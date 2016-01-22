@@ -1,0 +1,18 @@
+﻿{
+  "DataRequests": [
+    {
+      "DataFeed": "Mitake",
+      "DataPeriod": "1,Minute",
+      "Exchange": "TWSE",
+      "Range": "barsBack,3000/12/31;20",
+      "SymbolId": "TXF0.tw"
+    }
+  ],
+  "Property": {
+    "DefaultContracts": 1,
+    "InitialCapital": 100000.0,
+    "MaximumBarsReference": 400,
+    "OrderSource": "Netwings.OrderService;Netwings.SimulateOrderService"
+  },
+  "PipedNumber": 1
+}

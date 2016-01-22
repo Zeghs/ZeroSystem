@@ -1,0 +1,4 @@
+﻿{
+  "HttpDomain": "http://storage.stk.tw",
+  "TargetUrl": "/Zeghs/Services/GetSeriesSymbolData.ashx"
+}

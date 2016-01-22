@@ -1,0 +1,966 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WES.Runtime.Script</name>
+    </assembly>
+    <members>
+        <member name="T:Zeghs.Managers.ScriptManager">
+            <summary>
+              腳本管理員類別
+            </summary>
+        </member>
+        <member name="M:Zeghs.Managers.ScriptManager.LoadSettings">
+            <summary>
+              讀取腳本設定值
+            </summary>
+        </member>
+        <member name="M:Zeghs.Managers.ScriptManager.SaveSettings">
+            <summary>
+              儲存腳本設定值
+            </summary>
+        </member>
+        <member name="M:Zeghs.Managers.ScriptManager.ComplierAndUpdate(System.String)">
+            <summary>
+              編譯後更新腳本
+            </summary>
+            <param name="scriptFile">腳本檔案名稱</param>
+            <returns>返回值:true=成功, false=失敗</returns>
+        </member>
+        <member name="M:Zeghs.Managers.ScriptManager.CreateScript(System.String)">
+            <summary>
+              建立新的腳本執行個體
+            </summary>
+            <param name="scriptName">完整腳本名稱</param>
+            <returns>返回值: CStudyAbstract 類別, null=無此腳本</returns>
+        </member>
+        <member name="M:Zeghs.Managers.ScriptManager.LoadScripts">
+            <summary>
+              讀取所有腳本
+            </summary>
+        </member>
+        <member name="M:Zeghs.Managers.ScriptManager.AddScript(System.String)">
+            <summary>
+              加入腳本
+            </summary>
+            <param name="assemblyFile">編譯後的腳本檔案名稱</param>
+        </member>
+        <member name="M:Zeghs.Managers.ScriptManager.AddScript(System.Reflection.Assembly)">
+            <summary>
+              加入腳本
+            </summary>
+            <param name="assembly">Assembly 組件資訊</param>
+        </member>
+        <member name="M:Zeghs.Managers.ScriptManager.Complier(System.String)">
+            <summary>
+              編譯腳本
+            </summary>
+            <param name="scriptFile">腳本檔案名稱</param>
+            <returns>返回值:編譯後的腳本檔案名稱, null=編譯失敗</returns>
+        </member>
+        <member name="P:Zeghs.Managers.ScriptManager.Settings">
+            <summary>
+              [取得] 腳本設定資訊
+            </summary>
+        </member>
+        <member name="P:Zeghs.Managers.ScriptManager.Manager">
+            <summary>
+              [取得] ScriptManager類別
+            </summary>
+        </member>
+        <member name="P:Zeghs.Managers.ScriptManager.Scripts">
+            <summary>
+              [取得] 所有腳本資訊
+            </summary>
+        </member>
+        <member name="T:Zeghs.Drawing.TextObject">
+            <summary>
+              文字繪圖物件類別
+            </summary>
+        </member>
+        <member name="M:Zeghs.Drawing.TextObject.#ctor">
+            <summary>
+              建構子
+            </summary>
+        </member>
+        <member name="M:Zeghs.Drawing.TextObject.Delete">
+            <summary>
+              繪圖物件是否被刪除
+            </summary>
+            <returns>回傳值: true=刪除, false=尚未刪除</returns>
+        </member>
+        <member name="M:Zeghs.Drawing.TextObject.Equals(PowerLanguage.IDrawObject)">
+            <summary>
+              指出目前的物件是否等於另一個具有相同型別的物件。
+            </summary>
+            <param name="other">要與這個物件相互比較的物件。</param>
+            <returns>如果目前的物件等於 other 參數，則為 true，否則為 false。</returns>
+        </member>
+        <member name="M:Zeghs.Drawing.TextObject.Equals(PowerLanguage.ITextObject)">
+            <summary>
+              指出目前的物件是否等於另一個具有相同型別的物件。
+            </summary>
+            <param name="other">要與這個物件相互比較的物件。</param>
+            <returns>如果目前的物件等於 other 參數，則為 true，否則為 false。</returns>
+        </member>
+        <member name="M:Zeghs.Drawing.TextObject.Equals(System.Object)">
+            <summary>
+              判斷指定的 System.Object 和目前的 System.Object 是否相等。
+            </summary>
+            <param name="obj">System.Object，要與目前的 System.Object 比較。</param>
+            <returns>如果指定的 System.Object 和目前的 System.Object 相等，則為 true，否則為 false。</returns>
+        </member>
+        <member name="M:Zeghs.Drawing.TextObject.GetHashCode">
+            <summary>
+              做為特定型別的雜湊函式。
+            </summary>
+            <returns>目前 System.Object 的雜湊程式碼。</returns>
+        </member>
+        <member name="M:Zeghs.Drawing.TextObject.HaveFont(System.Drawing.FontStyle)">
+            <summary>
+              檢查是否有此種字型樣式
+            </summary>
+            <param name="style">字型樣式列舉</param>
+            <returns>返回值: true=有此樣式, false=無此樣式</returns>
+        </member>
+        <member name="M:Zeghs.Drawing.TextObject.SetFont(System.Drawing.FontStyle,System.Boolean)">
+            <summary>
+              設定字型樣式
+            </summary>
+            <param name="style">字型樣式列舉</param>
+            <param name="val">是否啟用此樣式</param>
+        </member>
+        <member name="P:Zeghs.Drawing.TextObject.BGColor">
+            <summary>
+              [取得/設定] 背景顏色
+            </summary>
+        </member>
+        <member name="P:Zeghs.Drawing.TextObject.Border">
+            <summary>
+              [取得/設定] 是否要繪製框線
+            </summary>
+        </member>
+        <member name="P:Zeghs.Drawing.TextObject.Color">
+            <summary>
+              [取得/設定] 文字顏色
+            </summary>
+        </member>
+        <member name="P:Zeghs.Drawing.TextObject.DataStream">
+            <summary>
+              [取得/設定] 資料串流編號
+            </summary>
+        </member>
+        <member name="P:Zeghs.Drawing.TextObject.DrawingSourceFlag">
+            <summary>
+              [取得/設定] 繪製來源旗標(1=Study, 2=Manual, 4=Other)
+            </summary>
+        </member>
+        <member name="P:Zeghs.Drawing.TextObject.Exist">
+            <summary>
+              [取得] 繪圖物件是否存在
+            </summary>
+        </member>
+        <member name="P:Zeghs.Drawing.TextObject.FontName">
+            <summary>
+              [取得/設定] 繪製文字的字型名稱
+            </summary>
+        </member>
+        <member name="P:Zeghs.Drawing.TextObject.HStyle">
+            <summary>
+              [取得/設定] 文字水平對齊樣式
+            </summary>
+        </member>
+        <member name="P:Zeghs.Drawing.TextObject.ID">
+            <summary>
+              [取得] 繪圖物件 ID
+            </summary>
+        </member>
+        <member name="P:Zeghs.Drawing.TextObject.Location">
+            <summary>
+              [取得/設定] 文字座標位置
+            </summary>
+        </member>
+        <member name="P:Zeghs.Drawing.TextObject.Locked">
+            <summary>
+              [設定] 鎖定繪圖物件以防止用戶修改
+            </summary>
+        </member>
+        <member name="P:Zeghs.Drawing.TextObject.OnSameSubchart">
+            <summary>
+              [取得/設定] 是否在同一個副圖上
+            </summary>
+        </member>
+        <member name="P:Zeghs.Drawing.TextObject.Size">
+            <summary>
+              [取得/設定] 繪製文字的字型大小
+            </summary>
+        </member>
+        <member name="P:Zeghs.Drawing.TextObject.Text">
+            <summary>
+              [取得/設定] 繪製文字
+            </summary>
+        </member>
+        <member name="P:Zeghs.Drawing.TextObject.VStyle">
+            <summary>
+              [取得/設定] 文字垂直對齊樣式
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.CStudyAbstract">
+            <summary>
+              基礎腳本抽象類別
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.CStudyControl">
+            <summary>
+              基礎腳本控制類別(如果只有應用在圖表顯示則可以使用此類別)
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.CStudyControl.#ctor">
+            <summary>
+              建構子
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.CStudyControl.Dispose">
+            <summary>
+              釋放腳本資源
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.CStudyControl.AddDataStreams(System.Collections.Generic.List{PowerLanguage.InstrumentDataRequest})">
+            <summary>
+              加入資料串流
+            </summary>
+            <param name="dataRequests">InstrumentDataRequest 列表</param>
+        </member>
+        <member name="M:PowerLanguage.CStudyControl.RemoveDataStream(System.Int32)">
+            <summary>
+              移除資料串流
+            </summary>
+            <param name="data_stream">資料串流編號(0 為主要依據不能移除)</param>
+        </member>
+        <member name="M:PowerLanguage.CStudyControl.Dispose(System.Boolean)">
+            <summary>
+              釋放腳本資源
+            </summary>
+            <param name="disposing">是否正在處理資源中</param>
+        </member>
+        <member name="M:PowerLanguage.CStudyControl.OnUpdate">
+            <summary>
+              當有資料時會觸發這個更新的事件
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.CStudyControl.Start">
+            <summary>
+              啟動腳本
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.CStudyControl.OnQuoteDateTime(Zeghs.Events.QuoteDateTimeEvent)">
+            <summary>
+              由伺服器報價時間觸發的引動事件
+            </summary>
+            <param name="e">伺服器報價時間資訊</param>
+        </member>
+        <member name="E:PowerLanguage.CStudyControl.onDisconnected">
+            <summary>
+              當即時報價資訊斷線時所觸發的事件
+            </summary>
+        </member>
+        <member name="E:PowerLanguage.CStudyControl.onQuoteDateTime">
+            <summary>
+              當伺服器對時資訊送來所觸發的事件
+            </summary>
+        </member>
+        <member name="E:PowerLanguage.CStudyControl.onReady">
+            <summary>
+              當所有報價資訊都準備好時所觸發的事件
+            </summary>
+        </member>
+        <member name="E:PowerLanguage.CStudyControl.onUpdate">
+            <summary>
+              當有資料時會觸發這個更新的事件
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.CStudyControl.Bars">
+            <summary>
+              [取得] IInstrument 資訊
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.CStudyControl.DrwText">
+            <summary>
+              [取得] 文字繪製容器
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.CStudyControl.MaxDataStream">
+            <summary>
+              [取得] 最大 IInstrument 資訊個數
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.CStudyAbstract.#ctor">
+            <summary>
+              建構子
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.CStudyAbstract.AddFunction(PowerLanguage.IStudyControl)">
+            <summary>
+              加入 FunctionObject 類別方法
+            </summary>
+            <param name="func">IStudyControl 介面</param>
+        </member>
+        <member name="M:PowerLanguage.CStudyAbstract.AddVariable(PowerLanguage.IVariables)">
+            <summary>
+              加入變數類別方法
+            </summary>
+            <param name="var">變數擴充介面</param>
+        </member>
+        <member name="M:PowerLanguage.CStudyAbstract.BarsOfData(System.Int32)">
+            <summary>
+              取得其他的 Bars 資訊
+            </summary>
+            <param name="data_stream">資料串流編號(1 為起始編號)</param>
+            <returns>返回值: IInstrument 介面</returns>
+        </member>
+        <member name="M:PowerLanguage.CStudyAbstract.CalcBar">
+            <summary>
+              計算 Bars 時所呼叫的方法
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.CStudyAbstract.Create">
+            <summary>
+              建立模型時所呼叫的方法
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.CStudyAbstract.Destroy">
+            <summary>
+              模型釋放時所呼叫的方法
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.CStudyAbstract.StartCalc">
+            <summary>
+              開始計算 Bars 時所呼叫的方法
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.CStudyAbstract.StopCalc">
+            <summary>
+              停止計算 Bars 時所呼叫的方法
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.CStudyAbstract.CStudyDestory">
+            <summary>
+              腳本內部資源釋放行為
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.CStudyAbstract.CStudyInitialize">
+            <summary>
+              腳本內部初始化行為
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.CStudyAbstract.Dispose(System.Boolean)">
+            <summary>
+              釋放腳本資源
+            </summary>
+            <param name="disposing">是否正在處理資源中</param>
+        </member>
+        <member name="M:PowerLanguage.CStudyAbstract.OnCalculate">
+            <summary>
+              計算使用者設計的邏輯方法 CalcBar
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.CStudyAbstract.Start">
+            <summary>
+              啟動腳本
+            </summary>
+        </member>
+        <member name="E:PowerLanguage.CStudyAbstract.onScriptParameters">
+            <summary>
+              腳本初始化所觸發的事件
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.CStudyAbstract.About">
+            <summary>
+              [取得] 腳本開發者資訊
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.CStudyAbstract.log">
+            <summary>
+              [取得] log 日誌紀錄員
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.CStudyAbstract.Output">
+            <summary>
+              [取得] 輸出訊息介面
+            </summary>
+        </member>
+        <member name="T:Zeghs.Scripts.ScriptType">
+            <summary>
+              腳本類型
+            </summary>
+        </member>
+        <member name="F:Zeghs.Scripts.ScriptType.Signal">
+            <summary>
+              交易信號
+            </summary>
+        </member>
+        <member name="F:Zeghs.Scripts.ScriptType.Script">
+            <summary>
+              自訂腳本  
+            </summary>
+        </member>
+        <member name="T:Zeghs.Scripts.ScriptSettings">
+            <summary>
+              腳本設定類別
+            </summary>
+        </member>
+        <member name="P:Zeghs.Scripts.ScriptSettings.OutputPath">
+            <summary>
+              [取得/設定] 編譯後的輸出路徑
+            </summary>
+        </member>
+        <member name="P:Zeghs.Scripts.ScriptSettings.SourcePath">
+            <summary>
+              [取得/設定] 腳本來源路徑
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.FunctionObject`1">
+            <summary>
+              內建指標方法抽象類別
+            </summary>
+            <typeparam name="T">泛型型別</typeparam>
+        </member>
+        <member name="M:PowerLanguage.FunctionObject`1.#ctor(PowerLanguage.CStudyAbstract,System.Int32)">
+            <summary>
+              建構子
+            </summary>
+            <param name="master">CStudyAbstract 類別</param>
+            <param name="dataStream">資料串流編號</param>
+        </member>
+        <member name="M:PowerLanguage.FunctionObject`1.AddVariable(PowerLanguage.IVariables)">
+            <summary>
+              加入變數類別方法
+            </summary>
+            <param name="var">變數擴充介面</param>
+        </member>
+        <member name="M:PowerLanguage.FunctionObject`1.BarsOfData(System.Int32)">
+            <summary>
+              取得其他的 Bars 資訊
+            </summary>
+            <param name="data_stream">資料串流編號(1 為起始編號)</param>
+            <returns>返回值: IInstrument 介面</returns>
+        </member>
+        <member name="M:PowerLanguage.FunctionObject`1.Dispose">
+            <summary>
+              釋放腳本資源
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.FunctionObject`1.CalcBar">
+            <summary>
+              計算 Bars 時所呼叫的方法
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.FunctionObject`1.Create">
+            <summary>
+              建立模型時所呼叫的方法
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.FunctionObject`1.Destroy">
+            <summary>
+              模型釋放時所呼叫的方法
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.FunctionObject`1.StartCalc">
+            <summary>
+              開始計算 Bars 時所呼叫的方法
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.FunctionObject`1.StopCalc">
+            <summary>
+              停止計算 Bars 時所呼叫的方法
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.FunctionObject`1.Dispose(System.Boolean)">
+            <summary>
+              釋放腳本資源
+            </summary>
+            <param name="disposing">是否正在處理資源中</param>
+        </member>
+        <member name="P:PowerLanguage.FunctionObject`1.Value">
+            <summary>
+              [取得] 目前資料
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.FunctionObject`1.Item(System.Int32)">
+            <summary>
+              [取得] 目前或是之前的資料
+            </summary>
+            <param name="barsAgo">目前或是之前的索引(0=目前的 Bar)</param>
+            <returns>返回值:從索引值獲得的所需資料</returns>
+        </member>
+        <member name="P:PowerLanguage.FunctionObject`1.Bars">
+            <summary>
+              [取得] IInstrument 資訊
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.FunctionObject`1.MasterDataStream">
+            <summary>
+              [取得/設定] 主要資料串流編號
+            </summary>
+        </member>
+        <member name="T:Zeghs.Drawing.TextContainer">
+            <summary>
+              文字繪製容器類別
+            </summary>
+        </member>
+        <member name="M:Zeghs.Drawing.TextContainer.#ctor">
+            <summary>
+              建構子
+            </summary>
+        </member>
+        <member name="M:Zeghs.Drawing.TextContainer.AddTextObject(Zeghs.Drawing.TextObject)">
+            <summary>
+              加入文字繪圖物件
+            </summary>
+            <param name="textObject">文字繪圖物件類別</param>
+        </member>
+        <member name="M:Zeghs.Drawing.TextContainer.Clear">
+            <summary>
+              清除所有文字繪圖物件
+            </summary>
+        </member>
+        <member name="M:Zeghs.Drawing.TextContainer.Create(PowerLanguage.ChartPoint,System.String)">
+            <summary>
+              建立文字繪圖物件
+            </summary>
+            <param name="point">文字繪圖物件的座標位置</param>
+            <param name="text">繪圖文字內容</param>
+            <returns>返回值: ITextObject 介面</returns>
+        </member>
+        <member name="M:Zeghs.Drawing.TextContainer.Create(PowerLanguage.ChartPoint,System.String,System.Boolean)">
+            <summary>
+              建立文字繪圖物件
+            </summary>
+            <param name="point">文字繪圖物件的座標位置</param>
+            <param name="text">繪圖文字內容</param>
+            <param name="onSameSubchart">是否在同一個副圖中</param>
+            <returns>返回值: ITextObject 介面</returns>
+        </member>
+        <member name="M:Zeghs.Drawing.TextContainer.Create(PowerLanguage.ChartPoint,System.String,System.Int32)">
+            <summary>
+              建立文字繪圖物件
+            </summary>
+            <param name="point">文字繪圖物件的座標位置</param>
+            <param name="text">繪圖文字內容</param>
+            <param name="dataStream">資料串流編號</param>
+            <returns>返回值: ITextObject 介面</returns>
+        </member>
+        <member name="M:Zeghs.Drawing.TextContainer.GetTextObjects(PowerLanguage.EDrawingSource)">
+            <summary>
+              取得文字繪圖物件列表
+            </summary>
+            <param name="drawingSource">繪製描述來源列舉</param>
+            <returns>返回值: 文字繪圖物件列表(需要使用 foreach 列舉所有文字繪圖物件)</returns>
+        </member>
+        <member name="M:Zeghs.Drawing.TextContainer.SetChartProperty(Zeghs.Settings.ChartProperty)">
+            <summary>
+              設定圖表屬性
+            </summary>
+            <param name="property">圖表屬性</param>
+        </member>
+        <member name="P:Zeghs.Drawing.TextContainer.Active">
+            <summary>
+              [取得/設定] 作用中的文字繪圖物件
+            </summary>
+        </member>
+        <member name="T:Zeghs.Scripts.ScriptPropertyAttribute">
+            <summary>
+              腳本屬性類別
+            </summary>
+        </member>
+        <member name="P:Zeghs.Scripts.ScriptPropertyAttribute.Company">
+            <summary>
+              [取得/設定] 公司名稱
+            </summary>
+        </member>
+        <member name="P:Zeghs.Scripts.ScriptPropertyAttribute.Comment">
+            <summary>
+              [取得/設定] 腳本說明
+            </summary>
+        </member>
+        <member name="P:Zeghs.Scripts.ScriptPropertyAttribute.Copyright">
+            <summary>
+              [取得/設定] 商標名稱
+            </summary>
+        </member>
+        <member name="P:Zeghs.Scripts.ScriptPropertyAttribute.ScriptType">
+            <summary>
+              [取得/設定] 腳本類型
+            </summary>
+        </member>
+        <member name="P:Zeghs.Scripts.ScriptPropertyAttribute.Version">
+            <summary>
+              [取得/設定] 版本編號
+            </summary>
+        </member>
+        <member name="T:Zeghs.Informations.ScriptInformation">
+            <summary>
+              腳本資訊類別
+            </summary>
+        </member>
+        <member name="M:Zeghs.Informations.ScriptInformation.#ctor(System.Type,Zeghs.Scripts.ScriptPropertyAttribute)">
+            <summary>
+              建構子
+            </summary>
+            <param name="script">腳本Type型別</param>
+            <param name="property">腳本屬性</param>
+        </member>
+        <member name="M:Zeghs.Informations.ScriptInformation.CreateScript">
+            <summary>
+              建立腳本
+            </summary>
+            <returns>返回值:AbstractScript類別</returns>
+        </member>
+        <member name="P:Zeghs.Informations.ScriptInformation.FullName">
+            <summary>
+              [取得] 腳本完整名稱
+            </summary>
+        </member>
+        <member name="P:Zeghs.Informations.ScriptInformation.Name">
+            <summary>
+              [取得] 腳本名稱
+            </summary>
+        </member>
+        <member name="P:Zeghs.Informations.ScriptInformation.Property">
+            <summary>
+              [取得] 腳本屬性值
+            </summary>
+        </member>
+        <member name="T:Zeghs.Scripts.SignalProperty">
+            <summary>
+              信號設定屬性類別
+            </summary>
+        </member>
+        <member name="P:Zeghs.Scripts.SignalProperty.DefaultContracts">
+            <summary>
+              [取得/設定] 預設的合約數量
+            </summary>
+        </member>
+        <member name="P:Zeghs.Scripts.SignalProperty.InitialCapital">
+            <summary>
+              [取得/設定] 初始本金
+            </summary>
+        </member>
+        <member name="P:Zeghs.Scripts.SignalProperty.MaximumBarsReference">
+            <summary>
+              [取得/設定] 信號使用的最大 Bars count 參考值
+            </summary>
+        </member>
+        <member name="P:Zeghs.Scripts.SignalProperty.OrderSource">
+            <summary>
+              [取得/設定] 下單來源名稱
+            </summary>
+        </member>
+        <member name="T:Zeghs.Events.OutputDataEvent">
+            <summary>
+              輸出資料事件
+            </summary>
+        </member>
+        <member name="M:Zeghs.Events.OutputDataEvent.#ctor(System.String,System.Boolean)">
+            <summary>
+              建構子
+            </summary>
+            <param name="output">輸出字串</param>
+            <param name="isNewLine">是否需要添加換行字元</param>
+        </member>
+        <member name="P:Zeghs.Events.OutputDataEvent.Data">
+            <summary>
+              [取得] 輸出字串資料
+            </summary>
+        </member>
+        <member name="P:Zeghs.Events.OutputDataEvent.IsNewLine">
+            <summary>
+              [取得] 是否需要添加換行字元
+            </summary>
+        </member>
+        <member name="T:Zeghs.Events.ScriptParametersEvent">
+            <summary>
+              腳本初始化事件類別
+            </summary>
+        </member>
+        <member name="M:Zeghs.Events.ScriptParametersEvent.SetOrderService(Zeghs.Services.AbstractOrderService)">
+            <summary>
+              設定下單服務元件(需要設定佣金參數, 所以必須傳出)
+            </summary>
+            <param name="service">下單服務元件</param>
+        </member>
+        <member name="M:Zeghs.Events.ScriptParametersEvent.SetScriptParameters(System.Collections.Generic.List{PowerLanguage.InputAttribute})">
+            <summary>
+              設定腳本參數列表
+            </summary>
+            <param name="args">腳本參數列表</param>
+        </member>
+        <member name="P:Zeghs.Events.ScriptParametersEvent.OrderService">
+            <summary>
+              [取得] 下單服務元件(設定佣金參數)
+            </summary>
+        </member>
+        <member name="P:Zeghs.Events.ScriptParametersEvent.ScriptParameters">
+            <summary>
+              [取得] 腳本參數列表
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.SignalObject">
+            <summary>
+              交易信號物件抽象類別
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.SignalObject.#ctor(System.Object)">
+            <summary>
+              建構子
+            </summary>
+            <param name="_ctx">相容 Multicharts 系統</param>
+        </member>
+        <member name="M:PowerLanguage.SignalObject.ApplyProperty(Zeghs.Scripts.SignalProperty)">
+            <summary>
+              施行信號屬性設定值
+            </summary>
+            <param name="property">信號屬性類別</param>
+        </member>
+        <member name="M:PowerLanguage.SignalObject.OnUpdate">
+            <summary>
+              當有資料時會觸發這個更新的事件
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.SignalObject.OnTradeResponse(Zeghs.Events.ResponseEvent)">
+            <summary>
+              觸發交易回報事件
+            </summary>
+            <param name="e">ResponseEvent 類別</param>
+        </member>
+        <member name="E:PowerLanguage.SignalObject.onTradeResponse">
+            <summary>
+              收到委託或是成交回報時需要觸發的事件
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.SignalObject.CurrentPosition">
+            <summary>
+              [取得] 目前的留倉部位
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.SignalObject.Positions">
+            <summary>
+              [取得] 留倉部位序列資訊
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.SignalObject.InitialCapital">
+            <summary>
+              [取得/設定] 初始本金
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.SignalObject.NetProfit">
+            <summary>
+              [取得] 已平倉的總損益
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.SignalObject.OrderCreator">
+            <summary>
+              [取得] 下單物件建立員
+            </summary>
+        </member>
+        <member name="T:Zeghs.Utils.OutputWriter">
+            <summary>
+              輸出訊息寫入者類別
+            </summary>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.Write(System.Boolean)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">bool型別</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.Write(System.Char)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">char型別</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.Write(System.Char[])">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="buffer">char陣列</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.Write(System.Decimal)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">decimal型別</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.Write(System.Double)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">double型別</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.Write(System.Single)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">float型別</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.Write(System.Int32)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">int型別</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.Write(System.Int64)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">long型別</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.Write(System.Object)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">object型別</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.Write(System.String)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">string型別</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.Write(System.UInt32)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">uint型別</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.Write(System.UInt64)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">ulong型別</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.Write(System.String,System.Object[])">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="format">格式化表示字串</param>
+            <param name="arg">參數陣列</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.Write(System.Char[],System.Int32,System.Int32)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="buffer">char陣列</param>
+            <param name="index">起始位置</param>
+            <param name="count">個數</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.WriteLine">
+            <summary>
+              寫入資料
+            </summary>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.WriteLine(System.Boolean)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">bool型別</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.WriteLine(System.Char)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">char型別</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.WriteLine(System.Char[])">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="buffer">char陣列</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.WriteLine(System.Decimal)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">decimal型別</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.WriteLine(System.Double)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">double型別</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.WriteLine(System.Single)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">float型別</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.WriteLine(System.Int32)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">int型別</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.WriteLine(System.Int64)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">long型別</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.WriteLine(System.Object)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">object型別</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.WriteLine(System.String)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">string型別</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.WriteLine(System.UInt32)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">uint型別</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.WriteLine(System.UInt64)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">ulong型別</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.WriteLine(System.String,System.Object[])">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="format">格式化表示字串</param>
+            <param name="arg">參數陣列</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.WriteLine(System.Char[],System.Int32,System.Int32)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="buffer">char陣列</param>
+            <param name="index">起始位置</param>
+            <param name="count">個數</param>
+        </member>
+        <member name="M:Zeghs.Utils.OutputWriter.Dispose(System.Boolean)">
+            <summary>
+              釋放 System.IO.TextWriter 使用的 Unmanaged 資源，並選擇性釋放 Managed 資源。
+            </summary>
+            <param name="disposing">true，表示釋放 Managed 和 Unmanaged 資源；false，表示只釋放 Unmanaged 資源。</param>
+        </member>
+        <member name="E:Zeghs.Utils.OutputWriter.onOutputData">
+            <summary>
+              輸出資料時所觸發的事件
+            </summary>
+        </member>
+        <member name="P:Zeghs.Utils.OutputWriter.Encoding">
+            <summary>
+              [取得] 字串編碼規則(Default)
+            </summary>
+        </member>
+    </members>
+</doc>

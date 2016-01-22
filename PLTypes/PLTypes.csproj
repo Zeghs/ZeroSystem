@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{39F489FF-91E0-415D-9912-635B113B38D2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PLTypes</RootNamespace>
+    <AssemblyName>PLTypes</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\PLTypes.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\PLTypes.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\json.net\4.0\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="PowerLanguage\AxisSetting.cs" />
+    <Compile Include="PowerLanguage\ChartPoint.cs" />
+    <Compile Include="PowerLanguage\ChartSetting.cs" />
+    <Compile Include="PowerLanguage\Contracts.cs" />
+    <Compile Include="PowerLanguage\DataRequest.cs" />
+    <Compile Include="PowerLanguage\DataRequestType.cs" />
+    <Compile Include="PowerLanguage\DaylightTime.cs" />
+    <Compile Include="PowerLanguage\DOMPrice.cs" />
+    <Compile Include="PowerLanguage\EAverageMode.cs" />
+    <Compile Include="PowerLanguage\EAxisScaleMode.cs" />
+    <Compile Include="PowerLanguage\EAxisScope.cs" />
+    <Compile Include="PowerLanguage\EBarState.cs" />
+    <Compile Include="PowerLanguage\EChartType.cs" />
+    <Compile Include="PowerLanguage\EDrawingSource.cs" />
+    <Compile Include="PowerLanguage\EMarketPositionSide.cs" />
+    <Compile Include="PowerLanguage\EOrderAction.cs" />
+    <Compile Include="PowerLanguage\EResolution.cs" />
+    <Compile Include="PowerLanguage\ERuleType.cs" />
+    <Compile Include="PowerLanguage\ESymbolCategory.cs" />
+    <Compile Include="PowerLanguage\ETextStyleH.cs" />
+    <Compile Include="PowerLanguage\ETextStyleV.cs" />
+    <Compile Include="PowerLanguage\GlobalSettings.cs" />
+    <Compile Include="PowerLanguage\IDOMData.cs" />
+    <Compile Include="PowerLanguage\IDrawObject.cs" />
+    <Compile Include="PowerLanguage\IInstrument.cs" />
+    <Compile Include="PowerLanguage\IInstrumentSettings.cs" />
+    <Compile Include="PowerLanguage\IMarketPosition.cs" />
+    <Compile Include="PowerLanguage\InputAttribute.cs" />
+    <Compile Include="PowerLanguage\InstrumentDataRequest.cs" />
+    <Compile Include="PowerLanguage\IOrderCreator.cs" />
+    <Compile Include="PowerLanguage\IOrderMarket.cs" />
+    <Compile Include="PowerLanguage\IOrderObject.cs" />
+    <Compile Include="PowerLanguage\IOrderPriced.cs" />
+    <Compile Include="PowerLanguage\IOrderSender.cs" />
+    <Compile Include="PowerLanguage\IOrderStopLimit.cs" />
+    <Compile Include="PowerLanguage\IOutput.cs" />
+    <Compile Include="PowerLanguage\IRuleSetting.cs" />
+    <Compile Include="PowerLanguage\ISeries.cs" />
+    <Compile Include="PowerLanguage\ISeriesSymbolData.cs" />
+    <Compile Include="PowerLanguage\ISeriesSymbolDataRand.cs" />
+    <Compile Include="PowerLanguage\IStudyControl.cs" />
+    <Compile Include="PowerLanguage\ITextContainer.cs" />
+    <Compile Include="PowerLanguage\ITextObject.cs" />
+    <Compile Include="PowerLanguage\ITradeTicket.cs" />
+    <Compile Include="PowerLanguage\ITrade.cs" />
+    <Compile Include="PowerLanguage\ITradeOrder.cs" />
+    <Compile Include="PowerLanguage\IVariables.cs" />
+    <Compile Include="PowerLanguage\OptionType.cs" />
+    <Compile Include="PowerLanguage\Order.cs" />
+    <Compile Include="PowerLanguage\OrderCategory.cs" />
+    <Compile Include="PowerLanguage\OrderExit.cs" />
+    <Compile Include="PowerLanguage\PenStyle.cs" />
+    <Compile Include="PowerLanguage\Product.cs" />
+    <Compile Include="PowerLanguage\RuleBase.cs" />
+    <Compile Include="PowerLanguage\PublicFunction.cs" />
+    <Compile Include="PowerLanguage\Resolution.cs" />
+    <Compile Include="PowerLanguage\RulePropertyAttribute.cs" />
+    <Compile Include="PowerLanguage\SeriesAbstract.cs" />
+    <Compile Include="PowerLanguage\SessionObject.cs" />
+    <Compile Include="PowerLanguage\SOrderParameters.cs" />
+    <Compile Include="PowerLanguage\Utils\AverageUtil.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Zeghs\Settings\ChartProperty.cs" />
+    <Compile Include="Zeghs\Settings\PathSetting.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

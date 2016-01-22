@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{38591330-95AE-44C9-ACC2-6BD924BE7E0B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Netwings</RootNamespace>
+    <AssemblyName>Netwings.OrderService</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\log4net\4.0\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\json.net\4.0\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Netwings\Events\MessageEvent.cs" />
+    <Compile Include="Netwings\Forms\frmCustomBrokerFeeSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Netwings\Forms\frmCustomBrokerFeeSetting.Designer.cs">
+      <DependentUpon>frmCustomBrokerFeeSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Netwings\LargeOrderService.cs" />
+    <Compile Include="Netwings\RealOrderService.cs" />
+    <Compile Include="Netwings\Orders\MarketPosition.cs" />
+    <Compile Include="Netwings\Orders\OrderDeal.cs" />
+    <Compile Include="Netwings\Orders\OrderTrust.cs" />
+    <Compile Include="Netwings\Orders\Trade.cs" />
+    <Compile Include="Netwings\Orders\TradeOrder.cs" />
+    <Compile Include="Netwings\Pipes\NetwingsNamedPipeStream.cs" />
+    <Compile Include="Netwings\Rules\Fees\CustomBrokerFeeRule.cs" />
+    <Compile Include="Netwings\Rules\RuleCreater.cs" />
+    <Compile Include="Netwings\SimulateOrderService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PLTypes\PLTypes.csproj">
+      <Project>{39F489FF-91E0-415D-9912-635B113B38D2}</Project>
+      <Name>PLTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WES.External.OrderPlugin\WES.External.OrderPlugin.csproj">
+      <Project>{952B0965-F7B9-4762-9B4C-F063372CCF31}</Project>
+      <Name>WES.External.OrderPlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WES.Runtime.Product\WES.Runtime.Product.csproj">
+      <Project>{7C5601E7-7118-477B-A4AC-C2E0DE9999DB}</Project>
+      <Name>WES.Runtime.Product</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WES.Runtime.Storage\WES.Runtime.Storage.csproj">
+      <Project>{9CF4E723-CAC5-4325-A32C-A75F1185B701}</Project>
+      <Name>WES.Runtime.Storage</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Netwings\Forms\frmCustomBrokerFeeSetting.resx">
+      <DependentUpon>frmCustomBrokerFeeSetting.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

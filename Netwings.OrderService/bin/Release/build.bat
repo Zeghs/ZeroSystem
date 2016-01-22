@@ -1,0 +1,1 @@
+copy Netwings.OrderService\bin\Release\Netwings.OrderService.dll zeroSystem\bin\Release\plugins\orders\zh-tw

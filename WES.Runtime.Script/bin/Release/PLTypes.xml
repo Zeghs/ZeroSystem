@@ -1,0 +1,2480 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PLTypes</name>
+    </assembly>
+    <members>
+        <member name="T:PowerLanguage.IOrderPriced">
+            <summary>
+              價格單交易介面
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.IOrderObject">
+            <summary>
+              下單物件介面
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IOrderObject.ID">
+            <summary>
+              [取得] 下單的代號
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IOrderObject.Info">
+            <summary>
+              [取得] 下單資訊
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.IOrderPriced.Send(System.Double)">
+            <summary>
+              送出下單命令
+            </summary>
+            <param name="price">指定價格</param>
+        </member>
+        <member name="M:PowerLanguage.IOrderPriced.Send(System.Double,System.Int32)">
+            <summary>
+              送出下單命令
+            </summary>
+            <param name="price">指定價格</param>
+            <param name="numLots">下單數量</param>
+        </member>
+        <member name="M:PowerLanguage.IOrderPriced.Send(System.String,System.Double)">
+            <summary>
+              送出下單命令
+            </summary>
+            <param name="new_name">新的下單名稱</param>
+            <param name="price">指定價格</param>
+        </member>
+        <member name="M:PowerLanguage.IOrderPriced.Send(System.String,System.Double,System.Int32)">
+            <summary>
+              送出下單命令
+            </summary>
+            <param name="new_name">新的下單名稱</param>
+            <param name="price">指定價格</param>
+            <param name="numLots">下單數量</param>
+        </member>
+        <member name="T:PowerLanguage.EDrawingSource">
+            <summary>
+              繪製描述來源列舉
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EDrawingSource.CurrentTech">
+            <summary>
+              由當前的腳本所創建繪製物件
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EDrawingSource.NotCurrentTechOrManual">
+            <summary>
+              不是由當前腳本或手動創建的繪製物件
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EDrawingSource.AnyTechOrManual">
+            <summary>
+              腳本或手動創建的所有繪製物件
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EDrawingSource.CurrentTechOrManual">
+            <summary>
+              由當前腳本或手動創建的繪製物件
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EDrawingSource.NotCurrentTech">
+            <summary>
+              不是由當前的腳本所創建繪製物件
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EDrawingSource.AnyTech">
+            <summary>
+              腳本所創建的所有繪製物件
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EDrawingSource.Manual">
+            <summary>
+              手動所創建的所有繪製物件
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.OrderCategory">
+            <summary>
+              下單類型列舉
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.OrderCategory.Market">
+            <summary>
+              市價單
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.OrderCategory.Limit">
+            <summary>
+              限價單
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.OrderCategory.Stop">
+            <summary>
+              停損單
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.OrderCategory.StopLimit">
+            <summary>
+              停損限價單
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.ITrade">
+            <summary>
+              交易介面
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.ITradeTicket">
+            <summary>
+              交易編號介面
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITradeTicket.Name">
+            <summary>
+              [取得] 下單名稱
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITradeTicket.Ticket">
+            <summary>
+              [取得] Ticket 編號
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITrade.CommissionValue">
+            <summary>
+              [取得] 交易佣金
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITrade.EntryOrder">
+            <summary>
+              [取得] 開倉訂單資訊
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITrade.ExitOrder">
+            <summary>
+              [取得] 平倉訂單資訊(如果為 null 表示尚未平倉)
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITrade.IsLong">
+            <summary>
+              [取得] 是否為多單
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITrade.IsOpen">
+            <summary>
+              [取得] 是否為開倉
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITrade.Profit">
+            <summary>
+              [取得] 損益
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.IRuleSetting">
+            <summary>
+              規則設定介面
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.IRuleSetting.ShowSetting">
+            <summary>
+              顯示設定表單視窗
+            </summary>
+            <returns>返回值: 0=設定完成, 其他=設計者自訂</returns>
+        </member>
+        <member name="T:PowerLanguage.IOrderSender">
+            <summary>
+              下單傳送者介面
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.IOrderSender.Send(PowerLanguage.EOrderAction,PowerLanguage.OrderCategory,System.Double,System.Int32,System.Boolean,System.Double,System.String,System.Boolean)">
+            <summary>
+              傳送下單命令
+            </summary>
+            <param name="action">下單進出場動作</param>
+            <param name="category">下單類型</param>
+            <param name="limitPrice">限價價格(市價=0)</param>
+            <param name="lots">下單數量</param>
+            <param name="isReverse">是否已反轉倉位</param>
+            <param name="touchPrice">觸發或停損價格</param>
+            <param name="name">下單註解</param>
+            <param name="openNextBar">是否開倉在下一根 Bars</param>
+            <returns>返回值: true=傳送成功, false=取消傳送(可能某些條件不符合或是價格相同)</returns>
+        </member>
+        <member name="T:PowerLanguage.EChartType">
+            <summary>
+              圖表類型列舉
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EChartType.Point">
+            <summary>
+              點型圖表
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EChartType.Line">
+            <summary>
+              線型圖表
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EChartType.Bar">
+            <summary>
+              長條圖表
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EChartType.OHLC">
+            <summary>
+              美國線圖表
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EChartType.HLC">
+            <summary>
+              HLC線圖表
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EChartType.Candlestick">
+            <summary>
+              蠟燭線圖表
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EChartType.CloseLine">
+            <summary>
+              收盤線圖表
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.EResolution">
+            <summary>
+              資料週期定義
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EResolution.Minute">
+            <summary>
+              分鐘週期定義
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EResolution.Hour">
+            <summary>
+              小時週期定義
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EResolution.Day">
+            <summary>
+              日週期定義
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EResolution.Week">
+            <summary>
+              周週期定義
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EResolution.Month">
+            <summary>
+              月週期定義
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.SOrderParameters">
+            <summary>
+              下單參數結構
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.SOrderParameters.Action">
+            <summary>
+              下單進出場動作
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.SOrderParameters.ExitTypeInfo">
+            <summary>
+              平倉設定類別
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.SOrderParameters.Lots">
+            <summary>
+              下單合約數量結構
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.SOrderParameters.Name">
+            <summary>
+              下單名稱
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.SOrderParameters.#ctor(PowerLanguage.EOrderAction)">
+            <summary>
+              建構子
+            </summary>
+            <param name="action">下單進出場動作</param>
+        </member>
+        <member name="M:PowerLanguage.SOrderParameters.#ctor(PowerLanguage.Contracts,PowerLanguage.EOrderAction)">
+            <summary>
+              建構子
+            </summary>
+            <param name="lots">下單合約數量結構</param>
+            <param name="action">下單進出場動作</param>
+        </member>
+        <member name="M:PowerLanguage.SOrderParameters.#ctor(PowerLanguage.EOrderAction,System.String)">
+            <summary>
+              建構子
+            </summary>
+            <param name="action">下單進出場動作</param>
+            <param name="name">下單名稱</param>
+        </member>
+        <member name="M:PowerLanguage.SOrderParameters.#ctor(PowerLanguage.Contracts,PowerLanguage.EOrderAction,PowerLanguage.OrderExit)">
+            <summary>
+              建構子
+            </summary>
+            <param name="lots">下單合約數量結構</param>
+            <param name="action">下單進出場動作</param>
+            <param name="exitInfo">平倉設定類別</param>
+        </member>
+        <member name="M:PowerLanguage.SOrderParameters.#ctor(PowerLanguage.Contracts,System.String,PowerLanguage.EOrderAction)">
+            <summary>
+              建構子
+            </summary>
+            <param name="lots">下單合約數量結構</param>
+            <param name="name">下單名稱</param>
+            <param name="action">下單進出場動作</param>
+        </member>
+        <member name="M:PowerLanguage.SOrderParameters.#ctor(PowerLanguage.Contracts,System.String,PowerLanguage.EOrderAction,PowerLanguage.OrderExit)">
+            <summary>
+              建構子
+            </summary>
+            <param name="lots">下單合約數量結構</param>
+            <param name="name">下單名稱</param>
+            <param name="action">下單進出場動作</param>
+            <param name="exitInfo">平倉設定類別</param>
+        </member>
+        <member name="T:PowerLanguage.Product">
+            <summary>
+              商品類別
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Product.CommodityId">
+            <summary>
+              [取得/設定] 商品來源Id
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Product.SymbolId">
+            <summary>
+              [取得/設定] 商品代號
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Product.SymbolName">
+            <summary>
+              [取得/設定] 商品名稱
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Product.Category">
+            <summary>
+              [取得/設定] 商品類型
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.PenStyle">
+            <summary>
+              圖表畫筆樣式
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.PenStyle.#ctor(System.Drawing.Color,System.Int32)">
+            <summary>
+              建構子
+            </summary>
+            <param name="color">畫筆顏色</param>
+            <param name="width">畫筆寬度</param>
+        </member>
+        <member name="P:PowerLanguage.PenStyle.Color">
+            <summary>
+              [取得/設定] 畫筆顏色
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.PenStyle.Pattern">
+            <summary>
+              [取得/設定] 畫筆線條格式
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.PenStyle.Width">
+            <summary>
+              [取得/設定] 畫筆寬度
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.ITextObject">
+            <summary>
+              文字繪圖物件介面
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.IDrawObject">
+            <summary>
+              基礎繪圖物件介面
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.IDrawObject.Delete">
+            <summary>
+              繪圖物件是否被刪除
+            </summary>
+            <returns>回傳值: true=刪除, false=尚未刪除</returns>
+        </member>
+        <member name="P:PowerLanguage.IDrawObject.Exist">
+            <summary>
+              [取得] 繪圖物件是否存在
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IDrawObject.ID">
+            <summary>
+              [取得] 繪圖物件 ID
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IDrawObject.Locked">
+            <summary>
+              [設定] 鎖定繪圖物件以防止用戶修改
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.ITextObject.HaveFont(System.Drawing.FontStyle)">
+            <summary>
+              檢查是否有此種字型樣式
+            </summary>
+            <param name="style">字型樣式列舉</param>
+            <returns>返回值: true=有此樣式, false=無此樣式</returns>
+        </member>
+        <member name="M:PowerLanguage.ITextObject.SetFont(System.Drawing.FontStyle,System.Boolean)">
+            <summary>
+              設定字型樣式
+            </summary>
+            <param name="style">字型樣式列舉</param>
+            <param name="val">是否啟用此樣式</param>
+        </member>
+        <member name="P:PowerLanguage.ITextObject.BGColor">
+            <summary>
+              [取得/設定] 背景顏色
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITextObject.Border">
+            <summary>
+              [取得/設定] 是否要繪製框線
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITextObject.Color">
+            <summary>
+              [取得/設定] 文字顏色
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITextObject.FontName">
+            <summary>
+              [取得/設定] 繪製文字的字型名稱
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITextObject.HStyle">
+            <summary>
+              [取得/設定] 文字水平對齊樣式
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITextObject.Location">
+            <summary>
+              [取得/設定] 文字座標位置
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITextObject.Size">
+            <summary>
+              [取得/設定] 繪製文字的字型大小
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITextObject.Text">
+            <summary>
+              [取得/設定] 繪製文字
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITextObject.VStyle">
+            <summary>
+              [取得/設定] 文字垂直對齊樣式
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.Utils.AverageUtil.GetAverage(PowerLanguage.ISeries{System.Double},System.Int32,PowerLanguage.EAverageMode,System.Double)">
+            <summary>
+              取得移動平均值
+            </summary>
+            <param name="series">ISeries 類別</param>
+            <param name="length">欲計算平均值的個數</param>
+            <param name="averageMode">移動平均模式</param>
+            <param name="previous">前一筆平均結果值(如果有前一筆平均結果值則可以加快計算速度)</param>
+            <returns>返回值: 移動平均結果值</returns>
+        </member>
+        <member name="M:PowerLanguage.Utils.AverageUtil.GetEMA(PowerLanguage.ISeries{System.Double},System.Int32,System.Double)">
+            <summary>
+              指數移動平均值
+            </summary>
+            <param name="series">ISeries 類別</param>
+            <param name="length">欲計算平均值的個數</param>
+            <param name="previous">前一筆平均結果值(如果有前一筆平均結果值則可以加快計算速度)</param>
+            <returns>返回值:平均值</returns>
+        </member>
+        <member name="M:PowerLanguage.Utils.AverageUtil.GetSMA(PowerLanguage.ISeries{System.Double},System.Int32,System.Double)">
+            <summary>
+              簡易移動平均值
+            </summary>
+            <param name="series">ISeries 類別</param>
+            <param name="length">欲計算平均值的個數</param>
+            <param name="previous">前一筆平均結果值(如果有前一筆平均結果值則可以加快計算速度)</param>
+            <returns>返回值:平均值</returns>
+        </member>
+        <member name="M:PowerLanguage.Utils.AverageUtil.GetWMA(PowerLanguage.ISeries{System.Double},System.Int32,System.Double)">
+            <summary>
+              加權移動平均值
+            </summary>
+            <param name="series">ISeries 類別</param>
+            <param name="length">欲計算平均值的個數</param>
+            <param name="previous">前一筆平均結果值(如果有前一筆平均結果值則可以加快計算速度)</param>
+            <returns>返回值:平均值</returns>
+        </member>
+        <member name="T:PowerLanguage.IDOMData">
+            <summary>
+              委託報價資訊集合
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IDOMData.Ask">
+            <summary>
+              叫價資訊陣列
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IDOMData.Bid">
+            <summary>
+              詢價資訊陣列
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.Contracts">
+            <summary>
+              下單合約數量結構
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.Contracts.CreateUserSpecified(System.Int32)">
+            <summary>
+              建立使用者指定的合約數量(使用指定的合約數量在預設模式)
+            </summary>
+            <param name="num">下單數量</param>
+            <returns>返回值: Contracts 結構</returns>
+        </member>
+        <member name="F:PowerLanguage.Contracts.Contract">
+            <summary>
+              下單合約預設口數
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.Contracts.Type">
+            <summary>
+              下單合約型態
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Contracts.Default">
+            <summary>
+              [取得] 預設合約數量
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Contracts.UserSpecified">
+            <summary>
+              [取得] 使用者指定的合約數量
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Contracts.IsDefault">
+            <summary>
+              [取得] 是否為預設合約類型
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Contracts.IsUserSpecified">
+            <summary>
+              [取得] 是否為使用者指定類型
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.Contracts.EContractsType">
+            <summary>
+              下單合約型態
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.Contracts.EContractsType.Default">
+            <summary>
+              預設 lots 單位
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.Contracts.EContractsType.UserSpecified">
+            <summary>
+              使用者指定 lots 單位
+            </summary>
+        </member>
+        <member name="T:Zeghs.Settings.PathSetting">
+            <summary>
+              預設系統目錄路徑設定類別
+            </summary>
+        </member>
+        <member name="P:Zeghs.Settings.PathSetting.CachePath">
+            <summary>
+              [取得/設定] Cache 路徑
+            </summary>
+        </member>
+        <member name="P:Zeghs.Settings.PathSetting.DatabasePath">
+            <summary>
+              [取得/設定] Database 路徑
+            </summary>
+        </member>
+        <member name="P:Zeghs.Settings.PathSetting.LogPath">
+            <summary>
+              [取得/設定] Log 路徑
+            </summary>
+        </member>
+        <member name="P:Zeghs.Settings.PathSetting.ProfilePath">
+            <summary>
+              [取得/設定] Database 路徑
+            </summary>
+        </member>
+        <member name="P:Zeghs.Settings.PathSetting.TrackerPath">
+            <summary>
+              [取得/設定] Order 與 Position 的追蹤路徑
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.ISeriesSymbolDataRand">
+            <summary>
+              序列資訊延伸介面
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.ISeriesSymbolData">
+            <summary>
+              商品的開高低收陣列資訊
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ISeriesSymbolData.Close">
+            <summary>
+              [取得] 收盤價陣列資訊
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ISeriesSymbolData.High">
+            <summary>
+              [取得] 最高價陣列資訊
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ISeriesSymbolData.Low">
+            <summary>
+              [取得] 最低價陣列資訊
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ISeriesSymbolData.Open">
+            <summary>
+              [取得] 開盤價陣列資訊
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ISeriesSymbolData.Time">
+            <summary>
+              [取得] 日期時間陣列資訊
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ISeriesSymbolData.Volume">
+            <summary>
+              [取得] 成交量陣列資訊
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ISeriesSymbolDataRand.Current">
+            <summary>
+              [取得] 目前索引值位置
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ISeriesSymbolDataRand.Count">
+            <summary>
+              [取得] 序列資料總個數
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.EAverageMode">
+            <summary>
+              移動平均模式
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EAverageMode.SMA">
+            <summary>
+              簡易移動平均模式
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EAverageMode.EMA">
+            <summary>
+              指數移動平均模式
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EAverageMode.WMA">
+            <summary>
+              加權移動平均模式
+            </summary>
+        </member>
+        <member name="T:Zeghs.Settings.ChartProperty">
+            <summary>
+              圖表屬性類別
+            </summary>
+        </member>
+        <member name="P:Zeghs.Settings.ChartProperty.BackgroundColor">
+            <summary>
+              [取得/設定] 背景顏色
+            </summary>
+        </member>
+        <member name="P:Zeghs.Settings.ChartProperty.FontName">
+            <summary>
+              [取得/設定] 預設字體名稱
+            </summary>
+        </member>
+        <member name="P:Zeghs.Settings.ChartProperty.FontSize">
+            <summary>
+              [取得/設定] 預設字體大小
+            </summary>
+        </member>
+        <member name="P:Zeghs.Settings.ChartProperty.ForeColor">
+            <summary>
+              [取得/設定] 前景顏色
+            </summary>
+        </member>
+        <member name="P:Zeghs.Settings.ChartProperty.GridColor">
+            <summary>
+              [取得/設定] 網格顏色
+            </summary>
+        </member>
+        <member name="P:Zeghs.Settings.ChartProperty.IsShowGrid">
+            <summary>
+              [取得/設定] 是否顯示網格
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.SeriesAbstract`1">
+            <summary>
+              資料陣列儲存類別
+            </summary>
+            <typeparam name="T">資料型態</typeparam>
+        </member>
+        <member name="T:PowerLanguage.ISeries`1">
+            <summary>
+              資料陣列儲存介面
+            </summary>
+            <typeparam name="T">資料型別</typeparam>
+        </member>
+        <member name="P:PowerLanguage.ISeries`1.Value">
+            <summary>
+              [取得] 目前資料
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ISeries`1.Item(System.Int32)">
+            <summary>
+              [取得] 目前或是之前的資料
+            </summary>
+            <param name="barsAgo">目前或是之前的索引(0=目前的 Bar)</param>
+            <returns>返回值:從索引值獲得的所需資料</returns>
+        </member>
+        <member name="M:PowerLanguage.SeriesAbstract`1.AdjustSize(System.Int32,System.Boolean)">
+            <summary>
+              調整序列空間大小
+            </summary>
+            <param name="count">新增加的個數</param>
+            <param name="isInsert">是否插入在最前面(預設為加入空間在尾端)</param>
+        </member>
+        <member name="M:PowerLanguage.SeriesAbstract`1.Dispose">
+            <summary>
+              釋放腳本資源
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.SeriesAbstract`1.CreateArray(System.Int32)">
+            <summary>
+              建立陣列
+            </summary>
+            <param name="size">陣列大小</param>
+            <returns>返回值: 陣列空間</returns>
+        </member>
+        <member name="M:PowerLanguage.SeriesAbstract`1.Dispose(System.Boolean)">
+            <summary>
+              釋放腳本資源
+            </summary>
+            <param name="disposing">是否正在處理資源中</param>
+        </member>
+        <member name="M:PowerLanguage.SeriesAbstract`1.GetValue(System.Int32)">
+            <summary>
+              取得資料
+            </summary>
+            <param name="index">資料絕對索引值</param>
+            <returns>返回值: 陣列內的資料</returns>
+        </member>
+        <member name="M:PowerLanguage.SeriesAbstract`1.Initialize(System.Int32)">
+            <summary>
+              初始化
+            </summary>
+            <param name="size">陣列大小</param>
+        </member>
+        <member name="M:PowerLanguage.SeriesAbstract`1.SetValue(System.Int32,`0)">
+            <summary>
+              設定資料
+            </summary>
+            <param name="index">資料絕對索引值</param>
+            <param name="value">欲設定資料</param>
+        </member>
+        <member name="P:PowerLanguage.SeriesAbstract`1.Count">
+            <summary>
+              [取得] 資料總個數
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.SeriesAbstract`1.Current">
+            <summary>
+              [取得/設定] 目前索引位置(索引從 1 開始)
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.SeriesAbstract`1.Value">
+            <summary>
+              [取得] 目前資料
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.SeriesAbstract`1.Item(System.Int32)">
+            <summary>
+              [取得] 目前或是之前的資料
+            </summary>
+            <param name="barsAgo">目前或是之前的索引(0=目前的 Bar)</param>
+            <returns>返回值:從索引值獲得的所需資料</returns>
+        </member>
+        <member name="T:PowerLanguage.InstrumentDataRequest">
+            <summary>
+              資料請求結構
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.InstrumentDataRequest.DataFeed">
+            <summary>
+              即時資料報價來源
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.InstrumentDataRequest.Exchange">
+            <summary>
+              證交所簡稱
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.InstrumentDataRequest.Range">
+            <summary>
+              資料請求結構
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.InstrumentDataRequest.Resolution">
+            <summary>
+              週期定義結構
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.InstrumentDataRequest.Symbol">
+            <summary>
+              商品代號
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.IMarketPosition">
+            <summary>
+              市場交易倉位介面
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IMarketPosition.ClosedTrades">
+            <summary>
+              [取得] 歷史交易明細
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IMarketPosition.MaxDrawDown">
+            <summary>
+              [取得] 帳上最大虧損
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IMarketPosition.MaxRunUp">
+            <summary>
+              [取得] 帳上最大獲利
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IMarketPosition.OpenLots">
+            <summary>
+              [取得] 開倉單總數量
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IMarketPosition.OpenProfit">
+            <summary>
+              [取得] 開倉單總損益
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IMarketPosition.OpenTrades">
+            <summary>
+              [取得] 留倉交易明細
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IMarketPosition.Profit">
+            <summary>
+              [取得] 已平倉的總損益
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IMarketPosition.ProfitPerContract">
+            <summary>
+              [取得] 目前未平倉單的平均損益
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IMarketPosition.Side">
+            <summary>
+              [取得] 目前倉位的方向
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IMarketPosition.Value">
+            <summary>
+              [取得] 總下單數量
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.EMarketPositionSide">
+            <summary>
+              留倉方向列舉
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EMarketPositionSide.Short">
+            <summary>
+              空方
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EMarketPositionSide.Flat">
+            <summary>
+              無留倉
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EMarketPositionSide.Long">
+            <summary>
+              多方
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.SessionObject">
+            <summary>
+              商品交易時段類別
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.SessionObject.Clone">
+            <summary>
+              建立 SessionObject 淺層複本
+            </summary>
+            <returns>返回值: SessionObject 類別</returns>
+        </member>
+        <member name="M:PowerLanguage.SessionObject.GetCloseTimeForDaylight">
+            <summary>
+              取得收盤時間為日光節約時間(如果沒有設定日光節約時間則回傳原設定值)
+            </summary>
+            <returns>返回值:調整後的日光節約時間</returns>
+        </member>
+        <member name="M:PowerLanguage.SessionObject.GetStartTimeForDaylight">
+            <summary>
+              取得開盤時間為日光節約時間(如果沒有設定日光節約時間則回傳原設定值)
+            </summary>
+            <returns>返回值:調整後的日光節約時間</returns>
+        </member>
+        <member name="P:PowerLanguage.SessionObject.EndDay">
+            <summary>
+              [取得/設定] 收盤星期名稱
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.SessionObject.EndTime">
+            <summary>
+              [取得/設定] 收盤時間(@如有日光節約時間則以夏令時間為主要設定)
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.SessionObject.Daylight">
+            <summary>
+              [取得/設定] 夏令時間設定
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.SessionObject.StartDay">
+            <summary>
+              [取得/設定] 開盤星期名稱
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.SessionObject.StartTime">
+            <summary>
+              [取得/設定] 開盤時間(@如有日光節約時間則以夏令時間為主要設定)
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.Resolution">
+            <summary>
+              週期定義結構
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.Resolution.MIN_BASE_TOTALSECONDS">
+            <summary>
+              最小基礎週期總秒數
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.Resolution.MAX_BASE_TOTALSECONDS">
+            <summary>
+              最大基礎週期總秒數
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.Resolution.GetBaseValue(PowerLanguage.Resolution)">
+            <summary>
+              取得基礎周期定義結構值
+            </summary>
+            <param name="value">當前週期定義結構</param>
+            <returns>返回值: 基礎周期定義結構</returns>
+        </member>
+        <member name="M:PowerLanguage.Resolution.GetNearestPeriod(System.Collections.Generic.List{System.DateTime},System.DateTime@)">
+            <summary>
+              取得最接近 time 的週期
+            </summary>
+            <param name="periods">週期列表</param>
+            <param name="time">time 結構</param>
+            <returns>返回值: true=須建立新的周期, false=尚在週期範圍內</returns>
+        </member>
+        <member name="M:PowerLanguage.Resolution.GetNearestPeriod(System.Collections.Generic.Queue{System.DateTime},System.DateTime@)">
+            <summary>
+              取得最接近 time 的週期
+            </summary>
+            <param name="periods">週期佇列</param>
+            <param name="time">time 結構</param>
+            <returns>返回值: true=須建立新的 Bars 周期, false=尚在 Bars 週期範圍內</returns>
+        </member>
+        <member name="M:PowerLanguage.Resolution.#ctor(PowerLanguage.EResolution,System.Int32)">
+            <summary>
+              初始化
+            </summary>
+            <param name="type">週期定義類型</param>
+            <param name="size">週期大小</param>
+        </member>
+        <member name="M:PowerLanguage.Resolution.CalculateRate(System.TimeSpan,System.TimeSpan,System.Int32)">
+            <summary>
+              計算週期放大比率
+            </summary>
+            <param name="startTime">開盤時間</param>
+            <param name="endTime">收盤時間</param>
+            <param name="sessionCount">開收盤的天數</param>
+        </member>
+        <member name="M:PowerLanguage.Resolution.CalculateRealtimePeriods(System.DateTime,System.DateTime,System.DateTime)">
+            <summary>
+              計算出時間區間內的所有時間週期(求出即時資訊的周期)
+            </summary>
+            <param name="lastBarsDate">歷史資訊最後一根 Bars 的日期</param>
+            <param name="today">今天的日期</param>
+            <param name="expiration">期權到期日(其他商品沒有到期日限制)</param>
+            <returns>返回值: 時間週期 Queue</returns>
+        </member>
+        <member name="M:PowerLanguage.Resolution.CalculatePeriods(System.DateTime,System.DateTime)">
+            <summary>
+              計算出時間區間內的所有時間週期
+            </summary>
+            <param name="_from">起始日期</param>
+            <param name="_to">終止日期</param>
+            <returns>返回值: 時間週期列表</returns>
+        </member>
+        <member name="M:PowerLanguage.Resolution.ConvertDaysToBars(System.Int32)">
+            <summary>
+              將天數轉換為 Bars 個數
+            </summary>
+            <param name="_days">天數</param>
+            <returns>返回值:轉換後的 Bars 個數</returns>
+        </member>
+        <member name="P:PowerLanguage.Resolution.Size">
+            <summary>
+              [取得/設定] 週期大小
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Resolution.Rate">
+            <summary>
+              [取得] 本周期變為基礎周期所需要的放大比率
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Resolution.TotalSeconds">
+            <summary>
+              [取得] 時間週期的總秒數
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Resolution.Type">
+            <summary>
+              [取得/設定] 週期定義類型
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.IInstrumentSettings">
+            <summary>
+              商品設定資訊
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrumentSettings.ASymbolInfo2">
+            <summary>
+              [取得] 商品資訊(為了相容 PowerLanguage 但內部結構並不相同)
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrumentSettings.BigPointValue">
+            <summary>
+              [取得] 每一大點的金額
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrumentSettings.Category">
+            <summary>
+              [取得] 商品分類列舉
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrumentSettings.DailyLimit">
+            <summary>
+              [取得] 當日漲跌幅限制
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrumentSettings.DataFeed">
+            <summary>
+              [取得] 資料來源名稱
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrumentSettings.Description">
+            <summary>
+              [取得] 商品資訊備註
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrumentSettings.Exchange">
+            <summary>
+              [取得] 交易所簡稱
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrumentSettings.Expiration">
+            <summary>
+              [取得] 到期日(如果是期貨與選擇權為到期日, 如果是股票則是交割時間截止日期)
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrumentSettings.Margin">
+            <summary>
+              [取得] 期貨或選擇權使用之保證金
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrumentSettings.MinMove">
+            <summary>
+              [取得] 最小跳動點數
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrumentSettings.Name">
+            <summary>
+              [取得] 商品名稱
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrumentSettings.OptionType">
+            <summary>
+              [取得] 選擇權的買賣權類型(None=無使用, 可能不是選擇權)
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrumentSettings.PointValue">
+            <summary>
+              [取得] 最小跳動金額
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrumentSettings.PriceScale">
+            <summary>
+              [取得] 價格座標
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrumentSettings.Resolution">
+            <summary>
+              [取得] Bars 時間週期
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrumentSettings.Sessions">
+            <summary>
+              [取得] 商品開收盤時間
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrumentSettings.StrikePrice">
+            <summary>
+              [取得] 選擇權的履約價格(若不是選擇權, 此屬性皆為 0)
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.IOrderMarket">
+            <summary>
+              市價單交易介面
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.IOrderMarket.Send">
+            <summary>
+              送出下單命令
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.IOrderMarket.Send(System.Int32)">
+            <summary>
+              送出下單命令
+            </summary>
+            <param name="numLots">下單數量</param>
+        </member>
+        <member name="M:PowerLanguage.IOrderMarket.Send(System.String)">
+            <summary>
+              送出下單命令
+            </summary>
+            <param name="new_name">新的下單名稱</param>
+        </member>
+        <member name="M:PowerLanguage.IOrderMarket.Send(System.String,System.Int32)">
+            <summary>
+              送出下單命令
+            </summary>
+            <param name="new_name">新的下單名稱</param>
+            <param name="numLots">下單數量</param>
+        </member>
+        <member name="T:PowerLanguage.DOMPrice">
+            <summary>
+              委託價量結構
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.DOMPrice.EMPTY">
+            <summary>
+              空的委託價量資訊
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.DOMPrice.Price">
+            <summary>
+              委託價格
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.DOMPrice.Size">
+            <summary>
+              委託量
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.DOMPrice.#ctor(System.Double,System.Double)">
+            <summary>
+              建構子
+            </summary>
+            <param name="price">委託價格</param>
+            <param name="size">委託量</param>
+        </member>
+        <member name="T:PowerLanguage.DataRequest">
+            <summary>
+              資料請求結構
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.DataRequest.Count">
+            <summary>
+              資料請求個數
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.DataRequest.From">
+            <summary>
+              日期起始日
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.DataRequest.IsAlreadyRequestAllData">
+            <summary>
+              是否已經請求全部資料
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.DataRequest.RequestType">
+            <summary>
+              資料請求類型
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.DataRequest.To">
+            <summary>
+              日期終止日
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.DataRequest.#ctor(System.DateTime,System.Int32,PowerLanguage.DataRequestType,System.DateTime)">
+            <summary>
+              初始化
+            </summary>
+            <param name="to">日期終止日</param>
+            <param name="count">資料個數</param>
+            <param name="requestType">資料請求類型</param>
+            <param name="from">日期起始日</param>
+        </member>
+        <member name="M:PowerLanguage.DataRequest.CreateBarsBack(System.DateTime,System.Int32)">
+            <summary>
+              建立資料請求結構使用以 Bars 數決定資料個數
+            </summary>
+            <param name="_to">日期終止日</param>
+            <param name="_bars">從日期終止日往前的 Bars 個數</param>
+            <returns>返回值:資料請求結構</returns>
+        </member>
+        <member name="M:PowerLanguage.DataRequest.CreateDaysBack(System.DateTime,System.Int32)">
+            <summary>
+              建立資料請求結構使用以天數決定資料個數
+            </summary>
+            <param name="_to">日期終止日</param>
+            <param name="_days">從日期終止日往前的天數</param>
+            <returns>返回值:資料請求結構</returns>
+        </member>
+        <member name="M:PowerLanguage.DataRequest.CreateFromTo(System.DateTime,System.DateTime)">
+            <summary>
+              建立資料請求結構使用起始日期與終止日期決定資料個數
+            </summary>
+            <param name="_from">日期起始日</param>
+            <param name="_to">日期終止日</param>
+            <returns>返回值:資料請求結構</returns>
+        </member>
+        <member name="T:PowerLanguage.IVariables">
+            <summary>
+              變數擴充類別
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.IVariables.Move(System.Int32)">
+            <summary>
+             移動 Current 索引
+            </summary>
+            <param name="index">索引值</param>
+        </member>
+        <member name="P:PowerLanguage.IVariables.DataStream">
+            <summary>
+              [取得] 資料串流編號
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.IOrderStopLimit">
+            <summary>
+              停損限價單交易介面
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.IOrderStopLimit.Send(System.Double,System.Double)">
+            <summary>
+              送出下單命令
+            </summary>
+            <param name="stopPrice">停損價格</param>
+            <param name="limitPrice">指定價格</param>
+        </member>
+        <member name="M:PowerLanguage.IOrderStopLimit.Send(System.Double,System.Double,System.Int32)">
+            <summary>
+              送出下單命令
+            </summary>
+            <param name="stopPrice">停損價格</param>
+            <param name="limitPrice">指定價格</param>
+            <param name="numLots">下單數量</param>
+        </member>
+        <member name="M:PowerLanguage.IOrderStopLimit.Send(System.String,System.Double,System.Double)">
+            <summary>
+              送出下單命令
+            </summary>
+            <param name="new_name">新的下單名稱</param>
+            <param name="stopPrice">停損價格</param>
+            <param name="limitPrice">指定價格</param>
+        </member>
+        <member name="M:PowerLanguage.IOrderStopLimit.Send(System.String,System.Double,System.Double,System.Int32)">
+            <summary>
+              送出下單命令
+            </summary>
+            <param name="new_name">新的下單名稱</param>
+            <param name="stopPrice">停損價格</param>
+            <param name="limitPrice">指定價格</param>
+            <param name="numLots">下單數量</param>
+        </member>
+        <member name="T:PowerLanguage.InputAttribute">
+            <summary>
+              腳本參數類別
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.InputAttribute.GetParameters(System.Object)">
+            <summary>
+              取得腳本物件內的所有使用者自訂的必要參數
+            </summary>
+            <param name="target">腳本物件類別</param>
+            <returns>返回值: 必要參數列表</returns>
+        </member>
+        <member name="M:PowerLanguage.InputAttribute.#ctor">
+            <summary>
+              建構子
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.InputAttribute.#ctor(System.String)">
+            <summary>
+              建構子
+            </summary>
+            <param name="comment">參數說明</param>
+        </member>
+        <member name="M:PowerLanguage.InputAttribute.SetValue(System.String)">
+            <summary>
+              設定資料
+            </summary>
+            <param name="value">字串值</param>
+        </member>
+        <member name="M:PowerLanguage.InputAttribute.SetValue(System.Object)">
+            <summary>
+              設定資料
+            </summary>
+            <param name="value">字串值</param>
+        </member>
+        <member name="M:PowerLanguage.InputAttribute.SetData(System.Object,System.Reflection.PropertyInfo)">
+            <summary>
+              設定必要資料
+            </summary>
+            <param name="instance">object類別</param>
+            <param name="property">PropertyInfo類別</param>
+        </member>
+        <member name="P:PowerLanguage.InputAttribute.Comment">
+            <summary>
+              [取得/設定] 參數說明
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.InputAttribute.Name">
+            <summary>
+              [取得] 參數名稱
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.InputAttribute.Value">
+            <summary>
+              [取得] 參數值
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.ESymbolCategory">
+            <summary>
+              商品分類
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ESymbolCategory.Future">
+            <summary>
+              期貨
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ESymbolCategory.FutureOption">
+            <summary>
+              期貨選擇權
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ESymbolCategory.Stock">
+            <summary>
+              股票
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ESymbolCategory.StockOption">
+            <summary>
+              股票選擇權
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ESymbolCategory.Index">
+            <summary>
+              指數
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ESymbolCategory.CurrOption">
+            <summary>
+              貨幣選擇權
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ESymbolCategory.IndexOption">
+            <summary>
+              指數選擇權
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ESymbolCategory.Cash">
+            <summary>
+              現貨選擇權
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ESymbolCategory.Bond">
+            <summary>
+              債券
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ESymbolCategory.Spread">
+            <summary>
+              點差交易
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ESymbolCategory.Forex">
+            <summary>
+              外匯
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ESymbolCategory.FutureRolover">
+            <summary>
+              期貨展期
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ESymbolCategory.Commodity">
+            <summary>
+              其他商品
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ESymbolCategory.Warrant">
+            <summary>
+              權證
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ESymbolCategory.None">
+            <summary>
+              無分類
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.PublicFunction">
+            <summary>
+              公用工具方法
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.PublicFunction.Average(PowerLanguage.ISeries{System.Double},System.Int32,PowerLanguage.EAverageMode,System.Double)">
+            <summary>
+              取得移動平均值
+            </summary>
+            <param name="series">ISeries 類別</param>
+            <param name="length">搜尋的個數</param>
+            <param name="averageMode">移動平均模式</param>
+            <param name="previous">前一筆平均結果值(如果有前一筆平均結果值則可以加快計算速度)</param>
+            <returns>返回值: 移動平均結果值</returns>
+        </member>
+        <member name="M:PowerLanguage.PublicFunction.Highest(PowerLanguage.ISeries{System.Double},System.Int32,System.Int32)">
+            <summary>
+              取得區間內的最大值
+            </summary>
+            <param name="series">序列資料</param>
+            <param name="length">區間個數</param>
+            <param name="barsBack">Bars 之前的索引(0=預設值)</param>
+            <returns>返回值: 區間內的最大值</returns>
+            <returns></returns>
+        </member>
+        <member name="M:PowerLanguage.PublicFunction.Lowest(PowerLanguage.ISeries{System.Double},System.Int32,System.Int32)">
+            <summary>
+              取得區間內的最小值
+            </summary>
+            <param name="series">序列資料</param>
+            <param name="length">區間個數</param>
+            <param name="barsBack">Bars 之前的索引(0=預設值)</param>
+            <returns>返回值: 區間內的最小值</returns>
+        </member>
+        <member name="M:PowerLanguage.PublicFunction.Summation(PowerLanguage.ISeries{System.Double},System.Int32,System.Int32)">
+            <summary>
+              取得區間的加總總合
+            </summary>
+            <param name="series">序列資料</param>
+            <param name="length">區間個數</param>
+            <param name="barsBack">Bars 之前的索引(0=預設值)</param>
+            <returns>返回值: 區間內的加總總和</returns>
+        </member>
+        <member name="T:PowerLanguage.IOrderCreator">
+            <summary>
+              下單建立者介面
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.IOrderCreator.Limit(PowerLanguage.SOrderParameters)">
+            <summary>
+              建立限價單交易
+            </summary>
+            <param name="orderParams">下單參數</param>
+            <returns>返回值: IOrderPriced 介面</returns>
+        </member>
+        <member name="M:PowerLanguage.IOrderCreator.MarketNextBar(PowerLanguage.SOrderParameters)">
+            <summary>
+              建立市場單交易(市場單會在下一根 Bars 下單)
+            </summary>
+            <param name="orderParams">下單參數</param>
+            <returns>返回值: IOrderMarket 介面</returns>
+        </member>
+        <member name="M:PowerLanguage.IOrderCreator.MarketThisBar(PowerLanguage.SOrderParameters)">
+            <summary>
+              建立市場單交易(市場單會在這一根 Bars 下單)
+            </summary>
+            <param name="orderParams">下單參數</param>
+            <returns>返回值: IOrderMarket 介面</returns>
+        </member>
+        <member name="M:PowerLanguage.IOrderCreator.Stop(PowerLanguage.SOrderParameters)">
+            <summary>
+              建立停損單交易
+            </summary>
+            <param name="orderParams">下單參數</param>
+            <returns>返回值: IOrderPriced 介面</returns>
+        </member>
+        <member name="M:PowerLanguage.IOrderCreator.StopLimit(PowerLanguage.SOrderParameters)">
+            <summary>
+              建立停損限價單交易
+            </summary>
+            <param name="orderParams">下單參數</param>
+            <returns>返回值: IOrderStopLimit 介面</returns>
+        </member>
+        <member name="T:PowerLanguage.IInstrument">
+            <summary>
+               商品資訊介面(包含開高低收資訊與商品屬性及其他重要資訊)
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrument.BarUpdateTime">
+            <summary>
+              [取得] Bars 最新的更新時間
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrument.CurrentBar">
+            <summary>
+              [取得] 目前 Bars 索引值
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrument.DOM">
+            <summary>
+              [取得] 委託價量資訊
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrument.FullSymbolData">
+            <summary>
+              [取得] 商品的所有資料
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrument.Info">
+            <summary>
+              [取得] 商品屬性
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrument.LastBarTime">
+            <summary>
+              [取得] 最後一根 Bars 的時間
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrument.Request">
+            <summary>
+              [取得] 資料請求資訊
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrument.Sessions">
+            <summary>
+              [取得] 開收盤的時間週期
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.IInstrument.Status">
+            <summary>
+              [取得] Bars 狀態
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.ETextStyleH">
+            <summary>
+              文字水平對齊樣式
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ETextStyleH.Right">
+            <summary>
+              靠右側對齊
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ETextStyleH.Left">
+            <summary>
+              靠左側對齊
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ETextStyleH.Center">
+            <summary>
+              置中對齊
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.EBarState">
+            <summary>
+              Bars 狀態列舉
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EBarState.None">
+            <summary>
+              無狀態
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EBarState.Open">
+            <summary>
+              開盤狀態
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EBarState.Inside">
+            <summary>
+              Bars 尚未收線
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EBarState.Close">
+            <summary>
+              Bars 已經收線
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.EAxisScaleMode">
+            <summary>
+              座標刻度模式列舉
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EAxisScaleMode.None">
+            <summary>
+              無模式(由圖表自行預設)
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EAxisScaleMode.ScaleGap">
+            <summary>
+              刻度間隔模式
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EAxisScaleMode.ScaleCount">
+            <summary>
+              刻度個數模式
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.AxisSetting">
+            <summary>
+              圖表座標設定值
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.AxisSetting.AxisScope">
+            <summary>
+              [取得/設定] 座標範圍
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.AxisSetting.MarginBottom">
+            <summary>
+              [取得/設定] 下邊界%數
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.AxisSetting.MarginTop">
+            <summary>
+              [取得/設定] 上邊界%數
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.AxisSetting.ScaleMode">
+            <summary>
+              [取得/設定] 刻度值模式
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.AxisSetting.ScaleValue">
+            <summary>
+              [取得/設定] 刻度設定值(根據 EAxisScaleMode 分別)
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.RuleBase">
+            <summary>
+              規則基礎類別
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.RuleBase.args">
+            <summary>
+              [取得/設定] 建構參數
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.RuleBase.ClassName">
+            <summary>
+              [取得/設定] 規則類別名稱
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.RulePropertyAttribute">
+            <summary>
+              規則屬性類別
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.RulePropertyAttribute.GetRules(System.Reflection.Assembly)">
+            <summary>
+              取得腳本物件內的所有使用者自訂的必要參數
+            </summary>
+            <param name="target">Assembly 組件</param>
+            <returns>返回值: 規則屬性類別列表(根據 ERuleType 分類)</returns>
+        </member>
+        <member name="M:PowerLanguage.RulePropertyAttribute.#ctor(PowerLanguage.ERuleType,System.String,System.String,System.String,System.Boolean)">
+            <summary>
+              建構子
+            </summary>
+            <param name="type">規則類型</param>
+            <param name="name">規則名稱</param>
+            <param name="className">規則類別名稱</param>
+            <param name="comment">規則說明</param>
+            <param name="isNeedSetting">是否需要設定(如果需要設定則需要時做 IRuleSetting 介面)</param>
+        </member>
+        <member name="P:PowerLanguage.RulePropertyAttribute.ClassName">
+            <summary>
+              [取得] 類別名稱
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.RulePropertyAttribute.Comment">
+            <summary>
+              [取得] 規則項目註解
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.RulePropertyAttribute.IsNeedSetting">
+            <summary>
+              [取得] 是否需要設定
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.RulePropertyAttribute.Name">
+            <summary>
+              [取得] 規則項目名稱
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.RulePropertyAttribute.RuleType">
+            <summary>
+              [取得] 規則類別
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.GlobalSettings">
+            <summary>
+              全域設定類別
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.GlobalSettings.Load(System.String)">
+            <summary>
+              讀取全域設定
+            </summary>
+            <param name="filename">設定檔名稱</param>
+        </member>
+        <member name="M:PowerLanguage.GlobalSettings.Save(System.String)">
+            <summary>
+              儲存全域設定
+            </summary>
+            <param name="filename">設定檔名稱</param>
+        </member>
+        <member name="P:PowerLanguage.GlobalSettings.Paths">
+            <summary>
+              [取得] 預設系統目錄路徑設定值
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.Order">
+            <summary>
+              下單參數類別
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.Order.#ctor(System.String,PowerLanguage.EOrderAction,PowerLanguage.OrderCategory,PowerLanguage.Contracts,System.Boolean,PowerLanguage.OrderExit)">
+            <summary>
+              建構子
+            </summary>
+            <param name="name">下單名稱</param>
+            <param name="action">下單進出場動作列舉</param>
+            <param name="category">下單類型</param>
+            <param name="lots">下單合約數量</param>
+            <param name="openNextBar">是否開倉在下一根 Bars</param>
+            <param name="exitInfo">平倉設定類別</param>
+        </member>
+        <member name="P:PowerLanguage.Order.Action">
+            <summary>
+              [取得] 下單進出場動作列舉
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Order.Category">
+            <summary>
+              [取得] 下單類型
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Order.Contracts">
+            <summary>
+              [取得] 下單合約數量
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Order.IsEntry">
+            <summary>
+              [取得] 平倉是否為 Entry 類型
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Order.IsExit">
+            <summary>
+              [取得] 是否為平倉類型
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Order.IsLong">
+            <summary>
+              [取得] 是否為多單類型
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Order.IsShort">
+            <summary>
+              [取得] 是否為空單類型
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Order.Name">
+            <summary>
+              [取得] 下單名稱
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Order.OnClose">
+            <summary>
+              [取得] 是否以市價下單在下一根 Bars 上
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Order.OrderExit">
+            <summary>
+              [取得] 平倉設定類別
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.ETextStyleV">
+            <summary>
+              文字垂直對齊樣式
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ETextStyleV.Below">
+            <summary>
+              靠下緣對齊
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ETextStyleV.Above">
+            <summary>
+              靠上緣對齊
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ETextStyleV.Center">
+            <summary>
+              置中對齊
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.EOrderAction">
+            <summary>
+              下單進出場動作列舉
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EOrderAction.Buy">
+            <summary>
+              多單進場
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EOrderAction.Sell">
+            <summary>
+              多單出場
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EOrderAction.SellShort">
+            <summary>
+              空單進場
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EOrderAction.BuyToCover">
+            <summary>
+              空單出場
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.DaylightTime">
+            <summary>
+              夏令時間設定類別
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.DaylightTime.Clone">
+            <summary>
+              建立 DaylightTime 淺層複本
+            </summary>
+            <returns>返回值: DaylightTime 類別</returns>
+        </member>
+        <member name="P:PowerLanguage.DaylightTime.EndDate">
+            <summary>
+              [取得/設定] 夏令時間結束日期(請將當地夏令時間自行轉換成UTC時間)
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.DaylightTime.StartDate">
+            <summary>
+              [取得/設定] 夏令時間開始日期(請將當地夏令時間自行轉換成UTC時間)
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.ChartSetting">
+            <summary>
+              圖表設定類別
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ChartSetting.Axis">
+            <summary>
+              [取得/設定] 座標設定值
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ChartSetting.ChartType">
+            <summary>
+              [取得/設定] 圖表類型
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ChartSetting.IsShowNewPrice">
+            <summary>
+              [取得/設定] 是否顯示最新價格
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ChartSetting.IsSubChart">
+            <summary>
+              [取得/設定] 是否為副圖(如果不是副圖則就是隱藏)
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ChartSetting.PenStyles">
+            <summary>
+              [取得/設定] 畫筆樣式
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.IOutput">
+            <summary>
+              輸出訊息介面
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.IOutput.Write(System.Boolean)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">bool型別</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.Write(System.Char)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">char型別</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.Write(System.Char[])">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="buffer">char陣列</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.Write(System.Decimal)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">decimal型別</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.Write(System.Double)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">double型別</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.Write(System.Single)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">float型別</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.Write(System.Int32)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">int型別</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.Write(System.Int64)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">long型別</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.Write(System.Object)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">object型別</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.Write(System.String)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">string型別</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.Write(System.UInt32)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">uint型別</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.Write(System.UInt64)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">ulong型別</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.Write(System.String,System.Object[])">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="format">格式化表示字串</param>
+            <param name="arg">參數陣列</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.Write(System.Char[],System.Int32,System.Int32)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="buffer">char陣列</param>
+            <param name="index">起始位置</param>
+            <param name="count">個數</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.WriteLine">
+            <summary>
+              寫入資料
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.IOutput.WriteLine(System.Boolean)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">bool型別</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.WriteLine(System.Char)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">char型別</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.WriteLine(System.Char[])">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="buffer">char陣列</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.WriteLine(System.Decimal)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">decimal型別</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.WriteLine(System.Double)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">double型別</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.WriteLine(System.Single)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">float型別</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.WriteLine(System.Int32)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">int型別</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.WriteLine(System.Int64)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">long型別</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.WriteLine(System.Object)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">object型別</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.WriteLine(System.String)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">string型別</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.WriteLine(System.UInt32)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">uint型別</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.WriteLine(System.UInt64)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="value">ulong型別</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.WriteLine(System.String,System.Object[])">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="format">格式化表示字串</param>
+            <param name="arg">參數陣列</param>
+        </member>
+        <member name="M:PowerLanguage.IOutput.WriteLine(System.Char[],System.Int32,System.Int32)">
+            <summary>
+              寫入資料
+            </summary>
+            <param name="buffer">char陣列</param>
+            <param name="index">起始位置</param>
+            <param name="count">個數</param>
+        </member>
+        <member name="T:PowerLanguage.ERuleType">
+            <summary>
+              規則類別
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ERuleType.None">
+            <summary>
+              無類型
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ERuleType.Contract">
+            <summary>
+              合約(交割)時間規則
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ERuleType.PriceScale">
+            <summary>
+              價格座標規則
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ERuleType.Tax">
+            <summary>
+              交易稅規則
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ERuleType.Commission">
+            <summary>
+              佣金規則
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.ERuleType.Fee">
+            <summary>
+              手續費規則
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.OrderExit">
+            <summary>
+              平倉設定類別
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.OrderExit.FromEntry(PowerLanguage.IOrderObject)">
+            <summary>
+              從 entry 取得平倉設定類別
+            </summary>
+            <param name="entry">IOrderObject 介面</param>
+            <returns>返回值: OrderExit 類別</returns>
+        </member>
+        <member name="P:PowerLanguage.OrderExit.EntryID">
+            <summary>
+              [取得] 條目代號
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.OrderExit.ExitType">
+            <summary>
+              [取得] 平倉類型
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.OrderExit.FromAll">
+            <summary>
+              [取得] All 類型的平倉類別
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.OrderExit.IsTotal">
+            <summary>
+              [取得] 是否為 Total 平倉類型
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.OrderExit.Total">
+            <summary>
+              [取得] Total 類型的平倉類別
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.OrderExit.EExitType">
+            <summary>
+              平倉類型
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.OrderExit.EExitType.All">
+            <summary>
+              平倉所有單
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.OrderExit.EExitType.Total">
+            <summary>
+              平倉一定數量的所有單(參考 Contract 的設定 lots 單位, 或是由使用者自己指定)
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.OrderExit.EExitType.FromOne">
+            <summary>
+              平倉使用者指定的 Entry
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.OptionType">
+            <summary>
+              選擇權類型
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.OptionType.Call">
+            <summary>
+              選擇權的買權
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.OptionType.Put">
+            <summary>
+              選擇權的賣權
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.OptionType.None">
+            <summary>
+              非選擇權類型
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.ITradeOrder">
+            <summary>
+              交易訂單資訊介面
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITradeOrder.Action">
+            <summary>
+              [取得] 下單進出場動作
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITradeOrder.BarNumber">
+            <summary>
+              [取得] 下單時的 Bars Number
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITradeOrder.Category">
+            <summary>
+              [取得] 下單類型
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITradeOrder.Contracts">
+            <summary>
+              [取得] 下單合約數量
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITradeOrder.Fee">
+            <summary>
+              [取得] 手續費
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITradeOrder.OtherFees">
+            <summary>
+              [取得] 其他佣金或手續費用
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITradeOrder.Price">
+            <summary>
+              [取得] 下單價格
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITradeOrder.Tax">
+            <summary>
+              [取得] 交易稅
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITradeOrder.Time">
+            <summary>
+              [取得] 下單時間
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.ITextContainer">
+            <summary>
+              文字繪製容器介面
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.ITextContainer.Create(PowerLanguage.ChartPoint,System.String)">
+            <summary>
+              建立文字繪圖物件
+            </summary>
+            <param name="point">文字繪圖物件的座標位置</param>
+            <param name="text">繪圖文字內容</param>
+            <returns>返回值: ITextObject 介面</returns>
+        </member>
+        <member name="M:PowerLanguage.ITextContainer.Create(PowerLanguage.ChartPoint,System.String,System.Boolean)">
+            <summary>
+              建立文字繪圖物件
+            </summary>
+            <param name="point">文字繪圖物件的座標位置</param>
+            <param name="text">繪圖文字內容</param>
+            <param name="onSameSubchart">是否在同一個副圖中</param>
+            <returns>返回值: ITextObject 介面</returns>
+        </member>
+        <member name="M:PowerLanguage.ITextContainer.Create(PowerLanguage.ChartPoint,System.String,System.Int32)">
+            <summary>
+              建立文字繪圖物件
+            </summary>
+            <param name="point">文字繪圖物件的座標位置</param>
+            <param name="text">繪圖文字內容</param>
+            <param name="dataStream">資料串流編號</param>
+            <returns>返回值: ITextObject 介面</returns>
+        </member>
+        <member name="M:PowerLanguage.ITextContainer.GetTextObjects(PowerLanguage.EDrawingSource)">
+            <summary>
+              取得文字繪圖物件列表
+            </summary>
+            <param name="drawingSource">繪製描述來源列舉</param>
+            <returns>返回值: 文字繪圖物件列表(需要使用 foreach 列舉所有文字繪圖物件)</returns>
+        </member>
+        <member name="P:PowerLanguage.ITextContainer.Active">
+            <summary>
+              [取得] 作用中的文字繪圖物件
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.IStudyControl">
+            <summary>
+              腳本控制介面
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.IStudyControl.AddVariable(PowerLanguage.IVariables)">
+            <summary>
+              加入變數類別方法
+            </summary>
+            <param name="var">變數擴充介面</param>
+        </member>
+        <member name="M:PowerLanguage.IStudyControl.BarsOfData(System.Int32)">
+            <summary>
+              取得其他的 Bars 資訊
+            </summary>
+            <param name="data_stream">資料串流編號(0 為起始編號)</param>
+            <returns>返回值: IInstrument 介面</returns>
+        </member>
+        <member name="T:PowerLanguage.EAxisScope">
+            <summary>
+              座標範圍列舉
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EAxisScope.CurrentScope">
+            <summary>
+              目前資料範圍
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EAxisScope.AllScope">
+            <summary>
+              全部資料範圍
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EAxisScope.ChangeScope">
+            <summary>
+              資料變動的範圍
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EAxisScope.PriceScaleScope">
+            <summary>
+              價格比例範圍(根據商品的價格尺度規則設定座標軸間距)
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.DataRequestType">
+            <summary>
+              資料請求類型
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.DataRequestType.DaysBack">
+            <summary>
+              從目前的日期往前幾天的讀取模式
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.DataRequestType.BarsBack">
+            <summary>
+              從目前的日期往前幾個Bars的讀取模式
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.DataRequestType.FromTo">
+            <summary>
+              從兩個日期區間內為範圍的讀取模式
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.ChartPoint">
+            <summary>
+              圖表點座標結構
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.ChartPoint.op_Inequality(PowerLanguage.ChartPoint,PowerLanguage.ChartPoint)">
+            <summary>
+              [!=]運算子重載 
+            </summary>
+            <param name="left">左方運算元</param>
+            <param name="right">右方運算元</param>
+            <returns>返回值:true=不相等, false=相等</returns>
+        </member>
+        <member name="M:PowerLanguage.ChartPoint.op_Equality(PowerLanguage.ChartPoint,PowerLanguage.ChartPoint)">
+            <summary>
+              [==]運算子重載 
+            </summary>
+            <param name="left">左方運算元</param>
+            <param name="right">右方運算元</param>
+            <returns>返回值:true=相等, false=不相等</returns>
+        </member>
+        <member name="M:PowerLanguage.ChartPoint.#ctor(System.Double)">
+            <summary>
+              建構子
+            </summary>
+            <param name="price">價格</param>
+        </member>
+        <member name="M:PowerLanguage.ChartPoint.#ctor(System.DateTime,System.Double)">
+            <summary>
+              建構子
+            </summary>
+            <param name="time">時間</param>
+            <param name="price">價格</param>
+        </member>
+        <member name="M:PowerLanguage.ChartPoint.#ctor(System.Int32,System.Double)">
+            <summary>
+              建構子
+            </summary>
+            <param name="barNumber">Bar 編號</param>
+            <param name="price">價格</param>
+        </member>
+        <member name="M:PowerLanguage.ChartPoint.Equals(PowerLanguage.ChartPoint)">
+            <summary>
+              比較相等方法
+            </summary>
+            <param name="other">ChartPoint 結構</param>
+            <returns>返回值: true=相等, false=不相等</returns>
+        </member>
+        <member name="M:PowerLanguage.ChartPoint.Equals(System.Object)">
+            <summary>
+              判斷指定的 System.Object 和目前的 System.Object 是否相等。
+            </summary>
+            <param name="obj">System.Object，要與目前的 System.Object 比較。</param>
+            <returns>如果指定的 System.Object 和目前的 System.Object 相等，則為 true，否則為 false。</returns>
+        </member>
+        <member name="M:PowerLanguage.ChartPoint.GetHashCode">
+            <summary>
+              做為特定型別的雜湊函式。
+            </summary>
+            <returns>目前 System.Object 的雜湊程式碼。</returns>
+        </member>
+        <member name="M:PowerLanguage.ChartPoint.ToString">
+            <summary>
+              傳回 System.String，表示目前的 System.Object。
+            </summary>
+            <returns>System.String，表示目前的 System.Object。</returns>
+        </member>
+        <member name="P:PowerLanguage.ChartPoint.Empty">
+            <summary>
+              [取得] 空的 ChartPoint 結構
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ChartPoint.BarNumber">
+            <summary>
+              [取得/設定] Bar 編號
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ChartPoint.Price">
+            <summary>
+              [取得/設定] 價格
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ChartPoint.Time">
+            <summary>
+              [取得/設定] 時間
+            </summary>
+        </member>
+    </members>
+</doc>

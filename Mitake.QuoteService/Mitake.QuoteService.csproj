@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B40A8B33-45D2-4C47-B872-193A75DC730F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Zeghs</RootNamespace>
+    <AssemblyName>Mitake.QuoteService</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <PublishUrl>http://localhost/zModule/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Debug\Mitake.QuoteService.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Release\Mitake.QuoteService.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\log4net\4.0\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\json.net\4.0\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Mitake\Packets\AuthenticationLogin.cs" />
+    <Compile Include="Mitake\Packets\AuthenticationReturn.cs" />
+    <Compile Include="Mitake\Packets\Complement.cs" />
+    <Compile Include="Mitake\Packets\Logout.cs" />
+    <Compile Include="Mitake\Packets\McpStruct.cs" />
+    <Compile Include="Mitake\Packets\SessionRegister.cs" />
+    <Compile Include="Mitake\Packets\LoadQuote.cs" />
+    <Compile Include="Mitake\Packets\QuoteRanking.cs" />
+    <Compile Include="Mitake\Packets\Subscribe.cs" />
+    <Compile Include="Mitake\Sockets\Data\SocketToken.cs" />
+    <Compile Include="Mitake\Sockets\Data\PacketBuffer.cs" />
+    <Compile Include="Mitake\Events\EventHandler.cs" />
+    <Compile Include="Mitake\Events\McpPacketEvent.cs" />
+    <Compile Include="Mitake\Events\CloseEvent.cs" />
+    <Compile Include="Mitake\Sockets\McpDecoder.cs" />
+    <Compile Include="Mitake\Sockets\MitakePacket.cs" />
+    <Compile Include="Mitake\Events\ConnectEvent.cs" />
+    <Compile Include="Mitake\Events\ReceiveEvent.cs" />
+    <Compile Include="Mitake\Sockets\SocketAsyncEventArgsPool.cs" />
+    <Compile Include="Mitake\QuoteService.cs" />
+    <Compile Include="Mitake\Sockets\ZSocket.cs" />
+    <Compile Include="Mitake\Stock\Data\MitakeIndexClassify.cs" />
+    <Compile Include="Mitake\Stock\Data\MitakeIndex.cs" />
+    <Compile Include="Mitake\Stock\Data\MitakeIndexTick.cs" />
+    <Compile Include="Mitake\Stock\Data\MitakeNotice.cs" />
+    <Compile Include="Mitake\Stock\Data\MitakePriceClassify.cs" />
+    <Compile Include="Mitake\Stock\Data\MitakeEntrust.cs" />
+    <Compile Include="Mitake\Stock\Data\MitakeQuoteTick.cs" />
+    <Compile Include="Mitake\Stock\Data\MitakeSymbolInformation.cs" />
+    <Compile Include="Mitake\Stock\Data\MitakeSymbolManager.cs" />
+    <Compile Include="Mitake\Stock\Data\上櫃指數代號表.cs" />
+    <Compile Include="Mitake\Stock\Data\MitakeStorage.cs" />
+    <Compile Include="Mitake\Stock\Data\MitakeQuote.cs" />
+    <Compile Include="Mitake\Stock\Data\MitakeNoticeUtil.cs" />
+    <Compile Include="Mitake\Stock\Data\上市指數代號表.cs" />
+    <Compile Include="Mitake\Stock\Decode\DecodeFinance.cs" />
+    <Compile Include="Mitake\Stock\Decode\DecodeReturn.cs" />
+    <Compile Include="Mitake\Stock\Decode\DecodeStock.cs" />
+    <Compile Include="Mitake\Stock\Decode\Decode_MF0.cs" />
+    <Compile Include="Mitake\Stock\Decode\Decode_S3D.cs" />
+    <Compile Include="Mitake\Stock\Decode\Decode_SB3.cs" />
+    <Compile Include="Mitake\Stock\Decode\Decode_SF1.cs" />
+    <Compile Include="Mitake\Stock\Util\BitConvert.cs" />
+    <Compile Include="Mitake\Stock\Decode\Decode_S30.cs" />
+    <Compile Include="Mitake\Stock\Decode\Decode_S31.cs" />
+    <Compile Include="Mitake\Stock\Decode\Decode_S32.cs" />
+    <Compile Include="Mitake\Stock\Decode\Decode_S33.cs" />
+    <Compile Include="Mitake\Stock\Decode\Decode_S34.cs" />
+    <Compile Include="Mitake\Stock\Decode\Decode_S35.cs" />
+    <Compile Include="Mitake\Stock\Decode\Decode_S36.cs" />
+    <Compile Include="Mitake\Stock\Decode\Decode_S37.cs" />
+    <Compile Include="Mitake\Stock\Decode\Decode_S38.cs" />
+    <Compile Include="Mitake\Stock\Decode\Decode_S3B.cs" />
+    <Compile Include="Mitake\Stock\Decode\Decode_S3C.cs" />
+    <Compile Include="Mitake\Stock\Decode\DecodeTime.cs" />
+    <Compile Include="Mitake\Stock\Util\Price.cs" />
+    <Compile Include="Mitake\Stock\Decode\StockDecoder.cs" />
+    <Compile Include="Mitake\Stock\Util\Time.cs" />
+    <Compile Include="Mitake\Stock\Util\Volumn.cs" />
+    <Compile Include="Mitake\Events\StockEvent.cs" />
+    <Compile Include="Mitake\Events\TimerEvent.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PLTypes\PLTypes.csproj">
+      <Project>{39F489FF-91E0-415D-9912-635B113B38D2}</Project>
+      <Name>PLTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WES.External.QuotePlugin\WES.External.QuotePlugin.csproj">
+      <Project>{DE017AC1-D250-445C-9776-92632E032758}</Project>
+      <Name>WES.External.QuotePlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WES.Runtime.Product\WES.Runtime.Product.csproj">
+      <Project>{7C5601E7-7118-477B-A4AC-C2E0DE9999DB}</Project>
+      <Name>WES.Runtime.Product</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

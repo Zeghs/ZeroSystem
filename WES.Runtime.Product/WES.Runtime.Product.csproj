@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7C5601E7-7118-477B-A4AC-C2E0DE9999DB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Zeghs</RootNamespace>
+    <AssemblyName>WES.Runtime.Product</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\WES.Runtime.Product.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\WES.Runtime.Product.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\json.net\4.0\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Zeghs\Informations\ProductInformation.cs" />
+    <Compile Include="Zeghs\Managers\ProductManager.cs" />
+    <Compile Include="Zeghs\Products\AbstractExchange.cs" />
+    <Compile Include="Zeghs\Products\CautionMoney.cs" />
+    <Compile Include="Zeghs\Products\ContractTime.cs" />
+    <Compile Include="Zeghs\Products\InstrumentSettings.cs" />
+    <Compile Include="Zeghs\Rules\IContractTarget.cs" />
+    <Compile Include="Zeghs\Rules\IPriceScale.cs" />
+    <Compile Include="Zeghs\Rules\IContractTime.cs" />
+    <Compile Include="Zeghs\Products\ProductClassify.cs" />
+    <Compile Include="Zeghs\Products\AbstractProductProperty.cs" />
+    <Compile Include="Zeghs\Products\ProductPropertyList.cs" />
+    <Compile Include="Zeghs\Rules\ITax.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PLTypes\PLTypes.csproj">
+      <Project>{39F489FF-91E0-415D-9912-635B113B38D2}</Project>
+      <Name>PLTypes</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,2 @@
+copy Taiwan.TaiwanStockExchange\bin\Release\Taiwan.TaiwanStockExchange.dll zeroSystem\bin\Release\exchanges
+copy Taiwan.TaiwanStockExchange\bin\Release\Taiwan.TaiwanStockExchange.set zeroSystem\bin\Release\exchanges

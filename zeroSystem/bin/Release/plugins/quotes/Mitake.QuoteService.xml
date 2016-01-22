@@ -1,0 +1,2157 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Mitake.QuoteService</name>
+    </assembly>
+    <members>
+        <member name="T:Mitake.Stock.Decode.Decode_S31">
+            <summary>
+              個股成交即時資訊
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Decode.Decode_S3D">
+            <summary>
+              暫緩撮合訊息
+            </summary>
+        </member>
+        <member name="T:Mitake.Sockets.Data.PacketBuffer">
+            <summary>
+              封包緩衝區
+            </summary>
+        </member>
+        <member name="M:Mitake.Sockets.Data.PacketBuffer.#ctor">
+            <summary>
+              PacketBuffer建構子
+            </summary>
+        </member>
+        <member name="M:Mitake.Sockets.Data.PacketBuffer.#ctor(System.Int32)">
+            <summary>
+              PacketBuffer建構子
+            </summary>
+            <param name="size">緩衝區大小</param>
+        </member>
+        <member name="M:Mitake.Sockets.Data.PacketBuffer.#ctor(System.Byte[])">
+            <summary>
+              ZBuffer建構子
+            </summary>
+            <param name="buffer">緩衝區陣列</param>
+        </member>
+        <member name="M:Mitake.Sockets.Data.PacketBuffer.#ctor(Mitake.Sockets.Data.PacketBuffer)">
+            <summary>
+              ZBuffer建構子
+            </summary>
+            <param name="buffer">ZBuffer緩衝區</param>
+        </member>
+        <member name="M:Mitake.Sockets.Data.PacketBuffer.Add(System.Byte[])">
+            <summary>
+               加入新封包
+            </summary>
+            <param name="buffer">來源封包陣列</param>
+            <returns>返回值:ture=成功  false=失敗</returns>
+        </member>
+        <member name="M:Mitake.Sockets.Data.PacketBuffer.Add(Mitake.Sockets.Data.PacketBuffer)">
+            <summary>
+               加入新封包
+            </summary>
+            <param name="buffer">來源ZBuffer封包</param>
+            <returns>返回值:ture=成功  false=失敗</returns>
+        </member>
+        <member name="M:Mitake.Sockets.Data.PacketBuffer.Add(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+               加入新封包
+            </summary>
+            <param name="buffer">來源封包陣列</param>
+            <param name="index">來源封包起始位置</param>
+            <param name="length">複製長度</param>
+            <returns>返回值:ture=成功  false=失敗</returns>
+        </member>
+        <member name="P:Mitake.Sockets.Data.PacketBuffer.Data">
+            <summary>
+               [取得/設定]緩衝區內容
+            </summary>
+        </member>
+        <member name="P:Mitake.Sockets.Data.PacketBuffer.Length">
+            <summary>
+               [取得/設定]緩衝區資料大小
+            </summary>
+        </member>
+        <member name="P:Mitake.Sockets.Data.PacketBuffer.Position">
+            <summary>
+               [取得/設定]目前索引位置
+            </summary>
+        </member>
+        <member name="P:Mitake.Sockets.Data.PacketBuffer.Size">
+            <summary>
+               [取得]緩衝區容量
+            </summary>
+        </member>
+        <member name="P:Mitake.Sockets.Data.PacketBuffer.Item(System.Int32)">
+            <summary>
+              取得偏移位置資訊(以 Position 為起始位置)
+            </summary>
+            <param name="Offset">偏移位置</param>
+            <returns>返回值: byte資料</returns>
+        </member>
+        <member name="T:Mitake.Packets.McpStruct">
+            <summary>
+              MCP封包檔頭結構表
+            </summary>
+        </member>
+        <member name="T:Mitake.Packets.AuthenticationLogin">
+            <summary>
+              Authentication登入封包結構表
+            </summary>
+        </member>
+        <member name="P:Mitake.Packets.AuthenticationLogin.UserId">
+            <summary>
+               [取得]使用者帳號
+            </summary>
+        </member>
+        <member name="P:Mitake.Packets.AuthenticationLogin.Password">
+            <summary>
+               [取得]使用者密碼
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Util.Volumn">
+            <summary>
+              成交量格式轉換類別
+            </summary>
+        </member>
+        <member name="M:Mitake.Stock.Util.Volumn.GetVolumn(System.Int32,Mitake.Sockets.Data.PacketBuffer)">
+            <summary>
+               取得成交量資訊函式
+            </summary>
+            <param name="type">成交量類型(請參考資料格式)</param>
+            <param name="Buffer">ZBuffer類別</param>
+            <returns>傳回值：成交量(或是其他型態)</returns>
+        </member>
+        <member name="M:Mitake.Stock.Util.Volumn.SetVolumn(Mitake.Sockets.Data.PacketBuffer,System.UInt32,System.Byte@,System.Int32)">
+            <summary>
+                設定成交量資訊函式
+            </summary>
+            <param name="Buffer">封包陣列</param>
+            <param name="Volumn">成交量</param>
+            <param name="VolumnFlag">成交量旗標</param>
+            <param name="BitIndex">起始位元索引(0=最右邊起始位元 依序向左遞增)</param>
+        </member>
+        <member name="T:Mitake.Stock.Decode.Decode_S3C">
+            <summary>
+               個股委買委賣(2~5檔)價量封包
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Decode.Decode_S30">
+            <summary>
+              今日開盤前資訊類別
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Decode.DecodeFinance">
+            <summary>
+               解碼所有悅陽資訊的金融封包
+            </summary>
+        </member>
+        <member name="T:Mitake.QuoteService">
+            <summary>
+              三竹即時報價服務類別
+            </summary>
+        </member>
+        <member name="M:Mitake.QuoteService.#ctor">
+            <summary>
+              建構子
+            </summary>
+        </member>
+        <member name="M:Mitake.QuoteService.AddSubscribe(System.String)">
+            <summary>
+              新增報價資訊訂閱
+            </summary>
+            <param name="symbolId">商品代號</param>
+        </member>
+        <member name="M:Mitake.QuoteService.AddSubscribe(System.Collections.Generic.List{System.String})">
+            <summary>
+              新增報價資訊訂閱(可多商品訂閱)
+            </summary>
+            <param name="symbolList">商品代號列表</param>
+        </member>
+        <member name="M:Mitake.QuoteService.Complement(System.String)">
+            <summary>
+              回補即時報價今天的所有歷史Tick
+            </summary>
+            <param name="symbolId">商品代號</param>
+        </member>
+        <member name="M:Mitake.QuoteService.Load">
+            <summary>
+              讀取即時報價服務的設定
+            </summary>
+        </member>
+        <member name="M:Mitake.QuoteService.Login">
+            <summary>
+              登入遠端伺服器
+            </summary>
+            <returns>返回值:true=登入程序已成功(等候onLogin事件通知), false=登入程序失敗</returns>
+        </member>
+        <member name="M:Mitake.QuoteService.Logout">
+            <summary>
+               登出遠端伺服器
+            </summary>
+        </member>
+        <member name="M:Mitake.QuoteService.RemoveSubscribe(System.String)">
+            <summary>
+              取消報價資訊訂閱
+            </summary>
+            <param name="symbolId">商品代號</param>
+        </member>
+        <member name="M:Mitake.QuoteService.Save">
+            <summary>
+              儲存即時報價服務的設定
+            </summary>
+        </member>
+        <member name="M:Mitake.QuoteService.SymbolUpdate">
+            <summary>
+              更新商品代號資訊
+            </summary>
+        </member>
+        <member name="M:Mitake.QuoteService.Dispose(System.Boolean)">
+            <summary>
+              釋放報價服務的所有資源(繼承後可複寫方法)
+            </summary>
+            <param name="disposing">是否處理受託管的資源</param>
+        </member>
+        <member name="M:Mitake.QuoteService.Send(System.Object)">
+            <summary>
+               傳送MCP命令給伺服器
+            </summary>
+            <param name="mcpObject">MCP命令類別</param>
+        </member>
+        <member name="M:Mitake.QuoteService.SendSubscribe">
+            <summary>
+               傳送訂閱資料給伺服器
+            </summary>
+        </member>
+        <member name="P:Mitake.QuoteService.IsDecode">
+            <summary>
+              [取得/設定] 是否啟動解碼器(預設:true)
+            </summary>
+        </member>
+        <member name="P:Mitake.QuoteService.Storage">
+            <summary>
+              [取得] 報價資訊儲存媒體
+            </summary>
+        </member>
+        <member name="P:Mitake.QuoteService.TradeDate">
+            <summary>
+              [取得] 最後交易日期
+            </summary>
+        </member>
+        <member name="P:Mitake.QuoteService.IsUpdate">
+            <summary>
+              [取得] 是否需要更新 
+            </summary>
+        </member>
+        <member name="T:Mitake.Events.ReceiveEvent">
+            <summary>
+               ZSocket完成接收之後所發出的事件類別
+            </summary>
+        </member>
+        <member name="P:Mitake.Events.ReceiveEvent.ActiveSocket">
+            <summary>
+               [取得]作用中的Socket
+            </summary>
+        </member>
+        <member name="P:Mitake.Events.ReceiveEvent.Token">
+            <summary>
+               [取得]緩衝區內的資料
+            </summary>
+        </member>
+        <member name="T:Mitake.Events.ConnectEvent">
+            <summary>
+              完成連結事件類別
+            </summary>
+        </member>
+        <member name="M:Mitake.Events.ConnectEvent.#ctor(System.Net.Sockets.Socket)">
+            <summary>
+               建構子
+            </summary>
+            <param name="socket">Socket類別</param>
+        </member>
+        <member name="P:Mitake.Events.ConnectEvent.RemoteIP">
+            <summary>
+               [取得]伺服器IP位址
+            </summary>
+        </member>
+        <member name="P:Mitake.Events.ConnectEvent.Port">
+            <summary>
+               [取得]伺服器端連接Port
+            </summary>
+        </member>
+        <member name="T:Mitake.Sockets.McpDecoder">
+            <summary>
+              MCP命令封包解碼類別
+            </summary>
+        </member>
+        <member name="M:Mitake.Sockets.McpDecoder.Decode(System.Net.Sockets.Socket,Mitake.Sockets.Data.SocketToken)">
+            <summary>
+              MCP命令封包解碼(解碼整個封包)
+            </summary>
+            <param name="socket">作用中的Socket類別</param>
+            <param name="token">SocketToken類別</param>
+        </member>
+        <member name="M:Mitake.Sockets.McpDecoder.McpDecode(System.Net.Sockets.Socket,Mitake.Sockets.Data.SocketToken)">
+            <summary>
+              MCP封包解碼(一次解讀一條MCP命令)
+            </summary>
+            <param name="socket">作用中的Socket類別</param>
+            <param name="Token">SocketToken類別</param>
+            <returns>返回值：true=解碼成功  false=解碼失敗</returns>
+        </member>
+        <member name="E:Mitake.Sockets.McpDecoder.McpPacketProc">
+            <summary>
+               當收到MCP封包後所產生的事件
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Util.Price">
+            <summary>
+              價位格式轉換類別
+            </summary>
+        </member>
+        <member name="M:Mitake.Stock.Util.Price.GetPrice(System.Int32,Mitake.Sockets.Data.PacketBuffer,System.Single@)">
+            <summary>
+               解碼價格資訊函式
+            </summary>
+            <param name="type">價格類型(請參閱資料格式)</param>
+            <param name="Buffer">ZBuffer類別</param>
+            <param name="ReferPrice">參考價格</param>
+            <returns>傳回值：股票價格</returns>
+        </member>
+        <member name="M:Mitake.Stock.Util.Price.SetPrice(Mitake.Sockets.Data.PacketBuffer,System.Single,System.Single,System.Byte@,System.Int32)">
+            <summary>
+                編碼價格資訊函式
+            </summary>
+            <param name="Buffer">緩衝區</param>
+            <param name="Price">價格</param>
+            <param name="ReferPrice">參考價</param>
+            <param name="PriceFlag">價格旗標</param>
+            <param name="BitIndex">起始位元索引(0=最右邊起始位元 依序向左遞增)</param>
+        </member>
+        <member name="T:Mitake.Stock.Decode.Decode_S3B">
+            <summary>
+              補個股每筆成交價量
+            </summary>
+        </member>
+        <member name="M:Mitake.Stock.Decode.Decode_S3B.EntrustPrice(System.Byte,Mitake.Sockets.Data.PacketBuffer)">
+            <summary>
+              取得委託價函式
+            </summary>
+            <param name="type">委託價格式(0=1Byte  1=2Byte)</param>
+            <param name="buffer">即時資料Buffer</param>
+            <returns>返回值:委託價格</returns>
+        </member>
+        <member name="T:Mitake.Stock.Data.上市指數代號表">
+            <summary>
+               上市指數代號表
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.加權指數">
+            <summary>
+             [上市]加權指數
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.水泥指數">
+            <summary>
+             [上市]水泥指數
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.食品指數">
+            <summary>
+             [上市]食品指數
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.塑膠指數">
+            <summary>
+             [上市]塑膠指數
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.紡織指數">
+            <summary>
+             [上市]紡織指數
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.機電指數">
+            <summary>
+             [上市]機電指數
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.造紙指數">
+            <summary>
+             [上市]造紙指數
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.營建指數">
+            <summary>
+             [上市]營建指數
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.金融指數">
+            <summary>
+             [上市]金融指數
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.不含金融">
+            <summary>
+             [上市]不含金融
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.水泥">
+            <summary>
+             [上市]水泥
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.食品">
+            <summary>
+             [上市]食品
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.塑膠">
+            <summary>
+             [上市]塑膠
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.紡織纖維">
+            <summary>
+             [上市]紡織纖維
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.電機機械">
+            <summary>
+             [上市]電機機械
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.電器電纜">
+            <summary>
+             [上市]電器電纜
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.化學工業">
+            <summary>
+             [上市]化學工業
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.玻璃陶瓷">
+            <summary>
+             [上市]玻璃陶瓷
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.造紙">
+            <summary>
+             [上市]造紙
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.鋼鐵">
+            <summary>
+             [上市]鋼鐵
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.橡膠">
+            <summary>
+             [上市]橡膠
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.汽車">
+            <summary>
+             [上市]汽車
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.電子">
+            <summary>
+             [上市]電子
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.營造建材">
+            <summary>
+             [上市]營造建材
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.航運運輸">
+            <summary>
+             [上市]航運運輸
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.觀光">
+            <summary>
+             [上市]觀光
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.金融保險">
+            <summary>
+             [上市]金融保險
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.百貨貿易">
+            <summary>
+             [上市]百貨貿易
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.其他">
+            <summary>
+             [上市]其他
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.不含電子">
+            <summary>
+             [上市]不含電子
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.領先指標">
+            <summary>
+             [上市]領先指標
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.不含金融電子">
+            <summary>
+             [上市]不含金融電子
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.化學產業">
+            <summary>
+             [上市]化學產業
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.生技醫療">
+            <summary>
+             [上市]生技醫療
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.油電燃氣">
+            <summary>
+             [上市]油電燃氣
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.半導體">
+            <summary>
+             [上市]半導體
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.電腦及週邊設備">
+            <summary>
+             [上市]電腦及週邊設備
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.光電">
+            <summary>
+             [上市]光電
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.通信網路">
+            <summary>
+             [上市]通信網路
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.電子零組件">
+            <summary>
+             [上市]電子零組件
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.電子通路">
+            <summary>
+             [上市]電子通路
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.資訊服務">
+            <summary>
+             [上市]資訊服務
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上市指數代號表.其他電子">
+            <summary>
+             [上市]其他電子
+            </summary>
+        </member>
+        <member name="T:Mitake.Events.McpPacketEvent">
+            <summary>
+              MCP封包事件類別
+            </summary>
+        </member>
+        <member name="P:Mitake.Events.McpPacketEvent.ActiveSocket">
+            <summary>
+               [取得]作用中的Socket
+            </summary>
+        </member>
+        <member name="P:Mitake.Events.McpPacketEvent.Source">
+            <summary>
+               [取得]MCP緩衝區內的資料
+            </summary>
+        </member>
+        <member name="P:Mitake.Events.McpPacketEvent.Type">
+            <summary>
+               [取得]MCP封包的類型
+            </summary>
+        </member>
+        <member name="P:Mitake.Events.McpPacketEvent.Command">
+            <summary>
+               [取得]MCP封包的命令
+            </summary>
+        </member>
+        <member name="T:Mitake.Packets.Subscribe">
+            <summary>
+               股票訂閱封包結構
+            </summary>
+        </member>
+        <member name="M:Mitake.Packets.Subscribe.Add(System.Int32)">
+            <summary>
+               加入要訂閱的股票流水號
+            </summary>
+            <param name="serial">股票流水號</param>
+        </member>
+        <member name="M:Mitake.Packets.Subscribe.Remove(System.Int32)">
+            <summary>
+               刪除要訂閱的股票流水號
+            </summary>
+            <param name="serial">股票流水號</param>
+        </member>
+        <member name="P:Mitake.Packets.Subscribe.Serials">
+            <summary>
+               [取得]使用者訂閱的股票流水號
+            </summary>
+        </member>
+        <member name="T:Mitake.Events.TimerEvent">
+            <summary>
+               收到時間封包解碼後所觸發的事件
+            </summary>
+        </member>
+        <member name="M:Mitake.Events.TimerEvent.ToString">
+            <summary>
+                取得證交所時間封包的字串完整格式
+            </summary>
+            <returns>返回值：證交所時間封包字串格式</returns>
+        </member>
+        <member name="P:Mitake.Events.TimerEvent.QuoteDateTime">
+            <summary>
+              [取得] 即時資訊報價日
+            </summary>
+        </member>
+        <member name="P:Mitake.Events.TimerEvent.Trade">
+            <summary>
+              [取得/設定] 交易資訊 0=尚未開盤  1=盤中資料  2=盤後資料  3=無法辨識
+            </summary>
+        </member>
+        <member name="P:Mitake.Events.TimerEvent.TradeDate">
+            <summary>
+              [取得/設定] 最後交易日期
+            </summary>
+        </member>
+        <member name="T:Mitake.Events.StockEvent">
+            <summary>
+              股票資料接收解碼後產生的事件類別
+            </summary>
+        </member>
+        <member name="P:Mitake.Events.StockEvent.Header">
+            <summary>
+               [取得/設定]封包檔頭型態 0x53=金融封包  0x23=上午時間封包  0x24=下午時間封包
+            </summary>
+        </member>
+        <member name="P:Mitake.Events.StockEvent.Serial">
+            <summary>
+               [取得/設定]股票內部流水號
+            </summary>
+        </member>
+        <member name="P:Mitake.Events.StockEvent.Type">
+            <summary>
+               [取得/設定]股票資料類型
+            </summary>
+        </member>
+        <member name="P:Mitake.Events.StockEvent.Source">
+            <summary>
+               [取得/設定]封包資料內容
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Decode.DecodeStock">
+            <summary>
+               股票封包解碼器
+            </summary>
+        </member>
+        <member name="M:Mitake.Stock.Decode.DecodeStock.Decode(Mitake.Events.StockEvent)">
+            <summary>
+              股票封包解碼
+            </summary>
+            <param name="item">StockEvent類別</param>
+        </member>
+        <member name="T:Mitake.Stock.Data.MitakeIndex">
+            <summary>
+               大盤資訊類別
+            </summary>
+        </member>
+        <member name="M:Mitake.Stock.Data.MitakeIndex.#ctor">
+            <summary>
+              大盤資訊類別
+            </summary>
+        </member>
+        <member name="M:Mitake.Stock.Data.MitakeIndex.GetTick(System.Int32)">
+            <summary>
+              取得即時報價Tick
+            </summary>
+            <param name="index">索引值(0=最新報價資訊)</param>
+            <returns>返回值:ITick報價資訊</returns>
+        </member>
+        <member name="M:Mitake.Stock.Data.MitakeIndex.GetMitakeTick(System.DateTime,Mitake.Stock.Data.MitakeIndexTick@)">
+            <summary>
+               取得成交資訊明細
+            </summary>
+            <param name="time">即時時間</param>
+            <param name="tick">成交資訊明細(ref)</param>
+            <returns>返回值：false=新建立  true=已存在</returns>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.Close">
+            <summary>
+              [取得] 今日收盤價
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.ComplementStatus">
+            <summary>
+              [取得] 即時資訊回補狀態
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.DOM">
+            <summary>
+               [取得] 委買委賣價量表
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.High">
+            <summary>
+              [取得] 今日最高價
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.Low">
+            <summary>
+              [取得] 今日最低價
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.Open">
+            <summary>
+              [取得] 今日開盤價
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.Prices">
+            <summary>
+              [取得] 分價表
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.RealTick">
+            <summary>
+              [取得] 目前最新即時報價
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.ReferPrice">
+            <summary>
+              [取得] 昨收價(昨收價為今日參考價)
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.SymbolId">
+            <summary>
+              [取得] 商品代號
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.SymbolName">
+            <summary>
+              [取得] 商品名稱
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.TickCount">
+            <summary>
+              [取得] 所有即時報價資訊的Tick Count
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.UpdateCount">
+            <summary>
+              [取得/設定] 更新次數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.ReferPrices">
+            <summary>
+              [取得] 大盤指數昨收價(參考價) @請參考上市指數代號表與上櫃指數代號表
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.成交總額">
+            <summary>
+              [取得] 成交總額
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.持平家數">
+            <summary>
+              [取得] 持平家數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.未成交家數">
+            <summary>
+              [取得] 未成交家數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.上漲家數">
+            <summary>
+              [取得] 上漲家數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.下跌家數">
+            <summary>
+              [取得] 下跌家數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.漲停家數">
+            <summary>
+              [取得] 漲停家數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.跌停家數">
+            <summary>
+              [取得] 跌停家數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.大盤綜合買氣">
+            <summary>
+              [取得] 大盤綜合買氣
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.大盤買賣比">
+            <summary>
+             [取得] 大盤買賣比 (委買張/委賣張)
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.加權指數價差">
+            <summary>
+             [取得] 加權指數價差
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.加權指數漲跌幅">
+            <summary>
+             [取得] 加權指數漲跌幅
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.不含金融價差">
+            <summary>
+             [取得] 不含金融價差
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.不含金融漲跌幅">
+            <summary>
+             [取得] 不含金融漲跌幅
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.OTC指數價差">
+            <summary>
+             [取得] OTC指數價差
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.OTC指數漲跌幅">
+            <summary>
+             [取得] OTC指數漲跌幅
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.類股綜合買氣">
+            <summary>
+              [取得] 類股綜合買氣(請參閱上市指數代號表，以取得綜合買氣值) @只有加權指數有此數值
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndex.即時資訊">
+            <summary>
+              [取得/設定] 即時資訊:最新大盤即時資訊，揭示板可以由此更新最新資料
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Decode.StockDecoder">
+            <summary>
+              股票封包解碼類別
+            </summary>
+        </member>
+        <member name="M:Mitake.Stock.Decode.StockDecoder.Decode(System.Net.Sockets.Socket,Mitake.Sockets.Data.SocketToken,System.Boolean)">
+            <summary>
+               解碼函式(解碼所有封包)
+            </summary>
+            <param name="socket">作用中的Socket類別</param>
+            <param name="token">SocketToken類別</param>
+            <param name="isDecode">是否啟動解碼功能</param>
+        </member>
+        <member name="M:Mitake.Stock.Decode.StockDecoder.Reset(System.DateTime)">
+            <summary>
+              重置並清除解碼後的所有資訊(只限於 TWSE 與 Mitake)
+            </summary>
+            <param name="date">設定日期(當天資料日期)</param>
+        </member>
+        <member name="M:Mitake.Stock.Decode.StockDecoder.VerifyPacket(Mitake.Sockets.Data.PacketBuffer)">
+            <summary>
+                檢查金融封包
+            </summary>
+            <param name="item">來源封包</param>
+            <returns>返回值：-1=未知封包  0=成功  1=末端斷包  2=封包長度不完整</returns>
+        </member>
+        <member name="M:Mitake.Stock.Decode.StockDecoder.DecodeFinance(System.Net.Sockets.Socket,Mitake.Events.StockEvent,System.Boolean)">
+            <summary>
+               解碼國際金融封包
+            </summary>
+            <param name="socket">作用中的Socket</param>
+            <param name="item">StockEvent類別</param>
+            <param name="isDecode">是否啟動解碼功能</param>
+        </member>
+        <member name="E:Mitake.Stock.Decode.StockDecoder.StockProc">
+            <summary>
+               當收到股票封包解碼後所產生的事件
+            </summary>
+        </member>
+        <member name="E:Mitake.Stock.Decode.StockDecoder.TimerProc">
+            <summary>
+               當收到時間封包解碼後所產生的事件
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Util.BitConvert">
+            <summary>
+              位元轉換類別
+            </summary>
+        </member>
+        <member name="M:Mitake.Stock.Util.BitConvert.GetValue(System.Byte,System.Int32,System.Byte)">
+            <summary>
+               取得資料內某依區段位元資料
+            </summary>
+            <param name="Value">來源資料</param>
+            <param name="StartIndex">起始位元索引(0=最右邊起始位元 依序向左遞增)</param>
+            <param name="Length">位元長度</param>
+            <returns>返回值：取得的位元值</returns>
+        </member>
+        <member name="M:Mitake.Stock.Util.BitConvert.GetValue(System.UInt16,System.Int32,System.Byte)">
+            <summary>
+               取得資料內某依區段位元資料
+            </summary>
+            <param name="Value">來源資料</param>
+            <param name="StartIndex">起始位元索引(0=最右邊起始位元 依序向左遞增)</param>
+            <param name="Length">位元長度</param>
+            <returns>返回值：取得的位元值</returns>
+        </member>
+        <member name="M:Mitake.Stock.Util.BitConvert.SetValue(System.Byte,System.Int32,System.Byte)">
+            <summary>
+               設定位元
+            </summary>
+            <param name="Src">來源資料</param>
+            <param name="StartIndex">起始位元索引(0=最右邊起始位元 依序向左遞增)</param>
+            <param name="Value">設定值</param>
+            <returns>返回值：重設後的數值</returns>
+        </member>
+        <member name="M:Mitake.Stock.Util.BitConvert.SetValue(System.UInt16,System.Int32,System.UInt16)">
+            <summary>
+               設定位元
+            </summary>
+            <param name="Src">來源資料</param>
+            <param name="StartIndex">起始位元索引(0=最右邊起始位元 依序向左遞增)</param>
+            <param name="Value">設定值</param>
+            <returns>返回值：重設後的數值</returns>
+        </member>
+        <member name="T:Mitake.Packets.SessionRegister">
+            <summary>
+              用戶端註冊Session服務引擎封包結構表
+            </summary>
+        </member>
+        <member name="P:Mitake.Packets.SessionRegister.SessionKey">
+            <summary>
+               [取得]SessionKey的值
+            </summary>
+        </member>
+        <member name="P:Mitake.Packets.SessionRegister.UserId">
+            <summary>
+               [取得]UserId
+            </summary>
+        </member>
+        <member name="T:Mitake.Packets.AuthenticationReturn">
+            <summary>
+              Authentication登入回應封包結構表
+            </summary>
+        </member>
+        <member name="P:Mitake.Packets.AuthenticationReturn.RemotePort">
+            <summary>
+              [取得] 遠端認證伺服器的Port
+            </summary>
+        </member>
+        <member name="P:Mitake.Packets.AuthenticationReturn.SessionKey">
+            <summary>
+              [取得] SessionKey的值
+            </summary>
+        </member>
+        <member name="P:Mitake.Packets.AuthenticationReturn.RemoteIP">
+            <summary>
+              [取得] 遠端認證伺服器的IP位址
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Data.MitakeIndexTick">
+            <summary>
+               指數即時資訊類別
+            </summary>
+        </member>
+        <member name="M:Mitake.Stock.Data.MitakeIndexTick.#ctor">
+            <summary>
+              指數即時資訊類別
+            </summary>
+        </member>
+        <member name="M:Mitake.Stock.Data.MitakeIndexTick.SetFlag(System.Int32)">
+            <summary>
+              設定旗標, 如果為 15 表示此四種封包都有收到(0x32=1, 0x33=2, 0x34=4, 0xb3=8)
+            </summary>
+            <param name="flag">旗標(0x32=1, 0x33=2, 0x34=4, 0xb3=8)</param>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexTick.Ask">
+            <summary>
+              [取得] 報價Tick成交時委賣資訊
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexTick.Bid">
+            <summary>
+              [取得] 報價Tick成交時委買資訊
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexTick.Price">
+            <summary>
+              [取得] 報價Tick的成交價格
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexTick.Single">
+            <summary>
+              [取得] 報價Tick的成交單量
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexTick.Time">
+            <summary>
+              [取得] 報價Tick的成交時間
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexTick.Volume">
+            <summary>
+              [取得] 報價Tick的成交總量
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexTick.成交張數">
+            <summary>
+              [取得] 成交張數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexTick.成交筆數">
+            <summary>
+              [取得] 成交筆數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexTick.成交張數單量">
+            <summary>
+              [取得] 成交張數單量
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexTick.成交筆數單量">
+            <summary>
+              [取得] 成交筆數單量
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexTick.委買合計筆數">
+            <summary>
+              [取得] 委買合計筆數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexTick.委賣合計筆數">
+            <summary>
+              [取得] 委賣合計筆數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexTick.委買總漲停張數">
+            <summary>
+              [取得] 委買總漲停張數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexTick.委賣總漲停張數">
+            <summary>
+              [取得] 委賣總漲停張數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexTick.委買總漲停筆數">
+            <summary>
+              [取得] 委買總漲停筆數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexTick.委賣總漲停筆數">
+            <summary>
+              [取得] 委賣總漲停筆數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexTick.委買總跌停張數">
+            <summary>
+              [取得] 委買總跌停張數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexTick.委賣總跌停張數">
+            <summary>
+              [取得] 委賣總跌停張數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexTick.委買總跌停筆數">
+            <summary>
+              [取得] 委買總跌停筆數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexTick.委賣總跌停筆數">
+            <summary>
+              [取得] 委賣總跌停筆數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexTick.Classifys">
+            <summary>
+               [取得] 大盤指數資訊(請使用上市指數代號表或是上櫃指數代號表這兩個列舉類別來選定需要的類股代號)
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexTick.Flag">
+            <summary>
+              [取得/設定] 接收旗標, 如果為 15 表示此四種封包都有收到(0x32=1, 0x33=2, 0x34=4, 0xb3=8)
+            </summary>
+        </member>
+        <member name="T:Mitake.Sockets.SocketAsyncEventArgsPool">
+            <summary>
+               SocketAsyncEventArgsPool類別(儲存池)
+            </summary>
+        </member>
+        <member name="M:Mitake.Sockets.SocketAsyncEventArgsPool.Push(System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+               將SocketAsyncEventArgs類別存入pool內
+            </summary>
+            <param name="item">SocketAsyncEventArgs類別</param>
+        </member>
+        <member name="M:Mitake.Sockets.SocketAsyncEventArgsPool.Pop">
+            <summary>
+               將SocketAsyncEventArgs類別從pool內取出
+            </summary>
+            <returns>返回值：SocketAsyncEventArgs類別</returns>
+        </member>
+        <member name="P:Mitake.Sockets.SocketAsyncEventArgsPool.Count">
+            <summary>
+               [取得]儲存池內的可用個數
+            </summary>
+        </member>
+        <member name="T:Mitake.Sockets.MitakePacket">
+            <summary>
+              封包處理類別(可做封包轉換與合併，檢查或設定封包檢查碼....)
+            </summary>
+        </member>
+        <member name="M:Mitake.Sockets.MitakePacket.GetChecksum(Mitake.Sockets.Data.PacketBuffer)">
+            <summary>
+               取得檢查碼是否正確
+            </summary>
+            <param name="item">封包資料</param>
+            <returns>返回值：true=檢查碼正確  false=檢查碼錯誤</returns>
+        </member>
+        <member name="M:Mitake.Sockets.MitakePacket.GetChecksum(Mitake.Sockets.Data.PacketBuffer,System.Int32)">
+            <summary>
+               取得檢查碼是否正確
+            </summary>
+            <param name="item">封包資料</param>
+            <param name="startIndex">起始位置</param>
+            <returns>返回值：true=檢查碼正確  false=檢查碼錯誤</returns>
+        </member>
+        <member name="M:Mitake.Sockets.MitakePacket.SetChecksum(Mitake.Sockets.Data.PacketBuffer)">
+            <summary>
+               設定檢查碼 
+            </summary>
+            <param name="item">封包資料</param>
+        </member>
+        <member name="M:Mitake.Sockets.MitakePacket.SetChecksum(Mitake.Sockets.Data.PacketBuffer,System.Int32)">
+            <summary>
+               設定檢查碼 
+            </summary>
+            <param name="item">封包資料</param>
+            <param name="startIndex">起始位置</param>
+        </member>
+        <member name="M:Mitake.Sockets.MitakePacket.ToBuffer(System.Object)">
+            <summary>
+               將結構轉換成Byte陣列
+            </summary>
+            <param name="o">結構類別</param>
+            <returns>回傳值：byte陣列</returns>
+        </member>
+        <member name="M:Mitake.Sockets.MitakePacket.ToBuffer(System.Object,System.Byte[])">
+            <summary>
+               將結構轉換成Byte陣列
+            </summary>
+            <param name="o">結構類別</param>
+            <param name="buffer">byte陣列緩衝區</param>
+        </member>
+        <member name="M:Mitake.Sockets.MitakePacket.ToBytes(System.String,System.Int32)">
+            <summary>
+               將字串轉換成byte陣列
+            </summary>
+            <param name="value">來源字串</param>
+            <param name="length">字串長度</param>
+            <returns>回傳值：byte陣列</returns>
+        </member>
+        <member name="M:Mitake.Sockets.MitakePacket.ToString(System.Byte[])">
+            <summary>
+               將byte陣列轉換成字串
+            </summary>
+            <param name="data">來源byte陣列</param>
+            <returns>回傳值：字串</returns>
+        </member>
+        <member name="M:Mitake.Sockets.MitakePacket.ToStructure``1(System.Byte[],System.Int32)">
+            <summary>
+              將byte陣列轉換成結構體
+            </summary>
+            <typeparam name="T">泛型(結構體類別名稱)</typeparam>
+            <param name="data">來源byte陣列</param>
+            <param name="length">byte陣列長度</param>
+            <returns>回傳直：結構體資料</returns>
+        </member>
+        <member name="T:Mitake.Stock.Decode.Decode_MF0">
+            <summary>
+              即時訊息(盤中即時小訊息)
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Decode.DecodeReturn">
+            <summary>
+               Mcp命令封包回應解碼器
+            </summary>
+        </member>
+        <member name="M:Mitake.Stock.Decode.DecodeReturn.Decode(Mitake.Events.StockEvent,System.Boolean)">
+            <summary>
+              Mcp命令封包回應解碼
+            </summary>
+            <param name="item">StockEvent類別</param>
+            <param name="IsDecode">是否啟動解碼功能</param>
+        </member>
+        <member name="T:Mitake.Stock.Data.MitakeStorage">
+            <summary>
+              股票資料儲存空間(類別唯一化物件)
+            </summary>
+        </member>
+        <member name="M:Mitake.Stock.Data.MitakeStorage.GetIndex(System.Int32)">
+            <summary>
+              取得陣列內的MitakeIndex類別資料
+            </summary>
+            <param name="serial">股票流水號</param>
+            <returns>返回值: MitakeIndex類別</returns>
+        </member>
+        <member name="M:Mitake.Stock.Data.MitakeStorage.GetQuote(System.Int32)">
+            <summary>
+              取得陣列內的MitakeQuote類別資料
+            </summary>
+            <param name="serial">股票流水號</param>
+            <returns>返回值: MitakeQuote類別</returns>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeStorage.Storage">
+            <summary>
+              [取得] MitakeStorage類別
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeStorage.Quotes">
+            <summary>
+              [取得] 所有報價資訊列表
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Data.MitakeSymbolInformation">
+            <summary>
+              報價資訊的基本資料類別(商品代號與商品名稱之類的資訊) @三竹報價需要有股票對照表才能找到股票流水號，如果全部都使用MitakeQuote實體化則記憶體會非常龐大，因此改變原來的寫法
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeSymbolInformation.FutureMark">
+            <summary>
+              [取得] 期貨擴充:1=一般, 2=現月, 3=次月 (股票無使用此變數)
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeSymbolInformation.SymbolId">
+            <summary>
+              [取得] 商品代號
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeSymbolInformation.SymbolName">
+            <summary>
+              [取得] 商品名稱
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeSymbolInformation.市場別">
+            <summary>
+              [取得] 市場別:0=集中市場, 1=上櫃, 2=期貨, 3=興櫃
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeSymbolInformation.警示">
+            <summary>
+              [取得] 個股是否為警示股
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeSymbolInformation.下市">
+            <summary>
+              [取得] 下市(五個交易日後清除，會再分配給新上市使用)
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Data.MitakePriceClassify">
+            <summary>
+               分價類別
+            </summary>
+        </member>
+        <member name="M:Mitake.Stock.Data.MitakePriceClassify.GetPrices(System.Collections.Generic.IEnumerable{Zeghs.Data.ITick})">
+            <summary>
+               取得個股分價表
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakePriceClassify.Price">
+            <summary>
+              [取得] 分價價格
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakePriceClassify.Volume">
+            <summary>
+              [取得] 分價價格內的統計總量
+            </summary>
+        </member>
+        <member name="T:Mitake.Events.McpPacketHandler">
+            <summary>
+               當收到MCP封包後所產生的事件
+            </summary>
+        </member>
+        <member name="T:Mitake.Events.ReceiveHandler">
+            <summary>
+              當接收封包資料完成時會觸發此事件
+            </summary>
+        </member>
+        <member name="T:Mitake.Events.ConnectHandler">
+            <summary>
+              當連接成功時則會觸發此事件
+            </summary>
+        </member>
+        <member name="T:Mitake.Events.CloseHandler">
+            <summary>
+              當遠端連線中斷時，則會觸發此事件
+            </summary>
+        </member>
+        <member name="T:Mitake.Events.TimerHandler">
+            <summary>
+               當收到時間封包解碼後所產生的事件
+            </summary>
+        </member>
+        <member name="T:Mitake.Events.StockHandler">
+            <summary>
+               當收到股票封包解碼後所產生的事件
+            </summary>
+        </member>
+        <member name="T:Mitake.Events.AddPacketHandler">
+            <summary>
+              委派原型：當ServiceEngine需要將封包加到所有Session時，就需要使用到此委派
+            </summary>
+        </member>
+        <member name="M:Mitake.Sockets.ZSocket.Connect(System.String,System.Int32)">
+            <summary>
+              連結至遠端伺服器
+            </summary>
+            <param name="RemoteIP">遠端伺服器IP位址</param>
+            <param name="Port">遠端伺服器Port號碼</param>
+            <returns>返回值：true=連線成功 false=連線失敗</returns>
+        </member>
+        <member name="M:Mitake.Sockets.ZSocket.Close">
+            <summary>
+               關閉連線端口，並釋放連線資源(關閉後此類別則無法在使用)
+            </summary>
+        </member>
+        <member name="T:Mitake.Events.CloseEvent">
+            <summary>
+               SocketClose事件類別
+            </summary>
+        </member>
+        <member name="P:Mitake.Events.CloseEvent.Handle">
+            <summary>
+               [取得]Socket Handle
+            </summary>
+        </member>
+        <member name="P:Mitake.Events.CloseEvent.Message">
+            <summary>
+              [取得/設定]中斷連線的訊息
+            </summary>
+        </member>
+        <member name="P:Mitake.Events.CloseEvent.Port">
+            <summary>
+               [取得]遠端主機Port
+            </summary>
+        </member>
+        <member name="P:Mitake.Events.CloseEvent.RemoteIP">
+            <summary>
+              [取得/設定]遠端主機位址
+            </summary>
+        </member>
+        <member name="P:Mitake.Events.CloseEvent.Type">
+            <summary>
+               [取得/設定]Socket斷線型態
+            </summary>
+        </member>
+        <member name="M:Mitake.Stock.Util.Time.ConvertForTotalSeconds(System.DateTime)">
+            <summary>
+              轉換 DateTime 為總秒數(00:00:00 到目前的總秒數)
+            </summary>
+            <param name="time">DateTime 結構</param>
+            <returns>返回值: 總秒數</returns>
+        </member>
+        <member name="M:Mitake.Stock.Util.Time.GetDate(Mitake.Sockets.Data.PacketBuffer)">
+            <summary>
+              時間封包解碼(解碼交易日期)
+            </summary>
+            <param name="buffer">ZBuffer類別</param>
+            <returns>返回值:最後交易日期(format:yyyyMMdd)</returns>
+        </member>
+        <member name="M:Mitake.Stock.Util.Time.GetTime(Mitake.Sockets.Data.PacketBuffer)">
+            <summary>
+              股票即時資訊時間解碼
+            </summary>
+            <param name="buffer">ZBuffer類別</param>
+            <returns>返回值:時間數值(將所有時間都轉換成秒數)</returns>
+        </member>
+        <member name="M:Mitake.Stock.Util.Time.GetOther(Mitake.Sockets.Data.PacketBuffer)">
+            <summary>
+              股票即時資訊時間解碼(解碼開盤其他時間 9:00:00 ~ 16:59:59 以外的時間)
+            </summary>
+            <param name="buffer">ZBuffer類別</param>
+            <returns>返回值:時間數值(將所有時間都轉換成秒數)</returns>
+        </member>
+        <member name="M:Mitake.Stock.Util.Time.GetDateTime(Mitake.Sockets.Data.PacketBuffer)">
+            <summary>
+              時間封包解碼(解碼時間)
+            </summary>
+            <param name="buffer">ZBuffer類別</param>
+            <returns>返回值:DateTime結構</returns>
+        </member>
+        <member name="M:Mitake.Stock.Util.Time.SetTime(Mitake.Sockets.Data.PacketBuffer,System.Int32,System.Boolean)">
+            <summary>
+               設定時間
+            </summary>
+            <param name="buffer">ZBuffer類別</param>
+            <param name="time">時間設定值</param>
+            <param name="isReal">是否為即時  true=即時   false=補價</param>
+        </member>
+        <member name="M:Mitake.Stock.Util.Time.SetOther(Mitake.Sockets.Data.PacketBuffer,System.Int32,System.Boolean)">
+            <summary>
+               設定時間(9:00:00 ~ 16:59:59 以外的時間)
+            </summary>
+            <param name="buffer">ZBuffer類別</param>
+            <param name="time">時間設定值</param>
+            <param name="isReal">是否為即時  true=即時   false=補價</param>
+        </member>
+        <member name="M:Mitake.Stock.Util.Time.SetToday(System.DateTime)">
+            <summary>
+              設定今天日期(今天日期會由伺服器送過來)
+            </summary>
+            <param name="today">今天日期</param>
+        </member>
+        <member name="T:Mitake.Stock.Decode.Decode_S38">
+            <summary>
+              個股基本資料
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Data.上櫃指數代號表">
+            <summary>
+               上櫃指數代號表
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.OTC指數">
+            <summary>
+             [上櫃]OTC指數
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.不含金融">
+            <summary>
+             [上櫃]不含金融
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.金融指數">
+            <summary>
+             [上櫃]金融指數
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.生技醫療">
+            <summary>
+             [上櫃]生技醫療
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.食品工業">
+            <summary>
+             [上櫃]食品工業
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.塑膠工業">
+            <summary>
+             [上櫃]塑膠工業
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.紡織纖維">
+            <summary>
+             [上櫃]紡織纖維
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.電機機械">
+            <summary>
+             [上櫃]電機機械
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.電器電纜">
+            <summary>
+             [上櫃]電器電纜
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.化學工業">
+            <summary>
+             [上櫃]化學工業
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.玻璃陶瓷">
+            <summary>
+             [上櫃]玻璃陶瓷
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.光電">
+            <summary>
+             [上櫃]光電
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.鋼鐵工業">
+            <summary>
+             [上櫃]鋼鐵工業
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.橡膠工業">
+            <summary>
+             [上櫃]橡膠工業
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.資訊服務">
+            <summary>
+             [上櫃]資訊服務
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.電子工業">
+            <summary>
+             [上櫃]電子工業
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.建材營造">
+            <summary>
+             [上櫃]建材營造
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.航運">
+            <summary>
+             [上櫃]航運
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.觀光事業">
+            <summary>
+             [上櫃]觀光事業
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.貿易百貨">
+            <summary>
+             [上櫃]貿易百貨
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.油電燃氣">
+            <summary>
+             [上櫃]油電燃氣
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.半導體">
+            <summary>
+             [上櫃]半導體
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.電腦及週邊設備">
+            <summary>
+             [上櫃]電腦及週邊設備
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.通信網路">
+            <summary>
+             [上櫃]通信網路
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.電子零組件">
+            <summary>
+             [上櫃]電子零組件
+            </summary>
+        </member>
+        <member name="F:Mitake.Stock.Data.上櫃指數代號表.電子通路">
+            <summary>
+             [上櫃]電子通路
+            </summary>
+        </member>
+        <member name="M:Mitake.Stock.Data.MitakeSymbolManager.Convert(System.String,System.Int32)">
+            <summary>
+              轉換Mitake資訊源內部商品代號為標準台股商品代號
+            </summary>
+            <param name="symbolId">商品代號</param>
+            <param name="marketType">市場別  1=期貨, 2=選擇權</param>
+            <returns>返回值:轉換後的商品代號</returns>
+        </member>
+        <member name="M:Mitake.Stock.Data.MitakeSymbolManager.ConvertToSerial(System.String)">
+            <summary>
+              轉換商品代號成Mitake資訊源的內部商品序號
+            </summary>
+            <param name="symbolId">商品代號</param>
+            <returns>返回值:轉換後的商品序號</returns>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeSymbolManager.DataSource">
+            <summary>
+              [取得/設定] 資料來源名稱
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeSymbolManager.ExchangeName">
+            <summary>
+              [取得/設定] 交易所簡稱
+            </summary>
+        </member>
+        <member name="M:Mitake.Stock.Decode.Decode_S37.Decode(System.Int32,Mitake.Sockets.Data.PacketBuffer)">
+            <summary>
+              個股計算及補價資訊
+            </summary>
+        </member>
+        <member name="M:Mitake.Stock.Decode.Decode_S37.Decoder(System.Int32,Mitake.Stock.Data.MitakeIndex,Mitake.Sockets.Data.PacketBuffer)">
+            <summary>
+               大盤指數計算及補價資訊
+            </summary>
+        </member>
+        <member name="T:Mitake.Packets.QuoteRanking">
+            <summary>
+               取得股票排行榜
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Decode.Decode_S36">
+            <summary>
+               漲跌停資訊(上市:9999、上櫃:9998)
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Data.MitakeQuoteTick">
+            <summary>
+               個股即時成交資訊
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuoteTick.Ask">
+            <summary>
+              [取得] 報價Tick成交時委賣資訊
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuoteTick.Bid">
+            <summary>
+              [取得] 報價Tick成交時委買資訊
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuoteTick.Price">
+            <summary>
+              [取得] 報價Tick的成交價格
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuoteTick.Single">
+            <summary>
+              [取得] 報價Tick的成交單量
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuoteTick.Time">
+            <summary>
+              [取得] 報價Tick的成交時間
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuoteTick.Volume">
+            <summary>
+              [取得] 報價Tick的成交總量
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuoteTick.類型">
+            <summary>
+               [取得] 報價Tick類型:0=即時, 1=補價
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuoteTick.價格類型">
+            <summary>
+              [取得] 價格類型:0=一般價, 1=開盤價, 2=最高價, 3=最低價, 4=委買價, 5=委賣價
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuoteTick.買賣盤">
+            <summary>
+              [取得] 買賣盤:0=無法區分買賣盤, 1=買盤, 2=賣盤
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuoteTick.Serial">
+            <summary>
+               [取得/設定] 報價Tick的序號(序號皆為唯一值)
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Data.MitakeIndexClassify">
+            <summary>
+               類股成交資訊
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexClassify.IndexValue">
+            <summary>
+              [取得] 類股指數值
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexClassify.Amount">
+            <summary>
+              [取得] 類股成交總額
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeIndexClassify.Totals">
+            <summary>
+              [取得] 類股成交張數
+            </summary>
+        </member>
+        <member name="T:Mitake.Packets.Logout">
+            <summary>
+                使用者登出命令封包結購類別
+            </summary>
+        </member>
+        <member name="T:Mitake.Packets.Complement">
+            <summary>
+                個股回補MCP封包(目前一次最多可補10支股票)
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Decode.Decode_S35">
+            <summary>
+               證交所公告資訊
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Data.MitakeQuote">
+            <summary>
+               個股資訊類別
+            </summary>
+        </member>
+        <member name="M:Mitake.Stock.Data.MitakeQuote.#ctor(System.Int32)">
+            <summary>
+              即時個股報價資訊
+            </summary>
+        </member>
+        <member name="M:Mitake.Stock.Data.MitakeQuote.GetTick(System.Int32)">
+            <summary>
+              取得即時報價Tick
+            </summary>
+            <param name="index">索引值(0=最新報價資訊)</param>
+            <returns>返回值:ITick報價資訊</returns>
+        </member>
+        <member name="M:Mitake.Stock.Data.MitakeQuote.GetMitakeTick(System.Int32,Mitake.Stock.Data.MitakeQuoteTick@)">
+            <summary>
+               取得成交資訊明細
+            </summary>
+            <param name="serial">即時資訊序號</param>
+            <param name="tick">即時成交資訊(ref)</param>
+            <returns>返回值：false=新建立  true=已存在</returns>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.Close">
+            <summary>
+              [取得] 今日收盤價
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.ComplementStatus">
+            <summary>
+              [取得] 即時資訊回補狀態
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.DOM">
+            <summary>
+               [取得] 委買委賣價量表
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.High">
+            <summary>
+              [取得] 今日最高價
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.Low">
+            <summary>
+              [取得] 今日最低價
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.Open">
+            <summary>
+              [取得] 今日開盤價
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.Prices">
+            <summary>
+              [取得] 分價表
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.RealTick">
+            <summary>
+              [取得] 目前最新即時報價
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.ReferPrice">
+            <summary>
+              [取得] 昨收價(昨收價為今日參考價)
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.SymbolId">
+            <summary>
+              [取得] 商品代號
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.SymbolName">
+            <summary>
+              [取得] 商品名稱
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.TickCount">
+            <summary>
+              [取得] 所有即時報價資訊的Tick Count
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.UpdateCount">
+            <summary>
+              [取得/設定] 更新次數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.FutureMark">
+            <summary>
+              [取得] 期貨擴充:1=一般, 2=現月, 3=次月 (股票無使用此變數)
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.下市">
+            <summary>
+              [取得] 下市(五個交易日後清除，會再分配給新上市使用)
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.警示">
+            <summary>
+              [取得] 個股是否為警示股
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.戳合類型">
+            <summary>
+              [取得] 戳合類型:0=一般揭示, 1=暫緩撮合且瞬間趨跌, 2=暫緩撮合且瞬間趨漲, 3=試算後延後收盤
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.市場別">
+            <summary>
+              [取得] 市場別:0=集中市場, 1=上櫃, 2=期貨, 3=興櫃
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.漲停價">
+            <summary>
+              [取得] 個股漲停價位
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.跌停價">
+            <summary>
+              [取得] 個股跌停價位
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.結算價">
+            <summary>
+              [取得] 結算價(可能是期貨與選擇權專用)
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.昨日總成交量">
+            <summary>
+              [取得] 昨日總成交量
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.今日總成交量">
+            <summary>
+              [取得] 今日總成交量
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.今日總成交額">
+            <summary>
+              [取得] 今日總成交額
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.累計買量">
+            <summary>
+              [取得] 累計買量
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.累計賣量">
+            <summary>
+              [取得] 累計賣量
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.單筆買進巨量">
+            <summary>
+              [取得] 單筆買進巨量
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.單筆賣出巨量">
+            <summary>
+              [取得] 單筆賣出巨量
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.累計買進巨量">
+            <summary>
+              [取得] 累計買進巨量
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.累計賣出巨量">
+            <summary>
+              [取得] 累計買進巨量
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.買進成交筆數">
+            <summary>
+               [取得] 累計買進成交筆數 (選擇權:委託買進總筆數) @與選擇權共用
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.賣出成交筆數">
+            <summary>
+               [取得] 累計賣出成交筆數 (選擇權:委託賣出總筆數) @與選擇權共用
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.總成交合約數">
+            <summary>
+               [取得] 累計成交合約數 (選擇權:總成交量) @與選擇權共用
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.委託買進總口數">
+            <summary>
+              [取得] 選擇權:委託買進總口數 (股票無使用此變數)
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.委託賣出總口數">
+            <summary>
+              [取得] 選擇權:委託賣出總口數 (股票無使用此變數)
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.總成交筆數">
+            <summary>
+              [取得] 選擇權:總成交筆數 (股票無使用此變數)
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.買進累計委託筆數">
+            <summary>
+              [取得] 買進累計委託筆數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.買進累計委託合約量">
+            <summary>
+              [取得] 買進累計委託合約量
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.賣出累計委託筆數">
+            <summary>
+              [取得] 賣出累計委託筆數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.賣出累計委託合約量">
+            <summary>
+              [取得] 賣出累計委託合約量
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.未平倉合約數">
+            <summary>
+              [取得] 未平倉合約數
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.買進量百分比">
+            <summary>
+              [取得] 買進量百分比(賣出量百分比 = 100 - 買進量百分比)
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.即時量幅">
+            <summary>
+              [取得] 即時量幅
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.即時均價">
+            <summary>
+              [取得] 即時均價
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.昨日最高價">
+            <summary>
+              [取得] 昨日最高價
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.昨日最低價">
+            <summary>
+              [取得] 昨日最低價
+            </summary>
+        </member>
+        <member name="T:Mitake.Packets.LoadQuote">
+            <summary>
+               讀取檔案封包結構
+            </summary>
+        </member>
+        <member name="F:Mitake.Packets.LoadQuote.InfoName">
+            <summary>
+               讀取檔案資料
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Decode.DecodeTime">
+            <summary>
+               股票時間封包解碼類別
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Decode.Decode_S34">
+            <summary>
+              大盤委託資訊
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Decode.Decode_S33">
+            <summary>
+              大盤成交資訊
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Decode.Decode_S32">
+            <summary>
+              大盤即時封包
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Data.MitakeNoticeUtil">
+            <summary>
+               股市公告存放類別
+            </summary>
+        </member>
+        <member name="M:Mitake.Stock.Data.MitakeNoticeUtil.Merge(System.Int32,System.Int32,System.Byte,System.Byte,System.String,System.String)">
+            <summary>
+               加入公告資訊
+            </summary>
+            <param name="StockId">公告代號</param>
+            <param name="SerialNo">公告序號</param>
+            <param name="Number">公告編號(從0開始編號 0=標題....)</param>
+            <param name="Count">公告個數</param>
+            <param name="Time">公告時間</param>
+            <param name="Text">公告內容</param>
+            <returns>返回值:null=公告尚未接收完成, 否則返回公告內容</returns>
+        </member>
+        <member name="M:Mitake.Stock.Data.MitakeNoticeUtil.Clear">
+            <summary>
+               清除公告訊息
+            </summary>
+        </member>
+        <member name="M:Mitake.Stock.Data.MitakeNoticeUtil.MergeNotice(Mitake.Stock.Data.MitakeNotice,System.Int32,System.Byte,System.Byte,System.String,System.String)">
+            <summary>
+               合併公告資訊(組合公告資訊封包)
+            </summary>
+            <param name="notice">公告類別</param>
+            <param name="StockId">公告代號</param>
+            <param name="Number">公告編號(從0開始編號 0=標題....)</param>
+            <param name="Count">公告總個數</param>
+            <param name="Time">公告時間</param>
+            <param name="Text">公告內容</param>
+            <returns>返回值：true=封包已經接收完畢  false=封包尚未接收完畢</returns>
+        </member>
+        <member name="T:Mitake.Stock.Data.MitakeEntrust">
+            <summary>
+               委買委賣資訊
+            </summary>
+        </member>
+        <member name="M:Mitake.Stock.Data.MitakeEntrust.ComparePrice(Mitake.Stock.Data.MitakeQuoteTick,Mitake.Stock.Data.MitakeQuoteTick)">
+            <summary>
+               比較價位(比較委買委賣價位，判斷是買盤還是賣盤)
+            </summary>
+            <param name="current">目前即時成交資訊</param>
+            <param name="old">上一筆即時成交資訊</param>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeEntrust.Ask">
+            <summary>
+              叫價資訊陣列
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeEntrust.Bid">
+            <summary>
+              詢價資訊陣列
+            </summary>
+        </member>
+        <member name="T:Mitake.Stock.Data.MitakeNotice">
+            <summary>
+               公告資料類別
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeNotice.Content">
+            <summary>
+              公告內容
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeNotice.Level">
+            <summary>
+               [取得/設定]公告等級
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeNotice.NoticeId">
+            <summary>
+              [取得] 公告ID 10000=證交所緊急公告, 9999=上市公告, 9998=上櫃公告, 9997=期交所公告, 9995=選擇權公告, 9994=興櫃公告, 98=時報資訊新聞, 99=中央社新聞, 100~199=投顧訊息(100:股市導航), 200~299=券商訊息, 
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeNotice.Time">
+            <summary>
+              [取得] 公告發出的時間
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeNotice.Title">
+            <summary>
+              [取得] 公告標題
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeNotice.Count">
+            <summary>
+              [取得/設定] 公告總封包個數(不包含標題，標題要算進去還要加一個封包)
+            </summary>
+        </member>
+        <member name="T:Mitake.Sockets.Data.SocketToken">
+            <summary>
+               存放Socket會使用到的其他參數
+            </summary>
+        </member>
+        <member name="M:Mitake.Sockets.Data.SocketToken.#ctor">
+            <summary>
+              建構子
+            </summary>
+        </member>
+        <member name="M:Mitake.Sockets.Data.SocketToken.#ctor(Mitake.Sockets.Data.PacketBuffer)">
+            <summary>
+              建構子
+            </summary>
+            <param name="Buffer">PacketBuffer 類別</param>
+        </member>
+        <member name="M:Mitake.Sockets.Data.SocketToken.AddTemp">
+            <summary>
+               加入到暫存封包內
+            </summary>
+        </member>
+        <member name="M:Mitake.Sockets.Data.SocketToken.Clear">
+            <summary>
+               將封包緩衝區全部清除
+            </summary>
+        </member>
+        <member name="M:Mitake.Sockets.Data.SocketToken.Move">
+            <summary>
+               將暫存封包般移到主要緩衝區
+            </summary>
+        </member>
+        <member name="M:Mitake.Sockets.Data.SocketToken.Reduction(System.Int32,System.Int32)">
+            <summary>
+               縮小暫存封包的資料大小
+            </summary>
+            <param name="MaxSize">資料最大Size(只要超過此Size就會縮小暫存封包大小)</param>
+            <param name="Size">要縮小的大小</param>
+        </member>
+        <member name="M:Mitake.Sockets.Data.SocketToken.SetPackage(System.Int32)">
+            <summary>
+                設定完整Package封包
+            </summary>
+            <param name="Size">封包大小</param>
+        </member>
+        <member name="P:Mitake.Sockets.Data.SocketToken.IsDataToTemp">
+            <summary>
+               [取得]是否暫存緩衝區有資料
+            </summary>
+        </member>
+        <member name="P:Mitake.Sockets.Data.SocketToken.IsStart">
+            <summary>
+               [取得/設定]是否為標準封包起始點
+            </summary>
+        </member>
+        <member name="P:Mitake.Sockets.Data.SocketToken.McpPacketEvent">
+            <summary>
+               [取得]McpPacketEvent事件
+            </summary>
+        </member>
+        <member name="P:Mitake.Sockets.Data.SocketToken.Package">
+            <summary>
+               [取得]封包緩衝區(有可能是金融封包或是MCP封包，一包完整的封包)
+            </summary>
+        </member>
+        <member name="P:Mitake.Sockets.Data.SocketToken.ReceiveBuffer">
+            <summary>
+               [取得]接收緩衝區(負責提供給Socket接收資料使用)
+            </summary>
+        </member>
+        <member name="P:Mitake.Sockets.Data.SocketToken.StockEvent">
+            <summary>
+               [取得]StockEvent事件
+            </summary>
+        </member>
+    </members>
+</doc>

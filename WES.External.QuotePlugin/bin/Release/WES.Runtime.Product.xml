@@ -1,0 +1,595 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WES.Runtime.Product</name>
+    </assembly>
+    <members>
+        <member name="T:Zeghs.Products.AbstractExchange">
+            <summary>
+              交易所類別(所有創建的交易所都需要繼承這個類別)
+            </summary>
+        </member>
+        <member name="M:Zeghs.Products.AbstractExchange.#ctor">
+            <summary>
+              建構子
+            </summary>
+        </member>
+        <member name="M:Zeghs.Products.AbstractExchange.GetRuleItems(PowerLanguage.ERuleType)">
+            <summary>
+              取得可用的規則項目列表
+            </summary>
+            <param name="ruleType">規則型態(由型態區分規則項目)</param>
+            <returns>返回值:規則項目列表</returns>
+        </member>
+        <member name="M:Zeghs.Products.AbstractExchange.Load">
+            <summary>
+              讀取交易所設定資訊
+            </summary>
+        </member>
+        <member name="M:Zeghs.Products.AbstractExchange.Save">
+            <summary>
+              寫入交易所設定資訊
+            </summary>
+        </member>
+        <member name="M:Zeghs.Products.AbstractExchange.AddProduct(PowerLanguage.Product)">
+            <summary>
+              新增商品(如果商品已經存在會覆寫之前商品)
+            </summary>
+            <param name="product">商品類別</param>
+        </member>
+        <member name="M:Zeghs.Products.AbstractExchange.AddProperty(Zeghs.Products.AbstractProductProperty,System.String)">
+            <summary>
+              新增商品屬性(如果商品已經存在會覆寫之前屬性設定)
+            </summary>
+            <param name="property">商品屬性類別</param>
+            <param name="dataSource">資料來源名稱</param>
+        </member>
+        <member name="M:Zeghs.Products.AbstractExchange.AddProperty(System.String,System.String)">
+            <summary>
+              新增商品屬性(如果商品已經存在會覆寫之前屬性設定)
+            </summary>
+            <param name="commodityId">商品源名稱(也可以是商品代號)</param>
+            <param name="dataSource">資料來源名稱</param>
+        </member>
+        <member name="M:Zeghs.Products.AbstractExchange.Clear">
+            <summary>
+              清除所有商品
+            </summary>
+        </member>
+        <member name="M:Zeghs.Products.AbstractExchange.GetProduct(System.String)">
+            <summary>
+              取得商品
+            </summary>
+            <param name="symbolId">商品代號</param>
+            <returns>返回值:Product類別</returns>
+        </member>
+        <member name="M:Zeghs.Products.AbstractExchange.GetProductClassify(PowerLanguage.ESymbolCategory)">
+            <summary>
+              取得商品
+            </summary>
+            <param name="productType">商品類型</param>
+            <returns>返回值:此分類的商品代號列表</returns>
+        </member>
+        <member name="M:Zeghs.Products.AbstractExchange.GetProperty(System.String,System.String)">
+            <summary>
+              取得商品屬性
+            </summary>
+            <param name="symbol">商品來源代號或商品代號</param>
+            <param name="dataSource">資料來源名稱</param>
+        </member>
+        <member name="M:Zeghs.Products.AbstractExchange.RemoveProduct(System.String)">
+            <summary>
+              移除商品
+            </summary>
+            <param name="symbolId">商品代號</param>
+        </member>
+        <member name="M:Zeghs.Products.AbstractExchange.RemoveProperty(System.String,System.String)">
+            <summary>
+              移除商品屬性
+            </summary>
+            <param name="symbolId">商品代號</param>
+            <param name="dataSource">資料來源名稱</param>
+        </member>
+        <member name="M:Zeghs.Products.AbstractExchange.SearchProducts(System.String,System.Boolean)">
+            <summary>
+              搜尋商品資訊
+            </summary>
+            <param name="symbolId">商品代號</param>
+            <param name="isMatch">是否需要吻合(true=商品代號需要完全吻合, false=商品代號不需要完全吻合)</param>
+            <returns>返回值:商品資訊列表</returns>
+        </member>
+        <member name="M:Zeghs.Products.AbstractExchange.Update(System.DateTime)">
+            <summary>
+              更新交易所所有商品屬性資訊
+            </summary>
+            <param name="date">欲更新的合約基準時間(通常都以今日為主, 也可以傳入基準時間來更新合約到期日)</param>
+        </member>
+        <member name="M:Zeghs.Products.AbstractExchange.CreateProperty(System.String)">
+            <summary>
+              建立新的商品屬性類別
+            </summary>
+            <param name="commodityId">商品源名稱(也可以是商品代號)</param>
+            <returns>返回值: AbstractProductProperty 類別</returns>
+        </member>
+        <member name="P:Zeghs.Products.AbstractExchange.FullName">
+            <summary>
+              [取得/設定] 完整交易所的名稱
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.AbstractExchange.ShortName">
+            <summary>
+              [取得/設定] 交易所簡稱
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.AbstractExchange.TimeZone">
+            <summary>
+              [取得] 交易所時差(以UTC時間為準) 
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.AbstractExchange.IsUpdate">
+            <summary>
+              [取得] 是否需要更新 
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.AbstractExchange.UpdateTime">
+            <summary>
+              [取得/設定] 更新時間
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.AbstractExchange.Products">
+            <summary>
+              [取得/設定] 產品資訊列表
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.AbstractExchange.BasePropertys">
+            <summary>
+              [取得/設定] 基礎產品屬性列表
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.AbstractExchange.CustomPropertys">
+            <summary>
+              [取得/設定] 使用者自訂產品屬性列表
+            </summary>
+        </member>
+        <member name="T:Zeghs.Products.ContractTime">
+            <summary>
+              合約時間
+            </summary>
+        </member>
+        <member name="M:Zeghs.Products.ContractTime.#ctor">
+            <summary>
+              建構子
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.ContractTime.ContractMonth">
+            <summary>
+              [取得/設定] 合約月份
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.ContractTime.ContractYear">
+            <summary>
+              [取得/設定] 合約年份
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.ContractTime.Id">
+            <summary>
+              [取得/設定] Id值
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.ContractTime.MaturityDate">
+            <summary>
+              [取得/設定] 最後交割日(到期日)
+            </summary>
+        </member>
+        <member name="T:Zeghs.Rules.IContractTime">
+            <summary>
+              合約規則介面
+            </summary>
+        </member>
+        <member name="M:Zeghs.Rules.IContractTime.GetContractIndex(System.String)">
+            <summary>
+              由商品代號取得合約時間代號索引
+            </summary>
+            <param name="symbolId">商品代號</param>
+            <returns>返回值: 合約時間代號索引</returns>
+        </member>
+        <member name="M:Zeghs.Rules.IContractTime.GetContractTime(System.DateTime,System.Int32)">
+            <summary>
+              取得目標日期的合約時間
+            </summary>
+            <param name="date">目標日期</param>
+            <param name="index">合約時間代號索引,會根據代號索引修正目標日期並取得最後合約時間</param>
+            <returns>返回值:ContractTime類別</returns>
+        </member>
+        <member name="M:Zeghs.Rules.IContractTime.UpdateContractTime(System.DateTime)">
+            <summary>
+              更新合約時間
+            </summary>
+            <param name="date">基準合約時間(以此時間為基準更新合約到期日)</param>
+        </member>
+        <member name="T:Zeghs.Informations.ProductInformation">
+            <summary>
+              產品資訊類別
+            </summary>
+        </member>
+        <member name="M:Zeghs.Informations.ProductInformation.#ctor(Zeghs.Products.AbstractExchange,System.Collections.Generic.List{PowerLanguage.Product})">
+            <summary>
+              建構子
+            </summary>
+            <param name="exchange">交易所類別</param>
+            <param name="products">商品資訊列表</param>
+        </member>
+        <member name="P:Zeghs.Informations.ProductInformation.Exchange">
+            <summary>
+              [取得] 交易所類別
+            </summary>
+        </member>
+        <member name="P:Zeghs.Informations.ProductInformation.Products">
+            <summary>
+              [取得] 商品資訊列表
+            </summary>
+        </member>
+        <member name="T:Zeghs.Rules.ITax">
+            <summary>
+              交易稅率規則介面
+            </summary>
+        </member>
+        <member name="M:Zeghs.Rules.ITax.GetTax(System.Double)">
+            <summary>
+              取得交易稅金額
+            </summary>
+            <param name="tradeTotals">交易總金額</param>
+            <returns>返回值:交易稅金</returns>
+        </member>
+        <member name="T:Zeghs.Rules.IContractTarget">
+            <summary>
+              合約的履約標的介面(適用選擇權)
+            </summary>
+        </member>
+        <member name="M:Zeghs.Rules.IContractTarget.GetContractTarget(System.String)">
+            <summary>
+               取得(合約)履約標的商品代號
+            </summary>
+            <param name="symbolId">商品代號</param>
+            <returns>返回值:履約標的商品代號</returns>
+        </member>
+        <member name="T:Zeghs.Managers.ProductManager">
+            <summary>
+              商品管理員類別
+            </summary>
+        </member>
+        <member name="M:Zeghs.Managers.ProductManager.Load(System.String)">
+            <summary>
+              讀取指定資料夾內的所有交易所模組
+            </summary>
+            <param name="exchangeDirectory">資料夾名稱</param>
+        </member>
+        <member name="M:Zeghs.Managers.ProductManager.GetExchange(System.String)">
+            <summary>
+              取得交易所
+            </summary>
+            <param name="shortName">交易所簡稱</param>
+            <returns>返回值:AbstractExchange類別</returns>
+        </member>
+        <member name="M:Zeghs.Managers.ProductManager.SearchProducts(System.String,System.Boolean)">
+            <summary>
+              搜尋商品資訊
+            </summary>
+            <param name="symbolId">商品代號</param>
+            <param name="isMatch">是否需要吻合(true=商品代號需要完全吻合, false=商品代號不需要完全吻合)</param>
+            <returns>返回值:商品資訊列表</returns>
+        </member>
+        <member name="P:Zeghs.Managers.ProductManager.Manager">
+            <summary>
+              [取得] ProductManager類別
+            </summary>
+        </member>
+        <member name="P:Zeghs.Managers.ProductManager.Exchanges">
+            <summary>
+              [取得] 所有交易所資訊
+            </summary>
+        </member>
+        <member name="T:Zeghs.Products.ProductPropertyList">
+            <summary>
+              商品屬性列表類別
+            </summary>
+        </member>
+        <member name="M:Zeghs.Products.ProductPropertyList.#ctor">
+            <summary>
+              建構子
+            </summary>
+        </member>
+        <member name="M:Zeghs.Products.ProductPropertyList.AddProperty(Zeghs.Products.AbstractProductProperty)">
+            <summary>
+              新增或修改商品屬性(如果商品已經存在會覆寫原本的設定值)
+            </summary>
+            <param name="property">商品屬性類別</param>
+        </member>
+        <member name="M:Zeghs.Products.ProductPropertyList.GetProperty(System.String)">
+            <summary>
+              取得商品屬性
+            </summary>
+            <param name="propertyName">屬性名稱</param>
+            <returns>返回值:AbstractProductProperty類別</returns>
+        </member>
+        <member name="M:Zeghs.Products.ProductPropertyList.GetProperty(PowerLanguage.Product)">
+            <summary>
+              取得商品屬性
+            </summary>
+            <param name="product">商品類別</param>
+            <returns>返回值:AbstractProductProperty類別</returns>
+        </member>
+        <member name="M:Zeghs.Products.ProductPropertyList.RemoveProperty(PowerLanguage.Product)">
+            <summary>
+              移除商品屬性
+            </summary>
+            <param name="product">商品類別</param>
+        </member>
+        <member name="M:Zeghs.Products.ProductPropertyList.UpdateProperty(System.DateTime)">
+            <summary>
+              更新商品屬性
+            </summary>
+            <param name="date">欲更新的合約基準時間(通常都以今日為主, 也可以傳入基準時間來更新合約到期日)</param>
+        </member>
+        <member name="P:Zeghs.Products.ProductPropertyList.Count">
+            <summary>
+              [取得] 商品屬性個數
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.ProductPropertyList.Propertys">
+            <summary>
+              [取得] 所有商品屬性設定
+            </summary>
+        </member>
+        <member name="T:Zeghs.Rules.IPriceScale">
+            <summary>
+              價格縮放規則
+            </summary>
+        </member>
+        <member name="M:Zeghs.Rules.IPriceScale.GetPriceScale(System.Double)">
+            <summary>
+              取得價格座標與最小跳動點數
+            </summary>
+            <param name="price">價格</param>
+            <returns>返回值:double陣列(0=價格座標, 1=最小跳動點數)</returns>
+        </member>
+        <member name="T:Zeghs.Products.InstrumentSettings">
+            <summary>
+              商品設定資訊
+            </summary>
+        </member>
+        <member name="M:Zeghs.Products.InstrumentSettings.#ctor(PowerLanguage.InstrumentDataRequest@)">
+            <summary>
+              建構子
+            </summary>
+            <param name="request">InstrumentDataRequest類別</param>
+        </member>
+        <member name="M:Zeghs.Products.InstrumentSettings.Create(PowerLanguage.InstrumentDataRequest@)">
+            <summary>
+              根據設定資訊調整 InstrumentDataRequest 設定並回傳目前的設定類別
+            </summary>
+            <param name="request">InstrumentDataRequest類別</param>
+            <returns>回傳值: 目前的 InstrumentSettings類別</returns>
+        </member>
+        <member name="M:Zeghs.Products.InstrumentSettings.GetSessionFromToday">
+            <summary>
+              取得今日的開收盤時間
+            </summary>
+            <returns>返回值:SessionObject類別</returns>
+        </member>
+        <member name="M:Zeghs.Products.InstrumentSettings.SetExpirationFromTime(System.DateTime)">
+            <summary>
+              從傳入的日期來設定合約到期日
+            </summary>
+            <param name="time">日期時間結構</param>
+        </member>
+        <member name="M:Zeghs.Products.InstrumentSettings.SetPriceScaleFromClosePrice(System.Double)">
+            <summary>
+              從目標價格資訊設定價格座標
+            </summary>
+            <param name="price">目標價格</param>
+        </member>
+        <member name="P:Zeghs.Products.InstrumentSettings.ASymbolInfo2">
+            <summary>
+              [取得] 商品資訊(為了相容 PowerLanguage 但內部結構並不相同)
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.InstrumentSettings.BigPointValue">
+            <summary>
+              [取得] 每一大點的金額
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.InstrumentSettings.Category">
+            <summary>
+              [取得] 商品分類列舉
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.InstrumentSettings.DailyLimit">
+            <summary>
+              [取得] 當日漲跌幅限制
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.InstrumentSettings.DataFeed">
+            <summary>
+              [取得] 資料來源名稱
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.InstrumentSettings.Description">
+            <summary>
+              [取得] 商品資訊備註
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.InstrumentSettings.Exchange">
+            <summary>
+              [取得] 交易所簡稱
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.InstrumentSettings.Expiration">
+            <summary>
+              [取得] 到期日(如果是期貨與選擇權為到期日, 如果是股票則是交割時間截止日期)
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.InstrumentSettings.Margin">
+            <summary>
+              [取得] 期貨或選擇權使用之保證金
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.InstrumentSettings.MinMove">
+            <summary>
+              [取得] 最小跳動點數
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.InstrumentSettings.Name">
+            <summary>
+              [取得] 商品名稱
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.InstrumentSettings.OptionType">
+            <summary>
+              [取得] 選擇權的買賣權類型(None=非選擇權類型, 可能不是選擇權)
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.InstrumentSettings.PointValue">
+            <summary>
+              [取得] 最小跳動金額
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.InstrumentSettings.PriceScale">
+            <summary>
+              [取得] 價格座標
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.InstrumentSettings.Property">
+            <summary>
+              [取得] 商品屬性
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.InstrumentSettings.Resolution">
+            <summary>
+              [取得] Bars 時間週期
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.InstrumentSettings.Sessions">
+            <summary>
+              [取得] 商品開收盤時間
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.InstrumentSettings.StrikePrice">
+            <summary>
+              [取得] 選擇權的履約價格(若不是選擇權, 此屬性皆為 0)
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.InstrumentSettings.TimeZone">
+            <summary>
+              [取得] 交易所與 UTC 的時差
+            </summary>
+        </member>
+        <member name="T:Zeghs.Products.AbstractProductProperty">
+            <summary>
+              商品屬性類別(所有創建的交易所都需要繼承此類別)
+            </summary>
+        </member>
+        <member name="M:Zeghs.Products.AbstractProductProperty.Clone">
+            <summary>
+              建立 AbstractProductProperty 淺層覆本
+            </summary>
+            <returns>返回值: AbstractProductProperty 類別</returns>
+        </member>
+        <member name="M:Zeghs.Products.AbstractProductProperty.GetCallOrPut(PowerLanguage.Product)">
+            <summary>
+              取得選擇權為 Call 或 Put(如果是其他商品則為 None)
+            </summary>
+            <param name="product">商品資訊類別</param>
+            <returns>返回值: OptionType列舉</returns>
+        </member>
+        <member name="M:Zeghs.Products.AbstractProductProperty.GetStrikePrice(PowerLanguage.Product)">
+            <summary>
+              取得選擇權履約價格(如果是其他商品則為 0 )
+            </summary>
+            <param name="product">商品資訊類別</param>
+            <returns>返回值: 履約價格</returns>
+        </member>
+        <member name="M:Zeghs.Products.AbstractProductProperty.UpdateContractTime(System.DateTime)">
+            <summary>
+              更新合約規則(每天需要更新一次新的合約到期規則)
+            </summary>
+            <param name="date">欲更新的合約基準時間(通常都以今日為主, 也可以傳入基準時間來更新合約到期日)</param>
+        </member>
+        <member name="P:Zeghs.Products.AbstractProductProperty.BigPointValue">
+            <summary>
+              [取得/設定] 每1大點金額
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.AbstractProductProperty.CautionMoneys">
+            <summary>
+              [取得/設定] 保證金資訊列表
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.AbstractProductProperty.CommodityId">
+            <summary>
+              [取得/設定] 商品源代號或是商品代號
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.AbstractProductProperty.Description">
+            <summary>
+              [取得/設定] 商品註解
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.AbstractProductProperty.ContractRule">
+            <summary>
+              [取得/設定] 合約規則(規則類別完整名稱)
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.AbstractProductProperty.DailyLimit">
+            <summary>
+              [取得/設定] 當日漲跌幅限制
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.AbstractProductProperty.PriceScaleRule">
+            <summary>
+              [取得/設定] 價格縮放規則
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.AbstractProductProperty.TaxRule">
+            <summary>
+              [取得/設定] 交易稅規則(規則類別完整名稱)
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.AbstractProductProperty.Sessions">
+            <summary>
+              [取得/設定] 商品交易時段
+            </summary>
+        </member>
+        <member name="T:Zeghs.Products.CautionMoney">
+            <summary>
+              保證金資訊類別
+            </summary>
+        </member>
+        <member name="M:Zeghs.Products.CautionMoney.Clone">
+            <summary>
+              建立保證金資訊的淺層複本
+            </summary>
+            <returns>返回值: CautionMoney 類別</returns>
+        </member>
+        <member name="P:Zeghs.Products.CautionMoney.CloseMoney">
+            <summary>
+              [取得/設定] 結算保證金金額(結算保證金) @百分比請轉換成小數格式
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.CautionMoney.Description">
+            <summary>
+              [取得/設定] 保證金描述
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.CautionMoney.InitialMoney">
+            <summary>
+              [取得/設定] 初始保證金金額(原始保證金) @百分比請轉換成小數格式
+            </summary>
+        </member>
+        <member name="P:Zeghs.Products.CautionMoney.KeepMoney">
+            <summary>
+              [取得/設定] 維持保證金金額(維持保證金) @百分比請轉換成小數格式
+            </summary>
+        </member>
+    </members>
+</doc>

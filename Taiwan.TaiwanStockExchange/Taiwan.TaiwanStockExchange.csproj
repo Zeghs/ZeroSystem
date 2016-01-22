@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4DDF84FF-86A7-4E0C-8D7D-4EB722495B19}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Taiwan</RootNamespace>
+    <AssemblyName>Taiwan.TaiwanStockExchange</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\json.net\4.0\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Taiwan\Forms\frmTaiwanContractSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Taiwan\Forms\frmTaiwanContractSetting.Designer.cs">
+      <DependentUpon>frmTaiwanContractSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Taiwan\Forms\frmTaiwanIndexFuturePriceScaleSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Taiwan\Forms\frmTaiwanIndexFuturePriceScaleSetting.Designer.cs">
+      <DependentUpon>frmTaiwanIndexFuturePriceScaleSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Taiwan\Forms\frmTaiwanTaxSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Taiwan\Forms\frmTaiwanTaxSetting.Designer.cs">
+      <DependentUpon>frmTaiwanTaxSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Taiwan\Products\TaiwanProductProperty.cs" />
+    <Compile Include="Taiwan\Rules\Contracts\MaturityDateUtil.cs" />
+    <Compile Include="Taiwan\Rules\Contracts\TaiwanIndexWeekFuturesContractRule.cs" />
+    <Compile Include="Taiwan\Rules\Contracts\TaiwanIndexWeekOptionContractRule.cs" />
+    <Compile Include="Taiwan\Rules\Contracts\TaiwanStockContractRule.cs" />
+    <Compile Include="Taiwan\Rules\Contracts\IContractParameters.cs" />
+    <Compile Include="Taiwan\Rules\PriceScales\TaiwanIndexFuturesPriceScaleRule.cs" />
+    <Compile Include="Taiwan\Rules\PriceScales\TaiwanIndexWeightPriceScaleRule.cs" />
+    <Compile Include="Taiwan\Rules\PriceScales\TaiwanStockOptionPriceScaleRule.cs" />
+    <Compile Include="Taiwan\Rules\PriceScales\TaiwanStockPriceScaleRule.cs" />
+    <Compile Include="Taiwan\Rules\PriceScales\TaiwanTEOptionPriceScaleRule.cs" />
+    <Compile Include="Taiwan\Rules\PriceScales\TaiwanTFOptionPriceScaleRule.cs" />
+    <Compile Include="Taiwan\Rules\PriceScales\TaiwanTXOptionPriceScaleRule.cs" />
+    <Compile Include="Taiwan\Rules\PriceScales\TaiwanXIOptionPriceScaleRule.cs" />
+    <Compile Include="Taiwan\Rules\RuleCreater.cs" />
+    <Compile Include="Taiwan\Rules\Contracts\TaiwanIndexFuturesContractRule.cs" />
+    <Compile Include="Taiwan\Rules\Contracts\TaiwanIndexOptionContractRule.cs" />
+    <Compile Include="Taiwan\Rules\Taxs\TaiwanIndexFuturesTaxRule.cs" />
+    <Compile Include="Taiwan\Rules\Taxs\TaiwanIndexOptionTaxRule.cs" />
+    <Compile Include="Taiwan\Rules\Taxs\TaiwanStockTaxRule.cs" />
+    <Compile Include="Taiwan\TaiwanStockExchange.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PLTypes\PLTypes.csproj">
+      <Project>{39F489FF-91E0-415D-9912-635B113B38D2}</Project>
+      <Name>PLTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WES.Runtime.Product\WES.Runtime.Product.csproj">
+      <Project>{7C5601E7-7118-477B-A4AC-C2E0DE9999DB}</Project>
+      <Name>WES.Runtime.Product</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Taiwan\Forms\frmTaiwanContractSetting.resx">
+      <DependentUpon>frmTaiwanContractSetting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Taiwan\Forms\frmTaiwanIndexFuturePriceScaleSetting.resx">
+      <DependentUpon>frmTaiwanIndexFuturePriceScaleSetting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Taiwan\Forms\frmTaiwanTaxSetting.resx">
+      <DependentUpon>frmTaiwanTaxSetting.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
