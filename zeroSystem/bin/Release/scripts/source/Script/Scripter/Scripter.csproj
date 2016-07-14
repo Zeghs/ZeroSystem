@@ -105,6 +105,7 @@
     <Compile Include="PowerLanguage\Strategy\__MAD_MA_Signal.Strategy.cs" />
     <Compile Include="PowerLanguage\Strategy\__Martingale_Signal.Strategy.CS" />
     <Compile Include="PowerLanguage\Strategy\__OPTIONS_Signal.Strategy.cs" />
+    <Compile Include="PowerLanguage\Strategy\__TestScript_Signal.Strategy.cs" />
     <Compile Include="PowerLanguage\Strategy\__Trust_Signal.Strategy.cs" />
     <Compile Include="PowerLanguage\Strategy\__WEEK_OPTIONS_Signal.Strategy.cs" />
     <Compile Include="PowerLanguage\Strategy\__TEST_Signal.Strategy.cs" />

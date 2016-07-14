@@ -44,7 +44,7 @@ namespace Mitake.Stock.Decode {
                         ++buffer.Position;
 
                         //取得股票代號(舊格式股票代號)
-			cSymbolInfo.SymbolId = Encoding.UTF8.GetString(buffer.Data, buffer.Position, 5).Replace("\0", string.Empty);
+			cSymbolInfo.SymbolId = Encoding.UTF8.GetString(buffer.Data, buffer.Position, 5).Trim();
 			buffer.Position += 5;
 
                         //取得股票名稱
@@ -60,15 +60,15 @@ namespace Mitake.Stock.Decode {
 			if (cSymbolInfo.市場別 == 2) { //判斷是否為期貨
 				if (cSymbolInfo.市場分類 == 2) {
 					//如果市場分類 == 2，則可能是選擇權(SID2 = 10Bytes)
-					sSymbolId = Encoding.UTF8.GetString(buffer.Data, buffer.Position, 10).Replace("\0", string.Empty).Trim();
+					sSymbolId = Encoding.UTF8.GetString(buffer.Data, buffer.Position, 10).Trim();
 					buffer.Position += 10;
 				} else {
-					sSymbolId = Encoding.UTF8.GetString(buffer.Data, buffer.Position, 13).Replace("\0", string.Empty).Trim();
+					sSymbolId = Encoding.UTF8.GetString(buffer.Data, buffer.Position, 10).Trim();
 					buffer.Position += 13;
 				}
 			} else {
 				//取得SID2
-				sSymbolId = Encoding.UTF8.GetString(buffer.Data, buffer.Position, 6).Replace("\0", string.Empty).Trim();
+				sSymbolId = Encoding.UTF8.GetString(buffer.Data, buffer.Position, 6).Trim();
 				buffer.Position += 6;
 
 				//取得個股產業類別

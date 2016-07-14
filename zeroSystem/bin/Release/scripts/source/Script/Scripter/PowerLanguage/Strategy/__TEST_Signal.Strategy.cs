@@ -212,7 +212,7 @@ namespace PowerLanguage.Strategy {
 			//}
 
 			///*
-			if (Bars.Time[0].Date == new DateTime(2016, 1, 8)) {
+			if (Bars.Time[0].Date == new DateTime(2016, 6, 16)) {
 				int iMinute = Bars.Time[0].Hour * 60 + Bars.Time[0].Minute;
 				cBuilder.Append(iMinute).Append(',').Append(Bars.Open[0]).Append(',').Append(Bars.High[0]).Append(',').Append(Bars.Low[0]).Append(',').Append(Bars.Close[0]).Append(',').Append(Bars.Volume[0]).AppendLine();
 			}

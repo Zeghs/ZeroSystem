@@ -1,7 +1,4 @@
-﻿//#define HISTORY
-#define STOP_PROFIT
-
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -121,23 +118,20 @@ namespace PowerLanguage.Strategy {
 
 			File.WriteAllText(filename, cBuilder.ToString(), Encoding.UTF8);
 		}
-		
+
 		private static int[] __iTable = new int[] { -180, -176, -173, -169, -162, -160, -157, -143, -139, -132, -129, -124, -122, -113, -107, -105, -91, -89, -86, -82, -76, -71, -64, -63, -60, -51, -40, -35, -33, -21, -20, -11, -6, -2, -1, 0, 1, 3, 7, 16, 18, 19, 23, 27, 30, 33, 34, 37, 41, 44, 46, 50, 51, 52, 58, 60, 68, 74, 77, 88, 89, 93, 102, 115, 116, 119, 121, 129, 131, 134, 136, 140, 141, 149, 150, 153, 164, 166, 168, 174, 177 };
-		private static TimeSpan __cPrevOpen = new TimeSpan(8, 40, 0);
+		private static TimeSpan __cPrevOpenStart = new TimeSpan(8, 40, 0);
+		private static TimeSpan __cPrevOpenStop = new TimeSpan(8, 40, 30);
 		private static TimeSpan __cClosedTime1 = new TimeSpan(13, 40, 0);
 		private static TimeSpan __cClosedTime2 = new TimeSpan(13, 25, 0);
 
 		private BIAS __cBIAS = null;
 		private DateTime __cPrevDate;
-		//private IOrderMarket BUY, BUY_C, SELL, SELL_C;
 		private IOrderMarket BUY, SELL;
 		private IOrderMarket BUY_C, SELL_C;
-#if HISTORY
-		private IOrderPriced BUY_LC, SELL_LC;
-#endif
 
-		private int 下單口數 = 2;        //下單口數
-		private int 加碼次數 = 0;        //有跳多空加碼次數就會變兩次(因為要連續下單兩天都加碼)
+		private int 下單口數 = 3;        //下單口數
+		private bool 是否已加碼 = false;   //是否已經加碼
 		private double __dOpen = 0;
 		private double 停損點數 = 34;    //停損點數
 		private double 跳多空點數 = 60;  //開盤漲跌點數(超過此點數就加碼)
@@ -145,8 +139,6 @@ namespace PowerLanguage.Strategy {
 		private double 轉折停利率 = 40;  //轉折超過20%就停利
 		private double __dPrevProfit = 0;  //基礎停利點
 		private bool __bTrade = false;
-
-		private MACD __cMACD = null;
 
 		public __BIAS_Signal(object _ctx)
 			: base(_ctx) {
@@ -158,97 +150,65 @@ namespace PowerLanguage.Strategy {
 			SELL = OrderCreator.MarketThisBar(new SOrderParameters(Contracts.UserSpecified, EOrderAction.SellShort));
 			BUY_C = OrderCreator.MarketThisBar(new SOrderParameters(Contracts.Default, EOrderAction.Sell, OrderExit.FromAll));
 			SELL_C = OrderCreator.MarketThisBar(new SOrderParameters(Contracts.Default, EOrderAction.BuyToCover, OrderExit.FromAll));
-#if HISTORY
-			BUY_LC = OrderCreator.Limit(new SOrderParameters(Contracts.Default, EOrderAction.Sell, OrderExit.FromAll));
-			SELL_LC = OrderCreator.Limit(new SOrderParameters(Contracts.Default, EOrderAction.BuyToCover, OrderExit.FromAll));
-#endif
 			__cBIAS = new BIAS(this, 2);
 			__cBIAS.Length = 5;
-
-			__cMACD = new MACD(this, 2);
-			__cMACD.FastPeriod = 5;
-			__cMACD.SlowPeriod = 10;
-			__cMACD.MACDPeriod = 10;
 
 			停損點數 *= 下單口數;
 			基礎停利點 *= 下單口數;
 			__cPrevDate = Bars.Time[0].AddDays(-1);
 
-			log.InfoFormat("最新KBars時間={0}", Bars.Time[0].ToString("yyyy-MM-dd HH:mm:ss"));
-			Output.WriteLine(string.Format("最新KBars時間={0}", Bars.Time[0].ToString("yyyy-MM-dd HH:mm:ss")));
+			IInstrument cBars = BarsOfData(2);
+			int iIndex = -(cBars.FullSymbolData.Count - 1);
+
+			log.InfoFormat("最新歷史KBars={0}", cBars.FullSymbolData.Time[iIndex].ToString("yyyy-MM-dd HH:mm:ss"));
+			Output.WriteLine(string.Format("最新歷史KBars={0}", cBars.FullSymbolData.Time[iIndex].ToString("yyyy-MM-dd HH:mm:ss")));
 		}
 
 		protected override void CalcBar() {
 			//Output.WriteLine(Bars.Time[0].ToString("yyyy-MM-dd HH:mm:ss"));
 			if (Bars.Time[0].Date > __cPrevDate.Date) {
 				__bTrade = true;
+				是否已加碼 = false;
 				__dPrevProfit = 0;
 				__dOpen = Bars.Open[0];
 				__cPrevDate = Bars.Time[0];
-
-				//加碼數量
-				double dDiff = Math.Abs(__dOpen - Bars.Close[1]);
-				if (加碼次數 == 0) {
-					if (dDiff >= 跳多空點數) {
-						log.InfoFormat("[加碼進場機制] 昨天收盤價={0}, 今日開盤價={1} 明天開盤繼續進場加碼...", Bars.Close[1], __dOpen);
-						SendOpen();
-						加碼次數 = 1;
-					}
-				} else {
-					log.InfoFormat("[加碼進場機制] 前天收盤價={0}, 今日開盤價={1} 今日為最後一次加碼...", Bars.Close[2], __dOpen);
-					SendOpen();
-					--加碼次數;
-				}
 			}
 
 			if (__bTrade && CurrentPosition.Side == EMarketPositionSide.Flat) {
-				/*
-				double dRate = Math.Atan2(__cBIAS[1], __cBIAS[0]) * 180 / Math.PI;
-				if (GetOrderAction(dRate) == 1) {
-				        BUY.Send("BIAS_BUY", 下單口數);
-				} else {
-				        SELL.Send("BIAS_SELL", 下單口數);
-				}
+				SendOpen(false);
 				__bTrade = false;
-				//*/
 
-				//*
-				int iOSD = __cMACD.OSD[0] >= 0 ? 1 : -1;
-				double dRate = Math.Atan2(__cBIAS[1], __cBIAS[0]) * 180 / Math.PI;
-				int iAction = GetOrderAction(dRate);
-				if (iAction == iOSD) {
-					if (iAction == 1) {
-						BUY.Send("BIAS_BUY", 下單口數);
-					} else {
-						SELL.Send("BIAS_SELL", 下單口數);
+				IInstrument cBars = BarsOfData(2);
+				double dDiff = Math.Abs(cBars.Open[0] - cBars.Close[1]);
+				if (dDiff >= 跳多空點數) {
+					Output.WriteLine("[加碼進場機制] 前天收盤價={0}, 昨日開盤價={1} 今日為最後加碼...", cBars.Close[1], cBars.Open[0]);
+					log.InfoFormat("[加碼進場機制] 前天收盤價={0}, 昨日開盤價={1} 今日為最後加碼...", cBars.Close[1], cBars.Open[0]);
+					SendOpen(true);
+
+					是否已加碼 = true;
+				}
+
+				if (!是否已加碼) {
+					//加碼數量
+					dDiff = Math.Abs(__dOpen - cBars.Close[0]);
+					if (dDiff >= 跳多空點數) {
+						Output.WriteLine("[加碼進場機制] 昨天收盤價={0}, 今日開盤價={1} 明天開盤繼續進場加碼...", cBars.Close[0], __dOpen);
+						log.InfoFormat("[加碼進場機制] 昨天收盤價={0}, 今日開盤價={1} 明天開盤繼續進場加碼...", cBars.Close[0], __dOpen);
+						SendOpen(true);
 					}
 				}
-				__bTrade = false;
-				//*/ 
 			} else {
 				double dStoploss = GetStoploss();
 				if (dStoploss >= 停損點數) {
 					SendClose("BIAS_StopLoss");
 				} else if (Bars.Time[0].TimeOfDay == GetCloseTime()) {
 					SendClose("BIAS_TradingClosed");
-#if STOP_PROFIT
-				} else if (dStoploss < 0) {
-					CalcStopProfit(dStoploss * -1);
-#endif
 				}
 			}
 		}
 
 		protected override void Destroy() {
 			Save("report.csv", "TXF0.tw", this.Positions);
-			base.Destroy();
-		}
-
-		protected override void OnQuoteDateTime(Zeghs.Events.QuoteDateTimeEvent e) {
-			//if (__bTrade && CurrentPosition.Side == EMarketPositionSide.Flat && e.QuoteDateTime.TimeOfDay >= __cPrevOpen) {
-				//SendOpen();
-				//__bTrade = false;
-			//}
 		}
 
 		private void CalcStopProfit(double profit) {
@@ -257,23 +217,11 @@ namespace PowerLanguage.Strategy {
 					double dDiff = __dPrevProfit - profit;
 					double dPercent = dDiff / __dPrevProfit * 100;
 					if (dPercent >= 轉折停利率) {
-#if HISTORY
-						double dSourceProfit = __dPrevProfit - Math.Round(__dPrevProfit * 轉折停利率 / 100);
-						double dDiffProfit = dSourceProfit - profit;
-						if (CurrentPosition.Side == EMarketPositionSide.Long) {
-							log.InfoFormat("最高獲利={0}, 目前獲利={1}, 轉折停利率={2}, 目前轉折率={3}", __dPrevProfit, profit, 轉折停利率, dPercent);
-							BUY_LC.Send("BIAS_StopProfit", Bars.Close[0] + dDiffProfit, 下單口數);
-						} else if (CurrentPosition.Side == EMarketPositionSide.Short) {
-							log.InfoFormat("最高獲利={0}, 目前獲利={1}, 轉折停利率={2}, 目前轉折率={3}", __dPrevProfit, profit, 轉折停利率, dPercent);
-							SELL_LC.Send("BIAS_StopProfit", Bars.Close[0] - dDiffProfit, 下單口數);
-						}
-#else
 						if (CurrentPosition.Side == EMarketPositionSide.Long) {
 							BUY_C.Send("BIAS_StopProfit", 下單口數);
 						} else if (CurrentPosition.Side == EMarketPositionSide.Short) {
 							SELL_C.Send("BIAS_StopProfit", 下單口數);
 						}
-#endif
 					}
 				}
 				__dPrevProfit = profit;
@@ -316,12 +264,12 @@ namespace PowerLanguage.Strategy {
 			return iRet;
 		}
 
-		private void SendOpen() {
+		private void SendOpen(bool isDouble) {
 			double dRate = Math.Atan2(__cBIAS[1], __cBIAS[0]) * 180 / Math.PI;
 			if (GetOrderAction(dRate) == 1) {
-				BUY.Send("BIAS_BUY", 下單口數);
+				BUY.Send((isDouble) ? "BIAS_BUY_Double" : "BIAS_BUY", 下單口數);
 			} else {
-				SELL.Send("BIAS_SELL", 下單口數);
+				SELL.Send((isDouble) ? "BIAS_SELL_Double" : "BIAS_SELL", 下單口數);
 			}
 		}
 

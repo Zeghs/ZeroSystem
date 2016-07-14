@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Drawing.Imaging;
+using Zeghs.Drawing;
 
 namespace Zeghs.Forms {
 	public partial class frmTest : Form {
@@ -138,18 +139,27 @@ namespace Zeghs.Forms {
 		}
 
 		protected override void OnPaint(PaintEventArgs e) {
-			base.OnPaint(e);
+			//base.OnPaint(e);
 
 			//Bitmap bmp = new Bitmap(100, 100);
 			Graphics g = e.Graphics;
+			g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighSpeed;
+			g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+
+			Gdi gg = new Gdi(this.Handle);
 
 			Stopwatch sw = new Stopwatch();
 			sw.Start();
 
-			for (int i = 0; i < 50000; i++) {
+			for (int i = 0; i < 100000; i++) {
 				//g.FillRectangle(Brushes.Black, 0, 0, 100, 100);
-				g.DrawLine(Pens.Black, 0, 0, 100, 100);
+				//g.DrawLine(Pens.Black, 0, 0, 100, 100);
+				//gg.DrawLine(Pens.Black, 0, 0, 100, 100);
+				//gg.DrawRectangle(Pens.Red, 100, 100, 200, 200);
+				//g.DrawRectangle(Pens.Red, 100, 100, 200, 200);
 			}
+
+			gg.Dispose();
 
 			//e.Graphics.DrawImageUnscaled(bmp, 0, 0);
 
@@ -182,6 +192,7 @@ namespace Zeghs.Forms {
 					}
 				}
 			}
+
 	
 			sw.Stop();
 			MessageBox.Show(sw.ElapsedMilliseconds.ToString());
