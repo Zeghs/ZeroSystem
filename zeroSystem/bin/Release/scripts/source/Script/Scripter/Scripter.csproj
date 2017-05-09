@@ -13,6 +13,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <IsWebBootstrapper>true</IsWebBootstrapper>
     <PublishUrl>http://localhost/Scripter/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -25,7 +26,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>true</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -59,6 +59,11 @@
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\..\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mitake.QuoteService, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\plugins\quotes\Mitake.QuoteService.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
@@ -97,14 +102,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PowerLanguage\Strategy\__AvgDealCount_Signal.Strategy.cs" />
+    <Compile Include="PowerLanguage\Strategy\__AvgDealVolume_Signal.Strategy.cs" />
     <Compile Include="PowerLanguage\Strategy\__BIAS_Signal.Strategy.cs" />
     <Compile Include="PowerLanguage\Strategy\__DT_Signal.Strategy.CS" />
     <Compile Include="PowerLanguage\Strategy\__KDJ_MACD_Signal.Strategy.cs" />
     <Compile Include="PowerLanguage\Strategy\__KDJ_Signal.Strategy.cs" />
     <Compile Include="PowerLanguage\Strategy\__Liberty_Signal.Strategy.cs" />
     <Compile Include="PowerLanguage\Strategy\__MAD_MA_Signal.Strategy.cs" />
+    <Compile Include="PowerLanguage\Strategy\__Manual_Signal.Strategy.cs" />
     <Compile Include="PowerLanguage\Strategy\__Martingale_Signal.Strategy.CS" />
     <Compile Include="PowerLanguage\Strategy\__OPTIONS_Signal.Strategy.cs" />
+    <Compile Include="PowerLanguage\Strategy\__SIM_Manual_Signal.Strategy.cs" />
     <Compile Include="PowerLanguage\Strategy\__TestScript_Signal.Strategy.cs" />
     <Compile Include="PowerLanguage\Strategy\__Trust_Signal.Strategy.cs" />
     <Compile Include="PowerLanguage\Strategy\__WEEK_OPTIONS_Signal.Strategy.cs" />

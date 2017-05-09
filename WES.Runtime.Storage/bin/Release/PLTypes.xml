@@ -232,9 +232,19 @@
               蠟燭線圖表
             </summary>
         </member>
-        <member name="F:PowerLanguage.EChartType.CloseLine">
+        <member name="F:PowerLanguage.EChartType.ClosingLine">
             <summary>
               收盤線圖表
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EChartType.TextObject">
+            <summary>
+              文字物件
+            </summary>
+        </member>
+        <member name="F:PowerLanguage.EChartType.TradeObject">
+            <summary>
+              交易物件
             </summary>
         </member>
         <member name="T:PowerLanguage.EResolution">
@@ -367,12 +377,25 @@
               圖表畫筆樣式
             </summary>
         </member>
+        <member name="M:PowerLanguage.PenStyle.#ctor">
+            <summary>
+              建構子
+            </summary>
+        </member>
         <member name="M:PowerLanguage.PenStyle.#ctor(System.Drawing.Color,System.Int32)">
             <summary>
               建構子
             </summary>
             <param name="color">畫筆顏色</param>
             <param name="width">畫筆寬度</param>
+        </member>
+        <member name="M:PowerLanguage.PenStyle.#ctor(System.Drawing.Color,System.Int32,System.Int32)">
+            <summary>
+              建構子
+            </summary>
+            <param name="color">畫筆顏色</param>
+            <param name="width">畫筆寬度</param>
+            <param name="pattern">筆刷樣式</param>
         </member>
         <member name="P:PowerLanguage.PenStyle.Color">
             <summary>
@@ -467,6 +490,11 @@
         <member name="P:PowerLanguage.ITextObject.Size">
             <summary>
               [取得/設定] 繪製文字的字型大小
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ITextObject.Style">
+            <summary>
+              [取得] 文字樣式資訊
             </summary>
         </member>
         <member name="P:PowerLanguage.ITextObject.Text">
@@ -588,36 +616,6 @@
               使用者指定 lots 單位
             </summary>
         </member>
-        <member name="T:Zeghs.Settings.PathSetting">
-            <summary>
-              預設系統目錄路徑設定類別
-            </summary>
-        </member>
-        <member name="P:Zeghs.Settings.PathSetting.CachePath">
-            <summary>
-              [取得/設定] Cache 路徑
-            </summary>
-        </member>
-        <member name="P:Zeghs.Settings.PathSetting.DatabasePath">
-            <summary>
-              [取得/設定] Database 路徑
-            </summary>
-        </member>
-        <member name="P:Zeghs.Settings.PathSetting.LogPath">
-            <summary>
-              [取得/設定] Log 路徑
-            </summary>
-        </member>
-        <member name="P:Zeghs.Settings.PathSetting.ProfilePath">
-            <summary>
-              [取得/設定] Database 路徑
-            </summary>
-        </member>
-        <member name="P:Zeghs.Settings.PathSetting.TrackerPath">
-            <summary>
-              [取得/設定] Order 與 Position 的追蹤路徑
-            </summary>
-        </member>
         <member name="T:PowerLanguage.ISeriesSymbolDataRand">
             <summary>
               序列資訊延伸介面
@@ -686,41 +684,6 @@
         <member name="F:PowerLanguage.EAverageMode.WMA">
             <summary>
               加權移動平均模式
-            </summary>
-        </member>
-        <member name="T:Zeghs.Settings.ChartProperty">
-            <summary>
-              圖表屬性類別
-            </summary>
-        </member>
-        <member name="P:Zeghs.Settings.ChartProperty.BackgroundColor">
-            <summary>
-              [取得/設定] 背景顏色
-            </summary>
-        </member>
-        <member name="P:Zeghs.Settings.ChartProperty.FontName">
-            <summary>
-              [取得/設定] 預設字體名稱
-            </summary>
-        </member>
-        <member name="P:Zeghs.Settings.ChartProperty.FontSize">
-            <summary>
-              [取得/設定] 預設字體大小
-            </summary>
-        </member>
-        <member name="P:Zeghs.Settings.ChartProperty.ForeColor">
-            <summary>
-              [取得/設定] 前景顏色
-            </summary>
-        </member>
-        <member name="P:Zeghs.Settings.ChartProperty.GridColor">
-            <summary>
-              [取得/設定] 網格顏色
-            </summary>
-        </member>
-        <member name="P:Zeghs.Settings.ChartProperty.IsShowGrid">
-            <summary>
-              [取得/設定] 是否顯示網格
             </summary>
         </member>
         <member name="T:PowerLanguage.SeriesAbstract`1">
@@ -1671,6 +1634,11 @@
               [取得/設定] 座標範圍
             </summary>
         </member>
+        <member name="P:PowerLanguage.AxisSetting.IsCreateInstance">
+            <summary>
+              [取得/設定] 是否建立新的 Axis 座標軸(true=建立新 axis 座標軸, false=共用主要 Axis 當作座標軸參考)
+            </summary>
+        </member>
         <member name="P:PowerLanguage.AxisSetting.MarginBottom">
             <summary>
               [取得/設定] 下邊界%數
@@ -1751,28 +1719,6 @@
         <member name="P:PowerLanguage.RulePropertyAttribute.RuleType">
             <summary>
               [取得] 規則類別
-            </summary>
-        </member>
-        <member name="T:PowerLanguage.GlobalSettings">
-            <summary>
-              全域設定類別
-            </summary>
-        </member>
-        <member name="M:PowerLanguage.GlobalSettings.Load(System.String)">
-            <summary>
-              讀取全域設定
-            </summary>
-            <param name="filename">設定檔名稱</param>
-        </member>
-        <member name="M:PowerLanguage.GlobalSettings.Save(System.String)">
-            <summary>
-              儲存全域設定
-            </summary>
-            <param name="filename">設定檔名稱</param>
-        </member>
-        <member name="P:PowerLanguage.GlobalSettings.Paths">
-            <summary>
-              [取得] 預設系統目錄路徑設定值
             </summary>
         </member>
         <member name="T:PowerLanguage.Order">
@@ -1929,7 +1875,17 @@
         </member>
         <member name="P:PowerLanguage.ChartSetting.IsSubChart">
             <summary>
-              [取得/設定] 是否為副圖(如果不是副圖則就是隱藏)
+              [取得/設定] 是否為副圖(true=副圖, false=隱藏)
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ChartSetting.LayerIndex">
+            <summary>
+              [取得/設定] 圖層索引
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.ChartSetting.LegendColor">
+            <summary>
+              [取得/設定] Legend 圖例顏色
             </summary>
         </member>
         <member name="P:PowerLanguage.ChartSetting.PenStyles">
@@ -2314,11 +2270,13 @@
             <param name="dataStream">資料串流編號</param>
             <returns>返回值: ITextObject 介面</returns>
         </member>
-        <member name="M:PowerLanguage.ITextContainer.GetTextObjects(PowerLanguage.EDrawingSource)">
+        <member name="M:PowerLanguage.ITextContainer.GetTextObjects(PowerLanguage.EDrawingSource,System.Int32,System.Int32)">
             <summary>
               取得文字繪圖物件列表
             </summary>
             <param name="drawingSource">繪製描述來源列舉</param>
+            <param name="index">起始 Bar Number(預設: 1)</param>
+            <param name="count">取得個數(0=全部)</param>
             <returns>返回值: 文字繪圖物件列表(需要使用 foreach 列舉所有文字繪圖物件)</returns>
         </member>
         <member name="P:PowerLanguage.ITextContainer.Active">

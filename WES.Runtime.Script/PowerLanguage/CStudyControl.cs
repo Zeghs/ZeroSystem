@@ -3,9 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using log4net;
+using Zeghs.IO;
 using Zeghs.Data;
 using Zeghs.Events;
-using Zeghs.Drawing;
 using Zeghs.Services;
 using Zeghs.Managers;
 
@@ -16,23 +16,12 @@ namespace PowerLanguage {
 	public class CStudyControl : IDisposable {
 		private static readonly ILog logger = LogManager.GetLogger(typeof(CStudyControl));
 
-		private struct DataStream {
-			internal int index;
-			internal InstrumentDataRequest data;
-		}
-
 		private bool __bBusy = false;      //忙碌旗標
 		private bool __bDisposed = false;  //Dispose旗標
 		private int __iTickCount = 1;
-		private int __iWaitingCount = 0;
-		private int __iMaxDataStream = 0;
-		private int __iMaxBarsReference = 0;
-		private TextContainer __cDrawTexts = null;
+		private DataLoader __cDataLoader = null;
 		private HashSet<string> __cDataSources = null;
-		private List<Instrument> __cInstruments = null;
-		private Dictionary<string, Queue<DataStream>> __cTemps = null;
 		private object __oLock = new object();
-		private object __oLockBars = new object();
 
 		/// <summary>
 		///   當即時報價資訊斷線時所觸發的事件
@@ -63,26 +52,26 @@ namespace PowerLanguage {
 		}
 
 		/// <summary>
-		///   [取得] 文字繪製容器
-		/// </summary>
-		public ITextContainer DrwText {
-			get {
-				return __cDrawTexts;
-			}
-		}
-
-		/// <summary>
 		///   [取得] 最大 IInstrument 資訊個數
 		/// </summary>
 		public int MaxDataStream {
 			get {
-				return __iMaxDataStream;
+				return __cDataLoader.MaxInstrumentCount;
+			}
+		}
+
+		/// <summary>
+		///   [取得] 商品資訊資料讀取者
+		/// </summary>
+		protected IDataLoader DataLoader {
+			get {
+				return __cDataLoader;
 			}
 		}
 
 		internal List<Instrument> Instruments {
 			get {
-				return __cInstruments;
+				return __cDataLoader.Instruments;
 			}
 		}
 
@@ -90,10 +79,10 @@ namespace PowerLanguage {
 		///   建構子
 		/// </summary>
 		public CStudyControl() {
-			__cDrawTexts = new TextContainer();
+			__cDataLoader = new DataLoader();
+			__cDataLoader.onLoadCompleted += DataLoader_onLoadCompleted;
+
 			__cDataSources = new HashSet<string>();
-			__cInstruments = new List<Instrument>(16);
-			__cTemps = new Dictionary<string, Queue<DataStream>>(16);
 		}
 
 		/// <summary>
@@ -109,14 +98,7 @@ namespace PowerLanguage {
 		/// </summary>
 		/// <param name="dataRequests">InstrumentDataRequest 列表</param>
 		public void AddDataStreams(List<InstrumentDataRequest> dataRequests) {
-			lock (__oLockBars) {
-				int iCount = __cInstruments.Count;
-				__cInstruments.AddRange(new Instrument[dataRequests.Count]);
-
-				foreach (InstrumentDataRequest dataRequest in dataRequests) {
-					AddDataStream(new DataStream() { index = iCount++, data = dataRequest });
-				}
-			}
+			__cDataLoader.LoadDataRange(dataRequests);
 		}
 
 		/// <summary>
@@ -124,16 +106,8 @@ namespace PowerLanguage {
 		/// </summary>
 		/// <param name="data_stream">資料串流編號(0 為主要依據不能移除)</param>
 		public void RemoveDataStream(int data_stream) {
-			if (__cTemps.Count == 0 && data_stream > 0 && data_stream < __cInstruments.Count) {
-				Instrument cInstrument = __cInstruments[data_stream];
-				if (cInstrument != null) {
-					cInstrument.Dispose();
-				}
-
-				lock (__oLockBars) {
-					__cInstruments.RemoveAt(data_stream);
-					--__iMaxDataStream;
-				}
+			if (data_stream > 0 && data_stream < __cDataLoader.MaxInstrumentCount) {
+				__cDataLoader.RemoveData(data_stream);
 			}
 		}
 
@@ -144,14 +118,12 @@ namespace PowerLanguage {
 		internal virtual void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
-				
 				if (disposing) {
 					onReady = null;
 					onUpdate = null;
 					onDisconnected = null;
 					onQuoteDateTime = null;
 
-					__cDrawTexts.Clear();
 					DisposeResources();
 					if (logger.IsInfoEnabled) logger.Info("[CStudyControl.Dispose] CStudyControl Disposed...");
 				}
@@ -159,7 +131,7 @@ namespace PowerLanguage {
 		}
 
 		internal void SetMaximumBarsReference(int barsCount) {
-			__iMaxBarsReference = barsCount;
+			__cDataLoader.SetMaximumBarsReference(barsCount);
 		}
 
 		/// <summary>
@@ -175,7 +147,7 @@ namespace PowerLanguage {
 		///   啟動腳本
 		/// </summary>
 		internal virtual void Start() {
-			Instrument cInstrument = __cInstruments[0];
+			Instrument cInstrument = __cDataLoader.GetInstrument(0);
 			string sDataSource = cInstrument.Request.DataFeed;
 
 			AsyncCalculate();  //啟動的時候先計算一次(因為使用者不一定會使用即時報價來源, 如果不先計算沒有報價源就不會啟動 CalcBar 方法)
@@ -198,68 +170,6 @@ namespace PowerLanguage {
 			}
 		}
 
-		private void AddDataStream(DataStream dataStream) {
-			string sDataSource = dataStream.data.DataFeed;
-			AbstractQuoteService cService = QuoteManager.Manager.GetQuoteService(sDataSource);
-			if (cService == null) {
-				CreateInstrument(dataStream);
-				CheckReady();
-			} else {
-				bool bLogin = cService.IsLogin;
-				lock (__cDataSources) {
-					if (!__cDataSources.Contains(sDataSource)) {
-						cService.onDisconnected += QuoteService_onDisconnected;
-						if (!bLogin) {  //如果尚未登入完成
-							cService.onLoginCompleted += QuoteService_onLoginCompleted;  //掛上登入完成事件
-						}
-						SeriesManager.Manager.SetQuoteService(cService);  //設定報價服務給股票資訊管理員(這樣 Bars 才會合併即時報價)
-
-						__cDataSources.Add(sDataSource);
-					}
-				}
-
-				if (bLogin) {
-					string sSymbolId = dataStream.data.Symbol;
-					IQuote cQuote = cService.Storage.GetQuote(sSymbolId);
-					if (cQuote != null && cQuote.ComplementStatus != ComplementStatus.Complemented) {
-						lock (__oLock) {
-							if (__iWaitingCount == 0) {
-								cService.onComplementCompleted += QuoteService_onComplementCompleted;
-							}
-							++__iWaitingCount;
-
-							Queue<DataStream> cQueue = GetTemps(sSymbolId);
-							cQueue.Enqueue(dataStream);
-
-							if (cQuote.ComplementStatus == ComplementStatus.NotComplement) {
-								cService.AddSubscribe(sSymbolId);
-								cService.Complement(sSymbolId);
-							}
-						}
-					} else {
-						CreateInstrument(dataStream);
-						CheckReady();
-					}
-				} else {  //如果還沒有登入完成
-					bool bReAddData = false;
-					lock (__oLock) {  //進行同步(因為登入完成的通知是非同步, 所以要同步一些步驟才不會出現資料沒有載入的問題)
-						if (cService.IsLogin) {  //再檢查一次是否已經登入成功
-							lock (__cTemps) {
-								bReAddData = !__cTemps.ContainsKey(sDataSource);  //檢查是否還有資料(如果沒資料表示已經執行過 onLoginCompleted 事件)
-							}
-						} else {  //如果還沒有登入完成
-							Queue<DataStream> cQueue = GetTemps(sDataSource);  //取得資料
-							cQueue.Enqueue(dataStream);  //保存至 Queue
-						}
-					}
-
-					if (bReAddData) {  //是否要重新加入資料
-						AddDataStream(dataStream);  //重新加入一次資料
-					}
-				}
-			}
-		}
-
 		private void AsyncCalculate() {
 			bool bBusy = false;
 			lock (__oLock) {
@@ -271,66 +181,31 @@ namespace PowerLanguage {
 
 			if (!bBusy) {
 				Task.Factory.StartNew(() => {
-					Instrument cBaseInstrument = __cInstruments[0];
-					while (__iTickCount > 0) {
-						Interlocked.Decrement(ref __iTickCount);
+					Instrument cBaseInstrument = __cDataLoader.GetInstrument(0);
+					if (cBaseInstrument != null) {
+						while (__iTickCount > 0) {
+							Interlocked.Decrement(ref __iTickCount);
 
-						do {
-							DateTime cTime = cBaseInstrument.Time[0];
-							lock (__oLockBars) {
-								int iCount = __cInstruments.Count;
-								Parallel.For(0, iCount, (i) => {
-									Instrument cInstrument = __cInstruments[i];
-									
+							do {
+								DateTime cTime = cBaseInstrument.Time[0];
+								int iCount = __cDataLoader.MaxInstrumentCount;
+								Parallel.For(1, iCount, (i) => {
+									Instrument cInstrument = __cDataLoader.GetInstrument(i);
+
 									if (cInstrument != null) {
 										cInstrument.MoveBars(cTime);
 									}
 								});
-							}
-							
-							OnUpdate();
-						} while (cBaseInstrument.Next());
+
+								OnUpdate();
+							} while (cBaseInstrument.Next());
+						}
 					}
 
 					lock (__oLock) {
 						__bBusy = false;
 					}
 				});
-			}
-		}
-
-		private void CheckReady() {
-			bool bReady = false;
-			lock (__oLockBars) {
-				if (__iMaxDataStream == __cInstruments.Count) {
-					if (this.Bars == null) {
-						this.Bars = __cInstruments[0];
-						bReady = true;
-					}
-				}
-			}
-
-			if (bReady) {
-				if (logger.IsInfoEnabled) logger.Info("[CStudyControl.CheckReady] Script initialized and ready...");
-				if (onReady != null) {
-					onReady(this, EventArgs.Empty);
-				}
-				
-				this.Start();
-			}
-		}
-
-		private void CreateInstrument(DataStream dataStream) {
-			SeriesSymbolData cSeries = SeriesManager.Manager.GetSeries(dataStream.data);
-			if (cSeries != null) {
-				lock (__oLockBars) {
-					int iIndex = dataStream.index;
-					Instrument cInstrument = new Instrument(cSeries, (iIndex == 0) ? __iMaxBarsReference : 0);
-					__cInstruments[iIndex] = cInstrument;
-					
-					++__iMaxDataStream;
-				}
-				if (logger.IsInfoEnabled) logger.InfoFormat("[CStudyControl.CreateInstrument] {0}:{1}{2} Instrument create completed...", dataStream.data.Symbol, dataStream.data.Resolution.Size, dataStream.data.Resolution.Type);
 			}
 		}
 
@@ -342,86 +217,32 @@ namespace PowerLanguage {
 						cService.onQuote -= QuoteService_onQuote;
 						cService.onDisconnected -= QuoteService_onDisconnected;
 						cService.onQuoteDateTime -= QuoteService_onQuoteDateTime;
-						cService.onLoginCompleted -= QuoteService_onLoginCompleted;
-						cService.onComplementCompleted -= QuoteService_onComplementCompleted;
 					}
 				}
 				__cDataSources.Clear();
 			}
 
-			lock (__oLockBars) {
-				if (__cInstruments != null) {
-					foreach (Instrument cInstrument in __cInstruments) {
-						if (cInstrument != null) {
-							cInstrument.Dispose();
-						}
-					}
-					__cInstruments.Clear();
-				}
-			}
+			__cDataLoader.Dispose();  //釋放資料讀取者資源
 		}
 
-		private Queue<DataStream> GetTemps(string key, bool isRemove = false) {
-			Queue<DataStream> cQueue = null;
-			lock (__cTemps) {
-				if (__cTemps.TryGetValue(key, out cQueue)) {
-					if (isRemove) {
-						__cTemps.Remove(key);
-					}
-				} else {
-					if (!isRemove) {
-						cQueue = new Queue<DataStream>(16);
-						__cTemps.Add(key, cQueue);
-					}
-				}
-			}
-			return cQueue;
-		}
+		private void DataLoader_onLoadCompleted(object sender, EventArgs e) {
+			if (this.Bars == null) {
+				this.Bars = __cDataLoader.GetInstrument(0);
 
-		private void QuoteService_onComplementCompleted(object sender, QuoteComplementCompletedEvent e) {
-			AbstractQuoteService cService = sender as AbstractQuoteService;
-
-			string sSymbolId = e.SymbolId;
-			Queue<DataStream> cQueue = null;
-			lock (__oLock) {
-				cQueue = GetTemps(sSymbolId, true);
-				if (cQueue != null) {
-					__iWaitingCount -= cQueue.Count;
-					if (__iWaitingCount == 0) {
-						cService.onComplementCompleted -= QuoteService_onComplementCompleted;
-					}
+				if (logger.IsInfoEnabled) logger.Info("[CStudyControl.onLoadCompleted] Script initialized and ready...");
+				if (onReady != null) {
+					onReady(this, EventArgs.Empty);
 				}
-			}
-			if (logger.IsInfoEnabled) logger.InfoFormat("[CStudyControl.onComplementCompleted] {0}:{1} complement completed...", e.DataSource, sSymbolId);
 
-			if (cQueue != null) {
-				while (cQueue.Count > 0) {
-					CreateInstrument(cQueue.Dequeue());
-				}
-				
-				CheckReady();
+				this.Start();
+
+				__cDataLoader.onLoadCompleted -= DataLoader_onLoadCompleted;
 			}
 		}
 
 		private void QuoteService_onDisconnected(object sender, QuoteDisconnectEvent e) {
 			if (onDisconnected != null) {
 				onDisconnected(sender, e);
-			}
-		}
-
-		private void QuoteService_onLoginCompleted(object sender, EventArgs e) {
-			AbstractQuoteService cService = sender as AbstractQuoteService;
-			cService.onLoginCompleted -= QuoteService_onLoginCompleted;
-
-			Queue<DataStream> cQueue = null;
-			lock (__oLock) {
-				cQueue = GetTemps(cService.DataSource, true);
-			}
-
-			if (cQueue != null) {
-				while (cQueue.Count > 0) {
-					AddDataStream(cQueue.Dequeue());
-				}
 			}
 		}
 
@@ -440,4 +261,4 @@ namespace PowerLanguage {
 			OnQuoteDateTime(e);
 		}
 	}
-}  //443行
+}  //264行

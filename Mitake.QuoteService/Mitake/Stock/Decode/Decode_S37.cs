@@ -105,7 +105,10 @@ namespace Mitake.Stock.Decode {
                                         case 27: //選擇權:總成交筆數 
                                                 stock.總成交筆數 = Volumn.GetVolumn(bMode, Buffer);
                                                 break;
-                                        case 32: //(即時)均價(每10筆送一次)
+					case 29: //盤前試戳成交量
+						stock.試戳成交量 = Volumn.GetVolumn(bMode, Buffer);
+						break;
+					case 32: //(即時)均價(每10筆送一次)
                                                 stock.即時均價 = Price.GetPrice(bMode, Buffer, ref fReferPrice);
                                                 break;
                                         case 40: //昨日最高價
@@ -129,7 +132,10 @@ namespace Mitake.Stock.Decode {
                                         case 54: //結算價(收盤後)
                                                 stock.結算價 = Price.GetPrice(bMode, Buffer, ref fReferPrice);
                                                 break;
-                                        default: //其他屬於盤後資料(已經不計入範圍內)
+					case 55: //盤前試戳成交價
+						stock.試戳成交價 = Price.GetPrice(bMode, Buffer, ref fReferPrice);
+						break;
+					default: //其他屬於盤後資料(已經不計入範圍內)
                                                 if (bPVFlag == 0)
                                                         Volumn.GetVolumn(bMode, Buffer);
                                                 else

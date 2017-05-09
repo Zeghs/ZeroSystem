@@ -36,6 +36,16 @@
 		/// <summary>
 		///   收盤線圖表
 		/// </summary>
-		CloseLine = 6
+		ClosingLine = 6,
+
+		/// <summary>
+		///   文字物件
+		/// </summary>
+		TextObject = 128,
+
+		/// <summary>
+		///   交易物件
+		/// </summary>
+		TradeObject = 129
 	}
 }

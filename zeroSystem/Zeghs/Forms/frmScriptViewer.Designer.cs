@@ -36,11 +36,11 @@
 			// 
 			// treeView
 			// 
-			this.treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.treeView.ImageIndex = 0;
 			this.treeView.ImageList = this.imageList;
 			this.treeView.ItemHeight = 20;
-			this.treeView.Location = new System.Drawing.Point(0, 23);
+			this.treeView.Location = new System.Drawing.Point(0, 0);
 			this.treeView.Name = "treeView";
 			treeNode1.ImageIndex = 1;
 			treeNode1.Name = "treeItem_Signal";
@@ -56,7 +56,7 @@
 			this.treeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode3});
 			this.treeView.SelectedImageIndex = 0;
-			this.treeView.Size = new System.Drawing.Size(228, 152);
+			this.treeView.Size = new System.Drawing.Size(229, 176);
 			this.treeView.TabIndex = 0;
 			this.treeView.DoubleClick += new System.EventHandler(this.treeView_DoubleClick);
 			this.treeView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.treeView_MouseMove);
@@ -74,13 +74,8 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(229, 176);
-			this.ControlBox = false;
 			this.Controls.Add(this.treeView);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
 			this.Name = "frmScriptViewer";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "交易模組";
 			this.Load += new System.EventHandler(this.frmScriptViewer_Load);
 			this.Resize += new System.EventHandler(this.frmScriptViewer_Resize);

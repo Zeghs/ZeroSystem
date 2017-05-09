@@ -18,7 +18,7 @@ namespace Taiwan.Rules.Contracts {
 		};
 
 		private static int CalcBaseMonth(int month) {
-			int iBaseMonth = month + 1;
+			int iBaseMonth = month + 3;
 			for (int i = iBaseMonth; i < 16; i++) {
 				if (i > iBaseMonth && i % 3 == 0) {
 					iBaseMonth = i;
@@ -145,8 +145,9 @@ namespace Taiwan.Rules.Contracts {
 
 			int[] iMonthPeriods = new int[5];
 			iMonthPeriods[0] = 1;
-			for (int i = 0; i < 4; i++) {
-				iMonthPeriods[i + 1] = (iBaseMonth + (3 * i)) - iMonth;
+			iMonthPeriods[1] = 2;
+			for (int i = 0; i < 3; i++) {
+				iMonthPeriods[i + 2] = (iBaseMonth + (3 * i)) - iMonth;
 			}
 
 			//計算其他月份的交易日與到期日

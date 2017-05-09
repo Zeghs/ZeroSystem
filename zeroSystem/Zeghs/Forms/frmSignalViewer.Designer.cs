@@ -15,6 +15,7 @@
 		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing) {
 			if (disposing) {
+				__cChart.Dispose();
 				__cSignalObject.Dispose();
 				__cTradeService.Dispose();
 
@@ -137,6 +138,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			this.components = new System.ComponentModel.Container();
 			this.dataGrid_Trust = new SourceGrid.DataGrid();
 			this.dataGrid_History = new SourceGrid.DataGrid();
 			this.dataGrid_Trade = new SourceGrid.DataGrid();
@@ -146,11 +148,19 @@
 			this.pageItem_History = new System.Windows.Forms.TabPage();
 			this.pageItem_Output = new System.Windows.Forms.TabPage();
 			this.txtOutput = new System.Windows.Forms.TextBox();
+			this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.menuItemSigner = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItemParameters = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItemDataSource = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItemRemove = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItemTradeDetails = new System.Windows.Forms.ToolStripMenuItem();
+			this.chart = new System.Windows.Forms.Control();
 			this.tabControl.SuspendLayout();
 			this.pageItem_Trust.SuspendLayout();
 			this.pageItem_Trade.SuspendLayout();
 			this.pageItem_History.SuspendLayout();
 			this.pageItem_Output.SuspendLayout();
+			this.contextMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// dataGrid_Trust
@@ -163,7 +173,7 @@
 			this.dataGrid_Trust.Location = new System.Drawing.Point(0, 0);
 			this.dataGrid_Trust.Name = "dataGrid_Trust";
 			this.dataGrid_Trust.SelectionMode = SourceGrid.GridSelectionMode.Row;
-			this.dataGrid_Trust.Size = new System.Drawing.Size(289, 125);
+			this.dataGrid_Trust.Size = new System.Drawing.Size(393, 129);
 			this.dataGrid_Trust.TabIndex = 1;
 			this.dataGrid_Trust.TabStop = true;
 			this.dataGrid_Trust.ToolTipText = "";
@@ -178,7 +188,7 @@
 			this.dataGrid_History.Location = new System.Drawing.Point(0, 0);
 			this.dataGrid_History.Name = "dataGrid_History";
 			this.dataGrid_History.SelectionMode = SourceGrid.GridSelectionMode.Row;
-			this.dataGrid_History.Size = new System.Drawing.Size(289, 125);
+			this.dataGrid_History.Size = new System.Drawing.Size(393, 129);
 			this.dataGrid_History.TabIndex = 1;
 			this.dataGrid_History.TabStop = true;
 			this.dataGrid_History.ToolTipText = "";
@@ -193,7 +203,7 @@
 			this.dataGrid_Trade.Location = new System.Drawing.Point(0, 0);
 			this.dataGrid_Trade.Name = "dataGrid_Trade";
 			this.dataGrid_Trade.SelectionMode = SourceGrid.GridSelectionMode.Row;
-			this.dataGrid_Trade.Size = new System.Drawing.Size(289, 125);
+			this.dataGrid_Trade.Size = new System.Drawing.Size(393, 129);
 			this.dataGrid_Trade.TabIndex = 1;
 			this.dataGrid_Trade.TabStop = true;
 			this.dataGrid_Trade.ToolTipText = "";
@@ -206,10 +216,10 @@
 			this.tabControl.Controls.Add(this.pageItem_Trade);
 			this.tabControl.Controls.Add(this.pageItem_History);
 			this.tabControl.Controls.Add(this.pageItem_Output);
-			this.tabControl.Location = new System.Drawing.Point(0, 116);
+			this.tabControl.Location = new System.Drawing.Point(0, 145);
 			this.tabControl.Name = "tabControl";
 			this.tabControl.SelectedIndex = 0;
-			this.tabControl.Size = new System.Drawing.Size(291, 150);
+			this.tabControl.Size = new System.Drawing.Size(395, 150);
 			this.tabControl.TabIndex = 0;
 			// 
 			// pageItem_Trust
@@ -218,7 +228,7 @@
 			this.pageItem_Trust.Location = new System.Drawing.Point(1, 1);
 			this.pageItem_Trust.Margin = new System.Windows.Forms.Padding(0);
 			this.pageItem_Trust.Name = "pageItem_Trust";
-			this.pageItem_Trust.Size = new System.Drawing.Size(289, 125);
+			this.pageItem_Trust.Size = new System.Drawing.Size(393, 129);
 			this.pageItem_Trust.TabIndex = 0;
 			this.pageItem_Trust.Text = "委託";
 			this.pageItem_Trust.UseVisualStyleBackColor = true;
@@ -229,7 +239,7 @@
 			this.pageItem_Trade.Location = new System.Drawing.Point(1, 1);
 			this.pageItem_Trade.Margin = new System.Windows.Forms.Padding(0);
 			this.pageItem_Trade.Name = "pageItem_Trade";
-			this.pageItem_Trade.Size = new System.Drawing.Size(289, 125);
+			this.pageItem_Trade.Size = new System.Drawing.Size(393, 129);
 			this.pageItem_Trade.TabIndex = 1;
 			this.pageItem_Trade.Text = "交易";
 			this.pageItem_Trade.UseVisualStyleBackColor = true;
@@ -240,7 +250,7 @@
 			this.pageItem_History.Location = new System.Drawing.Point(1, 1);
 			this.pageItem_History.Margin = new System.Windows.Forms.Padding(0);
 			this.pageItem_History.Name = "pageItem_History";
-			this.pageItem_History.Size = new System.Drawing.Size(289, 125);
+			this.pageItem_History.Size = new System.Drawing.Size(393, 129);
 			this.pageItem_History.TabIndex = 2;
 			this.pageItem_History.Text = "歷史";
 			this.pageItem_History.UseVisualStyleBackColor = true;
@@ -251,7 +261,7 @@
 			this.pageItem_Output.Location = new System.Drawing.Point(1, 1);
 			this.pageItem_Output.Name = "pageItem_Output";
 			this.pageItem_Output.Padding = new System.Windows.Forms.Padding(3);
-			this.pageItem_Output.Size = new System.Drawing.Size(289, 125);
+			this.pageItem_Output.Size = new System.Drawing.Size(393, 129);
 			this.pageItem_Output.TabIndex = 3;
 			this.pageItem_Output.Text = "輸出";
 			this.pageItem_Output.UseVisualStyleBackColor = true;
@@ -263,22 +273,79 @@
 			this.txtOutput.Multiline = true;
 			this.txtOutput.Name = "txtOutput";
 			this.txtOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.txtOutput.Size = new System.Drawing.Size(283, 119);
+			this.txtOutput.Size = new System.Drawing.Size(387, 123);
 			this.txtOutput.TabIndex = 0;
 			this.txtOutput.VisibleChanged += new System.EventHandler(this.txtOutput_VisibleChanged);
 			// 
+			// contextMenu
+			// 
+			this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemSigner,
+            this.menuItemTradeDetails});
+			this.contextMenu.Name = "contextMenu";
+			this.contextMenu.Size = new System.Drawing.Size(119, 48);
+			// 
+			// menuItemSigner
+			// 
+			this.menuItemSigner.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemParameters,
+            this.menuItemDataSource,
+            this.menuItemRemove});
+			this.menuItemSigner.Name = "menuItemSigner";
+			this.menuItemSigner.Size = new System.Drawing.Size(118, 22);
+			this.menuItemSigner.Text = "信號交易";
+			// 
+			// menuItemParameters
+			// 
+			this.menuItemParameters.Name = "menuItemParameters";
+			this.menuItemParameters.Size = new System.Drawing.Size(152, 22);
+			this.menuItemParameters.Text = "參數設定";
+			this.menuItemParameters.Click += new System.EventHandler(this.menuItemParameters_Click);
+			// 
+			// menuItemDataSource
+			// 
+			this.menuItemDataSource.Name = "menuItemDataSource";
+			this.menuItemDataSource.Size = new System.Drawing.Size(152, 22);
+			this.menuItemDataSource.Text = "資料來源";
+			this.menuItemDataSource.Click += new System.EventHandler(this.menuItemDataSource_Click);
+			// 
+			// menuItemRemove
+			// 
+			this.menuItemRemove.Name = "menuItemRemove";
+			this.menuItemRemove.Size = new System.Drawing.Size(152, 22);
+			this.menuItemRemove.Text = "刪除信號";
+			this.menuItemRemove.Click += new System.EventHandler(this.menuItemRemove_Click);
+			// 
+			// menuItemTradeDetails
+			// 
+			this.menuItemTradeDetails.Name = "menuItemTradeDetails";
+			this.menuItemTradeDetails.Size = new System.Drawing.Size(118, 22);
+			this.menuItemTradeDetails.Text = "交易明細";
+			this.menuItemTradeDetails.Click += new System.EventHandler(this.menuItemTradeDetails_Click);
+			// 
+			// chart
+			// 
+			this.chart.Location = new System.Drawing.Point(0, 0);
+			this.chart.Name = "chart";
+			this.chart.Size = new System.Drawing.Size(395, 145);
+			this.chart.TabIndex = 1;
+			this.chart.MouseClick += new System.Windows.Forms.MouseEventHandler(this.chart_onMouseUp);
+			// 
 			// frmSignalViewer
 			// 
+			this.AllowDrop = true;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(292, 266);
+			this.ClientSize = new System.Drawing.Size(394, 294);
+			this.ContextMenuStrip = this.contextMenu;
+			this.Controls.Add(this.chart);
 			this.Controls.Add(this.tabControl);
 			this.Name = "frmSignalViewer";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSignalViewer_FormClosing);
 			this.Load += new System.EventHandler(this.frmSignalViewer_Load);
 			this.Shown += new System.EventHandler(this.frmSignalViewer_Shown);
-			this.Move += new System.EventHandler(this.frmSignalViewer_Move);
+			this.DragDrop += new System.Windows.Forms.DragEventHandler(this.frmSignalViewer_DragDrop);
+			this.DragEnter += new System.Windows.Forms.DragEventHandler(this.frmSignalViewer_DragEnter);
 			this.Resize += new System.EventHandler(this.frmSignalViewer_Resize);
 			this.tabControl.ResumeLayout(false);
 			this.pageItem_Trust.ResumeLayout(false);
@@ -286,6 +353,7 @@
 			this.pageItem_History.ResumeLayout(false);
 			this.pageItem_Output.ResumeLayout(false);
 			this.pageItem_Output.PerformLayout();
+			this.contextMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -301,5 +369,12 @@
 		private System.Windows.Forms.TabPage pageItem_History;
 		private System.Windows.Forms.TabPage pageItem_Output;
 		private System.Windows.Forms.TextBox txtOutput;
+		private System.Windows.Forms.ContextMenuStrip contextMenu;
+		private System.Windows.Forms.ToolStripMenuItem menuItemSigner;
+		private System.Windows.Forms.ToolStripMenuItem menuItemParameters;
+		private System.Windows.Forms.ToolStripMenuItem menuItemRemove;
+		private System.Windows.Forms.Control chart;
+		private System.Windows.Forms.ToolStripMenuItem menuItemTradeDetails;
+		private System.Windows.Forms.ToolStripMenuItem menuItemDataSource;
 	}
 }

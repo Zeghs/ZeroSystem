@@ -59,9 +59,9 @@
 			this.labCopyright.Font = new System.Drawing.Font("Impact", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labCopyright.Location = new System.Drawing.Point(84, 491);
 			this.labCopyright.Name = "labCopyright";
-			this.labCopyright.Size = new System.Drawing.Size(231, 16);
+			this.labCopyright.Size = new System.Drawing.Size(230, 16);
 			this.labCopyright.TabIndex = 2;
-			this.labCopyright.Text = "Copyright © Web Electric Services 2004 - 2014";
+			this.labCopyright.Text = "Copyright © Web Electric Services 2004 - 2017";
 			// 
 			// labMemo
 			// 

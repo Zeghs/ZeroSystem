@@ -159,7 +159,7 @@
 			this.txtDefaultContracts.Name = "txtDefaultContracts";
 			this.txtDefaultContracts.Size = new System.Drawing.Size(58, 22);
 			this.txtDefaultContracts.TabIndex = 12;
-			this.txtDefaultContracts.Text = "0";
+			this.txtDefaultContracts.Text = "1";
 			// 
 			// labDefaultContracts
 			// 

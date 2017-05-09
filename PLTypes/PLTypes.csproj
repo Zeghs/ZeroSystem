@@ -63,7 +63,6 @@
     <Compile Include="PowerLanguage\ESymbolCategory.cs" />
     <Compile Include="PowerLanguage\ETextStyleH.cs" />
     <Compile Include="PowerLanguage\ETextStyleV.cs" />
-    <Compile Include="PowerLanguage\GlobalSettings.cs" />
     <Compile Include="PowerLanguage\IDOMData.cs" />
     <Compile Include="PowerLanguage\IDrawObject.cs" />
     <Compile Include="PowerLanguage\IInstrument.cs" />
@@ -104,8 +103,6 @@
     <Compile Include="PowerLanguage\SOrderParameters.cs" />
     <Compile Include="PowerLanguage\Utils\AverageUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Zeghs\Settings\ChartProperty.cs" />
-    <Compile Include="Zeghs\Settings\PathSetting.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

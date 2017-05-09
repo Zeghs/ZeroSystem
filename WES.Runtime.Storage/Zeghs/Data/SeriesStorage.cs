@@ -40,17 +40,22 @@ namespace Zeghs.Data {
 		///   加入 SeriesSymbolData 列表
 		/// </summary>
 		/// <param name="series">SeriesSymbolData 列表</param>
-		internal void Add(SeriesSymbolData series) {
-			int iTotalSeconds = series.DataRequest.Resolution.TotalSeconds;
+		/// <param name="useIdentify">是否使用 Identify 當作 Hash 值(true=使用 Identify 作為 Hash 值, false=使用時間週期總秒數當作 Hash 值)</param>
+		internal void Add(SeriesSymbolData series, bool useIdentify = false) {
+			int iHash = (useIdentify) ? series.Id : series.DataRequest.Resolution.TotalSeconds;
 			lock (__cIndexs) {
-				if (!__cIndexs.ContainsKey(iTotalSeconds)) {
+				if (!__cIndexs.ContainsKey(iHash)) {
 					int iIndex = __cSeries.Count;
 					__cSeries.Add(series);
-					__cIndexs.Add(iTotalSeconds, iIndex);
+					__cIndexs.Add(iHash, iIndex);
 
-					bool bBase = (iTotalSeconds == Resolution.MIN_BASE_TOTALSECONDS || iTotalSeconds == Resolution.MAX_BASE_TOTALSECONDS);
-					if (!bBase) {
-						series.onRequest += SeriesSymbolData_onRequest;
+					if (!useIdentify) {
+						series.Id = iHash;  //將 Id 改為 iHash(iHash=時間週期總秒數, 當存入 SeriesStorage 後都以 Id 當作 Hash 存取)
+
+						bool bBase = (iHash == Resolution.MIN_BASE_TOTALSECONDS || iHash == Resolution.MAX_BASE_TOTALSECONDS);
+						if (!bBase) {
+							series.onRequest += SeriesSymbolData_onRequest;
+						}
 					}
 				}
 			}
@@ -82,20 +87,19 @@ namespace Zeghs.Data {
 			SeriesSymbolData cTargetSeries = cBaseSeries.CreateSeries(dataRequest);
 			this.Add(cTargetSeries);
 
-			int iCount = dataRequest.Range.Count;
-			cTargetSeries.OnRequest(new DataRequestEvent(iCount, iCount, cTargetSeries.DataRequest.Resolution.Rate));
+			cTargetSeries.OnRequest(new DataRequestEvent(dataRequest));
 			return cTargetSeries;
 		}
 
 		/// <summary>
 		///   取得指定的總秒數週期 SeriesSymbolData 列表
 		/// </summary>
-		/// <param name="totalSeconds">總秒數</param>
-		internal SeriesSymbolData GetSeries(int totalSeconds) {
+		/// <param name="hashKey">可以為時間週期總秒數或是 Identify</param>
+		internal SeriesSymbolData GetSeries(int hashKey) {
 			int iIndex = 0;
 			SeriesSymbolData cSeries = null;
 			lock (__cIndexs) {
-				if (__cIndexs.TryGetValue(totalSeconds, out iIndex)) {
+				if (__cIndexs.TryGetValue(hashKey, out iIndex)) {
 					cSeries = __cSeries[iIndex];
 				}
 			}
@@ -117,11 +121,11 @@ namespace Zeghs.Data {
 		/// <summary>
 		///   移除 SeriesSymbolData 列表
 		/// </summary>
-		/// <param name="totalSeconds">總秒數</param>
-		internal void Remove(int totalSeconds) {
+		/// <param name="seriesId">SeriesSymbolData id</param>
+		internal void Remove(int seriesId) {
 			int iIndex = 0;
 			lock (__cIndexs) {
-				if (__cIndexs.TryGetValue(totalSeconds, out iIndex)) {
+				if (__cIndexs.TryGetValue(seriesId, out iIndex)) {
 					SeriesSymbolData cTarget = __cSeries[iIndex];
 					cTarget.Dispose();
 
@@ -129,12 +133,12 @@ namespace Zeghs.Data {
 					if (iLast > 0 && iLast > iIndex) {
 						SeriesSymbolData cLast = __cSeries[iLast];
 
-						int iTotalSeconds = cLast.DataRequest.Resolution.TotalSeconds;
-						__cIndexs[iTotalSeconds] = iIndex;
+						int iLastSeriesId = cLast.Id;
+						__cIndexs[iLastSeriesId] = iIndex;
 						__cSeries[iIndex] = cLast;
 					}
 
-					__cIndexs.Remove(totalSeconds);
+					__cIndexs.Remove(seriesId);
 					__cSeries.RemoveAt(iLast);
 				}
 			}
@@ -168,9 +172,14 @@ namespace Zeghs.Data {
 					e.IsAlreadyRequestAllData = true;
 					e.Count = cBaseSeries.DataRequest.Range.Count / e.Rate;
 				} else {
-					int iPosition = e.Position * e.Rate;
-					int iRequestCount = iPosition - cBaseSeries.DataRequest.Range.Count;
-					DataRequestEvent cRequestEvent = new DataRequestEvent(iPosition, iRequestCount, cBaseSeries.DataRequest.Resolution.Rate);
+					DataRequestEvent cRequestEvent = null;
+					if (e.Totals == 0) {  //檢查是否資料總個數為0(0=使用 InstrumentDataRequest 請求歷史資料)
+						cRequestEvent = e.Clone();  //直接複製
+					} else {  //如果不為0(表示使用者取得資料時超過目前已下載歷史資料的區間, 經過基礎週期比率計算之後再向伺服器請求歷史資料)
+						int iTotals = e.Totals * e.Rate;  //資料總個數 * 縮放比率 = 基礎週期需要請求的資料總個數
+						int iRequestCount = iTotals - cBaseSeries.DataRequest.Range.Count;  //計算後的資料總個數 - 基礎週期目前已下載後的資料個數 = 欲請求的的個數
+						cRequestEvent = new DataRequestEvent(iRequestCount, iTotals, cBaseSeries.DataRequest.Resolution.Rate);
+					}
 					
 					cBaseSeries.OnRequest(cRequestEvent);  //回補歷史資訊
 
@@ -192,4 +201,4 @@ namespace Zeghs.Data {
 			}
 		}
 	}
-}
+}  //204行

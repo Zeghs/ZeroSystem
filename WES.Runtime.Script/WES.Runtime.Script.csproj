@@ -54,8 +54,6 @@
     <Compile Include="PowerLanguage\FunctionObject.cs" />
     <Compile Include="PowerLanguage\SignalObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Zeghs\Drawing\TextContainer.cs" />
-    <Compile Include="Zeghs\Drawing\TextObject.cs" />
     <Compile Include="Zeghs\Events\OutputDataEvent.cs" />
     <Compile Include="Zeghs\Events\ScriptParametersEvent.cs" />
     <Compile Include="Zeghs\Informations\ScriptInformation.cs" />
@@ -78,6 +76,10 @@
     <ProjectReference Include="..\WES.External.QuotePlugin\WES.External.QuotePlugin.csproj">
       <Project>{DE017AC1-D250-445C-9776-92632E032758}</Project>
       <Name>WES.External.QuotePlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WES.Runtime.ChartEngine\WES.Runtime.ChartEngine.csproj">
+      <Project>{80F4F6B5-91C8-4841-9452-3BD99A2CD475}</Project>
+      <Name>WES.Runtime.ChartEngine</Name>
     </ProjectReference>
     <ProjectReference Include="..\WES.Runtime.Product\WES.Runtime.Product.csproj">
       <Project>{7C5601E7-7118-477B-A4AC-C2E0DE9999DB}</Project>

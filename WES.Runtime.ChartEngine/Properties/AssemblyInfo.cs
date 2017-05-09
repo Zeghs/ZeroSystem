@@ -6,12 +6,12 @@ using System.Runtime.InteropServices;
 // 變更這些屬性的值即可修改組件的相關
 // 資訊。
 [assembly: AssemblyTitle("WES.Runtime.ChartEngine")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("WES.Runtime.ChartEngine")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Administrators")]
+[assembly: AssemblyCompany("Web Electric Services")]
 [assembly: AssemblyProduct("WES.Runtime.ChartEngine")]
-[assembly: AssemblyCopyright("Copyright © Administrators 2015")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Copyright © Web Electric Services 2017")]
+[assembly: AssemblyTrademark("Copyright © Web Electric Services 2017")]
 [assembly: AssemblyCulture("")]
 
 // 將 ComVisible 設定為 false 會使得這個組件中的型別

@@ -30,9 +30,25 @@ namespace PowerLanguage {
 		}
 
 		/// <summary>
-		///   [取得/設定] 是否為副圖(如果不是副圖則就是隱藏)
+		///   [取得/設定] 是否為副圖(true=副圖, false=隱藏)
 		/// </summary>
 		public bool IsSubChart {
+			get;
+			set;
+		}
+
+		/// <summary>
+		///   [取得/設定] 圖層索引
+		/// </summary>
+		public int LayerIndex {
+			get;
+			set;
+		}
+
+		/// <summary>
+		///   [取得/設定] Legend 圖例顏色
+		/// </summary>
+		public Color LegendColor {
 			get;
 			set;
 		}

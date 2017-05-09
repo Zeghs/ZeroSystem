@@ -12,6 +12,14 @@
 		}
 
 		/// <summary>
+		///   [取得/設定] 是否建立新的 Axis 座標軸(true=建立新 axis 座標軸, false=共用主要 Axis 當作座標軸參考)
+		/// </summary>
+		public bool IsCreateInstance {
+			get;
+			set;
+		}
+
+		/// <summary>
 		///   [取得/設定] 下邊界%數
 		/// </summary>
 		public double MarginBottom {

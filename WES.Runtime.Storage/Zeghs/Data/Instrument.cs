@@ -42,6 +42,15 @@ namespace Zeghs.Data {
 		}
 
 		/// <summary>
+		///   [取得] Bars 資料總個數
+		/// </summary>
+		public int Count {
+			get {
+				return __cFullSymbolData.BarsCount;
+			}
+		}
+
+		/// <summary>
 		///   [取得] 目前 Bars 索引值(索引從 1 開始)
 		/// </summary>
 		public int CurrentBar {
@@ -184,7 +193,10 @@ namespace Zeghs.Data {
 			}
 		}
 
-		internal SeriesSymbolData SeriesSymbolData {
+		/// <summary>
+		///   [取得] 來源 SeriesSymbolData 資料
+		/// </summary>
+		internal SeriesSymbolData Source {
 			get {
 				return __cSource;
 			}
@@ -206,6 +218,22 @@ namespace Zeghs.Data {
 			if (cService != null) {
 				__cQuoteStorage = cService.Storage;
 			}
+		}
+
+		/// <summary>
+		///   綁定清盤重置事件
+		/// </summary>
+		/// <param name="onReset">EventHandler 事件委派</param>
+		public void BindResetEvent(EventHandler onReset) {
+			__cSource.onReset += onReset;
+		}
+
+		/// <summary>
+		///   清除綁定的清盤重置事件
+		/// </summary>
+		/// <param name="onReset">EventHandler 事件委派</param>
+		public void ClearResetEvent(EventHandler onReset) {
+			__cSource.onReset -= onReset;
 		}
 
 		/// <summary>
@@ -259,6 +287,7 @@ namespace Zeghs.Data {
 					onPositionChange = null;
 
 					__cFullSymbolData.Dispose();
+					SeriesManager.Manager.RemoveInstrument(this);
 				}
 			}
 		}
@@ -290,4 +319,4 @@ namespace Zeghs.Data {
 			return bRet;
 		}
 	}
-}  //293行
+}  //322行

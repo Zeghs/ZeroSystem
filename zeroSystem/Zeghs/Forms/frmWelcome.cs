@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using Zeghs.Services;
-using Zeghs.Managers;
-using Zeghs.Informations;
 
 namespace Zeghs.Forms {
 	internal partial class frmWelcome : Form {

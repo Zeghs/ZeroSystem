@@ -59,6 +59,9 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml" />
+    <Reference Include="WeifenLuo.WinFormsUI.Docking">
+      <HintPath>..\WeifenLuo.WinFormsUI.Docking\4.0\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -87,11 +90,11 @@
     <Compile Include="Zeghs\Forms\frmAbout.Designer.cs">
       <DependentUpon>frmAbout.cs</DependentUpon>
     </Compile>
-    <Compile Include="Zeghs\Forms\frmChildBase.cs">
+    <Compile Include="Zeghs\Forms\frmLogViewer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Zeghs\Forms\frmChildBase.Designer.cs">
-      <DependentUpon>frmChildBase.cs</DependentUpon>
+    <Compile Include="Zeghs\Forms\frmLogViewer.Designer.cs">
+      <DependentUpon>frmLogViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="Zeghs\Forms\frmConsoleViewer.cs">
       <SubType>Form</SubType>
@@ -197,6 +200,8 @@
     </Compile>
     <Compile Include="Zeghs\Services\LogService.cs" />
     <Compile Include="Zeghs\Services\TradeService.cs" />
+    <Compile Include="Zeghs\Settings\GlobalSettings.cs" />
+    <Compile Include="Zeghs\Settings\PathSetting.cs" />
     <Compile Include="Zeghs\Settings\ProfileManager.cs" />
     <Compile Include="Zeghs\Settings\ProfileSetting.cs" />
     <Compile Include="Zeghs\Settings\RequestSetting.cs" />
@@ -218,6 +223,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Zeghs\Forms\frmConsoleViewer.resx">
       <DependentUpon>frmConsoleViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Zeghs\Forms\frmLogViewer.resx">
+      <DependentUpon>frmLogViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Zeghs\Forms\frmCreateProduct.resx">
       <DependentUpon>frmCreateProduct.cs</DependentUpon>
@@ -292,6 +300,10 @@
       <Project>{DE017AC1-D250-445C-9776-92632E032758}</Project>
       <Name>WES.External.QuotePlugin</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WES.Runtime.ChartEngine\WES.Runtime.ChartEngine.csproj">
+      <Project>{80F4F6B5-91C8-4841-9452-3BD99A2CD475}</Project>
+      <Name>WES.Runtime.ChartEngine</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WES.Runtime.Indicator\WES.Runtime.Indicator.csproj">
       <Project>{B9830F85-72F2-409B-ADFC-09A6E2F2B5AC}</Project>
       <Name>WES.Runtime.Indicator</Name>
@@ -363,11 +375,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\frmMain_toolbar_toolItem_console.png" />
+    <None Include="Resources\frmMain_toolbar_toolItem_logger.png" />
+    <None Include="Resources\frmMain_toolbar_toolItem_script.png" />
+    <None Include="Resources\frmMain_toolbar_toolItem_quote.png" />
     <None Include="Resources\frmScriptParameters_dataGrid_cell_keyboard.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Zeghs\Events\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

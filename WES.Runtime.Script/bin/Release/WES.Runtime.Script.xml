@@ -72,138 +72,6 @@
               [取得] 所有腳本資訊
             </summary>
         </member>
-        <member name="T:Zeghs.Drawing.TextObject">
-            <summary>
-              文字繪圖物件類別
-            </summary>
-        </member>
-        <member name="M:Zeghs.Drawing.TextObject.#ctor">
-            <summary>
-              建構子
-            </summary>
-        </member>
-        <member name="M:Zeghs.Drawing.TextObject.Delete">
-            <summary>
-              繪圖物件是否被刪除
-            </summary>
-            <returns>回傳值: true=刪除, false=尚未刪除</returns>
-        </member>
-        <member name="M:Zeghs.Drawing.TextObject.Equals(PowerLanguage.IDrawObject)">
-            <summary>
-              指出目前的物件是否等於另一個具有相同型別的物件。
-            </summary>
-            <param name="other">要與這個物件相互比較的物件。</param>
-            <returns>如果目前的物件等於 other 參數，則為 true，否則為 false。</returns>
-        </member>
-        <member name="M:Zeghs.Drawing.TextObject.Equals(PowerLanguage.ITextObject)">
-            <summary>
-              指出目前的物件是否等於另一個具有相同型別的物件。
-            </summary>
-            <param name="other">要與這個物件相互比較的物件。</param>
-            <returns>如果目前的物件等於 other 參數，則為 true，否則為 false。</returns>
-        </member>
-        <member name="M:Zeghs.Drawing.TextObject.Equals(System.Object)">
-            <summary>
-              判斷指定的 System.Object 和目前的 System.Object 是否相等。
-            </summary>
-            <param name="obj">System.Object，要與目前的 System.Object 比較。</param>
-            <returns>如果指定的 System.Object 和目前的 System.Object 相等，則為 true，否則為 false。</returns>
-        </member>
-        <member name="M:Zeghs.Drawing.TextObject.GetHashCode">
-            <summary>
-              做為特定型別的雜湊函式。
-            </summary>
-            <returns>目前 System.Object 的雜湊程式碼。</returns>
-        </member>
-        <member name="M:Zeghs.Drawing.TextObject.HaveFont(System.Drawing.FontStyle)">
-            <summary>
-              檢查是否有此種字型樣式
-            </summary>
-            <param name="style">字型樣式列舉</param>
-            <returns>返回值: true=有此樣式, false=無此樣式</returns>
-        </member>
-        <member name="M:Zeghs.Drawing.TextObject.SetFont(System.Drawing.FontStyle,System.Boolean)">
-            <summary>
-              設定字型樣式
-            </summary>
-            <param name="style">字型樣式列舉</param>
-            <param name="val">是否啟用此樣式</param>
-        </member>
-        <member name="P:Zeghs.Drawing.TextObject.BGColor">
-            <summary>
-              [取得/設定] 背景顏色
-            </summary>
-        </member>
-        <member name="P:Zeghs.Drawing.TextObject.Border">
-            <summary>
-              [取得/設定] 是否要繪製框線
-            </summary>
-        </member>
-        <member name="P:Zeghs.Drawing.TextObject.Color">
-            <summary>
-              [取得/設定] 文字顏色
-            </summary>
-        </member>
-        <member name="P:Zeghs.Drawing.TextObject.DataStream">
-            <summary>
-              [取得/設定] 資料串流編號
-            </summary>
-        </member>
-        <member name="P:Zeghs.Drawing.TextObject.DrawingSourceFlag">
-            <summary>
-              [取得/設定] 繪製來源旗標(1=Study, 2=Manual, 4=Other)
-            </summary>
-        </member>
-        <member name="P:Zeghs.Drawing.TextObject.Exist">
-            <summary>
-              [取得] 繪圖物件是否存在
-            </summary>
-        </member>
-        <member name="P:Zeghs.Drawing.TextObject.FontName">
-            <summary>
-              [取得/設定] 繪製文字的字型名稱
-            </summary>
-        </member>
-        <member name="P:Zeghs.Drawing.TextObject.HStyle">
-            <summary>
-              [取得/設定] 文字水平對齊樣式
-            </summary>
-        </member>
-        <member name="P:Zeghs.Drawing.TextObject.ID">
-            <summary>
-              [取得] 繪圖物件 ID
-            </summary>
-        </member>
-        <member name="P:Zeghs.Drawing.TextObject.Location">
-            <summary>
-              [取得/設定] 文字座標位置
-            </summary>
-        </member>
-        <member name="P:Zeghs.Drawing.TextObject.Locked">
-            <summary>
-              [設定] 鎖定繪圖物件以防止用戶修改
-            </summary>
-        </member>
-        <member name="P:Zeghs.Drawing.TextObject.OnSameSubchart">
-            <summary>
-              [取得/設定] 是否在同一個副圖上
-            </summary>
-        </member>
-        <member name="P:Zeghs.Drawing.TextObject.Size">
-            <summary>
-              [取得/設定] 繪製文字的字型大小
-            </summary>
-        </member>
-        <member name="P:Zeghs.Drawing.TextObject.Text">
-            <summary>
-              [取得/設定] 繪製文字
-            </summary>
-        </member>
-        <member name="P:Zeghs.Drawing.TextObject.VStyle">
-            <summary>
-              [取得/設定] 文字垂直對齊樣式
-            </summary>
-        </member>
         <member name="T:PowerLanguage.CStudyAbstract">
             <summary>
               基礎腳本抽象類別
@@ -283,14 +151,14 @@
               [取得] IInstrument 資訊
             </summary>
         </member>
-        <member name="P:PowerLanguage.CStudyControl.DrwText">
-            <summary>
-              [取得] 文字繪製容器
-            </summary>
-        </member>
         <member name="P:PowerLanguage.CStudyControl.MaxDataStream">
             <summary>
               [取得] 最大 IInstrument 資訊個數
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.CStudyControl.DataLoader">
+            <summary>
+              [取得] 商品資訊資料讀取者
             </summary>
         </member>
         <member name="M:PowerLanguage.CStudyAbstract.#ctor">
@@ -376,6 +244,11 @@
         <member name="P:PowerLanguage.CStudyAbstract.About">
             <summary>
               [取得] 腳本開發者資訊
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.CStudyAbstract.DrwText">
+            <summary>
+              [取得] 文字繪製容器
             </summary>
         </member>
         <member name="P:PowerLanguage.CStudyAbstract.log">
@@ -500,71 +373,6 @@
         <member name="P:PowerLanguage.FunctionObject`1.MasterDataStream">
             <summary>
               [取得/設定] 主要資料串流編號
-            </summary>
-        </member>
-        <member name="T:Zeghs.Drawing.TextContainer">
-            <summary>
-              文字繪製容器類別
-            </summary>
-        </member>
-        <member name="M:Zeghs.Drawing.TextContainer.#ctor">
-            <summary>
-              建構子
-            </summary>
-        </member>
-        <member name="M:Zeghs.Drawing.TextContainer.AddTextObject(Zeghs.Drawing.TextObject)">
-            <summary>
-              加入文字繪圖物件
-            </summary>
-            <param name="textObject">文字繪圖物件類別</param>
-        </member>
-        <member name="M:Zeghs.Drawing.TextContainer.Clear">
-            <summary>
-              清除所有文字繪圖物件
-            </summary>
-        </member>
-        <member name="M:Zeghs.Drawing.TextContainer.Create(PowerLanguage.ChartPoint,System.String)">
-            <summary>
-              建立文字繪圖物件
-            </summary>
-            <param name="point">文字繪圖物件的座標位置</param>
-            <param name="text">繪圖文字內容</param>
-            <returns>返回值: ITextObject 介面</returns>
-        </member>
-        <member name="M:Zeghs.Drawing.TextContainer.Create(PowerLanguage.ChartPoint,System.String,System.Boolean)">
-            <summary>
-              建立文字繪圖物件
-            </summary>
-            <param name="point">文字繪圖物件的座標位置</param>
-            <param name="text">繪圖文字內容</param>
-            <param name="onSameSubchart">是否在同一個副圖中</param>
-            <returns>返回值: ITextObject 介面</returns>
-        </member>
-        <member name="M:Zeghs.Drawing.TextContainer.Create(PowerLanguage.ChartPoint,System.String,System.Int32)">
-            <summary>
-              建立文字繪圖物件
-            </summary>
-            <param name="point">文字繪圖物件的座標位置</param>
-            <param name="text">繪圖文字內容</param>
-            <param name="dataStream">資料串流編號</param>
-            <returns>返回值: ITextObject 介面</returns>
-        </member>
-        <member name="M:Zeghs.Drawing.TextContainer.GetTextObjects(PowerLanguage.EDrawingSource)">
-            <summary>
-              取得文字繪圖物件列表
-            </summary>
-            <param name="drawingSource">繪製描述來源列舉</param>
-            <returns>返回值: 文字繪圖物件列表(需要使用 foreach 列舉所有文字繪圖物件)</returns>
-        </member>
-        <member name="M:Zeghs.Drawing.TextContainer.SetChartProperty(Zeghs.Settings.ChartProperty)">
-            <summary>
-              設定圖表屬性
-            </summary>
-            <param name="property">圖表屬性</param>
-        </member>
-        <member name="P:Zeghs.Drawing.TextContainer.Active">
-            <summary>
-              [取得/設定] 作用中的文字繪圖物件
             </summary>
         </member>
         <member name="T:Zeghs.Scripts.ScriptPropertyAttribute">

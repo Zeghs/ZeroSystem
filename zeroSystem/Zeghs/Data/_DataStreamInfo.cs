@@ -5,6 +5,11 @@
 			set;
 		}
 
+		public bool IsNewSetting {
+			get;
+			set;
+		}
+
 		public string LastDate {
 			get;
 			set;

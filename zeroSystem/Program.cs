@@ -6,6 +6,7 @@ using log4net.Config;
 using PowerLanguage;
 using Zeghs.Forms;
 using Zeghs.Managers;
+using Zeghs.Settings;
 
 namespace zeroSystem {
 	static class Program {
@@ -43,6 +44,7 @@ namespace zeroSystem {
 
 			OrderManager.Manager.Refresh("plugins\\orders");
 			QuoteManager.Manager.Refresh("plugins\\quotes");
+			PaintManager.Manager.Refresh("plugins\\charts");
 
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);  //如果要做系統保護則不能開啟這個選項

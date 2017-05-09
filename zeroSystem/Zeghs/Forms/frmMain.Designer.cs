@@ -31,8 +31,13 @@
 			this.toolbar = new System.Windows.Forms.ToolStrip();
 			this.toolItem_quoteManager = new System.Windows.Forms.ToolStripButton();
 			this.toolItem_productManager = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolItem_quote = new System.Windows.Forms.ToolStripButton();
+			this.toolItem_script = new System.Windows.Forms.ToolStripButton();
+			this.toolItem_logger = new System.Windows.Forms.ToolStripButton();
+			this.toolItem_console = new System.Windows.Forms.ToolStripButton();
 			this.statusbar = new System.Windows.Forms.StatusStrip();
-			this.panelForms = new System.Windows.Forms.Panel();
+			this.dockPanels = new WeifenLuo.WinFormsUI.Docking.DockPanel();
 			this.menubar.SuspendLayout();
 			this.toolbar.SuspendLayout();
 			this.SuspendLayout();
@@ -59,7 +64,12 @@
 			// 
 			this.toolbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolItem_quoteManager,
-            this.toolItem_productManager});
+            this.toolItem_productManager,
+            this.toolStripSeparator1,
+            this.toolItem_quote,
+            this.toolItem_script,
+            this.toolItem_logger,
+            this.toolItem_console});
 			this.toolbar.Location = new System.Drawing.Point(0, 24);
 			this.toolbar.Name = "toolbar";
 			this.toolbar.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
@@ -87,6 +97,55 @@
 			this.toolItem_productManager.ToolTipText = "啟動商品資訊管理員";
 			this.toolItem_productManager.Click += new System.EventHandler(this.toolItem_productManager_Click);
 			// 
+			// toolStripSeparator1
+			// 
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+			// 
+			// toolItem_quote
+			// 
+			this.toolItem_quote.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolItem_quote.Image = global::ZeroSystem.Properties.Resources.frmMain_toolbar_toolItem_quote;
+			this.toolItem_quote.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolItem_quote.Name = "toolItem_quote";
+			this.toolItem_quote.Size = new System.Drawing.Size(23, 22);
+			this.toolItem_quote.Tag = "Zeghs.Forms.frmQuoteViewer";
+			this.toolItem_quote.ToolTipText = "報價檢視";
+			this.toolItem_quote.Click += new System.EventHandler(this.toolItem_DockViewer_Click);
+			// 
+			// toolItem_script
+			// 
+			this.toolItem_script.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolItem_script.Image = global::ZeroSystem.Properties.Resources.frmMain_toolbar_toolItem_script;
+			this.toolItem_script.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolItem_script.Name = "toolItem_script";
+			this.toolItem_script.Size = new System.Drawing.Size(23, 22);
+			this.toolItem_script.Tag = "Zeghs.Forms.frmScriptViewer";
+			this.toolItem_script.ToolTipText = "腳本檢視";
+			this.toolItem_script.Click += new System.EventHandler(this.toolItem_DockViewer_Click);
+			// 
+			// toolItem_logger
+			// 
+			this.toolItem_logger.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolItem_logger.Image = global::ZeroSystem.Properties.Resources.frmMain_toolbar_toolItem_logger;
+			this.toolItem_logger.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolItem_logger.Name = "toolItem_logger";
+			this.toolItem_logger.Size = new System.Drawing.Size(23, 22);
+			this.toolItem_logger.Tag = "Zeghs.Forms.frmLogViewer";
+			this.toolItem_logger.ToolTipText = "日誌檢視";
+			this.toolItem_logger.Click += new System.EventHandler(this.toolItem_DockViewer_Click);
+			// 
+			// toolItem_console
+			// 
+			this.toolItem_console.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolItem_console.Image = global::ZeroSystem.Properties.Resources.frmMain_toolbar_toolItem_console;
+			this.toolItem_console.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolItem_console.Name = "toolItem_console";
+			this.toolItem_console.Size = new System.Drawing.Size(23, 22);
+			this.toolItem_console.Tag = "Zeghs.Forms.frmConsoleViewer";
+			this.toolItem_console.ToolTipText = "輸出視窗";
+			this.toolItem_console.Click += new System.EventHandler(this.toolItem_DockViewer_Click);
+			// 
 			// statusbar
 			// 
 			this.statusbar.Location = new System.Drawing.Point(0, 544);
@@ -95,23 +154,25 @@
 			this.statusbar.TabIndex = 3;
 			this.statusbar.Text = "statusStrip1";
 			// 
-			// panelForms
+			// dockPanels
 			// 
-			this.panelForms.AllowDrop = true;
-			this.panelForms.BackColor = System.Drawing.SystemColors.AppWorkspace;
-			this.panelForms.Location = new System.Drawing.Point(0, 52);
-			this.panelForms.Name = "panelForms";
-			this.panelForms.Size = new System.Drawing.Size(100, 100);
-			this.panelForms.TabIndex = 5;
-			this.panelForms.DragDrop += new System.Windows.Forms.DragEventHandler(this.panelForms_DragDrop);
-			this.panelForms.DragEnter += new System.Windows.Forms.DragEventHandler(this.panelForms_DragEnter);
+			this.dockPanels.AllowDrop = true;
+			this.dockPanels.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.dockPanels.DockBackColor = System.Drawing.SystemColors.AppWorkspace;
+			this.dockPanels.Location = new System.Drawing.Point(0, 49);
+			this.dockPanels.Name = "dockPanels";
+			this.dockPanels.Size = new System.Drawing.Size(792, 495);
+			this.dockPanels.TabIndex = 6;
+			this.dockPanels.ContentRemoved += new System.EventHandler<WeifenLuo.WinFormsUI.Docking.DockContentEventArgs>(this.dockPanels_ContentRemoved);
+			this.dockPanels.DragDrop += new System.Windows.Forms.DragEventHandler(this.dockPanels_DragDrop);
+			this.dockPanels.DragEnter += new System.Windows.Forms.DragEventHandler(this.dockPanels_DragEnter);
 			// 
 			// frmMain
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(792, 566);
-			this.Controls.Add(this.panelForms);
+			this.Controls.Add(this.dockPanels);
 			this.Controls.Add(this.statusbar);
 			this.Controls.Add(this.toolbar);
 			this.Controls.Add(this.menubar);
@@ -143,6 +204,11 @@
 		private System.Windows.Forms.StatusStrip statusbar;
 		private System.Windows.Forms.ToolStripButton toolItem_quoteManager;
 		private System.Windows.Forms.ToolStripButton toolItem_productManager;
-		private System.Windows.Forms.Panel panelForms;
+		private WeifenLuo.WinFormsUI.Docking.DockPanel dockPanels;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+		private System.Windows.Forms.ToolStripButton toolItem_quote;
+		private System.Windows.Forms.ToolStripButton toolItem_script;
+		private System.Windows.Forms.ToolStripButton toolItem_logger;
+		private System.Windows.Forms.ToolStripButton toolItem_console;
 	}
 }

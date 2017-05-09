@@ -43,7 +43,9 @@ namespace PowerLanguage {
 		///   取得文字繪圖物件列表
 		/// </summary>
 		/// <param name="drawingSource">繪製描述來源列舉</param>
+		/// <param name="index">起始 Bar Number(預設: 1)</param>
+		/// <param name="count">取得個數(0=全部)</param>
 		/// <returns>返回值: 文字繪圖物件列表(需要使用 foreach 列舉所有文字繪圖物件)</returns>
-		IEnumerable<ITextObject> GetTextObjects(EDrawingSource drawingSource);
+		IEnumerable<ITextObject> GetTextObjects(EDrawingSource drawingSource, int index = 1, int count = 0);
 	}
 }

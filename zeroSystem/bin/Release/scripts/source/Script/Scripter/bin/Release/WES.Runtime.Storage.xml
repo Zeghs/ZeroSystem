@@ -499,6 +499,16 @@
               [取得] 成交量陣列資訊
             </summary>
         </member>
+        <member name="P:Zeghs.Data.SeriesSymbolDataRand.BarsCount">
+            <summary>
+              [取得] Bars 資料總個數
+            </summary>
+        </member>
+        <member name="P:Zeghs.Data.SeriesSymbolDataRand.BarsSize">
+            <summary>
+              [取得] Bars 資料容器大小(包含預留的即時資料空間)
+            </summary>
+        </member>
         <member name="T:Zeghs.Data.SeriesIndexer">
             <summary>
               SeriesSymbolData 資料索引子類別
@@ -607,6 +617,18 @@
             <param name="source">SeriesSymbolData 類別</param>
             <param name="maxBarsReferance">最大 Bars count 參考值(如果不需要很多歷史資訊計算則可以設定小一點, 設定數量不可以超過歷史資料載入總數量)</param>
         </member>
+        <member name="M:Zeghs.Data.Instrument.BindResetEvent(System.EventHandler)">
+            <summary>
+              綁定清盤重置事件
+            </summary>
+            <param name="onReset">EventHandler 事件委派</param>
+        </member>
+        <member name="M:Zeghs.Data.Instrument.ClearResetEvent(System.EventHandler)">
+            <summary>
+              清除綁定的清盤重置事件
+            </summary>
+            <param name="onReset">EventHandler 事件委派</param>
+        </member>
         <member name="M:Zeghs.Data.Instrument.Dispose">
             <summary>
               釋放腳本資源
@@ -644,6 +666,11 @@
         <member name="P:Zeghs.Data.Instrument.Close">
             <summary>
               [取得] 收盤價陣列資訊
+            </summary>
+        </member>
+        <member name="P:Zeghs.Data.Instrument.Count">
+            <summary>
+              [取得] Bars 資料總個數
             </summary>
         </member>
         <member name="P:Zeghs.Data.Instrument.CurrentBar">

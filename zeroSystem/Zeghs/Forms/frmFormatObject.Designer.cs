@@ -1,5 +1,8 @@
 ﻿namespace Zeghs.Forms {
 	partial class frmFormatObject {
+		private static readonly string __sMessageHeader_001 = "遺漏設定";
+		private static readonly string __sMessageContent_001 = "尚未設定腳本屬性，請點擊屬性按鈕設定！";
+		
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -50,6 +53,7 @@
 		private void InitializeComponent() {
 			this.tabControl = new System.Windows.Forms.TabControl();
 			this.pageItem_Instrument = new System.Windows.Forms.TabPage();
+			this.btnDataStreamEdit = new System.Windows.Forms.Button();
 			this.btnProperty = new System.Windows.Forms.Button();
 			this.btnDataStreamRemove = new System.Windows.Forms.Button();
 			this.btnDataStreamAdd = new System.Windows.Forms.Button();
@@ -71,6 +75,7 @@
 			// 
 			// pageItem_Instrument
 			// 
+			this.pageItem_Instrument.Controls.Add(this.btnDataStreamEdit);
 			this.pageItem_Instrument.Controls.Add(this.btnProperty);
 			this.pageItem_Instrument.Controls.Add(this.btnDataStreamRemove);
 			this.pageItem_Instrument.Controls.Add(this.btnDataStreamAdd);
@@ -82,9 +87,19 @@
 			this.pageItem_Instrument.Text = "Instrument";
 			this.pageItem_Instrument.UseVisualStyleBackColor = true;
 			// 
+			// btnDataStreamEdit
+			// 
+			this.btnDataStreamEdit.Location = new System.Drawing.Point(550, 39);
+			this.btnDataStreamEdit.Name = "btnDataStreamEdit";
+			this.btnDataStreamEdit.Size = new System.Drawing.Size(95, 23);
+			this.btnDataStreamEdit.TabIndex = 8;
+			this.btnDataStreamEdit.Text = "修改";
+			this.btnDataStreamEdit.UseVisualStyleBackColor = true;
+			this.btnDataStreamEdit.Click += new System.EventHandler(this.btnDataStreamEdit_Click);
+			// 
 			// btnProperty
 			// 
-			this.btnProperty.Location = new System.Drawing.Point(550, 69);
+			this.btnProperty.Location = new System.Drawing.Point(550, 96);
 			this.btnProperty.Name = "btnProperty";
 			this.btnProperty.Size = new System.Drawing.Size(95, 23);
 			this.btnProperty.TabIndex = 7;
@@ -95,7 +110,7 @@
 			// btnDataStreamRemove
 			// 
 			this.btnDataStreamRemove.Enabled = false;
-			this.btnDataStreamRemove.Location = new System.Drawing.Point(550, 40);
+			this.btnDataStreamRemove.Location = new System.Drawing.Point(550, 67);
 			this.btnDataStreamRemove.Name = "btnDataStreamRemove";
 			this.btnDataStreamRemove.Size = new System.Drawing.Size(95, 23);
 			this.btnDataStreamRemove.TabIndex = 6;
@@ -163,6 +178,7 @@
 			this.Name = "frmFormatObject";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Format Object";
+			this.Load += new System.EventHandler(this.frmFormatObject_Load);
 			this.tabControl.ResumeLayout(false);
 			this.pageItem_Instrument.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -179,5 +195,6 @@
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.Button btnOK;
 		private System.Windows.Forms.Button btnProperty;
+		private System.Windows.Forms.Button btnDataStreamEdit;
 	}
 }

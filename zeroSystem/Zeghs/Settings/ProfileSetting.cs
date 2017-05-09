@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
-using PowerLanguage;
+using Zeghs.Chart;
 using Zeghs.Scripts;
 
 namespace Zeghs.Settings {
@@ -20,7 +20,7 @@ namespace Zeghs.Settings {
 					break;
 			}
 
-			cProfile.Charts = setting["Charts"].ToObject<List<ChartSetting>>();
+			cProfile.ChartProperty = setting["ChartProperty"].ToObject<ChartProperty>();
 			cProfile.ProfileId = setting["ProfileId"].Value<string>();
 			cProfile.Parameters = setting["Parameters"].ToObject<List<string>>();
 			cProfile.ScriptName = setting["ScriptName"].Value<string>();
@@ -33,7 +33,7 @@ namespace Zeghs.Settings {
 		/// <summary>
 		///   [取得/設定] 圖表設定值列表
 		/// </summary>
-		public List<ChartSetting> Charts {
+		public ChartProperty ChartProperty {
 			get;
 			set;
 		}

@@ -39,7 +39,6 @@ namespace Netwings {
 		private HashSet<string> __cPNextBarRequires = null; //存放上一個 __cNextBarRequires 的變化, 因為 NextBar 是在下一根下單, 所以要提供的是上一根的最後狀態(提供給下 NextBars 的方法一個是否要下單的依據)
 		private AbstractProductProperty __cProperty = null;
 		private object __oLock = new object();      //lock 專用的變數
-		private object __oTempLock = new object();  //lock 專用的變數
 
 		/// <summary>
 		///   [取得] 目前留倉部位
@@ -179,17 +178,6 @@ namespace Netwings {
 			}
 		}
 
-		private void AdjustClosedContract(TradeOrder order) {
-			EOrderAction cAction = order.Action;
-			if (cAction == EOrderAction.Sell || cAction == EOrderAction.BuyToCover) {
-				lock (__oTempLock) {
-					if (__iUsedClosedTempLots > 0) {
-						__iUsedClosedTempLots -= order.Contracts;
-					}
-				}
-			}
-		}
-
 		private void AsyncCalculateProfits() {
 			bool bBusy = false;
 			lock (__oLock) {
@@ -219,7 +207,6 @@ namespace Netwings {
 					cDeal = __cDeals.Dequeue();
 				}
 
-				AdjustClosedContract(cDeal);
 				if (cDeal.IsDealed) {  //檢查是否戳合完成
 					__cEntrusts.Remove(cDeal.Ticket);
 				}
@@ -235,6 +222,8 @@ namespace Netwings {
 					++__cPositions.Current;  //移動目前留倉部位陣列的目前索引值
 					__cPositions.Value = __cCurrentPosition;  //指定新的留倉部位至留倉陣列
 				}
+
+				Interlocked.Exchange(ref __iUsedClosedTempLots, 0);
 				OnResponse(cDeal, cDeal.SymbolId, ResponseType.Deal, (bClosed) ? null : __cCurrentPosition, (bClosed) ? __cPositions[1].ClosedTrades : __cCurrentPosition.ClosedTrades);
 			}
 
@@ -260,8 +249,8 @@ namespace Netwings {
 						if (!cTrust.IsDealed && cTrust.Price > 0) {  //尚未成交而且是限價單就處理
 							EOrderAction cAction = cTrust.Action;
 							if (cAction == cAction1 || cAction == cAction2) {
-								AdjustClosedContract(cTrust);
 								__cEntrusts.Remove(cTrust.Ticket);
+								OnResponse(cTrust, cTrust.SymbolId, ResponseType.Cancel);
 							}
 						}
 					}
@@ -280,23 +269,10 @@ namespace Netwings {
 						return false;
 					} else {
 						if (cTrust.IsTrusted) {  //如果已經委託完成就取消單號
-							string sTicket = cTrust.Ticket;  //委託單號
-							AdjustClosedContract(cTrust);  //調整平倉數量(如果是平倉單就要調整)
 							__cEntrusts.Remove(cTrust.Ticket);  //從委託陣列中移除
 						} else {  //如果還沒有委託成功
 							return false;  //直接離開(可能需要等到委託成功之後才能處理)
 						}
-					}
-				}
-			}
-
-			if (action == EOrderAction.Sell || action == EOrderAction.BuyToCover) {
-				int iLots = __cCurrentPosition.OpenLots - __iUsedClosedTempLots;  //檢查平倉數量是否足夠
-				if (lots > iLots) {  //平倉數量不足(不下單)
-					return false;
-				} else {
-					lock (__oTempLock) {
-						__iUsedClosedTempLots += lots;
 					}
 				}
 			}
@@ -321,6 +297,7 @@ namespace Netwings {
 				if (isReverse) {  //如果有反轉倉單
 					CancelLimit(action);  //取消所有反向之前的限價委託單
 				}
+				
 				SendTrust(cOrder);  //傳送新委託單給下單機
 			}
 			return true;
@@ -337,6 +314,17 @@ namespace Netwings {
 		}
 
 		private void OrderDeal(TradeOrder trust, double dealPrice = 0) {
+			EOrderAction cAction = trust.Action;
+			if (cAction == EOrderAction.Sell || cAction == EOrderAction.BuyToCover) {
+				int iLots = __cCurrentPosition.OpenLots - __iUsedClosedTempLots;  //檢查平倉數量是否足夠
+				if (trust.Contracts > iLots) {  //平倉數量不足(不下單)
+					__cEntrusts.Remove(trust.Ticket);  //移除委託單
+					return;
+				} else {
+					Interlocked.Increment(ref __iUsedClosedTempLots);
+				}
+			}
+
 			trust.IsDealed = true;
 
 			TradeOrder cDeal = trust.Clone();
@@ -349,6 +337,9 @@ namespace Netwings {
 			cDeal.Fee = dValues[1];
 
 			__cDeals.Enqueue(cDeal);
+
+			trust.Contracts = 0;
+			OnResponse(trust, trust.SymbolId, ResponseType.Trust);
 		}
 
 		private void SendNextBars(int previousBar) {
@@ -368,24 +359,19 @@ namespace Netwings {
 						if (cTrust.IsReverse) {  //如果有反轉倉單
 							CancelLimit(cTrust.Action);  //取消所有反向之前的限價委託單
 						}
+						
 						this.SendTrust(cTrust, Bars.Open[0]);  //發送委託單
-					} else {
-						AdjustClosedContract(cTrust);  //如果是平倉單但是沒有符合條件(要將平倉的數量調整回來, 好讓之後的平倉單可以成功下出去)
 					}
 				}
 			}
 		}
 
 		private void SendLimit(TradeOrder trust) {
-			double dDealPrice = 0, dPrice = trust.Price;
-			EOrderAction cAction = trust.Action;
-			if (cAction == EOrderAction.Buy || cAction == EOrderAction.BuyToCover) {
-				dDealPrice = (dPrice >= Bars.Close[0]) ? Bars.Close[0] : (dPrice >= Bars.Low[0]) ? dPrice : 0;
+			double dPrice = trust.Price;
+			double dDealPrice = (dPrice >= Bars.Low[0] && dPrice <= Bars.High[0]) ? dPrice : 0;
+			if (dDealPrice == 0) {
+				OnResponse(trust, trust.SymbolId, ResponseType.Trust);
 			} else {
-				dDealPrice = (Bars.Close[0] >= dPrice) ? Bars.Close[0] : (Bars.High[0] >= dPrice) ? dPrice : 0;
-			}
-
-			if (dDealPrice > 0) {
 				OrderDeal(trust, dDealPrice);
 			}
 		}
@@ -407,4 +393,4 @@ namespace Netwings {
 			deal.Tax = cTax.GetTax(dTotals);
 		}
 	}
-} //410行
+} //396行

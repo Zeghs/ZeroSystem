@@ -30,10 +30,10 @@
 			this.dataGrid.Rows.RowHeight = 21;  //處理第一列中文字體會被遮住的問題
 			this.dataGrid.Columns.Add("Comment", "參數", typeof(string));
 			this.dataGrid.Columns.Add("Value", "數值", typeof(string));
-			this.dataGrid.Columns[0].Width = 188;
+			this.dataGrid.Columns[0].Width = 180;
 			this.dataGrid.Columns[0].DataCell.Model.AddModel(new BoundImage());
 			this.dataGrid.Columns[0].DataCell.Editor.EnableEdit = false;
-			this.dataGrid.Columns[1].Width = 188;
+			this.dataGrid.Columns[1].Width = 175;
 
 			//修改選擇條的框線寬度與顏色
 			SourceGrid.Selection.SelectionBase cSelectionBase = this.dataGrid.Selection as SourceGrid.Selection.SelectionBase;

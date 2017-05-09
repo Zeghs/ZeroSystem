@@ -50,11 +50,6 @@
               [取得/設定] 是否已經請求全部資料
             </summary>
         </member>
-        <member name="P:Zeghs.Events.DataRequestEvent.Position">
-            <summary>
-              [取得] 使用者移動的索引位置
-            </summary>
-        </member>
         <member name="P:Zeghs.Events.DataRequestEvent.Rate">
             <summary>
               [取得] 與基礎周期的縮放比率
@@ -68,6 +63,11 @@
         <member name="P:Zeghs.Events.DataRequestEvent.Result">
             <summary>
               [取得/設定] 返回值
+            </summary>
+        </member>
+        <member name="P:Zeghs.Events.DataRequestEvent.Totals">
+            <summary>
+              [取得] 資料總個數(欲請求個數 + 目前已下載完後的資料個數)
             </summary>
         </member>
         <member name="T:Zeghs.IO.ZReader">
@@ -115,6 +115,32 @@
         <member name="P:Zeghs.IO.ZReader.Result">
             <summary>
               [取得] 回傳代碼(0=成功)
+            </summary>
+        </member>
+        <member name="T:PowerLanguage.LoadDataCallback">
+            <summary>
+              DataLoader 使用非同步取得 Instrument 商品資料會使用此委派通知使用者
+            </summary>
+            <param name="result">資料讀取者回報類別</param>
+        </member>
+        <member name="T:PowerLanguage.DataLoaderResult">
+            <summary>
+              資料讀取者回報類別(使用非同步取得 Instrument 會使用此類別存放回報結果)
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.DataLoaderResult.Data">
+            <summary>
+              [取得] IInstrument 商品資料
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.DataLoaderResult.Quote">
+            <summary>
+              [取得] 商品資料的即時報價資訊介面
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.DataLoaderResult.Parameters">
+            <summary>
+              [取得] 使用者自訂參數
             </summary>
         </member>
         <member name="T:Zeghs.IO.ZBuffer">
@@ -337,6 +363,21 @@
             <param name="offset">偏移位置(Position + offset為實際位置)</param>
             <returns></returns>
         </member>
+        <member name="T:Zeghs.Events.InstrumentChangeEvent">
+            <summary>
+              Instrument 商品資料更動事件(當 Instrument 商品資料新增或修改時會觸發此事件)
+            </summary>
+        </member>
+        <member name="P:Zeghs.Events.InstrumentChangeEvent.Data">
+            <summary>
+              [取得] IInstrument 商品資料
+            </summary>
+        </member>
+        <member name="P:Zeghs.Events.InstrumentChangeEvent.data_stream">
+            <summary>
+              [取得] 資料串流的編號
+            </summary>
+        </member>
         <member name="T:Zeghs.Managers.SeriesManager">
             <summary>
               股票資訊管理者類別
@@ -352,18 +393,34 @@
               儲存 Series 設定值
             </summary>
         </member>
-        <member name="M:Zeghs.Managers.SeriesManager.GetSeries(PowerLanguage.InstrumentDataRequest)">
+        <member name="M:Zeghs.Managers.SeriesManager.AsyncGetSeries(PowerLanguage.InstrumentDataRequest,System.EventHandler{Zeghs.Events.SeriesResultEvent},System.Boolean,System.Object)">
             <summary>
-              取得開高低收資訊列表
+              非同步模式取得序列商品資訊
             </summary>
             <param name="dataRequest">資料請求結構</param>
+            <param name="result">序列商品資訊回報事件</param>
+            <param name="useCache">是否使用快取 [預設:true](true=序列資料結構建立後保存在快取內，下次需要使用直接從快取拿取, false=重新建立序列資料結構，建立的序列資料需要自行移除否則會占用記憶體空間)</param>
+            <param name="args">使用者自訂參數</param>
+        </member>
+        <member name="M:Zeghs.Managers.SeriesManager.GetSeries(PowerLanguage.InstrumentDataRequest,System.Boolean)">
+            <summary>
+              取得序列商品資訊
+            </summary>
+            <param name="dataRequest">資料請求結構</param>
+            <param name="useCache">是否使用快取 [預設:true](true=序列資料結構建立後保存在快取內，下次需要使用直接從快取拿取, false=重新建立序列資料結構，建立的序列資料需要自行移除否則會占用記憶體空間)</param>
             <returns>返回值: SeriesSymbolData 類別</returns>
         </member>
-        <member name="M:Zeghs.Managers.SeriesManager.SetQuoteService(Zeghs.Services.AbstractQuoteService)">
+        <member name="M:Zeghs.Managers.SeriesManager.SetQuoteService(System.String)">
             <summary>
               設定報價資訊服務
             </summary>
-            <param name="quoteService">報價資訊服務</param>
+            <param name="dataSource">報價資訊來源名稱</param>
+        </member>
+        <member name="M:Zeghs.Managers.SeriesManager.RemoveInstrument(Zeghs.Data.Instrument)">
+            <summary>
+              移除商品資訊(如果 GetSeries 不是使用 useCache 模式都需要移除)
+            </summary>
+            <param name="bars">商品資訊類別</param>
         </member>
         <member name="P:Zeghs.Managers.SeriesManager.Settings">
             <summary>
@@ -499,6 +556,16 @@
               [取得] 成交量陣列資訊
             </summary>
         </member>
+        <member name="P:Zeghs.Data.SeriesSymbolDataRand.BarsCount">
+            <summary>
+              [取得] Bars 資料總個數
+            </summary>
+        </member>
+        <member name="P:Zeghs.Data.SeriesSymbolDataRand.BarsSize">
+            <summary>
+              [取得] Bars 資料容器大小(包含預留的即時資料空間)
+            </summary>
+        </member>
         <member name="T:Zeghs.Data.SeriesIndexer">
             <summary>
               SeriesSymbolData 資料索引子類別
@@ -595,6 +662,21 @@
               [取得/設定] Request method
             </summary>
         </member>
+        <member name="T:Zeghs.Events.SeriesResultEvent">
+            <summary>
+              序列商品資料回報事件(使用非同步取得 SeriesSymbolData 會使用此類別存放回報結果)
+            </summary>
+        </member>
+        <member name="P:Zeghs.Events.SeriesResultEvent.Data">
+            <summary>
+              [取得] 序列商品資料
+            </summary>
+        </member>
+        <member name="P:Zeghs.Events.SeriesResultEvent.Parameters">
+            <summary>
+              [取得] 使用者自訂參數
+            </summary>
+        </member>
         <member name="T:Zeghs.Data.Instrument">
             <summary>
                商品資訊類別(包含開高低收資訊與商品屬性及其他重要資訊)
@@ -606,6 +688,18 @@
             </summary>
             <param name="source">SeriesSymbolData 類別</param>
             <param name="maxBarsReferance">最大 Bars count 參考值(如果不需要很多歷史資訊計算則可以設定小一點, 設定數量不可以超過歷史資料載入總數量)</param>
+        </member>
+        <member name="M:Zeghs.Data.Instrument.BindResetEvent(System.EventHandler)">
+            <summary>
+              綁定清盤重置事件
+            </summary>
+            <param name="onReset">EventHandler 事件委派</param>
+        </member>
+        <member name="M:Zeghs.Data.Instrument.ClearResetEvent(System.EventHandler)">
+            <summary>
+              清除綁定的清盤重置事件
+            </summary>
+            <param name="onReset">EventHandler 事件委派</param>
         </member>
         <member name="M:Zeghs.Data.Instrument.Dispose">
             <summary>
@@ -644,6 +738,11 @@
         <member name="P:Zeghs.Data.Instrument.Close">
             <summary>
               [取得] 收盤價陣列資訊
+            </summary>
+        </member>
+        <member name="P:Zeghs.Data.Instrument.Count">
+            <summary>
+              [取得] Bars 資料總個數
             </summary>
         </member>
         <member name="P:Zeghs.Data.Instrument.CurrentBar">
@@ -716,6 +815,98 @@
               [取得] 成交量陣列資訊
             </summary>
         </member>
+        <member name="P:Zeghs.Data.Instrument.Source">
+            <summary>
+              [取得] 來源 SeriesSymbolData 資料
+            </summary>
+        </member>
+        <member name="T:Zeghs.IO.DataLoader">
+            <summary>
+              商品資訊 Instrument 資料讀取者類別
+            </summary>
+        </member>
+        <member name="M:Zeghs.IO.IDataLoader.BeginLoadData(PowerLanguage.InstrumentDataRequest,PowerLanguage.LoadDataCallback,System.Object)">
+            <summary>
+              非同步讀取資料請求結構內的 IInstrument 資料
+            </summary>
+            <param name="request">資料請求結構</param>
+            <param name="result">當成功取得 IInstrument 商品資料會使用此委派方法回傳資料</param>
+            <param name="args">使用者自訂參數</param>
+        </member>
+        <member name="M:Zeghs.IO.DataLoader.#ctor">
+            <summary>
+              建構子
+            </summary>
+        </member>
+        <member name="M:Zeghs.IO.DataLoader.BeginLoadData(PowerLanguage.InstrumentDataRequest,PowerLanguage.LoadDataCallback,System.Object)">
+            <summary>
+              非同步讀取資料請求結構內的 Instrument 資料
+            </summary>
+            <param name="request">資料請求結構</param>
+            <param name="result">當成功取得 Instrument 商品資料會使用此委派方法回傳資料</param>
+            <param name="args">使用者自訂參數</param>
+        </member>
+        <member name="M:Zeghs.IO.DataLoader.Dispose">
+            <summary>
+              釋放腳本資源
+            </summary>
+        </member>
+        <member name="M:Zeghs.IO.DataLoader.GetInstrument(System.Int32)">
+            <summary>
+              取得 Instrument 商品資訊
+            </summary>
+            <param name="index">資料存放索引值(從 0 起始)</param>
+            <returns>返回值: Instrument 商品資訊類別</returns>
+        </member>
+        <member name="M:Zeghs.IO.DataLoader.LoadDataRange(System.Collections.Generic.List{PowerLanguage.InstrumentDataRequest})">
+            <summary>
+              讀取資料請求結構列表內的 Instrument 資料
+            </summary>
+            <param name="requests">資料請求結構列表</param>
+        </member>
+        <member name="M:Zeghs.IO.DataLoader.RemoveData(System.Int32)">
+            <summary>
+              移除 Instrument 資料
+            </summary>
+            <param name="index">資料存放索引值(從 0 起始)</param>
+        </member>
+        <member name="M:Zeghs.IO.DataLoader.SetMaximumBarsReference(System.Int32)">
+            <summary>
+              設定最大 Bars 參考個數
+            </summary>
+            <param name="barsCount">Bars 參考個數</param>
+        </member>
+        <member name="M:Zeghs.IO.DataLoader.Dispose(System.Boolean)">
+            <summary>
+              釋放腳本資源
+            </summary>
+            <param name="disposing">是否正在處理資源中</param>
+        </member>
+        <member name="E:Zeghs.IO.DataLoader.onAddInstrument">
+            <summary>
+              當有 Instrument 新增時所觸發的更動事件
+            </summary>
+        </member>
+        <member name="E:Zeghs.IO.DataLoader.onLoadCompleted">
+            <summary>
+              當所有 Instrument 資料都讀取完畢後所觸發的事件
+            </summary>
+        </member>
+        <member name="E:Zeghs.IO.DataLoader.onRemoveInstrument">
+            <summary>
+              當有 Instrument 移除時所觸發的更動事件
+            </summary>
+        </member>
+        <member name="P:Zeghs.IO.DataLoader.Instruments">
+            <summary>
+              [取得] Instrument 商品資訊列表
+            </summary>
+        </member>
+        <member name="P:Zeghs.IO.DataLoader.MaxInstrumentCount">
+            <summary>
+              [取得] 最大 Instrument 資訊個數
+            </summary>
+        </member>
         <member name="T:Zeghs.Data.SeriesSymbolData">
             <summary>
               商品資料類別(存放開高低收量資訊)
@@ -768,11 +959,12 @@
             </summary>
             <param name="capacity">擴充的容量大小</param>
         </member>
-        <member name="M:Zeghs.Data.SeriesStorage.Add(Zeghs.Data.SeriesSymbolData)">
+        <member name="M:Zeghs.Data.SeriesStorage.Add(Zeghs.Data.SeriesSymbolData,System.Boolean)">
             <summary>
               加入 SeriesSymbolData 列表
             </summary>
             <param name="series">SeriesSymbolData 列表</param>
+            <param name="useIdentify">是否使用 Identify 當作 Hash 值(true=使用 Identify 作為 Hash 值, false=使用時間週期總秒數當作 Hash 值)</param>
         </member>
         <member name="M:Zeghs.Data.SeriesStorage.Clear">
             <summary>
@@ -790,13 +982,13 @@
             <summary>
               取得指定的總秒數週期 SeriesSymbolData 列表
             </summary>
-            <param name="totalSeconds">總秒數</param>
+            <param name="hashKey">可以為時間週期總秒數或是 Identify</param>
         </member>
         <member name="M:Zeghs.Data.SeriesStorage.Remove(System.Int32)">
             <summary>
               移除 SeriesSymbolData 列表
             </summary>
-            <param name="totalSeconds">總秒數</param>
+            <param name="seriesId">SeriesSymbolData id</param>
         </member>
         <member name="M:Zeghs.Data.SeriesStorage.Reset(System.String)">
             <summary>

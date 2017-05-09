@@ -130,7 +130,7 @@ namespace PowerLanguage.Strategy {
 		private IOrderMarket BUY, SELL;
 		private IOrderMarket BUY_C, SELL_C;
 
-		private int 下單口數 = 3;        //下單口數
+		private int 下單口數 = 1;        //下單口數
 		private bool 是否已加碼 = false;   //是否已經加碼
 		private double __dOpen = 0;
 		private double 停損點數 = 34;    //停損點數

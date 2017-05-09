@@ -6,6 +6,7 @@ using Zeghs.Data;
 using Zeghs.Utils;
 using Zeghs.Events;
 using Zeghs.Scripts;
+using Zeghs.Drawing;
 
 namespace PowerLanguage {
 	/// <summary>
@@ -21,6 +22,7 @@ namespace PowerLanguage {
 
 		private bool __bDisposed = false;  //Dispose旗標
 		private IOutput __cOutputWriter = null;
+		private TextContainer __cDrawTexts = null;
 		private List<IVariables> __cVariables = null;
 		private List<IStudyControl> __cFunctions = null;
 
@@ -30,6 +32,15 @@ namespace PowerLanguage {
 		public ScriptPropertyAttribute About {
 			get;
 			internal set;
+		}
+
+		/// <summary>
+		///   [取得] 文字繪製容器
+		/// </summary>
+		public ITextContainer DrwText {
+			get {
+				return __cDrawTexts;
+			}
 		}
 
 		/// <summary>
@@ -54,6 +65,7 @@ namespace PowerLanguage {
 		///   建構子
 		/// </summary>
 		public CStudyAbstract() {
+			__cDrawTexts = new TextContainer();
 			__cOutputWriter = new OutputWriter();
 			__cVariables = new List<IVariables>(16);
 			__cFunctions = new List<IStudyControl>(16);
@@ -160,6 +172,9 @@ namespace PowerLanguage {
 
 					CStudyDestory();
 
+					//清理使用者繪圖文字物件
+					__cDrawTexts.Clear();
+
 					//清理輸出寫入者
 					OutputWriter cOutputWriter = __cOutputWriter as OutputWriter;
 					cOutputWriter.Dispose();
@@ -199,10 +214,15 @@ namespace PowerLanguage {
 		///   啟動腳本
 		/// </summary>
 		internal override void Start() {
+			//初始化使用者繪圖字型類別
+			__cDrawTexts.Initialate(this);
+
+			//腳本初始化工作
 			CStudyInitialize();
 			Create();
 			StartCalc();
 
+			//呼叫父類別作啟動工作
 			base.Start();
 		}
 
@@ -232,4 +252,4 @@ namespace PowerLanguage {
 			}
 		}
 	}
-}  //235行
+}  //255行

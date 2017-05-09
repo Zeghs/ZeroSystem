@@ -8,7 +8,14 @@ using Zeghs.Informations;
 
 namespace Zeghs.Forms {
 	internal partial class frmSignalProperty : Form {
+		private bool __bCompleted = false;
 		private SignalProperty __cProperty = null;
+
+		internal bool IsSetupCompleted {
+			get {
+				return __bCompleted;
+			}
+		}
 
 		internal frmSignalProperty() {
 			InitializeComponent();
@@ -47,6 +54,7 @@ namespace Zeghs.Forms {
 			if (dataGrid.SelectedDataRows.Length > 0) {
 				OrderServiceInformation cOrderInfo = dataGrid.SelectedDataRows[0] as OrderServiceInformation;
 				__cProperty.OrderSource = string.Format("{0};{1}", cOrderInfo.ModuleName, comboOrderService.Text);
+				__bCompleted = true;
 			}
 			this.DialogResult = DialogResult.OK;
 		}

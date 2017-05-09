@@ -81,8 +81,7 @@ namespace PowerLanguage {
 			this.DataStream = dataStream;
 
 			__cBars = master.BarsOfData(dataStream) as Instrument;
-			SeriesSymbolData cSeries = __cBars.SeriesSymbolData;
-			cSeries.onReset += SeriesSymbolData_onReset;  //設定清盤重置事件
+			__cBars.BindResetEvent(SeriesSymbolData_onReset);  //設定清盤重置事件
 
 			SeriesSymbolDataRand cSeriesRand = __cBars.FullSymbolData as SeriesSymbolDataRand;
 			this.Initialize(cSeriesRand.BarsSize);
@@ -121,8 +120,7 @@ namespace PowerLanguage {
 				__bDisposed = true;
 
 				if (disposing) {
-					SeriesSymbolData cSeries = __cBars.SeriesSymbolData;
-					cSeries.onReset -= SeriesSymbolData_onReset;
+					__cBars.ClearResetEvent(SeriesSymbolData_onReset);
 
 					base.Dispose();
 				}

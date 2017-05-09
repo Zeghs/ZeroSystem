@@ -382,7 +382,23 @@ namespace Mitake.Stock.Data {
 			get;
 			internal set;
 		}
-		
+
+		/// <summary>
+		///   [取得] 盤前試戳成交價
+		/// </summary>
+		public float 試戳成交價 {
+			get;
+			internal set;
+		}
+
+		/// <summary>
+		///   [取得] 盤前試戳成交量
+		/// </summary>
+		public uint 試戳成交量 {
+			get;
+			internal set;
+		}
+
 		internal int Serial {
 			get;
 			set;

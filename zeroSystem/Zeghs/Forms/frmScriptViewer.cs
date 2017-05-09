@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using WeifenLuo.WinFormsUI.Docking;
 using Zeghs.Scripts;
 using Zeghs.Managers;
 using Zeghs.Informations;
 
 namespace Zeghs.Forms {
-	internal partial class frmScriptViewer : frmChildBase {
+	internal partial class frmScriptViewer : DockContent {
 		internal frmScriptViewer() {
 			InitializeComponent();
-
-			this.ShowTitle = true;
 		}
 
 		private void frmScriptViewer_Load(object sender, EventArgs e) {

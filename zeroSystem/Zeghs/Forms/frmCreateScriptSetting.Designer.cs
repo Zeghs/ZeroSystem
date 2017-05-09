@@ -23,8 +23,6 @@
 					components.Dispose();
 				}
 
-				__cAddSymbolIds.Clear();
-	
 				int iCount = __cSources.Count;
 				for (int i = iCount - 1; i >= 0; i--) {
 					Zeghs.Data.SimpleBoundList<Zeghs.Data._ProductInfo> cProducts = __cSources[i];
@@ -75,7 +73,7 @@
 			this.pageItem_Settings = new System.Windows.Forms.TabPage();
 			this.listSubChart = new System.Windows.Forms.ListBox();
 			this.labSubChart = new System.Windows.Forms.Label();
-			this.comboDataStream = new System.Windows.Forms.ComboBox();
+			this.comboLayer = new System.Windows.Forms.ComboBox();
 			this.labDataStream = new System.Windows.Forms.Label();
 			this.comboTimeZone = new System.Windows.Forms.ComboBox();
 			this.labＴimeZone = new System.Windows.Forms.Label();
@@ -99,6 +97,11 @@
 			this.label2 = new System.Windows.Forms.Label();
 			this.labPeriodType = new System.Windows.Forms.Label();
 			this.pageItem_Template = new System.Windows.Forms.TabPage();
+			this.labLegend = new System.Windows.Forms.Label();
+			this.colorLegend = new DevAge.Windows.Forms.ColorPicker();
+			this.comboLineWidth = new Zeghs.Controls.LineWidthComboBox();
+			this.comboDownWidth = new Zeghs.Controls.LineWidthComboBox();
+			this.comboUpWidth = new Zeghs.Controls.LineWidthComboBox();
 			this.labLine = new System.Windows.Forms.Label();
 			this.colorLine = new DevAge.Windows.Forms.ColorPicker();
 			this.labDown = new System.Windows.Forms.Label();
@@ -133,9 +136,6 @@
 			this.labAxisRange = new System.Windows.Forms.Label();
 			this.btnOK = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
-			this.comboUpWidth = new Zeghs.Controls.LineWidthComboBox();
-			this.comboDownWidth = new Zeghs.Controls.LineWidthComboBox();
-			this.comboLineWidth = new Zeghs.Controls.LineWidthComboBox();
 			this.tabControl_Main.SuspendLayout();
 			this.pageItem_Product.SuspendLayout();
 			this.tabControl_Products.SuspendLayout();
@@ -252,7 +252,7 @@
 			// 
 			this.pageItem_Settings.Controls.Add(this.listSubChart);
 			this.pageItem_Settings.Controls.Add(this.labSubChart);
-			this.pageItem_Settings.Controls.Add(this.comboDataStream);
+			this.pageItem_Settings.Controls.Add(this.comboLayer);
 			this.pageItem_Settings.Controls.Add(this.labDataStream);
 			this.pageItem_Settings.Controls.Add(this.comboTimeZone);
 			this.pageItem_Settings.Controls.Add(this.labＴimeZone);
@@ -294,42 +294,33 @@
 			this.listSubChart.Name = "listSubChart";
 			this.listSubChart.Size = new System.Drawing.Size(121, 52);
 			this.listSubChart.TabIndex = 24;
+			this.listSubChart.SelectedIndexChanged += new System.EventHandler(this.listSubChart_SelectedIndexChanged);
 			// 
 			// labSubChart
 			// 
 			this.labSubChart.AutoSize = true;
-			this.labSubChart.Location = new System.Drawing.Point(35, 291);
+			this.labSubChart.Location = new System.Drawing.Point(33, 290);
 			this.labSubChart.Name = "labSubChart";
 			this.labSubChart.Size = new System.Drawing.Size(32, 12);
 			this.labSubChart.TabIndex = 23;
 			this.labSubChart.Text = "副圖:";
 			// 
-			// comboDataStream
+			// comboLayer
 			// 
-			this.comboDataStream.FormattingEnabled = true;
-			this.comboDataStream.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9"});
-			this.comboDataStream.Location = new System.Drawing.Point(132, 259);
-			this.comboDataStream.Name = "comboDataStream";
-			this.comboDataStream.Size = new System.Drawing.Size(121, 20);
-			this.comboDataStream.TabIndex = 22;
+			this.comboLayer.FormattingEnabled = true;
+			this.comboLayer.Location = new System.Drawing.Point(132, 259);
+			this.comboLayer.Name = "comboLayer";
+			this.comboLayer.Size = new System.Drawing.Size(121, 20);
+			this.comboLayer.TabIndex = 22;
 			// 
 			// labDataStream
 			// 
 			this.labDataStream.AutoSize = true;
-			this.labDataStream.Location = new System.Drawing.Point(35, 265);
+			this.labDataStream.Location = new System.Drawing.Point(33, 263);
 			this.labDataStream.Name = "labDataStream";
 			this.labDataStream.Size = new System.Drawing.Size(56, 12);
 			this.labDataStream.TabIndex = 21;
-			this.labDataStream.Text = "數列編號:";
+			this.labDataStream.Text = "圖層編號:";
 			// 
 			// comboTimeZone
 			// 
@@ -344,7 +335,7 @@
 			// labＴimeZone
 			// 
 			this.labＴimeZone.AutoSize = true;
-			this.labＴimeZone.Location = new System.Drawing.Point(35, 238);
+			this.labＴimeZone.Location = new System.Drawing.Point(33, 236);
 			this.labＴimeZone.Name = "labＴimeZone";
 			this.labＴimeZone.Size = new System.Drawing.Size(32, 12);
 			this.labＴimeZone.TabIndex = 19;
@@ -517,6 +508,8 @@
 			// 
 			// pageItem_Template
 			// 
+			this.pageItem_Template.Controls.Add(this.labLegend);
+			this.pageItem_Template.Controls.Add(this.colorLegend);
 			this.pageItem_Template.Controls.Add(this.comboLineWidth);
 			this.pageItem_Template.Controls.Add(this.comboDownWidth);
 			this.pageItem_Template.Controls.Add(this.comboUpWidth);
@@ -540,10 +533,57 @@
 			this.pageItem_Template.Text = "樣式";
 			this.pageItem_Template.UseVisualStyleBackColor = true;
 			// 
+			// labLegend
+			// 
+			this.labLegend.AutoSize = true;
+			this.labLegend.Location = new System.Drawing.Point(32, 196);
+			this.labLegend.Name = "labLegend";
+			this.labLegend.Size = new System.Drawing.Size(32, 12);
+			this.labLegend.TabIndex = 22;
+			this.labLegend.Text = "標籤:";
+			// 
+			// colorLegend
+			// 
+			this.colorLegend.Location = new System.Drawing.Point(98, 192);
+			this.colorLegend.Name = "colorLegend";
+			this.colorLegend.SelectedColor = System.Drawing.Color.Black;
+			this.colorLegend.Size = new System.Drawing.Size(132, 21);
+			this.colorLegend.TabIndex = 21;
+			// 
+			// comboLineWidth
+			// 
+			this.comboLineWidth.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+			this.comboLineWidth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboLineWidth.FormattingEnabled = true;
+			this.comboLineWidth.Location = new System.Drawing.Point(237, 277);
+			this.comboLineWidth.Name = "comboLineWidth";
+			this.comboLineWidth.Size = new System.Drawing.Size(89, 23);
+			this.comboLineWidth.TabIndex = 20;
+			// 
+			// comboDownWidth
+			// 
+			this.comboDownWidth.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+			this.comboDownWidth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboDownWidth.FormattingEnabled = true;
+			this.comboDownWidth.Location = new System.Drawing.Point(237, 248);
+			this.comboDownWidth.Name = "comboDownWidth";
+			this.comboDownWidth.Size = new System.Drawing.Size(89, 23);
+			this.comboDownWidth.TabIndex = 19;
+			// 
+			// comboUpWidth
+			// 
+			this.comboUpWidth.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+			this.comboUpWidth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboUpWidth.FormattingEnabled = true;
+			this.comboUpWidth.Location = new System.Drawing.Point(237, 219);
+			this.comboUpWidth.Name = "comboUpWidth";
+			this.comboUpWidth.Size = new System.Drawing.Size(89, 23);
+			this.comboUpWidth.TabIndex = 18;
+			// 
 			// labLine
 			// 
 			this.labLine.AutoSize = true;
-			this.labLine.Location = new System.Drawing.Point(32, 254);
+			this.labLine.Location = new System.Drawing.Point(32, 282);
 			this.labLine.Name = "labLine";
 			this.labLine.Size = new System.Drawing.Size(32, 12);
 			this.labLine.TabIndex = 17;
@@ -551,7 +591,7 @@
 			// 
 			// colorLine
 			// 
-			this.colorLine.Location = new System.Drawing.Point(98, 250);
+			this.colorLine.Location = new System.Drawing.Point(98, 278);
 			this.colorLine.Name = "colorLine";
 			this.colorLine.SelectedColor = System.Drawing.Color.Black;
 			this.colorLine.Size = new System.Drawing.Size(132, 21);
@@ -560,7 +600,7 @@
 			// labDown
 			// 
 			this.labDown.AutoSize = true;
-			this.labDown.Location = new System.Drawing.Point(32, 225);
+			this.labDown.Location = new System.Drawing.Point(32, 253);
 			this.labDown.Name = "labDown";
 			this.labDown.Size = new System.Drawing.Size(32, 12);
 			this.labDown.TabIndex = 13;
@@ -568,7 +608,7 @@
 			// 
 			// colorDown
 			// 
-			this.colorDown.Location = new System.Drawing.Point(98, 221);
+			this.colorDown.Location = new System.Drawing.Point(98, 249);
 			this.colorDown.Name = "colorDown";
 			this.colorDown.SelectedColor = System.Drawing.Color.Black;
 			this.colorDown.Size = new System.Drawing.Size(132, 21);
@@ -577,7 +617,7 @@
 			// labUp
 			// 
 			this.labUp.AutoSize = true;
-			this.labUp.Location = new System.Drawing.Point(32, 196);
+			this.labUp.Location = new System.Drawing.Point(32, 224);
 			this.labUp.Name = "labUp";
 			this.labUp.Size = new System.Drawing.Size(32, 12);
 			this.labUp.TabIndex = 9;
@@ -585,7 +625,7 @@
 			// 
 			// colorUp
 			// 
-			this.colorUp.Location = new System.Drawing.Point(98, 192);
+			this.colorUp.Location = new System.Drawing.Point(98, 220);
 			this.colorUp.Name = "colorUp";
 			this.colorUp.SelectedColor = System.Drawing.Color.Black;
 			this.colorUp.Size = new System.Drawing.Size(132, 21);
@@ -621,6 +661,8 @@
 			// checkShowNewPrice
 			// 
 			this.checkShowNewPrice.AutoSize = true;
+			this.checkShowNewPrice.Checked = true;
+			this.checkShowNewPrice.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkShowNewPrice.Location = new System.Drawing.Point(17, 22);
 			this.checkShowNewPrice.Name = "checkShowNewPrice";
 			this.checkShowNewPrice.Size = new System.Drawing.Size(96, 16);
@@ -752,7 +794,6 @@
 			// labBottomMarginP
 			// 
 			this.labBottomMarginP.AutoSize = true;
-			this.labBottomMarginP.Enabled = false;
 			this.labBottomMarginP.Location = new System.Drawing.Point(293, 96);
 			this.labBottomMarginP.Name = "labBottomMarginP";
 			this.labBottomMarginP.Size = new System.Drawing.Size(14, 12);
@@ -761,16 +802,15 @@
 			// 
 			// txtBottomMargin
 			// 
-			this.txtBottomMargin.Enabled = false;
 			this.txtBottomMargin.Location = new System.Drawing.Point(217, 91);
 			this.txtBottomMargin.Name = "txtBottomMargin";
 			this.txtBottomMargin.Size = new System.Drawing.Size(70, 22);
 			this.txtBottomMargin.TabIndex = 14;
+			this.txtBottomMargin.Text = "1";
 			// 
 			// labBottomMargin
 			// 
 			this.labBottomMargin.AutoSize = true;
-			this.labBottomMargin.Enabled = false;
 			this.labBottomMargin.Location = new System.Drawing.Point(145, 96);
 			this.labBottomMargin.Name = "labBottomMargin";
 			this.labBottomMargin.Size = new System.Drawing.Size(44, 12);
@@ -780,7 +820,6 @@
 			// labTopMarginP
 			// 
 			this.labTopMarginP.AutoSize = true;
-			this.labTopMarginP.Enabled = false;
 			this.labTopMarginP.Location = new System.Drawing.Point(293, 66);
 			this.labTopMarginP.Name = "labTopMarginP";
 			this.labTopMarginP.Size = new System.Drawing.Size(14, 12);
@@ -789,16 +828,15 @@
 			// 
 			// txtTopMargin
 			// 
-			this.txtTopMargin.Enabled = false;
 			this.txtTopMargin.Location = new System.Drawing.Point(217, 61);
 			this.txtTopMargin.Name = "txtTopMargin";
 			this.txtTopMargin.Size = new System.Drawing.Size(70, 22);
 			this.txtTopMargin.TabIndex = 11;
+			this.txtTopMargin.Text = "1";
 			// 
 			// labTopMargin
 			// 
 			this.labTopMargin.AutoSize = true;
-			this.labTopMargin.Enabled = false;
 			this.labTopMargin.Location = new System.Drawing.Point(145, 66);
 			this.labTopMargin.Name = "labTopMargin";
 			this.labTopMargin.Size = new System.Drawing.Size(44, 12);
@@ -808,6 +846,8 @@
 			// checkMargin
 			// 
 			this.checkMargin.AutoSize = true;
+			this.checkMargin.Checked = true;
+			this.checkMargin.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkMargin.Location = new System.Drawing.Point(137, 42);
 			this.checkMargin.Name = "checkMargin";
 			this.checkMargin.Size = new System.Drawing.Size(75, 16);
@@ -883,36 +923,6 @@
 			this.btnCancel.UseVisualStyleBackColor = true;
 			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
 			// 
-			// comboUpWidth
-			// 
-			this.comboUpWidth.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-			this.comboUpWidth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboUpWidth.FormattingEnabled = true;
-			this.comboUpWidth.Location = new System.Drawing.Point(237, 191);
-			this.comboUpWidth.Name = "comboUpWidth";
-			this.comboUpWidth.Size = new System.Drawing.Size(89, 23);
-			this.comboUpWidth.TabIndex = 18;
-			// 
-			// comboDownWidth
-			// 
-			this.comboDownWidth.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-			this.comboDownWidth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboDownWidth.FormattingEnabled = true;
-			this.comboDownWidth.Location = new System.Drawing.Point(237, 220);
-			this.comboDownWidth.Name = "comboDownWidth";
-			this.comboDownWidth.Size = new System.Drawing.Size(89, 23);
-			this.comboDownWidth.TabIndex = 19;
-			// 
-			// comboLineWidth
-			// 
-			this.comboLineWidth.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-			this.comboLineWidth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboLineWidth.FormattingEnabled = true;
-			this.comboLineWidth.Location = new System.Drawing.Point(237, 249);
-			this.comboLineWidth.Name = "comboLineWidth";
-			this.comboLineWidth.Size = new System.Drawing.Size(89, 23);
-			this.comboLineWidth.TabIndex = 20;
-			// 
 			// frmCreateScriptSetting
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -978,7 +988,7 @@
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.Label labShow;
-		private System.Windows.Forms.ComboBox comboDataStream;
+		private System.Windows.Forms.ComboBox comboLayer;
 		private System.Windows.Forms.Label labDataStream;
 		private System.Windows.Forms.ComboBox comboTimeZone;
 		private System.Windows.Forms.Label labＴimeZone;
@@ -1020,5 +1030,7 @@
 		private Controls.LineWidthComboBox comboLineWidth;
 		private Controls.LineWidthComboBox comboDownWidth;
 		private Controls.LineWidthComboBox comboUpWidth;
+		private System.Windows.Forms.Label labLegend;
+		private DevAge.Windows.Forms.ColorPicker colorLegend;
 	}
 }

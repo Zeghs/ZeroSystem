@@ -36,7 +36,7 @@ namespace Zeghs.IO {
 			__cSeries = new SeriesSymbolData(request);
 			__cSeries.onRequest += SeriesSymbolData_onRequest;
 
-			__cSeries.OnRequest(new DataRequestEvent(iCount, iCount, 1));  //請求歷史資料
+			__cSeries.OnRequest(new DataRequestEvent(request));  //請求歷史資料
 			__cSeries.MergeTicks();  //合併即時Tick資訊
 		}
 
@@ -65,12 +65,12 @@ namespace Zeghs.IO {
 
 		private void Request(DataRequestEvent e) {
 			InstrumentDataRequest cDataRequest = __cSeries.DataRequest;
-			DataRequest cRange = cDataRequest.Range;
+			DateTime[] cRanges = e.Ranges;
 			
 			ZRequest cRequest = new ZRequest();
 			cRequest.Method = "POST";
 			cRequest.Url = __sHttpUrl;
-			cRequest.Parameters = string.Format("exchange={0}&symbolId={1}&timeFrame={2}&position={3}&startDate={4}&endDate={5}&count={6}", cDataRequest.Exchange, cDataRequest.Symbol, cDataRequest.Resolution.TotalSeconds, __lPosition, cRange.From.ToString("yyyy-MM-dd"), cRange.To.ToString("yyyy-MM-dd"), (cRange.RequestType == DataRequestType.BarsBack || __lPosition != -1) ? e.Count : cRange.Count);
+			cRequest.Parameters = string.Format("exchange={0}&symbolId={1}&timeFrame={2}&position={3}&startDate={4}&endDate={5}&count={6}", cDataRequest.Exchange, cDataRequest.Symbol, cDataRequest.Resolution.TotalSeconds, __lPosition, cRanges[0].ToString("yyyy-MM-dd"), cRanges[1].ToString("yyyy-MM-dd"), e.Count);
 			cRequest.CookieContainer = __cCookies;
 
 			int iRet = cRequest.Request();
@@ -108,24 +108,28 @@ namespace Zeghs.IO {
 
 		private void SeriesSymbolData_onRequest(object sender, DataRequestEvent e) {
 			int iCount = e.Count;
-			int iBaseCount = __cSeries.DataRequest.Range.Count;
-			if (e.Position > iBaseCount) {
+			DataRequest cDataRequest = __cSeries.DataRequest.Range;
+			int iBaseCount = cDataRequest.Count;
+			bool bRequest = e.Totals > iBaseCount;
+			if (!bRequest) {
+				bRequest = (__lPosition == -1) ? true : e.CheckRequest(cDataRequest);
+			}
+
+			if (bRequest) {
 				Request(e);
 
 				if (e.Result == 0) {
 					e.Count += iBaseCount;
 					if (e.IsAlreadyRequestAllData) {
-						__cSeries.RemoveRequest();  ////如果已經全部讀取完畢就取消事件
+						__cSeries.RemoveRequest();  //如果已經全部讀取完畢就取消事件
 
 						if (onCompleted != null) {
-							InstrumentDataRequest cDataRequest = __cSeries.DataRequest;
-							onCompleted(this, new DataAdapterCompleteEvent(cDataRequest.Symbol, cDataRequest.Resolution.TotalSeconds));
+							InstrumentDataRequest cInstDataRequest = __cSeries.DataRequest;
+							onCompleted(this, new DataAdapterCompleteEvent(cInstDataRequest.Symbol, cInstDataRequest.Resolution.TotalSeconds));
 						}
 					}
 				}
 			} else {
-				DataRequest cDataRequest = __cSeries.DataRequest.Range;
-
 				e.Result = 0;
 				e.Count = iBaseCount;
 				e.Ranges = new DateTime[] { cDataRequest.From, cDataRequest.To };

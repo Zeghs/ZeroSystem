@@ -63,6 +63,13 @@ namespace PowerLanguage {
 		}
 
 		/// <summary>
+		///   [取得] 文字樣式資訊
+		/// </summary>
+		FontStyle Style {
+			get;
+		}
+
+		/// <summary>
 		///   [取得/設定] 繪製文字
 		/// </summary>
 		string Text {

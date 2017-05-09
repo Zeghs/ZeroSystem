@@ -64,7 +64,6 @@ namespace Netwings {
 		private int __iPrevious = 0;
 		private int __iTrustIndex = 1;
 		private int __iMaxTrustIndex = 1;
-		private int __iAPIPipeNumber = 0;
 		private bool __bBusy = false;
 		private bool __bDisposed = false;
 		private string __sApiPipe = null;
@@ -357,30 +356,30 @@ namespace Netwings {
 		}
 
 		private bool CheckTrust(EOrderAction action, OrderCategory category, double limitPrice, int lots, string name, bool isReverse, bool openNextBar) {
-			TradeOrder cTrust = __cEntrusts.GetTradeFromName(name);
-			if (cTrust == null) {
-				if (action == EOrderAction.Sell || action == EOrderAction.BuyToCover) {
-					bool bRet = false;
-					int iCount = __cEntrusts.Count;
-					if (iCount > 0) {
-						EOrderAction cAction = (action == EOrderAction.Buy || action == EOrderAction.BuyToCover) ? EOrderAction.SellShort : (action == EOrderAction.SellShort || action == EOrderAction.Sell) ? EOrderAction.Buy : action;
-						for (int i = 0; i < iCount; i++) {
-							TradeOrder cTemp = __cEntrusts[i];
-							if (cTemp.IsTrusted && cTemp.Action == cAction && cTemp.Contracts > 0) {
-								if (!cTemp.IsCancel) {
-									SendTrust(cTemp, cTemp.Ticket);  //取消委託單
-									cTemp.IsCancel = true;
-								}
-								bRet = true;
+			//檢查是否下單類型是平倉單(如果是平倉單需要將委託倉內的所有同向平倉單都取消, 全部取消完畢才可以在下平倉單)
+			if (action == EOrderAction.Sell || action == EOrderAction.BuyToCover) {
+				bool bRet = false;
+				int iCount = __cEntrusts.Count;
+				if (iCount > 0) {
+					for (int i = 0; i < iCount; i++) {
+						TradeOrder cTemp = __cEntrusts[i];
+						if (cTemp.IsTrusted && cTemp.Price > 0 && cTemp.Contracts > 0 && cTemp.Action == action) {
+							if (!cTemp.IsCancel) {
+								SendTrust(cTemp, cTemp.Ticket);  //送出取消委託單命令
+								cTemp.IsCancel = true;
 							}
+							bRet = true;
 						}
 					}
-
-					if (bRet || __cDeals.Count > 0) {
-						return false;
-					}
 				}
-			} else {
+
+				if (bRet || __cDeals.Count > 0) {
+					return false;
+				}
+			}
+
+			TradeOrder cTrust = __cEntrusts.GetTradeFromName(name);
+			if (cTrust != null) {
 				if (openNextBar) {
 					if (!cTrust.IsSended) {
 						cTrust.Price = limitPrice;  //支援可以下出 NextBar 的限價單(沒有指定會以 0 送出)
@@ -572,9 +571,9 @@ namespace Netwings {
 						OrderDeal cDeal = cToken["Report"].ToObject<OrderDeal>();
 						string sDealId = cDeal.成交書號;  //成交書號 == 委託書號
 
+						int iDealLots = cDeal.成交數量;
 						TradeOrder cTempTrust = __cEntrusts.GetTrade(sDealId);
-						if (cTempTrust != null) {  //檢查委託陣列內是否有相同的成交書號(委託書號)
-							int iDealLots = cDeal.成交數量;
+						if (cTempTrust != null && cTempTrust.Contracts >= iDealLots) {  //檢查委託陣列內是否有相同的成交書號(委託書號)
 							cTempTrust.Contracts -= iDealLots;
 
 							bool bDealed = cTempTrust.Contracts == 0;
@@ -606,4 +605,4 @@ namespace Netwings {
 			}
 		}
 	}
-} //609行
+} //608行

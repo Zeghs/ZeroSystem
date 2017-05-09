@@ -58,10 +58,15 @@
     <Compile Include="Zeghs\Data\SeriesSymbolData.cs" />
     <Compile Include="Zeghs\Data\SeriesSymbolDataRand.cs" />
     <Compile Include="Zeghs\Events\DataAdapterCompleteEvent.cs" />
+    <Compile Include="PowerLanguage\DataLoaderResult.cs" />
     <Compile Include="Zeghs\Events\DataRequestEvent.cs" />
+    <Compile Include="Zeghs\Events\InstrumentChangeEvent.cs" />
     <Compile Include="Zeghs\Events\SeriesPositionChangeEvent.cs" />
     <Compile Include="Zeghs\Events\SeriesRequestEvent.cs" />
+    <Compile Include="Zeghs\Events\SeriesResultEvent.cs" />
     <Compile Include="Zeghs\IO\DataAdapter.cs" />
+    <Compile Include="Zeghs\IO\DataLoader.cs" />
+    <Compile Include="Zeghs\IO\IDataLoader.cs" />
     <Compile Include="Zeghs\IO\ZBuffer.cs" />
     <Compile Include="Zeghs\IO\ZReader.cs" />
     <Compile Include="Zeghs\IO\ZRequest.cs" />

@@ -1,30 +1,47 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using WeifenLuo.WinFormsUI.Docking;
+using Zeghs.Scripts;
 using Zeghs.Settings;
 using Zeghs.Informations;
 
 namespace Zeghs.Forms {
 	internal partial class frmMain : Form {
 		private bool __bShown = false;
-		private frmQuoteViewer __frmQuoteViewer = null;
-		private frmScriptViewer __frmScriptViewer = null;
-		private frmConsoleViewer __frmConsoleViewer = null;
-		
-		internal frmMain() {
-			InitializeComponent();
+		private bool __bLoaded = false;
+		private Dictionary<string, IDockContent> __cCommons = null;
 
-			__frmQuoteViewer = new frmQuoteViewer();
-			__frmScriptViewer = new frmScriptViewer();
-			__frmConsoleViewer = new frmConsoleViewer();
+		internal frmMain() {
+			__cCommons = new Dictionary<string, IDockContent>(8);
+
+			InitializeComponent();
 		}
 
-		private void CreateScriptViewer(ProfileSetting profile) {
-			frmSignalViewer frmSignalViewer = new frmSignalViewer();
-			frmSignalViewer.SetProfileSetting(profile);
-			frmSignalViewer.TopLevel = false;
+		private IDockContent GetDockContentFromPersistString(string persistString) {
+			IDockContent cContent = null;
+			bool bExist = __cCommons.TryGetValue(persistString, out cContent);
 
-			panelForms.Controls.Add(frmSignalViewer);
-			frmSignalViewer.Show();
+			switch (persistString) {
+				case "Zeghs.Forms.frmConsoleViewer":
+				case "Zeghs.Forms.frmLogViewer":
+				case "Zeghs.Forms.frmQuoteViewer":
+				case "Zeghs.Forms.frmScriptViewer":
+					if (bExist) {
+						cContent.DockHandler.Activate();
+					} else {
+						DockContent cDockContent = Activator.CreateInstance(Type.GetType(persistString), true) as DockContent;
+						__cCommons.Add(persistString, cDockContent);
+
+						if (__bLoaded) {
+							cDockContent.Show(this.dockPanels, DockState.Float);
+						} else {
+							cContent = cDockContent;
+						}
+					}
+					break;
+			}
+			return cContent;
 		}
 
 		private void OnShowQuoteManager() {
@@ -37,21 +54,16 @@ namespace Zeghs.Forms {
 			ProfileManager.Manager.onLoadProfile -= ProfileManager_onLoadProfile;
 			ProfileManager.Manager.Save("default");
 
-			__frmQuoteViewer.Dispose();
-			__frmScriptViewer.Dispose();
-			__frmConsoleViewer.Dispose();
+			this.dockPanels.SaveAsXml(string.Format("{0}__main.xml", GlobalSettings.Paths.ProfilePath));
+			__cCommons.Clear();
 		}
 
 		private void frmMain_Load(object sender, EventArgs e) {
-			__frmQuoteViewer.MdiParent = this;
-			__frmScriptViewer.MdiParent = this;
-			__frmConsoleViewer.MdiParent = this;
-
-			__frmQuoteViewer.Show();
-			__frmScriptViewer.Show();
-			__frmConsoleViewer.Show();
-
+			this.dockPanels.LoadFromXml(string.Format("{0}__main.xml", GlobalSettings.Paths.ProfilePath), new DeserializeDockContent(GetDockContentFromPersistString));
+			
 			this.OnResize(null);
+
+			__bLoaded = true;
 		}
 
 		private void frmMain_Move(object sender, EventArgs e) {
@@ -63,26 +75,6 @@ namespace Zeghs.Forms {
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e) {
-			int iUseHeight = toolbar.Top + toolbar.Height + statusbar.Height;
-			int iViewHeight = (this.ClientSize.Height - iUseHeight - 154) / 2;
-
-			__frmQuoteViewer.Left = 0;
-			__frmQuoteViewer.Top = 0;
-			__frmQuoteViewer.Height = iViewHeight;
-
-			__frmScriptViewer.Left = 0;
-			__frmScriptViewer.Top = __frmQuoteViewer.Height;
-			__frmScriptViewer.Height = iViewHeight;
-
-			__frmConsoleViewer.Left = 0;
-			__frmConsoleViewer.Top = __frmScriptViewer.Top + __frmScriptViewer.Height;
-			__frmConsoleViewer.Width = this.ClientSize.Width - 4;
-
-			panelForms.Left = __frmQuoteViewer.Width + 2;
-			panelForms.Top = toolbar.Top + toolbar.Height + 2;
-			panelForms.Width = this.ClientSize.Width - panelForms.Left - 4;
-			panelForms.Height = this.ClientSize.Height - __frmConsoleViewer.Height - iUseHeight - 7;
-
 			if (__bShown) {
 				WindowStatus cWindow = ProfileManager.Manager.MainWindow;
 				cWindow.Height = this.Height;
@@ -99,9 +91,6 @@ namespace Zeghs.Forms {
 				cWindow.Height = this.Height;
 				cWindow.Width = this.Width;
 			} else {
-				this.Left = cWindow.Left;
-				this.Top = cWindow.Top;
-
 				FormWindowState cState = cWindow.WindowState;
 				switch (cState) {
 					case FormWindowState.Maximized:
@@ -112,6 +101,8 @@ namespace Zeghs.Forms {
 						break;
 					case FormWindowState.Normal:
 						this.WindowState = FormWindowState.Normal;
+						this.Left = cWindow.Left;
+						this.Top = cWindow.Top;
 						this.Height = cWindow.Height;
 						this.Width = cWindow.Width;
 						break;
@@ -121,7 +112,7 @@ namespace Zeghs.Forms {
 
 			OnShowQuoteManager();
 
-			this.OnResize(null);
+			this.OnResize(EventArgs.Empty);
 
 			ProfileManager.Manager.onLoadProfile += ProfileManager_onLoadProfile;
 			ProfileManager.Manager.Load("default");
@@ -143,30 +134,42 @@ namespace Zeghs.Forms {
 			OnShowQuoteManager();
 		}
 
-		private void panelForms_DragDrop(object sender, DragEventArgs e) {
-			ScriptInformation cInfo = e.Data.GetData("__script") as ScriptInformation;
-			frmFormatObject frmFormatObject = new frmFormatObject();
-			frmFormatObject.SetScriptInformation(cInfo);
+		private void toolItem_DockViewer_Click(object sender, EventArgs e) {
+			ToolStripButton cButton = sender as ToolStripButton;
+			GetDockContentFromPersistString(cButton.Tag as string);
+		}
 
-			DialogResult cResult = frmFormatObject.ShowDialog();
-			frmFormatObject.Dispose();
-
-			if (cResult == DialogResult.OK) {
-				CreateScriptViewer(frmFormatObject.Profile);
+		private void dockPanels_ContentRemoved(object sender, DockContentEventArgs e) {
+			string sFullName = e.Content.DockHandler.Form.GetType().FullName;
+			if (__cCommons.ContainsKey(sFullName)) {
+				__cCommons.Remove(sFullName);
 			}
 		}
 
-		private void panelForms_DragEnter(object sender, DragEventArgs e) {
+		private void dockPanels_DragDrop(object sender, DragEventArgs e) {
+			ScriptInformation cInfo = e.Data.GetData("__script") as ScriptInformation;
+			frmFormatObject.Create(this.dockPanels, cInfo);
+		}
+
+		private void dockPanels_DragEnter(object sender, DragEventArgs e) {
 			if (e.Data.GetDataPresent("__script")) {
 				e.Effect = DragDropEffects.Move;
 			}
 		}
 
 		private void ProfileManager_onLoadProfile(object sender, EventArgs e) {
+			ProfileManager.Manager.onLoadProfile -= ProfileManager_onLoadProfile;
+
 			ProfileSetting[] cProfiles = ProfileManager.Manager.Profiles;
 			if (cProfiles != null) {
 				foreach (ProfileSetting cProfile in cProfiles) {
-					CreateScriptViewer(cProfile);
+					switch (cProfile.ScriptType) {
+						case ScriptType.Script:
+							break;
+						case ScriptType.Signal:
+							frmSignalViewer.Create(this.dockPanels, cProfile);
+							break;
+					}
 				}
 			}
 		}

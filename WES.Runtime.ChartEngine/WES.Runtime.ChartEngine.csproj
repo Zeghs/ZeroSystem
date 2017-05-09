@@ -5,8 +5,8 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{96EF7978-D1A8-41B6-AEC4-0862194665F0}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <ProjectGuid>{80F4F6B5-91C8-4841-9452-3BD99A2CD475}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Zeghs</RootNamespace>
     <AssemblyName>WES.Runtime.ChartEngine</AssemblyName>
@@ -26,34 +26,56 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\log4net\4.0\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="frmTest.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmTest.Designer.cs">
-      <DependentUpon>frmTest.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Zeghs\Drawing\Gdi.cs" />
-    <EmbeddedResource Include="frmTest.resx">
-      <DependentUpon>frmTest.cs</DependentUpon>
-    </EmbeddedResource>
+    <Compile Include="Zeghs\Actions\Behavior.cs" />
+    <Compile Include="Zeghs\Actions\DrawContainer.cs" />
+    <Compile Include="Zeghs\Actions\DrawObject.cs" />
+    <Compile Include="Zeghs\Actions\IDrawable.cs" />
+    <Compile Include="Zeghs\Actions\Move.cs" />
+    <Compile Include="Zeghs\Actions\Resize.cs" />
+    <Compile Include="Zeghs\Actions\Zoom.cs" />
+    <Compile Include="Zeghs\Chart\AbstractPaintEngine.cs" />
+    <Compile Include="Zeghs\Chart\AbstractPlot.cs" />
+    <Compile Include="Zeghs\Chart\AxisX.cs" />
+    <Compile Include="Zeghs\Chart\AxisXLabel.cs" />
+    <Compile Include="Zeghs\Chart\AxisXUnit.cs" />
+    <Compile Include="Zeghs\Chart\AxisY.cs" />
+    <Compile Include="Zeghs\Chart\ChartParameter.cs" />
+    <Compile Include="Zeghs\Chart\ChartProfile.cs" />
+    <Compile Include="Zeghs\Chart\ChartProperty.cs" />
+    <Compile Include="Zeghs\Chart\EInputDeviceEvent.cs" />
+    <Compile Include="Zeghs\Actions\IAction.cs" />
+    <Compile Include="Zeghs\Chart\InputDeviceStatus.cs" />
+    <Compile Include="Zeghs\Chart\Layer.cs" />
+    <Compile Include="Zeghs\Chart\TradeContainer.cs" />
+    <Compile Include="Zeghs\Chart\ZChart.cs" />
+    <Compile Include="Zeghs\Drawing\TextContainer.cs" />
+    <Compile Include="Zeghs\Drawing\TextObject.cs" />
+    <Compile Include="Zeghs\Informations\ChartEngineInformation.cs" />
+    <Compile Include="Zeghs\Managers\PaintManager.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -64,7 +86,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -75,7 +96,24 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\PLTypes\PLTypes.csproj">
+      <Project>{39F489FF-91E0-415D-9912-635B113B38D2}</Project>
+      <Name>PLTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WES.External.OrderPlugin\WES.External.OrderPlugin.csproj">
+      <Project>{952B0965-F7B9-4762-9B4C-F063372CCF31}</Project>
+      <Name>WES.External.OrderPlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WES.Runtime.Product\WES.Runtime.Product.csproj">
+      <Project>{7C5601E7-7118-477B-A4AC-C2E0DE9999DB}</Project>
+      <Name>WES.Runtime.Product</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WES.Runtime.Storage\WES.Runtime.Storage.csproj">
+      <Project>{9CF4E723-CAC5-4325-A32C-A75F1185B701}</Project>
+      <Name>WES.Runtime.Storage</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

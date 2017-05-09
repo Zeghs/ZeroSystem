@@ -59,9 +59,9 @@
 			this.labCopyright.ForeColor = System.Drawing.Color.White;
 			this.labCopyright.Location = new System.Drawing.Point(87, 279);
 			this.labCopyright.Name = "labCopyright";
-			this.labCopyright.Size = new System.Drawing.Size(231, 16);
+			this.labCopyright.Size = new System.Drawing.Size(230, 16);
 			this.labCopyright.TabIndex = 2;
-			this.labCopyright.Text = "Copyright © Web Electric Services 2004 - 2014";
+			this.labCopyright.Text = "Copyright © Web Electric Services 2004 - 2017";
 			// 
 			// labVersion
 			// 

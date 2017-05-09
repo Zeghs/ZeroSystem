@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using WeifenLuo.WinFormsUI.Docking;
 using Zeghs.Data;
 using Zeghs.Events;
 using Zeghs.Services;
 using Zeghs.Managers;
 
 namespace Zeghs.Forms {
-	internal partial class frmQuoteViewer : frmChildBase {
+	internal partial class frmQuoteViewer : DockContent {
 		private bool __bBusy = false;
 		private Queue<QuoteEvent> __cQueue = null;
 		private System.Timers.Timer __cTimer = null;
@@ -25,8 +26,6 @@ namespace Zeghs.Forms {
 
 			InitializeComponent();
 			InitializeSourceGrid();
-
-			this.ShowTitle = true;
 		}
 
 		private void QuoteUpdate(string exchangeName, string dataSource, IQuote quote) {

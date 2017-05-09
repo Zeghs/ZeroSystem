@@ -113,8 +113,8 @@ namespace Mitake.Stock.Decode {
 				cTick.價格類型 = b價格類型;
 				cTick.Time = cTime;
 				cTick.Price = dPrice;
-				cTick.Volume = dVolume;
 				cTick.Single = dSingle;
+				cTick.Volume = (dVolume == 0 && cPrevTick != null) ? cPrevTick.Volume : dVolume;
 				cTick.Ask = (dAskP == 0 && dAskV == 0 && cPrevTick != null) ? cPrevTick.Ask : new DOMPrice(dAskP, dAskV);
 				cTick.Bid = (dBidP == 0 && dBidV == 0 && cPrevTick != null) ? cPrevTick.Bid : new DOMPrice(dBidP, dBidV);
 

@@ -1958,6 +1958,16 @@
               [取得] 昨日最低價
             </summary>
         </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.試戳成交價">
+            <summary>
+              [取得] 盤前試戳成交價
+            </summary>
+        </member>
+        <member name="P:Mitake.Stock.Data.MitakeQuote.試戳成交量">
+            <summary>
+              [取得] 盤前試戳成交量
+            </summary>
+        </member>
         <member name="T:Mitake.Packets.LoadQuote">
             <summary>
                讀取檔案封包結構

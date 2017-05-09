@@ -61,16 +61,15 @@
 			// 
 			// dataGrid
 			// 
-			this.dataGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.dataGrid.BackColor = System.Drawing.SystemColors.Window;
 			this.dataGrid.DeleteQuestionMessage = "您確定要刪除此筆資訊?";
+			this.dataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dataGrid.EnableSort = false;
 			this.dataGrid.FixedRows = 1;
-			this.dataGrid.Location = new System.Drawing.Point(0, 22);
+			this.dataGrid.Location = new System.Drawing.Point(0, 0);
 			this.dataGrid.Name = "dataGrid";
 			this.dataGrid.SelectionMode = SourceGrid.GridSelectionMode.Row;
-			this.dataGrid.Size = new System.Drawing.Size(228, 154);
+			this.dataGrid.Size = new System.Drawing.Size(229, 176);
 			this.dataGrid.TabIndex = 1;
 			this.dataGrid.TabStop = true;
 			this.dataGrid.ToolTipText = "";
@@ -80,13 +79,8 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(229, 176);
-			this.ControlBox = false;
 			this.Controls.Add(this.dataGrid);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
 			this.Name = "frmQuoteViewer";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "報價資訊";
 			this.Load += new System.EventHandler(this.frmQuoteViewer_Load);
 			this.Resize += new System.EventHandler(this.frmQuoteViewer_Resize);

@@ -1,10 +1,19 @@
-﻿using System.Windows.Forms;
+﻿using System.Drawing;
+using System.Windows.Forms;
 
 namespace Zeghs.Settings {
 	/// <summary>
 	///   視窗狀態類別
 	/// </summary>
 	public sealed class WindowStatus {
+		/// <summary>
+		///   [取得/設定] 是否停駐在容器上
+		/// </summary>
+		public bool IsDock {
+			get;
+			set;
+		}
+
 		/// <summary>
 		///   [取得/設定] 視窗高度
 		/// </summary>

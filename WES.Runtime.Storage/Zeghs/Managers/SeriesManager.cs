@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using log4net;
@@ -67,11 +68,17 @@ namespace Zeghs.Managers {
 			File.WriteAllText(sFileName, sSettings, Encoding.UTF8);
 		}
 
+		private sealed class _AsyncEventArgs {
+			internal EventWaitHandle handle = null;
+			internal InstrumentDataRequest request;
+		}
+
 		private Queue<QuoteEvent> __cQueue = null;
 		private HashSet<string> __cDataSources = null;
 		private Dictionary<string, DataAdapter> __cMinBases = null;
 		private Dictionary<string, DataAdapter> __cDayBases = null;
 		private Dictionary<string, SeriesStorage> __cStorages = null;
+		private Dictionary<string, _AsyncEventArgs> __cAsyncArgs = null;
 
 		private bool __bBusy = false;
 		private object __oLock = new object();
@@ -83,62 +90,77 @@ namespace Zeghs.Managers {
 			__cMinBases = new Dictionary<string, DataAdapter>(128);
 			__cDayBases = new Dictionary<string, DataAdapter>(128);
 			__cStorages = new Dictionary<string, SeriesStorage>(256);
+			__cAsyncArgs = new Dictionary<string, _AsyncEventArgs>(32);
 		}
-		
+
 		/// <summary>
-		///   取得開高低收資訊列表
+		///   非同步模式取得序列商品資訊
 		/// </summary>
 		/// <param name="dataRequest">資料請求結構</param>
+		/// <param name="result">序列商品資訊回報事件</param>
+		/// <param name="useCache">是否使用快取 [預設:true](true=序列資料結構建立後保存在快取內，下次需要使用直接從快取拿取, false=重新建立序列資料結構，建立的序列資料需要自行移除否則會占用記憶體空間)</param>
+		/// <param name="args">使用者自訂參數</param>
+		public void AsyncGetSeries(InstrumentDataRequest dataRequest, EventHandler<SeriesResultEvent> result, bool useCache = true, object args = null) {
+			Task.Factory.StartNew(() => {
+				CheckLogin(dataRequest.DataFeed);
+				Complement(dataRequest);
+
+				SeriesSymbolData cSeries = InternalGetSeries(dataRequest, useCache);
+				result(this, new SeriesResultEvent(cSeries, args));
+			});
+		}
+
+		/// <summary>
+		///   取得序列商品資訊
+		/// </summary>
+		/// <param name="dataRequest">資料請求結構</param>
+		/// <param name="useCache">是否使用快取 [預設:true](true=序列資料結構建立後保存在快取內，下次需要使用直接從快取拿取, false=重新建立序列資料結構，建立的序列資料需要自行移除否則會占用記憶體空間)</param>
 		/// <returns>返回值: SeriesSymbolData 類別</returns>
-		public SeriesSymbolData GetSeries(InstrumentDataRequest dataRequest) {
-			SeriesStorage cStorage = null;
-			string sLSymbolId = dataRequest.Symbol.ToLower();
-			lock (__cStorages) {
-				if (!__cStorages.TryGetValue(sLSymbolId, out cStorage)) {
-					DataAdapter cAdapter = LoadAdapter(dataRequest);
-					if (cAdapter.Series == null) {
-						return null;  //表示沒有檔案
-					} else {
-						cStorage = new SeriesStorage(16);
-						cStorage.Add(cAdapter.Series);
-
-						__cStorages.Add(sLSymbolId, cStorage);
-					}
-				}
-			}
-
-			int iTotalSeconds = dataRequest.Resolution.TotalSeconds;
-			SeriesSymbolData cSeries = cStorage.GetSeries(iTotalSeconds);
-			if (cSeries == null) {
-				int iBaseSeconds = (iTotalSeconds < Resolution.MAX_BASE_TOTALSECONDS) ? Resolution.MIN_BASE_TOTALSECONDS : Resolution.MAX_BASE_TOTALSECONDS;
-				cSeries = cStorage.GetSeries(iBaseSeconds);
-				if (cSeries == null) {
-					DataAdapter cAdapter = LoadAdapter(dataRequest);
-					if (cAdapter.Series != null) {
-						cSeries = cAdapter.Series;
-						cStorage.Add(cSeries);
-					}
-				}
-
-				if (iBaseSeconds != iTotalSeconds) {
-					cSeries = cStorage.Create(dataRequest);
-				}
-			}
-			return cSeries;
+		public SeriesSymbolData GetSeries(InstrumentDataRequest dataRequest, bool useCache = true) {
+			CheckLogin(dataRequest.DataFeed);
+			Complement(dataRequest);
+			
+			return InternalGetSeries(dataRequest, useCache);
 		}
 
 		/// <summary>
 		///   設定報價資訊服務
 		/// </summary>
-		/// <param name="quoteService">報價資訊服務</param>
-		public void SetQuoteService(AbstractQuoteService quoteService) {
-			string sDataSource = quoteService.DataSource;
+		/// <param name="dataSource">報價資訊來源名稱</param>
+		public void SetQuoteService(string dataSource) {
 			lock (__cDataSources) {
-				if (!__cDataSources.Contains(sDataSource)) {
-					quoteService.onQuote += QuoteService_onQuote;
-					quoteService.onReset += QuoteService_onReset;
-					
-					__cDataSources.Add(sDataSource);
+				if (!__cDataSources.Contains(dataSource)) {
+					AbstractQuoteService cService = QuoteManager.Manager.GetQuoteService(dataSource);
+					if (cService != null) {
+						if (!cService.IsLogin) {
+							cService.onLoginCompleted += QuoteService_onLoginCompleted;
+						}
+
+						cService.onQuote += QuoteService_onQuote;
+						cService.onReset += QuoteService_onReset;
+
+						__cDataSources.Add(dataSource);
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		///   移除商品資訊(如果 GetSeries 不是使用 useCache 模式都需要移除)
+		/// </summary>
+		/// <param name="bars">商品資訊類別</param>
+		internal void RemoveInstrument(Instrument bars) {
+			SeriesSymbolData cSeries = bars.Source;
+
+			SeriesStorage cStorage = null;
+			string sLSymbolId = cSeries.DataRequest.Symbol.ToLower();
+			lock (__cStorages) {
+				__cStorages.TryGetValue(sLSymbolId, out cStorage);
+			}
+
+			if (cStorage != null) {
+				if (cSeries.Id > 0x4000000) {  //Id 編號從 0x40000001 開始編號(如果低於表示使用時間週期總秒數當作 Hash, 使用時間週期總秒數都是 Cache 資料所以不能移除) 
+					cStorage.Remove(cSeries.Id);
 				}
 			}
 		}
@@ -178,30 +200,142 @@ namespace Zeghs.Managers {
 			}
 		}
 
-		private DataAdapter LoadAdapter(InstrumentDataRequest dataRequest) {
-			dataRequest.Resolution = Resolution.GetBaseValue(dataRequest.Resolution);
-			DataAdapter cAdapter = new DataAdapter(dataRequest);
-			
-			SeriesSymbolData cSeries = cAdapter.Series;
-			if (cSeries == null) {
-				return null;
-			}
+		private void CheckLogin(string dataSource) {
+			if (__cDataSources.Contains(dataSource)) {
+				AbstractQuoteService cService = QuoteManager.Manager.GetQuoteService(dataSource);
+				if (cService != null) {
+					if (!cService.IsLogin) {
+						EventWaitHandle cWaitHandle = null;
+						lock (__cAsyncArgs) {
+							_AsyncEventArgs cArgs = null;
+							if (__cAsyncArgs.TryGetValue(dataSource, out cArgs)) {
+								cWaitHandle = cArgs.handle;
+							} else {
+								cArgs = new _AsyncEventArgs();
+								cWaitHandle = new ManualResetEvent(false);
+								cArgs.handle = cWaitHandle;
+								__cAsyncArgs.Add(dataSource, cArgs);
+							}
+						}
 
-			if (!cSeries.DataRequest.Range.IsAlreadyRequestAllData) {
-				cAdapter.onCompleted += DataAdapter_onCompleted;
-
-				string sLSymbolId = dataRequest.Symbol.ToLower();
-				int iTotalSeconds = cSeries.DataRequest.Resolution.TotalSeconds;
-				if (iTotalSeconds < Resolution.MAX_BASE_TOTALSECONDS) {
-					lock (__cMinBases) {
-						if (!__cMinBases.ContainsKey(sLSymbolId)) {
-							__cMinBases.Add(sLSymbolId, cAdapter);
+						if (cWaitHandle != null) {
+							cWaitHandle.WaitOne();
 						}
 					}
+				}
+			}
+		}
+
+		private void Complement(InstrumentDataRequest request) {
+			string sDataSource = request.DataFeed;
+			if (__cDataSources.Contains(sDataSource)) {
+				AbstractQuoteService cService = QuoteManager.Manager.GetQuoteService(sDataSource);
+				if (cService != null) {
+					string sSymbolId = request.Symbol;
+					IQuote cQuote = cService.Storage.GetQuote(sSymbolId);
+					if (cQuote != null && cQuote.ComplementStatus != ComplementStatus.Complemented) {
+						EventWaitHandle cWaitHandle = null;
+						lock (__cAsyncArgs) {
+							if (__cAsyncArgs.Count == 0) {
+								cService.onComplementCompleted += QuoteService_onComplementCompleted;
+							}
+
+							_AsyncEventArgs cArgs = null;
+							string sHashKey = string.Format("{0}_{1}", sDataSource, sSymbolId);
+							if (__cAsyncArgs.TryGetValue(sHashKey, out cArgs)) {
+								cWaitHandle = cArgs.handle;
+							} else {
+								if (cQuote.ComplementStatus == ComplementStatus.NotComplement) {
+									cArgs = new _AsyncEventArgs();
+									cArgs.request = request;
+									cWaitHandle = new ManualResetEvent(false);
+									cArgs.handle = cWaitHandle;
+									__cAsyncArgs.Add(sHashKey, cArgs);
+
+									cService.AddSubscribe(sSymbolId);
+									cService.Complement(sSymbolId);
+								}
+							}
+						}
+
+						if (cWaitHandle != null) {
+							cWaitHandle.WaitOne();
+						}
+					}
+				}
+			}
+		}
+
+		private SeriesSymbolData InternalGetSeries(InstrumentDataRequest dataRequest, bool useCache) {
+			SeriesStorage cStorage = null;
+			string sLSymbolId = dataRequest.Symbol.ToLower();
+			lock (__cStorages) {
+				if (!__cStorages.TryGetValue(sLSymbolId, out cStorage)) {
+					cStorage = new SeriesStorage(16);
+					__cStorages.Add(sLSymbolId, cStorage);
+				}
+			}
+
+			SeriesSymbolData cSeries = null;
+			int iTotalSeconds = dataRequest.Resolution.TotalSeconds;
+			if (useCache) {  //是否使用快取
+				cSeries = cStorage.GetSeries(iTotalSeconds);
+				if (cSeries == null) {
+					int iBaseSeconds = (iTotalSeconds < Resolution.MAX_BASE_TOTALSECONDS) ? Resolution.MIN_BASE_TOTALSECONDS : Resolution.MAX_BASE_TOTALSECONDS;
+					cSeries = cStorage.GetSeries(iBaseSeconds);
+					if (cSeries == null) {
+						DataAdapter cAdapter = LoadAdapter(dataRequest);
+						cSeries = cAdapter.Series;
+						cStorage.Add(cSeries);
+					}
+
+					if (iBaseSeconds != iTotalSeconds) {
+						cSeries = cStorage.Create(dataRequest);
+					}
 				} else {
-					lock (__cDayBases) {
-						if (!__cDayBases.ContainsKey(sLSymbolId)) {
-							__cDayBases.Add(sLSymbolId, cAdapter);
+					cSeries.OnRequest(new DataRequestEvent(dataRequest));  //如果已經存在則請求使用者需要的歷史資料區間(請求方法會檢查目前已下載的歷史資料區間是否足夠, 如果使用者需要的歷史資料區間比較大會向伺服器請求)
+				}
+			} else {
+				DataAdapter cAdapter = LoadAdapter(dataRequest, false);  //重新建立新的基礎週期序列資料(不使用快取, 不保存至快取內, 使用完畢之後立即 Dispose)
+				cSeries = cAdapter.Series;  //取得新的基礎周期序列資料
+
+				int iBaseSeconds = (iTotalSeconds < Resolution.MAX_BASE_TOTALSECONDS) ? Resolution.MIN_BASE_TOTALSECONDS : Resolution.MAX_BASE_TOTALSECONDS;
+				if (iBaseSeconds != iTotalSeconds) {
+					SeriesSymbolData cTargetSeries = cSeries.CreateSeries(dataRequest);  //使用 InstrumentDataRequest 建立新的其他週期序列資料
+					cSeries.Merge(cTargetSeries);  //將基礎周期序列資料合併至新的其他週期序列資料
+					cSeries.Dispose();  //釋放基礎周期序列資料
+
+					cSeries = cTargetSeries;
+				}
+
+				cStorage.Add(cSeries, true);  //保存序列資料(存放在 SeriesStorage 內的序列資料才會自動合併最新的即時資訊報價)
+				cAdapter.Dispose();  //釋放資料配置者類別
+			}
+			return cSeries;
+		}
+
+		private DataAdapter LoadAdapter(InstrumentDataRequest dataRequest, bool useCache = true) {
+			dataRequest.Resolution = Resolution.GetBaseValue(dataRequest.Resolution);
+			DataAdapter cAdapter = new DataAdapter(dataRequest);
+
+			if (useCache) {  //使用快取(true=建立完 DataAdapter 之後，將其保存至快取內以方便後續請求時使用)
+				InstrumentDataRequest cDataRequest = cAdapter.Series.DataRequest;
+				if (!cDataRequest.Range.IsAlreadyRequestAllData) {
+					cAdapter.onCompleted += DataAdapter_onCompleted;
+
+					string sLSymbolId = dataRequest.Symbol.ToLower();
+					int iTotalSeconds = cDataRequest.Resolution.TotalSeconds;
+					if (iTotalSeconds < Resolution.MAX_BASE_TOTALSECONDS) {
+						lock (__cMinBases) {
+							if (!__cMinBases.ContainsKey(sLSymbolId)) {
+								__cMinBases.Add(sLSymbolId, cAdapter);
+							}
+						}
+					} else {
+						lock (__cDayBases) {
+							if (!__cDayBases.ContainsKey(sLSymbolId)) {
+								__cDayBases.Add(sLSymbolId, cAdapter);
+							}
 						}
 					}
 				}
@@ -230,11 +364,54 @@ namespace Zeghs.Managers {
 			}
 		}
 
+		private void QuoteService_onComplementCompleted(object sender, QuoteComplementCompletedEvent e) {
+			AbstractQuoteService cService = sender as AbstractQuoteService;
+			string sHashKey = string.Format("{0}_{1}", e.DataSource, e.SymbolId);
+			
+			_AsyncEventArgs cArgs = null;
+			lock (__cAsyncArgs) {
+				if (__cAsyncArgs.TryGetValue(sHashKey, out cArgs)) {
+					__cAsyncArgs.Remove(sHashKey);
+
+					if (__cAsyncArgs.Count == 0) {
+						cService.onComplementCompleted -= QuoteService_onComplementCompleted;
+					}
+				}
+			}
+
+			if (cArgs != null) {
+				EventWaitHandle cWaitHandle = cArgs.handle;
+				if (cWaitHandle != null) {
+					cWaitHandle.Set();
+					cWaitHandle.Dispose();
+				}
+			}
+		}
+
+		private void QuoteService_onLoginCompleted(object sender, EventArgs e) {
+			AbstractQuoteService cService = sender as AbstractQuoteService;
+			cService.onLoginCompleted -= QuoteService_onLoginCompleted;
+			
+			_AsyncEventArgs cArgs = null;
+			string sDataSource = cService.DataSource;
+			lock (__cAsyncArgs) {
+				if (__cAsyncArgs.TryGetValue(sDataSource, out cArgs)) {
+					__cAsyncArgs.Remove(sDataSource);
+				}
+			}
+
+			if (cArgs != null) {
+				EventWaitHandle cWaitHandle = cArgs.handle;
+				cWaitHandle.Set();
+				cWaitHandle.Dispose();
+			}
+		}
+
 		private void QuoteService_onQuote(object sender, QuoteEvent e) {
 			lock (__cQueue) {
 				__cQueue.Enqueue(e);
 			}
-			
+
 			AsyncMergeTick();
 		}
 
@@ -247,4 +424,4 @@ namespace Zeghs.Managers {
 			}
 		}
 	}
-}  //250行
+}  //427行

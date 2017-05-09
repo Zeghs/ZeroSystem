@@ -99,6 +99,18 @@ namespace Zeghs.Data {
 			}
 		}
 
+		/// <summary>
+		///   [取得] Bars 資料總個數
+		/// </summary>
+		internal int BarsCount {
+			get {
+				return this.BarsSize - (__cCloses.Count - __cIndexer.Count);
+			}
+		}
+
+		/// <summary>
+		///   [取得] Bars 資料容器大小(包含預留的即時資料空間)
+		/// </summary>
 		internal int BarsSize {
 			get {
 				return __cCloses.Count - __iIgnoreBarsCount - (__cIndexer.AdjustTotalCount - __iBaseAdjustTotal);
@@ -155,4 +167,4 @@ namespace Zeghs.Data {
 			}
 		}
 	}
-}  //158行
+}  //170行

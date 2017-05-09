@@ -11,17 +11,12 @@ using Zeghs.Settings;
 
 namespace Zeghs.Forms {
 	internal partial class frmCreateScriptSetting : Form {
+		private static Dictionary<string, string> __cAddSymbolIds = new Dictionary<string, string>(64);
+
+		private bool __bEdit = true;
+		private bool __bNewSetting = false;  //是否為新建立的設定
 		private ChartSetting __cChartSetting = null;
 		private RequestSetting __cRequestSetting = null;
-		private Dictionary<string, string> __cAddSymbolIds = null;
-
-		/// <summary>
-		///   [取得/設定] 資料來源編號
-		/// </summary>
-		internal int DataStream {
-			get;
-			set;
-		}
 
 		/// <summary>
 		///   [取得] 圖表設定值
@@ -33,6 +28,14 @@ namespace Zeghs.Forms {
 		}
 
 		/// <summary>
+		///   [取得/設定] 最大 Layer 圖層個數(根據已經新增的圖表資訊內的 LayerIndex 判斷目前使用到的最大圖層個數)
+		/// </summary>
+		internal int MaxLayerCount {
+			get;
+			set;
+		}
+
+		/// <summary>
 		///   [取得] 請求設定值
 		/// </summary>
 		internal RequestSetting RequestSetting {
@@ -41,55 +44,21 @@ namespace Zeghs.Forms {
 			}
 		}
 
-		internal frmCreateScriptSetting() {
-			__cChartSetting = new ChartSetting();
-			__cRequestSetting = new RequestSetting();
-			__cAddSymbolIds = new Dictionary<string, string>(64);
+		internal frmCreateScriptSetting()
+			: this(new ChartSetting(), new RequestSetting(), true) {
+				__bEdit = false;
+		}
+
+		internal frmCreateScriptSetting(ChartSetting chartSetting, RequestSetting requestSetting, bool isNewSetting) {
+			__cChartSetting = chartSetting;
+			__cRequestSetting = requestSetting;
+			__bNewSetting = isNewSetting;
 
 			InitializeComponent();
 			InitializeSourceGrid();
 		}
 
-		private void LoadProducts(string dataSource) {
-			List<AbstractExchange> cExchanges = ProductManager.Manager.Exchanges;
-
-			int iCount = cExchanges.Count;
-			if (iCount > 0) {
-				for (int i = 0; i < iCount; i++) {
-					AbstractExchange cExchange = cExchanges[i];
-
-					int iIndex = 0;
-					string sExchangeName = cExchange.ShortName;
-					ESymbolCategory[] cCategorys = Enum.GetValues(typeof(ESymbolCategory)) as ESymbolCategory[];
-					foreach (ESymbolCategory cCategory in cCategorys) {
-						List<string> cSymbols = cExchange.GetProductClassify(cCategory);
-						if (cSymbols != null && cSymbols.Count > 0) {
-							++iIndex;
-							tabControl_Products.TabPages.Add(cCategory.ToString());
-							if (iIndex == __cSources.Count) {
-								__cSources.Add(new SimpleBoundList<_ProductInfo>(cSymbols.Count));
-							}
-
-							foreach (string sSymbolId in cSymbols) {
-								AbstractProductProperty cProperty = cExchange.GetProperty(sSymbolId, dataSource);
-								if (cProperty != null) {
-									_ProductInfo cProductInfo = new _ProductInfo() {
-										ProductId = sSymbolId,
-										Description = cProperty.Description,
-										ExchangeName = sExchangeName
-									};
-
-									__cSources[0].Add(cProductInfo);
-									__cSources[iIndex].Add(cProductInfo);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
-		private void SetChartSetting() {
+		private void GetChartSetting() {
 			PenStyle[] cPenStyles = new PenStyle[2];
 			int iChartIndex = listChartType.SelectedIndex;
 			switch (iChartIndex) {
@@ -104,7 +73,7 @@ namespace Zeghs.Forms {
 					cPenStyles = new PenStyle[3];
 					break;
 				case 3:  //收盤線
-					__cChartSetting.ChartType = EChartType.CloseLine;
+					__cChartSetting.ChartType = EChartType.ClosingLine;
 					break;
 			}
 
@@ -114,8 +83,11 @@ namespace Zeghs.Forms {
 				cPenStyles[2] = new PenStyle(colorLine.SelectedColor, comboLineWidth.SelectedIndex + 1);
 			}
 			__cChartSetting.PenStyles = cPenStyles;
+			__cChartSetting.LegendColor = colorLegend.SelectedColor;
 
-			__cChartSetting.IsSubChart = listSubChart.SelectedIndex == 0;
+			bool bSubChart = listSubChart.SelectedIndex == 0;
+			__cChartSetting.IsSubChart = bSubChart;
+			__cChartSetting.LayerIndex = comboLayer.SelectedIndex;
 			__cChartSetting.IsShowNewPrice = checkShowNewPrice.Checked;
 
 			//座標資訊設定
@@ -167,7 +139,7 @@ namespace Zeghs.Forms {
 			__cChartSetting.Axis = cAxisSetting;
 		}
 
-		private bool SetRequestSetting() {
+		private bool GetRequestSetting() {
 			string sDataSources = comboDataSources.Text;
 			if (sDataSources.Length == 0) {
 				MessageBox.Show(__sMessageContent_001, __sMessageHeader_001, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -188,7 +160,7 @@ namespace Zeghs.Forms {
 			DateTime cEndDate = DateTime.Now.Date;
 			if (radioRange2.Checked) {
 				if (cEndDate == dtEndDate.Value.Date) {
-					cEndDate = new DateTime(3000, 12, 31);
+					cEndDate = RequestSetting.MAX_REQUEST_LASTDATE;
 				}
 				__cRequestSetting.Range = string.Format("fromTo,{0};{1}", cEndDate.ToString("yyyy/MM/dd"), dtStartDate.Value.ToString("yyyy/MM/dd"));
 			} else {
@@ -203,13 +175,52 @@ namespace Zeghs.Forms {
 					MessageBox.Show(__sMessageContent_004, __sMessageHeader_001, MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return false;
 				}
-				
+
 				if (cEndDate == dtTODate.Value.Date) {
-					cEndDate = new DateTime(3000, 12, 31);
+					cEndDate = RequestSetting.MAX_REQUEST_LASTDATE;
 				}
 				__cRequestSetting.Range = string.Format("{0},{1};{2}", (comboRequestMode.SelectedIndex == 0) ? "barsBack" : "daysBack", cEndDate.ToString("yyyy/MM/dd"), iCount);
 			}
 			return true;
+		}
+
+		private void LoadProducts(string dataSource) {
+			List<AbstractExchange> cExchanges = ProductManager.Manager.Exchanges;
+
+			int iCount = cExchanges.Count;
+			if (iCount > 0) {
+				for (int i = 0; i < iCount; i++) {
+					AbstractExchange cExchange = cExchanges[i];
+
+					int iIndex = 0;
+					string sExchangeName = cExchange.ShortName;
+					ESymbolCategory[] cCategorys = Enum.GetValues(typeof(ESymbolCategory)) as ESymbolCategory[];
+					foreach (ESymbolCategory cCategory in cCategorys) {
+						List<string> cSymbols = cExchange.GetProductClassify(cCategory);
+						if (cSymbols != null && cSymbols.Count > 0) {
+							++iIndex;
+							tabControl_Products.TabPages.Add(cCategory.ToString());
+							if (iIndex == __cSources.Count) {
+								__cSources.Add(new SimpleBoundList<_ProductInfo>(cSymbols.Count));
+							}
+
+							foreach (string sSymbolId in cSymbols) {
+								AbstractProductProperty cProperty = cExchange.GetProperty(sSymbolId, dataSource);
+								if (cProperty != null) {
+									_ProductInfo cProductInfo = new _ProductInfo() {
+										ProductId = sSymbolId,
+										Description = cProperty.Description,
+										ExchangeName = sExchangeName
+									};
+
+									__cSources[0].Add(cProductInfo);
+									__cSources[iIndex].Add(cProductInfo);
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 
 		private void RefreshGrid() {
@@ -224,18 +235,116 @@ namespace Zeghs.Forms {
 			__cCurrentPages = cPage;
 		}
 
-		private void frmCreateScriptSetting_Load(object sender, EventArgs e) {
-			List<AbstractQuoteService> cServices = QuoteManager.Manager.QuoteServices;
-			int iCount = cServices.Count;
-			for (int i = 0; i < iCount; i++) {
-				AbstractQuoteService cService = cServices[i];
-				comboDataSources.Items.Add(cService.DataSource);
+		private void SetChartSetting() {
+			bool bCandlestick = false;
+			switch (__cChartSetting.ChartType) {
+				case EChartType.OHLC:  //美國線
+					listChartType.SelectedIndex = 0;
+					break;
+				case EChartType.HLC:  //HLC線
+					listChartType.SelectedIndex = 1;
+					break;
+				case EChartType.Candlestick:  //蠟燭線
+					listChartType.SelectedIndex = 2;
+					bCandlestick = true;
+					break;
+				case EChartType.ClosingLine:  //收盤線
+					listChartType.SelectedIndex = 3;
+					break;
 			}
 
+			PenStyle[] cPenStyles = __cChartSetting.PenStyles;
+			colorUp.SelectedColor = cPenStyles[0].Color;
+			comboUpWidth.SelectedIndex = cPenStyles[0].Width - 1;
+			colorDown.SelectedColor = cPenStyles[1].Color;
+			comboDownWidth.SelectedIndex = cPenStyles[1].Width - 1;
+			if (bCandlestick) {
+				colorLine.SelectedColor = cPenStyles[2].Color;
+				comboLineWidth.SelectedIndex = cPenStyles[2].Width - 1;
+			}
+			colorLegend.SelectedColor = __cChartSetting.LegendColor;
+
+			comboLayer.SelectedIndex = (__cChartSetting.IsSubChart) ? __cChartSetting.LayerIndex : 0;
+			listSubChart.SelectedIndex = (__cChartSetting.IsSubChart) ? 0 : 1;
+			checkShowNewPrice.Checked = __cChartSetting.IsShowNewPrice;
+
+			//座標資訊設定
+			AxisSetting cAxisSetting = __cChartSetting.Axis;
+			switch (cAxisSetting.AxisScope) {
+				case EAxisScope.CurrentScope:  //目前區間
+					listAxisRange.SelectedIndex = 0;
+					break;
+				case EAxisScope.AllScope:  //全部數列
+					listAxisRange.SelectedIndex = 1;
+					break;
+				case EAxisScope.ChangeScope:  //變動大小
+					listAxisRange.SelectedIndex = 2;
+					break;
+				case EAxisScope.PriceScaleScope:  //價格區間
+					listAxisRange.SelectedIndex = 3;
+					break;
+			}
+
+			if (cAxisSetting.MarginTop == 0 && cAxisSetting.MarginBottom == 0) {
+				checkMargin.Checked = false;
+				txtTopMargin.Text = txtBottomMargin.Text = "0";
+			} else {
+				checkMargin.Checked = true;
+				txtTopMargin.Text = cAxisSetting.MarginTop.ToString();
+				txtBottomMargin.Text = cAxisSetting.MarginBottom.ToString();
+			}
+
+			if (cAxisSetting.ScaleMode != EAxisScaleMode.None) {
+				checkManualAxis.Checked = true;
+
+				switch (cAxisSetting.ScaleMode) {
+					case EAxisScaleMode.ScaleGap:
+						radioScaleGap.Checked = true;
+						txtScaleGap.Text = cAxisSetting.ScaleValue.ToString();
+						break;
+					case EAxisScaleMode.ScaleCount:
+						radioScaleCount.Checked = true;
+						txtScaleCount.Text = cAxisSetting.ScaleValue.ToString();
+						break;
+				}
+			}
+		}
+
+		private void SetRequestSetting() {
+			comboDataSources.Items.Add(__cRequestSetting.DataFeed);
+			comboDataSources.SelectedIndex = 0;
+			comboProduct.Items.Add(__cRequestSetting.SymbolId);
+			comboProduct.SelectedIndex = 0;
+
+			string[] sPeriods = __cRequestSetting.DataPeriod.Split(',');
+			txtPeriod.Text = sPeriods[0];
+			comboResolution.Text = sPeriods[1];
+
+			string[] sRangeModes = __cRequestSetting.Range.Split(',');
+			string[] sRanges = sRangeModes[1].Split(';');
+
+			DateTime cEndDate = DateTime.Parse(sRanges[0]);
+			dtEndDate.Value = (cEndDate == RequestSetting.MAX_REQUEST_LASTDATE) ? DateTime.Today : cEndDate;
+			if (sRangeModes[0].Equals("fromTo")) {
+				radioRange2.Checked = true;
+				dtStartDate.Value = DateTime.Parse(sRanges[1]);
+			} else {
+				radioRange1.Checked = true;
+				comboRequestMode.SelectedIndex = (sRangeModes[0].Equals("barsBack")) ? 0 : 1;
+				txtCount.Text = sRanges[1];
+			}
+		}
+
+		private void frmCreateScriptSetting_Load(object sender, EventArgs e) {
 			//列舉所有圖表周期
 			EResolution[] cResolutions = Enum.GetValues(typeof(EResolution)) as EResolution[];
 			foreach (EResolution cResolution in cResolutions) {
 				comboResolution.Items.Add(cResolution.ToString());
+			}
+
+			//加入圖層索引資料
+			for (int i = 1; i <= this.MaxLayerCount; i++) {
+				comboLayer.Items.Add(i);
 			}
 
 			//加入線寬資料資料
@@ -245,28 +354,63 @@ namespace Zeghs.Forms {
 				comboUpWidth.Items.Add(i);
 			}
 
-			//設定資料來源編號
-			comboDataStream.Text = DataStream.ToString();
-			
-			//設定 ComboBox & listBox 索引值
-			comboDataSources.SelectedIndex = 0;
+			comboUpWidth.SelectedIndex = 0;
 			comboDownWidth.SelectedIndex = 0;
 			comboLineWidth.SelectedIndex = 0;
-			comboResolution.SelectedIndex = 0;
-			comboRequestMode.SelectedIndex = 0;
-			comboTimeZone.SelectedIndex = 0;
-			comboUpWidth.SelectedIndex = 0;
-			listSubChart.SelectedIndex = 0;
-			listChartType.SelectedIndex = 0;
-			listAxisRange.SelectedIndex = 0;
 
 			//設定顏色值
+			colorLegend.SelectedColor = Color.Yellow;
 			colorUp.SelectedColor = Color.Red;
 			colorDown.SelectedColor = Color.Lime;
 			colorLine.SelectedColor = Color.Gray;
-			
-			//預設選取第一種區間模式
-			radioRange1.Checked = true;
+
+			comboTimeZone.SelectedIndex = 0;
+
+			if (__bEdit) {
+				SetChartSetting();
+				SetRequestSetting();
+
+				if (!__bNewSetting) {
+					foreach (Control cControl in pageItem_Product.Controls) {
+						cControl.Enabled = false;
+					}
+
+					foreach (Control cControl in pageItem_Settings.Controls) {
+						cControl.Enabled = false;
+					}
+					listSubChart.Enabled = true;
+					listChartType.Enabled = false;
+				}
+			} else {
+				//加入所有已經啟動的報價資料來源名稱
+				List<AbstractQuoteService> cServices = QuoteManager.Manager.QuoteServices;
+				int iCount = cServices.Count;
+				for (int i = 0; i < iCount; i++) {
+					AbstractQuoteService cService = cServices[i];
+					comboDataSources.Items.Add(cService.DataSource);
+				}
+
+				//加入使用者之前所選過的商品名稱
+				if (__cAddSymbolIds.Count > 0) {
+					foreach (string sSymbolId in __cAddSymbolIds.Keys) {
+						comboProduct.Items.Insert(0, sSymbolId);
+					}
+					comboProduct.SelectedIndex = 0;
+				}
+
+				//設定 ComboBox & listBox 索引值
+				comboLayer.Items.Add("New");
+				comboLayer.SelectedIndex = 0;
+				comboDataSources.SelectedIndex = 0;
+				comboResolution.SelectedIndex = 0;
+				comboRequestMode.SelectedIndex = 0;
+				listSubChart.SelectedIndex = 0;
+				listChartType.SelectedIndex = 2;
+				listAxisRange.SelectedIndex = 3;
+
+				//預設選取第一種區間模式
+				radioRange1.Checked = true;
+			}
 		}
 
 		private void comboDataSources_SelectedIndexChanged(object sender, EventArgs e) {
@@ -290,6 +434,12 @@ namespace Zeghs.Forms {
 			labLine.Visible = bVisible;
 			colorLine.Visible = bVisible;
 			comboLineWidth.Visible = bVisible;
+		}
+
+		private void listSubChart_SelectedIndexChanged(object sender, EventArgs e) {
+			if (__bNewSetting) {
+				comboLayer.Enabled = listSubChart.SelectedIndex == 0;
+			}
 		}
 
 		private void radioRange1_CheckedChanged(object sender, EventArgs e) {
@@ -340,12 +490,14 @@ namespace Zeghs.Forms {
 		}
 
 		private void btnOK_Click(object sender, EventArgs e) {
-			bool bRet = SetRequestSetting();  //設定請求資訊
-			if (!bRet) {
-				return;
+			if (__bNewSetting) {
+				bool bRet = GetRequestSetting();  //設定請求資訊
+				if (!bRet) {
+					return;
+				}
 			}
 
-			SetChartSetting();  //設定圖表資訊
+			GetChartSetting();  //設定圖表資訊
 
 			this.DialogResult = DialogResult.OK;
 		}

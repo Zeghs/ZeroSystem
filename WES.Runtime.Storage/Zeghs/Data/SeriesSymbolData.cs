@@ -11,6 +11,7 @@ namespace Zeghs.Data {
 	///   商品資料類別(存放開高低收量資訊)
 	/// </summary>
 	public sealed class SeriesSymbolData : ISeriesSymbolData, IDisposable {
+		private static int __iLastSeriesId = 0;  //存放最後一個 Series Id
 		private static void MergeSeries(SeriesSymbolData target, DateTime period, double open, double high, double low, double close, double volume, bool isNewBars, bool isRealtime) {
 			if (isNewBars) {
 				target.AddSeries(period, open, high, low, close, volume, isRealtime);
@@ -97,6 +98,11 @@ namespace Zeghs.Data {
 			}
 		}
 
+		internal int Id {
+			get;
+			set;
+		}
+
 		internal SeriesIndexer Indexer {
 			get;
 			private set;
@@ -132,6 +138,8 @@ namespace Zeghs.Data {
 		}
 
 		internal SeriesSymbolData(InstrumentDataRequest dataRequest, InstrumentSettings settings = null) {
+			this.Id = 0x40000000 | ++__iLastSeriesId;
+
 			this.Indexer = new SeriesIndexer();
 			__cDataRequest = dataRequest;
 			__cSettings = ((settings == null) ? new InstrumentSettings(ref __cDataRequest) : settings.Create(ref __cDataRequest));
@@ -247,7 +255,6 @@ namespace Zeghs.Data {
 
 			if (iTargetCount == 0) {
 				target.__cDataRequest.Range.To = __cDataRequest.Range.To;
-
 				Queue<DateTime> cQueue = target.CreateRealtimePeriods();
 				for (int i = __cDataRequest.Range.Count; i <= Indexer.RealtimeIndex; i++) {
 					DateTime cBaseTime = __cTimes[i];
@@ -256,6 +263,7 @@ namespace Zeghs.Data {
 				}
 			}
 
+			target.__dOVolume = __dOVolume;        //更新最後參考總量(只要低於最後總量的 tick 都不會再被合併進去 Bars)
 			target.__cUpdateTime = __cUpdateTime;  //更新目標資訊的最後更新時間(最後更新時間會牽涉到 Bars 的狀態 Close or Inside)
 			target.Initialized = true;
 		}
@@ -396,10 +404,10 @@ namespace Zeghs.Data {
 		}
 
 		private void Series_onRequest(object sender, SeriesRequestEvent e) {
-			int iRequestCount = ~e.Position + 1;
-			int iPosition = iRequestCount + __cDataRequest.Range.Count;
-			
-			OnRequest(new DataRequestEvent(iPosition, iRequestCount, __cDataRequest.Resolution.Rate));
+			int iRequestCount = ~e.Position + 1;  //e.Position為負值(往前100根 Bar = -100), 使用補數運算變成 100 作為請求 Bars 資料個數
+			int iTotals = iRequestCount + __cDataRequest.Range.Count;  //資料總個數(欲請求個數 + 目前已下載完後的資料個數)
+
+			OnRequest(new DataRequestEvent(iRequestCount, iTotals, __cDataRequest.Resolution.Rate));  //呼叫請求方法
 		}
 	}
-}  //405行
+}  //413行

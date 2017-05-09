@@ -91,7 +91,8 @@ namespace Zeghs.Managers {
 			AbstractQuoteService cQuoteService = null;
 			string sDataSource = quoteServiceInformation.DataSource;
 			if (sDataSource == null) {
-				Assembly cAssembly = Assembly.LoadFile(Path.GetFullPath(quoteServiceInformation.Location));
+				string sFilename = Path.GetFileName(quoteServiceInformation.Location);
+				Assembly cAssembly = File.Exists(sFilename) ? Assembly.LoadFile(Path.GetFullPath(sFilename)) : Assembly.LoadFile(Path.GetFullPath(quoteServiceInformation.Location));
 				Type cType = cAssembly.GetType(quoteServiceInformation.Name);
 
 				cQuoteService = Activator.CreateInstance(cType) as AbstractQuoteService;

@@ -7,6 +7,8 @@ namespace Zeghs.Settings {
 	///   資料請求設定類別
 	/// </summary>
 	public sealed class RequestSetting {
+		internal readonly static DateTime MAX_REQUEST_LASTDATE = new DateTime(2099, 12, 31);
+
 		/// <summary>
 		///   將設定檔轉換為 InstrumentDataRequest 列表的格式
 		/// </summary>
@@ -29,17 +31,21 @@ namespace Zeghs.Settings {
 
 				string[] sParams = cRequest.Range.Split(',');
 				string sMode = sParams[0];
-				string[] sArgs = sParams[1].Split(';'); 
+				string[] sArgs = sParams[1].Split(';');
+				DateTime cEndDate = DateTime.Parse(sArgs[0]);
+				if (cEndDate == MAX_REQUEST_LASTDATE) {
+					cEndDate = DateTime.Today;
+				}
 
 				switch(sMode) {
 					case "barsBack":
-						cDataRequest.Range = DataRequest.CreateBarsBack(DateTime.Parse(sArgs[0]), int.Parse(sArgs[1]));
+						cDataRequest.Range = DataRequest.CreateBarsBack(cEndDate, int.Parse(sArgs[1]));
 						break;
 					case "daysBack":
-						cDataRequest.Range = DataRequest.CreateDaysBack(DateTime.Parse(sArgs[0]), int.Parse(sArgs[1]));
+						cDataRequest.Range = DataRequest.CreateDaysBack(cEndDate, int.Parse(sArgs[1]));
 						break;
 					case "fromTo":
-						cDataRequest.Range = DataRequest.CreateFromTo(DateTime.Parse(sArgs[1]), DateTime.Parse(sArgs[0]));
+						cDataRequest.Range = DataRequest.CreateFromTo(DateTime.Parse(sArgs[1]), cEndDate);
 						break;
 				}
 				cResult.Add(cDataRequest);

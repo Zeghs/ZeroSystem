@@ -21,9 +21,11 @@ namespace Test {
 		private static ManualResetEvent __cManualReset = new ManualResetEvent(false);
 
 		private static SignalObject CreateSignalObject() {
-			SignalObject cSignalObject = new __TestScript_Signal(new object());
+			//SignalObject cSignalObject = new __AvgDealCount_Signal(new object());
+			//SignalObject cSignalObject = new __TestScript_Signal(new object());
 			//SignalObject cSignalObject = new __BIAS_Signal(new object());
-			//SignalObject cSignalObject = new __TEST_Signal(new object());
+			SignalObject cSignalObject = new __TEST_Signal(new object());
+			//SignalObject cSignalObject = new __Manual_Signal(new object());
 			//SignalObject cSignalObject = new __Liberty_Signal(new object());
 			//SignalObject cSignalObject = new __Martingale_Signal(new object());
 			//SignalObject cSignalObject = new __WeekOption_Signal(new object());

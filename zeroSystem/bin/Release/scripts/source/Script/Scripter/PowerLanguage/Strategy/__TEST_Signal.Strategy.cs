@@ -212,9 +212,10 @@ namespace PowerLanguage.Strategy {
 			//}
 
 			///*
-			if (Bars.Time[0].Date == new DateTime(2016, 6, 16)) {
+			if (Bars.Time[0].Date == new DateTime(2017, 4, 7)) {
 				int iMinute = Bars.Time[0].Hour * 60 + Bars.Time[0].Minute;
 				cBuilder.Append(iMinute).Append(',').Append(Bars.Open[0]).Append(',').Append(Bars.High[0]).Append(',').Append(Bars.Low[0]).Append(',').Append(Bars.Close[0]).Append(',').Append(Bars.Volume[0]).AppendLine();
+				//cBuilder.Append(Bars.Time[0].ToString("yyyy/MM/dd HH:mm:ss")).Append(',').Append(Bars.Open[0]).Append(',').Append(Bars.High[0]).Append(',').Append(Bars.Low[0]).Append(',').Append(Bars.Close[0]).Append(',').Append(Bars.Volume[0]).AppendLine();
 			}
 			System.Console.WriteLine(Bars.Time[0].ToString("yyyy-MM-dd HH:mm:ss") + " " + string.Format("{0,8:0.00}", Math.Round(Bars.Open[0], 2)) + " " + string.Format("{0,8:0.00}", Math.Round(Bars.High[0], 2)) + " " + string.Format("{0,8:0.00}", Math.Round(Bars.Low[0], 2)) + " " + string.Format("{0,8:0.00}", Math.Round(Bars.Close[0], 2)) + " " + string.Format("{0,7}", Math.Round(Bars.Volume[0], 2)));
 			// */

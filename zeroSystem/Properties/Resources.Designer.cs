@@ -109,6 +109,20 @@ namespace ZeroSystem.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap frmMain_toolbar_toolItem_console {
+            get {
+                object obj = ResourceManager.GetObject("frmMain_toolbar_toolItem_console", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap frmMain_toolbar_toolItem_logger {
+            get {
+                object obj = ResourceManager.GetObject("frmMain_toolbar_toolItem_logger", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap frmMain_toolbar_toolItem_productManager {
             get {
                 object obj = ResourceManager.GetObject("frmMain_toolbar_toolItem_productManager", resourceCulture);
@@ -116,9 +130,23 @@ namespace ZeroSystem.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap frmMain_toolbar_toolItem_quote {
+            get {
+                object obj = ResourceManager.GetObject("frmMain_toolbar_toolItem_quote", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap frmMain_toolbar_toolItem_quoteManager {
             get {
                 object obj = ResourceManager.GetObject("frmMain_toolbar_toolItem_quoteManager", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap frmMain_toolbar_toolItem_script {
+            get {
+                object obj = ResourceManager.GetObject("frmMain_toolbar_toolItem_script", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
