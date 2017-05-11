@@ -60,6 +60,15 @@ namespace Zeghs.Chart {
 		}
 
 		/// <summary>
+		///   [取得] 自訂繪圖工具集合(繪圖引擎自訂的圖表繪製工具)
+		/// </summary>
+		public Dictionary<string, IAction> CustomDrawTools {
+			get {
+				return __cBehavior.CustomActions;
+			}
+		}
+
+		/// <summary>
 		///   [取得] Layer 圖層陣列
 		/// </summary>
 		public List<Layer> Layers {
@@ -79,6 +88,7 @@ namespace Zeghs.Chart {
 
 			__cLayers = new List<Layer>(8);
 			__cStatus = new InputDeviceStatus();
+
 			__cBehavior = new Behavior(this, context, __cStatus);
 			__cBehavior.SetCustomActions(__cPainter.GetActions());
 
@@ -342,8 +352,8 @@ namespace Zeghs.Chart {
 		private void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
-
 				if (disposing) {
+					__bBusy = true;
 					if (__cInstrument != null) {
 						__cInstrument.ClearResetEvent(onReset);
 					}

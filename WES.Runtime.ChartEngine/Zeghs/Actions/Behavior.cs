@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using Zeghs.Chart;
@@ -23,6 +24,12 @@ namespace Zeghs.Actions {
 			}
 		}
 
+		internal Dictionary<string, IAction> CustomActions {
+			get {
+				return __cCustoms;
+			}
+		}
+
 		internal bool Enabled {
 			get;
 			set;
@@ -30,7 +37,6 @@ namespace Zeghs.Actions {
 
 		internal Behavior(ZChart chart, Control context, InputDeviceStatus status) {
 			__cDrawContainer = new DrawContainer();
-			__cCustoms = new Dictionary<string, IAction>(16);
 			__cParameter = new ChartParameter(chart, context, this, status);
 
 			__cActions = new List<IAction>(8);
@@ -115,16 +121,15 @@ namespace Zeghs.Actions {
 				}
 			} else {
 				if (__cCustoms != null && name != null && __cCustoms.ContainsKey(name)) {
-					if (name.Equals("Cross")) {
-						bRet = false;
-					} else {
-						__cParameter.CustomPen = pen;
+					if (!name.Equals("Cross")) {
 						__cParameter.CustomPainter = name;
+						__cParameter.CustomPen = pen;
 					}
 				} else {
 					__cCurrent = null;
 					__cParameter.IsAction = false;
 					__cParameter.CustomPainter = null;
+					
 					bRet = false;
 				}
 			}
@@ -132,10 +137,12 @@ namespace Zeghs.Actions {
 		}
 
 		internal void SetCustomActions(List<IAction> actions) {
-			__cCustoms.Clear();
-			
-			foreach (IAction cAction in actions) {
-				__cCustoms.Add(cAction.Name, cAction);
+			if (__cCustoms == null) {
+				__cCustoms = new Dictionary<string, IAction>(16);
+
+				foreach (IAction cAction in actions) {
+					__cCustoms.Add(cAction.Name, cAction);
+				}
 			}
 		}
 

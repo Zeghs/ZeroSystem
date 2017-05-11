@@ -55,9 +55,9 @@
 			this.btnOK = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.tabControl = new System.Windows.Forms.TabControl();
-			this.pageItem_Commissions = new System.Windows.Forms.TabPage();
 			this.pageItem_Parameters = new System.Windows.Forms.TabPage();
 			this.dataGrid = new SourceGrid.DataGrid();
+			this.pageItem_Commissions = new System.Windows.Forms.TabPage();
 			this.tabControl.SuspendLayout();
 			this.pageItem_Parameters.SuspendLayout();
 			this.SuspendLayout();
@@ -92,16 +92,6 @@
 			this.tabControl.Size = new System.Drawing.Size(390, 230);
 			this.tabControl.TabIndex = 7;
 			// 
-			// pageItem_Commissions
-			// 
-			this.pageItem_Commissions.Location = new System.Drawing.Point(4, 21);
-			this.pageItem_Commissions.Name = "pageItem_Commissions";
-			this.pageItem_Commissions.Padding = new System.Windows.Forms.Padding(3);
-			this.pageItem_Commissions.Size = new System.Drawing.Size(381, 202);
-			this.pageItem_Commissions.TabIndex = 1;
-			this.pageItem_Commissions.Text = "交易成本";
-			this.pageItem_Commissions.UseVisualStyleBackColor = true;
-			// 
 			// pageItem_Parameters
 			// 
 			this.pageItem_Parameters.Controls.Add(this.dataGrid);
@@ -129,6 +119,16 @@
 			this.dataGrid.TabStop = true;
 			this.dataGrid.ToolTipText = "";
 			// 
+			// pageItem_Commissions
+			// 
+			this.pageItem_Commissions.Location = new System.Drawing.Point(4, 21);
+			this.pageItem_Commissions.Name = "pageItem_Commissions";
+			this.pageItem_Commissions.Padding = new System.Windows.Forms.Padding(3);
+			this.pageItem_Commissions.Size = new System.Drawing.Size(382, 205);
+			this.pageItem_Commissions.TabIndex = 1;
+			this.pageItem_Commissions.Text = "交易成本";
+			this.pageItem_Commissions.UseVisualStyleBackColor = true;
+			// 
 			// frmScriptParameters
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -142,6 +142,7 @@
 			this.Name = "frmScriptParameters";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "參數輸入";
+			this.TopMost = true;
 			this.tabControl.ResumeLayout(false);
 			this.pageItem_Parameters.ResumeLayout(false);
 			this.ResumeLayout(false);

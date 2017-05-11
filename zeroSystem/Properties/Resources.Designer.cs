@@ -116,6 +116,13 @@ namespace ZeroSystem.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap frmMain_toolbar_toolItem_cursor {
+            get {
+                object obj = ResourceManager.GetObject("frmMain_toolbar_toolItem_cursor", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap frmMain_toolbar_toolItem_logger {
             get {
                 object obj = ResourceManager.GetObject("frmMain_toolbar_toolItem_logger", resourceCulture);

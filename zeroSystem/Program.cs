@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using log4net;
@@ -15,21 +16,11 @@ namespace zeroSystem {
 		/// </summary>
 		[STAThread]
 		static void Main() {
-			/*
-			byte[] aaa = new byte[8192];
-			byte[] bbb = new byte[8192];
-
-			System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-			sw.Start();
-
-			for (int i = 0; i < 10000; i++) {
-				Array.Copy(aaa,bbb, aaa.Length);
+			//檢查是否有即時更新程式的換版檔案
+			if (File.Exists("LiveUpdate.ex_")) {
+				File.Delete("LiveUpdate.exe");  //先刪除舊版本
+				File.Move("LiveUpdate.ex_", "LiveUpdate.exe");  //再將新的程式更名
 			}
-
-			sw.Stop();
-			System.Console.WriteLine(sw.ElapsedMilliseconds);
-		
-			//*/
 
 			Assembly.LoadFrom("WES.Runtime.Indicator.dll");  //預先載入否則編譯會找不到(因為此 Dll 只有在信號內會使用到)
 

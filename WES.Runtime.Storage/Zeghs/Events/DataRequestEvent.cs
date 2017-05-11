@@ -83,6 +83,9 @@ namespace Zeghs.Events {
 			bool bRet = true;
 			if (this.Count == 0) {  //0表示請求區間使用起始日期與終止日期
 				bRet = request.From > this.Ranges[0];  //如果目前已下載資料的請求起始日期 > 準備請求的起始日期(表示準備請求的起始日期更早, 需要再提交請求更早的日期資料)
+			} else {
+				this.Count *= this.Rate;
+				bRet = !(request.To == this.Ranges[1] && this.Count < request.Count);
 			}
 			return bRet;
 		}

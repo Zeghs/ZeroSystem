@@ -14,7 +14,7 @@ namespace Zeghs.Actions {
 		}
 
 		/// <summary>
-		///   [取得] 動作圖示(0=16*16, 1=32*32, 其他可以由設計者自訂)
+		///   [取得] 動作圖示(0=16*16, 其他可以由設計者自訂)
 		/// </summary>
 		Image[] Icons {
 			get;

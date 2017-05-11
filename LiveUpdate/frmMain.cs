@@ -23,8 +23,25 @@ namespace LiveUpdate {
 			InitializeComponent();
 		}
 
-		internal void SetUpdateUrl(string url) {
-			__sUpdateURL = url;
+		internal bool CheckUpdate(string url) {
+			bool bRet = false;
+			HttpWebResponse cResponse = null;
+			HttpWebRequest cRequest = WebRequest.Create(url) as HttpWebRequest;
+			cRequest.Method = "HEAD";
+
+
+			try {
+				cResponse = cRequest.GetResponse() as HttpWebResponse;
+
+				__sUpdateURL = url;
+				bRet = true;
+			} catch {
+			} finally {
+				if (cResponse != null) {
+					cResponse.Close();
+				}
+			}
+			return bRet;
 		}
 
 		private void AsyncCompression() {

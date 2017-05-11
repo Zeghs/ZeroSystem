@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.Collections.Generic;
 using WeifenLuo.WinFormsUI.Docking;
+using Zeghs.Actions;
 using Zeghs.Scripts;
 using Zeghs.Settings;
 using Zeghs.Informations;
@@ -10,12 +11,33 @@ namespace Zeghs.Forms {
 	internal partial class frmMain : Form {
 		private bool __bShown = false;
 		private bool __bLoaded = false;
+		private Form __cActivateForm = null;
+		private PowerLanguage.PenStyle __cPenStyle = null;
 		private Dictionary<string, IDockContent> __cCommons = null;
 
 		internal frmMain() {
 			__cCommons = new Dictionary<string, IDockContent>(8);
+			__cPenStyle = new PowerLanguage.PenStyle(System.Drawing.Color.Red, 1);
 
 			InitializeComponent();
+		}
+
+		internal void SetCustomDrawTools(Dictionary<string, IAction> customs) {
+			int iIndex = 4;
+			foreach (IAction cAction in customs.Values) {
+				ToolStripButton cButton = new ToolStripButton();
+				cButton.Click += toolItem_CustomDrawing_Click;
+				cButton.Image = cAction.Icons[0];
+				cButton.Text = cAction.Name;
+				cButton.ToolTipText = cAction.Comment;
+				cButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
+
+				toolbar.Items.Insert(iIndex++, cButton);
+			}
+			
+			ToolStripItem cItem = toolbar.Items[4];
+			cItem.Click += toolItem_CustomSelected_Click;
+			toolItem_cursor.Tag = cItem;
 		}
 
 		private IDockContent GetDockContentFromPersistString(string persistString) {
@@ -48,6 +70,11 @@ namespace Zeghs.Forms {
 			frmQuoteManager frmQuoteManager = new frmQuoteManager();
 			frmQuoteManager.ShowDialog();
 			frmQuoteManager.Dispose();
+		}
+
+		private void SetCustomAction(string action) {
+			frmSignalViewer frmSignalViewer = __cActivateForm as frmSignalViewer;
+			frmSignalViewer.Chart.SetCustomAction(action, __cPenStyle);
 		}
 
 		private void frmMain_FormClosing(object sender, FormClosingEventArgs e) {
@@ -134,6 +161,24 @@ namespace Zeghs.Forms {
 			OnShowQuoteManager();
 		}
 
+		private void toolItem_CustomDrawing_Click(object sender, EventArgs e) {
+			ToolStripButton cButton = sender as ToolStripButton;
+			SetCustomAction(cButton.Text);
+		}
+
+		private void toolItem_CustomSelected_Click(object sender, EventArgs e) {
+			ToolStripButton cButton = sender as ToolStripButton;
+			cButton.Checked = true;
+
+			if (cButton.Text.Equals("Cursor")) {
+				ToolStripButton cCrossButton = cButton.Tag as ToolStripButton;
+				cCrossButton.Checked = false;
+			} else {
+				toolItem_cursor.Checked = false;
+			}
+			SetCustomAction(cButton.Text);
+		}
+
 		private void toolItem_DockViewer_Click(object sender, EventArgs e) {
 			ToolStripButton cButton = sender as ToolStripButton;
 			GetDockContentFromPersistString(cButton.Tag as string);
@@ -154,6 +199,12 @@ namespace Zeghs.Forms {
 		private void dockPanels_DragEnter(object sender, DragEventArgs e) {
 			if (e.Data.GetDataPresent("__script")) {
 				e.Effect = DragDropEffects.Move;
+			}
+		}
+
+		private void dockPanels_ActiveDocumentChanged(object sender, EventArgs e) {
+			if (this.dockPanels.ActiveDocument != null) {
+				__cActivateForm = this.dockPanels.ActiveDocument.DockHandler.Form;
 			}
 		}
 

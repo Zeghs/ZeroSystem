@@ -825,6 +825,11 @@
               商品資訊 Instrument 資料讀取者類別
             </summary>
         </member>
+        <member name="T:Zeghs.IO.IDataLoader">
+            <summary>
+              資料讀取者介面
+            </summary>
+        </member>
         <member name="M:Zeghs.IO.IDataLoader.BeginLoadData(PowerLanguage.InstrumentDataRequest,PowerLanguage.LoadDataCallback,System.Object)">
             <summary>
               非同步讀取資料請求結構內的 IInstrument 資料

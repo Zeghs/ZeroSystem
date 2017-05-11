@@ -138,7 +138,6 @@ namespace Zeghs.Managers {
 
 						cService.onQuote += QuoteService_onQuote;
 						cService.onReset += QuoteService_onReset;
-
 						__cDataSources.Add(dataSource);
 					}
 				}
@@ -279,21 +278,23 @@ namespace Zeghs.Managers {
 			SeriesSymbolData cSeries = null;
 			int iTotalSeconds = dataRequest.Resolution.TotalSeconds;
 			if (useCache) {  //是否使用快取
-				cSeries = cStorage.GetSeries(iTotalSeconds);
-				if (cSeries == null) {
-					int iBaseSeconds = (iTotalSeconds < Resolution.MAX_BASE_TOTALSECONDS) ? Resolution.MIN_BASE_TOTALSECONDS : Resolution.MAX_BASE_TOTALSECONDS;
-					cSeries = cStorage.GetSeries(iBaseSeconds);
+				lock (cStorage) {  //需要 lock 這個區塊(避免非同步讀取資料時發生問題)
+					cSeries = cStorage.GetSeries(iTotalSeconds);
 					if (cSeries == null) {
-						DataAdapter cAdapter = LoadAdapter(dataRequest);
-						cSeries = cAdapter.Series;
-						cStorage.Add(cSeries);
-					}
+						int iBaseSeconds = (iTotalSeconds < Resolution.MAX_BASE_TOTALSECONDS) ? Resolution.MIN_BASE_TOTALSECONDS : Resolution.MAX_BASE_TOTALSECONDS;
+						cSeries = cStorage.GetSeries(iBaseSeconds);
+						if (cSeries == null) {
+							DataAdapter cAdapter = LoadAdapter(dataRequest);
+							cSeries = cAdapter.Series;
+							cStorage.Add(cSeries);
+						}
 
-					if (iBaseSeconds != iTotalSeconds) {
-						cSeries = cStorage.Create(dataRequest);
+						if (iBaseSeconds != iTotalSeconds) {
+							cSeries = cStorage.Create(dataRequest);
+						}
+					} else {
+						cSeries.OnRequest(new DataRequestEvent(dataRequest));  //如果已經存在則請求使用者需要的歷史資料區間(請求方法會檢查目前已下載的歷史資料區間是否足夠, 如果使用者需要的歷史資料區間比較大會向伺服器請求)
 					}
-				} else {
-					cSeries.OnRequest(new DataRequestEvent(dataRequest));  //如果已經存在則請求使用者需要的歷史資料區間(請求方法會檢查目前已下載的歷史資料區間是否足夠, 如果使用者需要的歷史資料區間比較大會向伺服器請求)
 				}
 			} else {
 				DataAdapter cAdapter = LoadAdapter(dataRequest, false);  //重新建立新的基礎週期序列資料(不使用快取, 不保存至快取內, 使用完畢之後立即 Dispose)
@@ -424,4 +425,4 @@ namespace Zeghs.Managers {
 			}
 		}
 	}
-}  //427行
+}  //428行

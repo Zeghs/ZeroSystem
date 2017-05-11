@@ -68,7 +68,7 @@ namespace Zeghs.IO {
 		public void BeginLoadData(InstrumentDataRequest request, LoadDataCallback result, object args = null) {
 			SeriesManager.Manager.SetQuoteService(request.DataFeed);
 			SeriesManager.Manager.AsyncGetSeries(request, (object sender, SeriesResultEvent e) => {
-				Instrument cInstrument = new Instrument(e.Data, 0);  //建立 Instrument 商品資料
+				Instrument cInstrument = new Instrument(e.Data, __iMaxBarsReference);  //建立 Instrument 商品資料
 				Instrument cBars_0 = GetInstrument(0);  //取得目前第 0 個 Instrument 商品資料
 				if (cBars_0 != null) {
 					cInstrument.MoveBars(cBars_0.LastBarTime);
@@ -163,7 +163,7 @@ namespace Zeghs.IO {
 				}
 
 				bool bCompleted = false;
-				Instrument cInstrument = new Instrument(series, (dataIndex == 0) ? __iMaxBarsReference : 0);
+				Instrument cInstrument = new Instrument(series, __iMaxBarsReference);
 				
 				lock (__cInstruments) {
 					__cInstruments[dataIndex] = cInstrument;

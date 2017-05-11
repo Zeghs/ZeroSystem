@@ -20,17 +20,19 @@ namespace LiveUpdate {
 				return;
 			}
 
-			bool bCompleted = false;
+			bool bCompleted = true;
 			if (sURL != null) {
 				Application.EnableVisualStyles();
 				Application.SetCompatibleTextRenderingDefault(false);
 
 				frmMain frmMain = new frmMain();
-				frmMain.SetUpdateUrl(sURL);
-
-				Application.Run(frmMain);
-
-				bCompleted = frmMain.IsCompleted;
+				bool bExist = frmMain.CheckUpdate(sURL);
+				if (bExist) {
+					Application.Run(frmMain);
+					bCompleted = frmMain.IsCompleted;
+				} else {
+					frmMain.Dispose();
+				}
 			}
 
 			if (bCompleted) {

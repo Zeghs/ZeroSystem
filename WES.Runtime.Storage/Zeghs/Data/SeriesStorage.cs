@@ -87,6 +87,7 @@ namespace Zeghs.Data {
 			SeriesSymbolData cTargetSeries = cBaseSeries.CreateSeries(dataRequest);
 			this.Add(cTargetSeries);
 
+			dataRequest.Resolution = cTargetSeries.DataRequest.Resolution;  //將修正後的週期結構更新至傳入的 InstrumentDataRequest 週期結構(修正後的周期結構才有週期轉換比率)
 			cTargetSeries.OnRequest(new DataRequestEvent(dataRequest));
 			return cTargetSeries;
 		}
@@ -201,4 +202,4 @@ namespace Zeghs.Data {
 			}
 		}
 	}
-}  //204行
+}  //205行

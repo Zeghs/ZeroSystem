@@ -1,6 +1,9 @@
 ﻿using PowerLanguage;
 
 namespace Zeghs.IO {
+	/// <summary>
+	///   資料讀取者介面
+	/// </summary>
 	public interface IDataLoader {
 		/// <summary>
 		///   非同步讀取資料請求結構內的 IInstrument 資料

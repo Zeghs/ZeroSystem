@@ -97,6 +97,7 @@ namespace Zeghs.Forms {
 				__cChartProperty.TitleFont = DefaultProperty.TitleFont;
 				__cChartProperty.AxisColor = DefaultProperty.AxisColor;
 				__cChartProperty.BackgroundColor = DefaultProperty.BackgroundColor;
+				__cChartProperty.DrawAideLineColor = DefaultProperty.DrawAideLineColor;
 				__cChartProperty.ForeColor = DefaultProperty.ForeColor;
 				__cChartProperty.GridColor = DefaultProperty.GridColor;
 				__cChartProperty.TradeLineColor = DefaultProperty.TradeLineColor;

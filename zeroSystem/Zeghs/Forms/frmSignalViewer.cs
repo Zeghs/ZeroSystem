@@ -18,6 +18,7 @@ using Zeghs.Informations;
 
 namespace Zeghs.Forms {
 	internal partial class frmSignalViewer : DockContent {
+		private static bool __bCustomsLoaded = false;
 		internal static void Create(WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel, ProfileSetting profile) {
 			frmSignalViewer frmSignalViewer = new frmSignalViewer();
 			frmSignalViewer.SetProfileSetting(profile);
@@ -27,6 +28,12 @@ namespace Zeghs.Forms {
 				frmSignalViewer.Show(dockPanel, WeifenLuo.WinFormsUI.Docking.DockState.Document);
 			} else {
 				frmSignalViewer.Show(dockPanel, new System.Drawing.Rectangle(cWindow.Left, cWindow.Top, cWindow.Width, cWindow.Height));
+			}
+
+			if (!__bCustomsLoaded) {
+				__bCustomsLoaded = true;
+				frmMain frmMain = dockPanel.Parent as frmMain;
+				frmMain.SetCustomDrawTools(frmSignalViewer.Chart.CustomDrawTools);
 			}
 		}
 
@@ -38,6 +45,12 @@ namespace Zeghs.Forms {
 		private ProfileSetting __cProfile = null;
 		private SignalObject __cSignalObject = null;
 		private List<InputAttribute> __cParameters = null;
+
+		internal ZChart Chart {
+			get {
+				return __cChart;
+			}
+		}
 
 		internal frmSignalViewer() {
 			__cTradeService = new TradeService();

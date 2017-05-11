@@ -40,6 +40,14 @@ namespace Zeghs.Chart {
 		}
 
 		/// <summary>
+		///   [取得/設定] 繪製輔助線顏色
+		/// </summary>
+		public Color DrawAideLineColor {
+			get;
+			set;
+		}
+
+		/// <summary>
 		///   [取得/設定] 繪製來源狀態
 		/// </summary>
 		public EDrawingSource DrawingSource {

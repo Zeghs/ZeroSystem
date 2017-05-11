@@ -223,7 +223,7 @@ namespace Zeghs.Managers {
 				string sFileName = Path.Combine(sPath, sAssembly + ".dll");
 
 				try {
-					sComplierFile = CSScript.Compile(scriptFile, sFileName, false);
+					sComplierFile = CSScript.CompileFile(scriptFile, sFileName, false);
 				} catch (Exception __errExcep) {
 					if (logger.IsErrorEnabled) logger.ErrorFormat("[ScriptManager.Complier] Error Message:/r/n{0}", __errExcep.Message);
 				}

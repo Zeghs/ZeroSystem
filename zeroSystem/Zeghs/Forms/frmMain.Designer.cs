@@ -32,6 +32,8 @@
 			this.toolItem_quoteManager = new System.Windows.Forms.ToolStripButton();
 			this.toolItem_productManager = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolItem_cursor = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolItem_quote = new System.Windows.Forms.ToolStripButton();
 			this.toolItem_script = new System.Windows.Forms.ToolStripButton();
 			this.toolItem_logger = new System.Windows.Forms.ToolStripButton();
@@ -66,6 +68,8 @@
             this.toolItem_quoteManager,
             this.toolItem_productManager,
             this.toolStripSeparator1,
+            this.toolItem_cursor,
+            this.toolStripSeparator2,
             this.toolItem_quote,
             this.toolItem_script,
             this.toolItem_logger,
@@ -101,6 +105,25 @@
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
 			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+			// 
+			// toolItem_cursor
+			// 
+			this.toolItem_cursor.Checked = true;
+			this.toolItem_cursor.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.toolItem_cursor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolItem_cursor.Image = global::ZeroSystem.Properties.Resources.frmMain_toolbar_toolItem_cursor;
+			this.toolItem_cursor.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolItem_cursor.Name = "toolItem_cursor";
+			this.toolItem_cursor.Size = new System.Drawing.Size(23, 22);
+			this.toolItem_cursor.Tag = "";
+			this.toolItem_cursor.Text = "Cursor";
+			this.toolItem_cursor.ToolTipText = "Cursor";
+			this.toolItem_cursor.Click += new System.EventHandler(this.toolItem_CustomSelected_Click);
+			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
 			// 
 			// toolItem_quote
 			// 
@@ -164,6 +187,7 @@
 			this.dockPanels.Size = new System.Drawing.Size(792, 495);
 			this.dockPanels.TabIndex = 6;
 			this.dockPanels.ContentRemoved += new System.EventHandler<WeifenLuo.WinFormsUI.Docking.DockContentEventArgs>(this.dockPanels_ContentRemoved);
+			this.dockPanels.ActiveContentChanged += new System.EventHandler(this.dockPanels_ActiveDocumentChanged);
 			this.dockPanels.DragDrop += new System.Windows.Forms.DragEventHandler(this.dockPanels_DragDrop);
 			this.dockPanels.DragEnter += new System.Windows.Forms.DragEventHandler(this.dockPanels_DragEnter);
 			// 
@@ -210,5 +234,7 @@
 		private System.Windows.Forms.ToolStripButton toolItem_script;
 		private System.Windows.Forms.ToolStripButton toolItem_logger;
 		private System.Windows.Forms.ToolStripButton toolItem_console;
+		private System.Windows.Forms.ToolStripButton toolItem_cursor;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 	}
 }

@@ -138,7 +138,7 @@ namespace Zeghs.Data {
 		}
 
 		internal SeriesSymbolData(InstrumentDataRequest dataRequest, InstrumentSettings settings = null) {
-			this.Id = 0x40000000 | ++__iLastSeriesId;
+			this.Id = 0x40000000 | System.Threading.Interlocked.Increment(ref __iLastSeriesId);
 
 			this.Indexer = new SeriesIndexer();
 			__cDataRequest = dataRequest;
