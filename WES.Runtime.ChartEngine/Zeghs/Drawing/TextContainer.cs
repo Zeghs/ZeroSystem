@@ -55,7 +55,9 @@ namespace Zeghs.Drawing {
 		///   清除所有文字繪圖物件
 		/// </summary>
 		public void Clear() {
-			__cTextObjects.Dispose();
+			if (__cTextObjects != null) {
+				__cTextObjects.Dispose();
+			}
 		}
 
 		/// <summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Newtonsoft.Json.Linq;
 using PowerLanguage;
 using Zeghs.Orders;
 using Netwings.Forms;
@@ -26,6 +27,13 @@ namespace Netwings.Rules.Fees {
 		/// </summary>
 		public CustomBrokerFeeRule() {
 			ShowSetting();
+		}
+
+		/// <summary>
+		///   建構子
+		/// </summary>
+		public CustomBrokerFeeRule(JToken args) {
+			this.args = args;
 		}
 
 		/// <summary>

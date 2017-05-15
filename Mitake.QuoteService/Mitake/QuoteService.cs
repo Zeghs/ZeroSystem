@@ -223,10 +223,6 @@ namespace Mitake {
 				int iPort = authReturn.RemotePort;
 				if (logger.IsInfoEnabled) logger.InfoFormat("[QuoteService.Login] Register service... service={0}({1}), userId={2}, sessionKey:{3}", sServiceIP, iPort, __sUserID, __sSessionKey);
 
-				StockDecoder.TimerProc += StockClient_onTimer;
-				StockDecoder.StockProc += StockClient_onStock;
-				McpDecoder.McpPacketProc += StockClient_onMcpPacket;
-
 				if (__cSocket == null) {
 					__cSocket = new ZSocket();
 					__cSocket.ReceiveProc += SocketClient_onReceive;
@@ -251,6 +247,10 @@ namespace Mitake {
 					__bTimeFlag = true;
 					__cTimer.Start();
 				}
+
+				StockDecoder.TimerProc += StockClient_onTimer;
+				StockDecoder.StockProc += StockClient_onStock;
+				McpDecoder.McpPacketProc += StockClient_onMcpPacket;
 
 				MitakeSymbolManager.DataSource = this.DataSource;
 				MitakeSymbolManager.ExchangeName = this.ExchangeName;

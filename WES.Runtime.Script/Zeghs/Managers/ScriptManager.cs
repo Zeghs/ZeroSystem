@@ -225,7 +225,7 @@ namespace Zeghs.Managers {
 				try {
 					sComplierFile = CSScript.CompileFile(scriptFile, sFileName, false);
 				} catch (Exception __errExcep) {
-					if (logger.IsErrorEnabled) logger.ErrorFormat("[ScriptManager.Complier] Error Message:/r/n{0}", __errExcep.Message);
+					if (logger.IsErrorEnabled) logger.ErrorFormat("[ScriptManager.Complier] Error Message:\r\n{0}", __errExcep.Message);
 				}
 			}
 			return sComplierFile;

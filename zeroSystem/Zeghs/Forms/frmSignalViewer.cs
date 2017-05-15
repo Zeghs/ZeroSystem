@@ -30,7 +30,7 @@ namespace Zeghs.Forms {
 				frmSignalViewer.Show(dockPanel, new System.Drawing.Rectangle(cWindow.Left, cWindow.Top, cWindow.Width, cWindow.Height));
 			}
 
-			if (!__bCustomsLoaded) {
+			if (!__bCustomsLoaded) {  //自訂繪圖工具是否已經載入
 				__bCustomsLoaded = true;
 				frmMain frmMain = dockPanel.Parent as frmMain;
 				frmMain.SetCustomDrawTools(frmSignalViewer.Chart.CustomDrawTools);

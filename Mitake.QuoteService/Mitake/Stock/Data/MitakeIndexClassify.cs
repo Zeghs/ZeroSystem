@@ -28,15 +28,15 @@
 		}
 
 		internal void Clone(MitakeIndexClassify classify) {
-			if (this.Amount == 0) {
+			if (this.Amount == 0 && classify.Amount > 0) {
 				this.Amount = classify.Amount;
 			}
 
-			if (this.IndexValue == 0) {
+			if (this.IndexValue == 0 && classify.IndexValue > 0) {
 				this.IndexValue = classify.IndexValue;
 			}
 
-			if (this.Totals == 0) {
+			if (this.Totals == 0 && classify.Totals > 0) {
 				this.Totals = classify.Totals;
 			}
 		}

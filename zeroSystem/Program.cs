@@ -38,7 +38,7 @@ namespace zeroSystem {
 			PaintManager.Manager.Refresh("plugins\\charts");
 
 			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);  //如果要做系統保護則不能開啟這個選項
+			Application.SetCompatibleTextRenderingDefault(false);
 
 			frmWelcome frmWelcome = new frmWelcome();
 			frmWelcome.ShowDialog();

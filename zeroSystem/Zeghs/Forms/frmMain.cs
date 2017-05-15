@@ -23,7 +23,7 @@ namespace Zeghs.Forms {
 		}
 
 		internal void SetCustomDrawTools(Dictionary<string, IAction> customs) {
-			int iIndex = 4;
+			int iIndex = 4;  //插入索引為第4個(如果有新增 toolbar 項目還需要再修改)
 			foreach (IAction cAction in customs.Values) {
 				ToolStripButton cButton = new ToolStripButton();
 				cButton.Click += toolItem_CustomDrawing_Click;
@@ -172,7 +172,9 @@ namespace Zeghs.Forms {
 
 			if (cButton.Text.Equals("Cursor")) {
 				ToolStripButton cCrossButton = cButton.Tag as ToolStripButton;
-				cCrossButton.Checked = false;
+				if (cCrossButton != null) {
+					cCrossButton.Checked = false;
+				}
 			} else {
 				toolItem_cursor.Checked = false;
 			}

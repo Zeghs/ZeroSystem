@@ -319,22 +319,9 @@ namespace Zeghs.Chart {
 					int iHeight = (int) (dTotalHeight * cLayer.HeightScale);
 					cLayer.LayerRectangle = new Rectangle(__cChartRect.X, iY, __cChartRect.Width, iHeight);
 					iY += iHeight;
-
-					AxisY cAxisY = cLayer.AxisY;
-					if (cAxisY != null) {
-						int iWidthY = cAxisY.AxisRectangle.Width;
-						if (iWidthY > iAxisYWidth) {
-							iAxisYWidth = iWidthY;
-						}
-					}
 				}
 
-				for (int i = 0; i < iCount; i++) {
-					Layer cLayer = __cLayers[i];
-					cLayer.ResizeAxisY(iAxisYWidth);
-				}
-
-				//重新設定 AxisX 的寬度與 Axis.Y 的位置
+				//重新設定 AxisX 的寬度與 AxisX.Y 的位置
 				cAxisRect.Y = iAxisX_Y;
 				cAxisRect.Width = __cChartRect.Width - iAxisYWidth;
 				__cAxisX.AxisRectangle = cAxisRect;

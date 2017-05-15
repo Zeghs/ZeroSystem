@@ -1,4 +1,5 @@
 ﻿using System;
+using Zeghs.Data;
 using Mitake.Stock.Data;
 using Mitake.Stock.Util;
 
@@ -22,10 +23,10 @@ namespace Mitake.Stock.Decode {
 			bool bHave = index.GetMitakeTick(cTime, ref cTick);
 			cTick.SetFlag(8);
 
-			if (!bHave) {
+			if (index.ComplementStatus != ComplementStatus.NotComplement) {
 				MitakeIndexTick cPrevTick = index.GetPreviousTick(cTime, 8);
 				if (cPrevTick != null) {
-					cTick.Clone(cPrevTick, 8);
+					cTick.Clone(cPrevTick);
 				}
 			}
 

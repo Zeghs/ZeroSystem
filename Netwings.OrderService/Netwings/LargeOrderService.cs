@@ -25,13 +25,13 @@ namespace Netwings {
 		///   [取得/設定] 重新送出限價單的時間間隔(單位:毫秒)
 		/// </summary>
 		[Input("重新送出限價單的時間間隔(單位:毫秒)")]
-		private double ReSendLimit_Interval {
+		private double RequestLimitInterval {
 			get;
 			set;
 		}
 
 		public LargeOrderService() {
-			this.ReSendLimit_Interval = 5000;
+			this.RequestLimitInterval = 5000;
 			this.onResponse += LargeOrderService_onResponse;
 
 			__cTimer = new System.Timers.Timer();
@@ -46,7 +46,9 @@ namespace Netwings {
 
 			bool bRet = base.Send(action, category, (category == OrderCategory.Market) ? AdjustPrice(action) : limitPrice, lots, isReverse, touchPrice, name, openNextBar);
 			if (bRet) {
-				__iTimeCount = 0;
+				lock (__oLock) {
+					__iTimeCount = 0;  //如果送單成功就歸 0 重新計時(當達到設定值才需要重新處理取消與發送單, 尚未達到就讓委託單在市場上可以多成交幾張)
+				}
 			}
 			return bRet;
 		}
@@ -72,9 +74,9 @@ namespace Netwings {
 		}
 
 		private void Timer_onElapsed(object sender, ElapsedEventArgs e) {
-			__iTimeCount += TIMER_INTERVAL;
-			if (__iTimeCount >= this.ReSendLimit_Interval) {
-				lock (__oLock) {
+			lock (__oLock) {
+				__iTimeCount += TIMER_INTERVAL;  //累加時間個數(如果達到 RequestLimitInterval 設定的值才處理)
+				if (__iTimeCount >= this.RequestLimitInterval) {
 					if (__cCurrent != null && __cCurrent.Contracts > 0) {
 						if (__cCurrent.IsTrusted && !__cCurrent.IsCancel) {
 							__cCurrent.IsCancel = true;
@@ -83,12 +85,13 @@ namespace Netwings {
 					} else if (__cTemp != null) {
 						bool bSuccess = this.Send(__cTemp.Action, __cTemp.Category, 0, __cTemp.Contracts, false, 0, __cTemp.Name);
 						if (bSuccess) {
-							__iTimeCount = 0;
+							__iTimeCount = 0;  //歸 0 重新計時(當達到設定值才需要重新處理取消與發送單, 尚未達到就讓委託單在市場上可以多成交幾張)
 						}
 					}
+
+					__iTimeCount -= TIMER_INTERVAL;  //當達到設定值就不需要再重新累積(加快處理重新送單與取消單, 直到又再次成功送單在歸 0 重新計時)
 				}
 			}
-
 			__cTimer.Start();
 		}
 
@@ -98,6 +101,8 @@ namespace Netwings {
 					lock (__oLock) {
 						if (__cCurrent != null) {
 							EOrderAction cAction = __cCurrent.Action;
+
+							//如果有反轉信號單且取消的單是平倉單就不用再把單放到 __cTemp 內(因為父類別 RealOrderService 在平倉單取消之後, 後面尚未傳送的單都會全部取消掉)
 							__cTemp = (__bReverse && (cAction == EOrderAction.Sell || cAction == EOrderAction.BuyToCover)) ? null : __cCurrent;
 						}
 						__cCurrent = null;
@@ -122,4 +127,4 @@ namespace Netwings {
 			}
 		}
 	}
-}  //125行
+}  //130行

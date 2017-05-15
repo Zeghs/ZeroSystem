@@ -1,4 +1,5 @@
 ﻿using System;
+using Zeghs.Data;
 using Mitake.Stock.Data;
 using Mitake.Stock.Util;
 using Mitake.Sockets.Data;
@@ -23,10 +24,11 @@ namespace Mitake.Stock.Decode {
 			bool bHave = index.GetMitakeTick(cTime, ref cTick);
 			cTick.SetFlag(2);
 
-			MitakeIndexTick cPrevTick = index.GetPreviousTick(cTime, 2);
-			if (!bHave) {
+			MitakeIndexTick cPrevTick = null;
+			if (index.ComplementStatus != ComplementStatus.NotComplement) {
+				cPrevTick = index.GetPreviousTick(cTime, 2);
 				if (cPrevTick != null) {
-					cTick.Clone(cPrevTick, 2);
+					cTick.Clone(cPrevTick);
 				}
 			}
 
@@ -38,7 +40,7 @@ namespace Mitake.Stock.Decode {
                         bMode = BitConvert.GetValue(bFlag, 6, 2);
 
 			uint uVolume = Volumn.GetVolumn(bMode, Buffer);
-			
+
 			cTick.Volume = uVolume;
 			if (uVolume > index.成交總額) {
 				index.成交總額 = uVolume;

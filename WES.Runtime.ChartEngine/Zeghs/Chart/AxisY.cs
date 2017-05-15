@@ -198,6 +198,7 @@ namespace Zeghs.Chart {
 		private void CalculateAxisScaleCount() {
 			__iMarginTop = (int) (this.__cAxisRect.Height * __cSetting.MarginTop / 100);
 			__iMarginBottom = (int) (this.__cAxisRect.Height * __cSetting.MarginBottom / 100);
+			
 			int iHeight = this.__cAxisRect.Height - (__iMarginTop + __iMarginBottom);
 			__iScaleCount = iHeight / (this.FontMetrics.Height + SCALE_SPACING_PIXEL);
 			__dUnitHeight = iHeight / (__dAxisMax - __dAxisMin);
@@ -249,8 +250,10 @@ namespace Zeghs.Chart {
 
 				string sValue = Math.Round(__dAxisMax, this.Decimals).ToString();
 				int iWidth = sValue.Length * this.FontMetrics.Width + DEFAULT_AXISRECTANGLE_PADDING_WIDTH;
-				__cAxisRect.X = __cAxisRect.Left + (__cAxisRect.Width - iWidth);
-				__cAxisRect.Width = iWidth;
+				if (iWidth > __cAxisRect.Width) {
+					__cAxisRect.X = __cAxisRect.Left + (__cAxisRect.Width - iWidth);
+					__cAxisRect.Width = iWidth;
+				}
 			}
 		}
 	}

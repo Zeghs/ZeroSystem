@@ -321,6 +321,8 @@ namespace Zeghs.Data {
 					if (!this.Initialized) {  //尚未初始化之前才需要更新(初始化之後已經併入即時報價資訊, 更新時間會是目前最新的報價時間)
 						__cUpdateTime = __cTimes[this.Indexer.RealtimeIndex];  //更新最後的更新時間(如果沒有即時報價資訊, 這個就是最後一根 Bars 的時間)
 					}
+				} else {
+					RemoveRequest();  //請求失敗就移除請求事件(表示可能伺服器有問題或沒有歷史報價資訊無法執行請求服務)
 				}
 			}
 		}
@@ -410,4 +412,4 @@ namespace Zeghs.Data {
 			OnRequest(new DataRequestEvent(iRequestCount, iTotals, __cDataRequest.Resolution.Rate));  //呼叫請求方法
 		}
 	}
-}  //413行
+}  //415行

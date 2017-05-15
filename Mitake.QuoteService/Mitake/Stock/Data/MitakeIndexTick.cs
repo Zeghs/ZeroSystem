@@ -194,22 +194,15 @@ namespace Mitake.Stock.Data {
 			}
 		}
 
-		internal void Clone(MitakeIndexTick tick, int flag) {
-			this.Flag = tick.Flag;
-			this.Ask = tick.Ask;
-			this.Bid = tick.Bid;
+		internal void Clone(MitakeIndexTick tick) {
+			if (this.Flag < 15) {
+				this.Flag |= tick.Flag;
+				this.Ask = tick.Ask;
+				this.Bid = tick.Bid;
 
-			switch (flag) {
-				case 1:  //0x32
-				case 8:  //0xb3
-					CloneIndex(tick);
-					break;
-				case 2:  //0x33
-					CloneVolume(tick);
-					break;
-				case 4:  //0x34
-					CloneTrust(tick);
-					break;
+				CloneIndex(tick);
+				CloneVolume(tick);
+				CloneTrust(tick);
 			}
 		}
 
@@ -229,9 +222,17 @@ namespace Mitake.Stock.Data {
 		}
 
 		private void CloneVolume(MitakeIndexTick tick) {
-			this.Volume = tick.Volume;
-			this.成交張數 = tick.成交張數;
-			this.成交筆數 = tick.成交筆數;
+			if (this.Volume == 0 && tick.Volume > 0) {
+				this.Volume = tick.Volume;
+			}
+
+			if (this.成交張數 == 0 && tick.成交張數 > 0) {
+				this.成交張數 = tick.成交張數;
+			}
+
+			if (this.成交筆數 == 0 && tick.成交筆數 > 0) {
+				this.成交筆數 = tick.成交筆數;
+			}
 		}
 
 		private void CloneTrust(MitakeIndexTick tick) {

@@ -1,5 +1,6 @@
 ﻿using System;
 using PowerLanguage;
+using Zeghs.Data;
 using Mitake.Stock.Data;
 using Mitake.Stock.Util;
 
@@ -25,10 +26,10 @@ namespace Mitake.Stock.Decode {
 			bool bHave = index.GetMitakeTick(cTime, ref cTick);
 			cTick.SetFlag(1);
 
-			if (!bHave) {
+			if (index.ComplementStatus != ComplementStatus.NotComplement) {
 				MitakeIndexTick cPrevTick = index.GetPreviousTick(cTime, 1);
 				if (cPrevTick != null) {
-					cTick.Clone(cPrevTick, 1);
+					cTick.Clone(cPrevTick);
 				}
 			}
 
@@ -47,7 +48,10 @@ namespace Mitake.Stock.Decode {
 				if (Time.ConvertForTotalSeconds(cTime) == 32400) { //09:00 開盤會送出昨日收盤價
                                         index.ReferPrices[bIType] = fIndex;  //昨天收盤指數
                                 }
-                                cTick.Classifys[bIType].IndexValue = fIndex;
+
+				if (fIndex > 0) {
+					cTick.Classifys[bIType].IndexValue = fIndex;
+				}
 
                                 if (index.Serial == 9999) {
                                         switch (bIType) {
