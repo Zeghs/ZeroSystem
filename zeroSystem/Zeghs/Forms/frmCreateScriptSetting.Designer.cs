@@ -12,6 +12,12 @@
 		private System.ComponentModel.IContainer components = null;
 		private System.Windows.Forms.TabPage __cCurrentPages;
 		private System.Collections.Generic.List<Zeghs.Data.SimpleBoundList<Data._ProductInfo>> __cSources = null;
+		private System.Collections.Generic.Dictionary<string, System.Comparison<Data._ProductInfo>> __cComparison = new System.Collections.Generic.Dictionary<string, System.Comparison<Data._ProductInfo>>(8) {
+			{"ProductId_A", (a, b) => { return a.ProductId.CompareTo(b.ProductId); }},	
+			{"ProductId_D", (a, b) => { return b.ProductId.CompareTo(a.ProductId); }},	
+			{"ExchangeName_A", (a, b) => { return a.ExchangeName.CompareTo(b.ExchangeName); }},	
+			{"ExchangeName_D", (a, b) => { return b.ExchangeName.CompareTo(a.ExchangeName); }}	
+		};
 
 		/// <summary>
 		/// Clean up any resources being used.
@@ -29,6 +35,7 @@
 					cProducts.Clear();  //清除分類商品資訊
 					__cSources.RemoveAt(i);  //移除分類商品
 				}
+				__cComparison.Clear();
 			}
 			base.Dispose(disposing);
 		}
@@ -47,9 +54,13 @@
 			cSelectionBase.Border = new DevAge.Drawing.RectangleBorder(new DevAge.Drawing.BorderLine(cSelectionBase.BackColor, 1));
 
 			//建立資料來源
+			Data.SimpleBoundList < Data._ProductInfo > cList = new Data.SimpleBoundList<Data._ProductInfo>(4096);
+			cList.AllowSort = true;
+			cList.SetComparers(__cComparison);
+
 			__cSources = new System.Collections.Generic.List<Data.SimpleBoundList<Data._ProductInfo>>(32);
-			__cSources.Add(new Data.SimpleBoundList<Data._ProductInfo>(4096));
-			this.dataGrid.DataSource = __cSources[0];
+			__cSources.Add(cList);
+			this.dataGrid.DataSource = cList;
 
 			__cCurrentPages = this.pageItem_All;
 		}
@@ -161,6 +172,7 @@
 			this.dataGrid.TabIndex = 3;
 			this.dataGrid.TabStop = true;
 			this.dataGrid.ToolTipText = "";
+			this.dataGrid.SortedRangeRows += new SourceGrid.SortRangeRowsEventHandler(this.dataGrid_SortedRangeRows);
 			this.dataGrid.DoubleClick += new System.EventHandler(this.dataGrid_DoubleClick);
 			// 
 			// tabControl_Main

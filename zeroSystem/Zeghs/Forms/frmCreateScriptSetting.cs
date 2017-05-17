@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using SourceGrid;
 using PowerLanguage;
 using Zeghs.Data;
 using Zeghs.Products;
@@ -17,6 +18,7 @@ namespace Zeghs.Forms {
 		private bool __bNewSetting = false;  //是否為新建立的設定
 		private ChartSetting __cChartSetting = null;
 		private RequestSetting __cRequestSetting = null;
+		private SortRangeRowsEventArgs __cSortRangeRowEvent = null;
 
 		/// <summary>
 		///   [取得] 圖表設定值
@@ -201,7 +203,11 @@ namespace Zeghs.Forms {
 							++iIndex;
 							tabControl_Products.TabPages.Add(cCategory.ToString());
 							if (iIndex == __cSources.Count) {
-								__cSources.Add(new SimpleBoundList<_ProductInfo>(cSymbols.Count));
+								SimpleBoundList<_ProductInfo> cList = new SimpleBoundList<_ProductInfo>(cSymbols.Count);
+								cList.AllowSort = true;
+								cList.SetComparers(__cComparison);
+
+								__cSources.Add(cList);
 							}
 
 							foreach (string sSymbolId in cSymbols) {
@@ -225,14 +231,21 @@ namespace Zeghs.Forms {
 
 		private void RefreshGrid() {
 			int iIndex = tabControl_Products.SelectedIndex;
-
 			__cCurrentPages.Controls.RemoveAt(0);
 
 			this.dataGrid.DataSource = __cSources[iIndex];
+			RefreshGridSort();
+
 			TabPage cPage = tabControl_Products.TabPages[iIndex];
 			cPage.Controls.Add(this.dataGrid);
 
 			__cCurrentPages = cPage;
+		}
+
+		private void RefreshGridSort() {
+			if (__cSortRangeRowEvent != null) {
+				this.dataGrid.SortRangeRows(__cSortRangeRowEvent.Range, __cSortRangeRowEvent.KeyColumn, __cSortRangeRowEvent.Ascending, __cSortRangeRowEvent.CellComparer);
+			}
 		}
 
 		private void SetChartSetting() {
@@ -498,7 +511,6 @@ namespace Zeghs.Forms {
 			}
 
 			GetChartSetting();  //設定圖表資訊
-
 			this.DialogResult = DialogResult.OK;
 		}
 
@@ -507,7 +519,8 @@ namespace Zeghs.Forms {
 		}
 
 		private void dataGrid_DoubleClick(object sender, EventArgs e) {
-			if (this.dataGrid.SelectedDataRows != null) {
+			object[] cRows = this.dataGrid.SelectedDataRows;
+			if (cRows != null && cRows.Length > 0) {
 				_ProductInfo cProductInfo = this.dataGrid.SelectedDataRows[0] as _ProductInfo;
 				
 				string sSymbolId = cProductInfo.ProductId;
@@ -518,6 +531,10 @@ namespace Zeghs.Forms {
 					__cAddSymbolIds.Add(cProductInfo.ProductId, cProductInfo.ExchangeName);
 				}
 			}
+		}
+
+		private void dataGrid_SortedRangeRows(object sender, SortRangeRowsEventArgs e) {
+			__cSortRangeRowEvent = e;
 		}
 	}
 }
