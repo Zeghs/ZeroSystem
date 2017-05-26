@@ -109,6 +109,20 @@ namespace ZeroSystem.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap frmMain_menubar_menuItem_exportProfile {
+            get {
+                object obj = ResourceManager.GetObject("frmMain_menubar_menuItem_exportProfile", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap frmMain_menubar_menuItem_importProfile {
+            get {
+                object obj = ResourceManager.GetObject("frmMain_menubar_menuItem_importProfile", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap frmMain_toolbar_toolItem_console {
             get {
                 object obj = ResourceManager.GetObject("frmMain_toolbar_toolItem_console", resourceCulture);

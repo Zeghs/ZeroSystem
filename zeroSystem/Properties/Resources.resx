@@ -136,9 +136,6 @@
   <data name="frmMain_toolbar_toolItem_productManager" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\frmMain_toolbar_toolItem_productManager.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="frmMain_toolbar_toolItem_console" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\frmMain_toolbar_toolItem_console.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="frmMain_toolbar_toolItem_quote" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\frmMain_toolbar_toolItem_quote.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -150,6 +147,12 @@
   </data>
   <data name="frmMain_toolbar_toolItem_quoteManager" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\frmMain_toolbar_toolItem_quoteManager.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="frmMain_menubar_menuItem_importProfile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\frmMain_menubar_menuItem_importProfile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="frmProductManager_toolbar_toolItem_Save" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\frmProductManager_toolbar_toolItem_Save.png.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="frmChildBase_MouseMove_minbox" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\frmChildBase_MouseMove_minbox.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -163,11 +166,14 @@
   <data name="frmMain_toolbar_toolItem_logger" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\frmMain_toolbar_toolItem_logger.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="frmMain_toolbar_toolItem_cursor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\frmMain_toolbar_toolItem_cursor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="frmChildBase_minbox" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\frmChildBase_minbox.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="frmProductManager_toolbar_toolItem_Save" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\frmProductManager_toolbar_toolItem_Save.png.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="frmMain_toolbar_toolItem_console" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\frmMain_toolbar_toolItem_console.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="frmChildBase_maxbox" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\frmChildBase_maxbox.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -184,7 +190,7 @@
   <data name="frmProductManager_toolbar_toolItem_Create" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\frmProductManager_toolbar_toolItem_Create.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="frmMain_toolbar_toolItem_cursor" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\frmMain_toolbar_toolItem_cursor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="frmMain_menubar_menuItem_exportProfile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\frmMain_menubar_menuItem_exportProfile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

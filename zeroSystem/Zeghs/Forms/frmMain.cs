@@ -40,6 +40,20 @@ namespace Zeghs.Forms {
 			toolItem_cursor.Tag = cItem;
 		}
 
+		private void CreateScriptFromProfile(ProfileSetting[] profiles) {
+			if (profiles != null) {
+				foreach (ProfileSetting cProfile in profiles) {
+					switch (cProfile.ScriptType) {
+						case ScriptType.Script:
+							break;
+						case ScriptType.Signal:
+							frmSignalViewer.Create(this.dockPanels, cProfile);
+							break;
+					}
+				}
+			}
+		}
+
 		private IDockContent GetDockContentFromPersistString(string persistString) {
 			IDockContent cContent = null;
 			bool bExist = __cCommons.TryGetValue(persistString, out cContent);
@@ -74,7 +88,9 @@ namespace Zeghs.Forms {
 
 		private void SetCustomAction(string action) {
 			frmSignalViewer frmSignalViewer = __cActivateForm as frmSignalViewer;
-			frmSignalViewer.Chart.SetCustomAction(action, __cPenStyle);
+			if (frmSignalViewer != null) {
+				frmSignalViewer.Chart.SetCustomAction(action, __cPenStyle);
+			}
 		}
 
 		private void frmMain_FormClosing(object sender, FormClosingEventArgs e) {
@@ -151,6 +167,31 @@ namespace Zeghs.Forms {
 			frmAbout.Dispose();
 		}
 
+		private void menuItem_ExportProfile_Click(object sender, EventArgs e) {
+			DialogResult cResult = saveDialog.ShowDialog();
+			if (cResult == DialogResult.OK) {
+				string sFilename = saveDialog.FileName;
+				saveDialog.FileName = string.Empty;
+
+				ProfileManager.Manager.Export(sFilename);
+
+				MessageBox.Show(__sMessageContent_002, __sMessageHeader_002, MessageBoxButtons.OK, MessageBoxIcon.Information);
+			}
+		}
+
+		private void menuItem_ImportProfile_Click(object sender, EventArgs e) {
+			DialogResult cResult = openDialog.ShowDialog();
+			if (cResult == DialogResult.OK) {
+				string sFilename = openDialog.FileName;
+				openDialog.FileName = string.Empty;
+
+				ProfileSetting[] cProfiles = ProfileManager.Manager.Import(sFilename);
+				CreateScriptFromProfile(cProfiles);
+
+				MessageBox.Show(__sMessageContent_001, __sMessageHeader_001, MessageBoxButtons.OK, MessageBoxIcon.Information);
+			}
+		}
+
 		private void toolItem_productManager_Click(object sender, EventArgs e) {
 			frmProductManager frmProductManager = new frmProductManager();
 			frmProductManager.ShowDialog();
@@ -214,17 +255,7 @@ namespace Zeghs.Forms {
 			ProfileManager.Manager.onLoadProfile -= ProfileManager_onLoadProfile;
 
 			ProfileSetting[] cProfiles = ProfileManager.Manager.Profiles;
-			if (cProfiles != null) {
-				foreach (ProfileSetting cProfile in cProfiles) {
-					switch (cProfile.ScriptType) {
-						case ScriptType.Script:
-							break;
-						case ScriptType.Signal:
-							frmSignalViewer.Create(this.dockPanels, cProfile);
-							break;
-					}
-				}
-			}
+			CreateScriptFromProfile(cProfiles);
 		}
 	}
 }

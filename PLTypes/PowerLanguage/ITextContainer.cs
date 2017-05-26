@@ -26,9 +26,9 @@ namespace PowerLanguage {
 		/// </summary>
 		/// <param name="point">文字繪圖物件的座標位置</param>
 		/// <param name="text">繪圖文字內容</param>
-		/// <param name="onSameSubchart">是否在同一個副圖中</param>
+		/// <param name="absolutePosition">是否座標位置為螢幕座標而非價格與時間軸座標</param>
 		/// <returns>返回值: ITextObject 介面</returns>
-		ITextObject Create(ChartPoint point, string text, bool onSameSubchart);
+		ITextObject Create(ChartPoint point, string text, bool absolutePosition);
 
 		/// <summary>
 		///   建立文字繪圖物件
@@ -36,8 +36,9 @@ namespace PowerLanguage {
 		/// <param name="point">文字繪圖物件的座標位置</param>
 		/// <param name="text">繪圖文字內容</param>
 		/// <param name="dataStream">資料串流編號</param>
+		/// <param name="absolutePosition">是否座標位置為螢幕座標而非價格與時間軸座標</param>
 		/// <returns>返回值: ITextObject 介面</returns>
-		ITextObject Create(ChartPoint point, string text, int dataStream);
+		ITextObject Create(ChartPoint point, string text, int dataStream, bool absolutePosition = false);
 
 		/// <summary>
 		///   取得文字繪圖物件列表

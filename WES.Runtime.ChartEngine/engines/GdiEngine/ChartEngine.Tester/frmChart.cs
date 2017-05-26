@@ -87,7 +87,7 @@ namespace ChartEngine.Tester {
 			cObject.ApplyProperty(new SignalProperty() {
 				DefaultContracts = 1,
 				InitialCapital = 100000,
-				MaximumBarsReference = 60,
+				MaximumBarsReference = 0,
 				OrderSource = "Netwings.OrderService;Netwings.SimulateOrderService"
 			});
 
@@ -103,8 +103,8 @@ namespace ChartEngine.Tester {
 					Exchange = "TWSE",
 					DataFeed = "Mitake",
 					Range = new DataRequest(DateTime.Today, 1000, DataRequestType.BarsBack, DateTime.Today),
-					Symbol = "TWI.tw",
-					Resolution = new Resolution(EResolution.Minute, 1)
+					Symbol = "TXF0.tw",
+					Resolution = new Resolution(EResolution.Minute, 5)
 				}
 			});
 		}

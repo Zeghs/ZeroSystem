@@ -65,6 +65,31 @@ namespace Zeghs.Settings {
 			}
 		}
 
+		internal void Export(string file) {
+			string sJSONSettings = JsonConvert.SerializeObject(__cProfiles, Formatting.Indented);
+			File.WriteAllText(file, sJSONSettings, Encoding.UTF8);
+		}
+
+		internal ProfileSetting[] Import(string file) {
+			if (File.Exists(file)) {
+				string sJSONSettings = File.ReadAllText(file, Encoding.UTF8);
+				Dictionary<string, JToken> cSettings = JsonConvert.DeserializeObject<Dictionary<string, JToken>>(sJSONSettings);
+				
+				int iCount = cSettings.Count;
+				if (iCount > 0) {
+					int iIndex = 0;
+					ProfileSetting[] cProfiles = new ProfileSetting[iCount];
+					foreach (JToken cSetting in cSettings.Values) {
+						ProfileSetting cProfile = ProfileSetting.CreateProfile(cSetting);
+						cProfiles[iIndex++] = cProfile;
+						AddProfile(cProfile);
+					}
+					return cProfiles;
+				}
+			}
+			return null;
+		}
+
 		internal void Load(string name) {
 			string sFile = string.Format("{0}{1}.profile", GlobalSettings.Paths.ProfilePath, name);
 			if (File.Exists(sFile)) {

@@ -375,6 +375,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\frmMain_menubar_menuItem_exportProfile.png" />
+    <None Include="Resources\frmMain_menubar_menuItem_importProfile.png" />
     <None Include="Resources\frmMain_toolbar_toolItem_cursor.png" />
     <None Include="Resources\frmMain_toolbar_toolItem_console.png" />
     <None Include="Resources\frmMain_toolbar_toolItem_logger.png" />

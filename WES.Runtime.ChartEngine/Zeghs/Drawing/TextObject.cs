@@ -16,6 +16,14 @@ namespace Zeghs.Drawing {
 		private FontStyle __cStyle = FontStyle.Regular;
 
 		/// <summary>
+		///   [取得/設定] 是否座標位置為螢幕座標而非價格與時間軸座標
+		/// </summary>
+		public bool AbsolutePosition {
+			get;
+			internal set;
+		}
+
+		/// <summary>
 		///   [取得/設定] 背景顏色
 		/// </summary>
 		public Color BGColor {
@@ -98,14 +106,6 @@ namespace Zeghs.Drawing {
 			}
 		}
 
-		/// <summary>
-		///   [取得/設定] 是否在同一個副圖上
-		/// </summary>
-		public bool OnSameSubchart {
-			get;
-			internal set;
-		}
-	
 		/// <summary>
 		///   [取得/設定] 繪製文字的字型大小
 		/// </summary>

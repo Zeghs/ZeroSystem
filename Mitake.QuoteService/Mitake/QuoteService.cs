@@ -388,7 +388,11 @@ namespace Mitake {
                 internal void Send(object mcpObject) {
                         if (__cSession != null) {
                                 if (__cSession.Connected) {
-                                        __cSession.Send(MitakePacket.ToBuffer(mcpObject));
+					try {
+						__cSession.Send(MitakePacket.ToBuffer(mcpObject));
+					} catch (Exception __errExcep) {
+						if (logger.IsErrorEnabled) logger.ErrorFormat("[QuoteService.Send] {0}\r\n{1}", __errExcep.Message, __errExcep.StackTrace);
+					}
                                 }
                         }
                 }
@@ -399,13 +403,21 @@ namespace Mitake {
 		internal void SendSubscribe() {
                         if (__cSocket != null) {
                                 if (__cSocket.Connected) {
-                                        __cSocket.Send(MitakePacket.ToBuffer(__cSubscribe));
+					try {
+						__cSocket.Send(MitakePacket.ToBuffer(__cSubscribe));
+					} catch (Exception __errExcep) {
+						if (logger.IsErrorEnabled) logger.ErrorFormat("[QuoteService.SendSubscribe] {0}\r\n{1}", __errExcep.Message, __errExcep.StackTrace);
+					}
                                 }
                         }
                         
 			if (__cSession != null) {
                                 if (__cSession.Connected) {
-					__cSession.Send(MitakePacket.ToBuffer(__cSubscribe));
+					try {
+						__cSession.Send(MitakePacket.ToBuffer(__cSubscribe));
+					} catch (Exception __errExcep) {
+						if (logger.IsErrorEnabled) logger.ErrorFormat("[QuoteService.SendSubscribe] {0}\r\n{1}", __errExcep.Message, __errExcep.StackTrace);
+					}
                                 }
                         }
                 }
@@ -615,4 +627,4 @@ namespace Mitake {
 			}
 		}
 	}
-} //618行
+} //630行

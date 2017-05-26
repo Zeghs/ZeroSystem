@@ -41,7 +41,6 @@ namespace Zeghs.Drawing.Plots {
 		public override bool DrawPlot(Layer layer, ChartProperty property, bool onlyUpdateLastBar) {
 			AxisX cAxisX = layer.AxisX;
 
-			int iOldMode = __cGDI.SelectTransparent();
 			IntPtr iOldFont = __cGDI.SelectFont(property.TextFont);
 
 			int iIndex = cAxisX.BarNumber, iCount = 1;
@@ -58,7 +57,6 @@ namespace Zeghs.Drawing.Plots {
 			ProccessObjects(cTextObjects, property, onlyUpdateLastBar);
 
 			__cGDI.RemoveObject(__cGDI.SelectFont(iOldFont));
-			__cGDI.ClearTransparent(iOldMode);
 			return true;
 		}
 
@@ -100,22 +98,31 @@ namespace Zeghs.Drawing.Plots {
 			bool bUseFont = textObject.FontName != property.TextFont.Name || textObject.Size != property.TextFont.Size;
 			if (bUseBG) {
 				iOldBackground = __cGDI.SelectBackground(textObject.BGColor);
+			} else {
+				iOldBackground = __cGDI.SelectTransparent();
 			}
 
 			if (bUseFont) {
 				iOldFont = __cGDI.SelectFont(new Font(textObject.FontName, textObject.Size, textObject.Style));
 			}
 
+			int iX = 0, iY = 0;
 			ChartPoint cPoint = textObject.Location;
-			int iY = cRectY.Y + cAxisY.ConvertValueToHeight(cPoint.Price) + 1;
-			AxisXUnit cUnit = cAxisX.ConvertBarNumberToWidth(cPoint.BarNumber.Value);
-			Size cSize = __cGDI.MeasureString(textObject.Text);
+			bool bAbsolute = textObject.AbsolutePosition;
+			if (bAbsolute) {
+				iY = cRectY.Y + (int) cPoint.Price;
+				iX = cPoint.BarNumber.Value;
+			} else {
+				iY = cRectY.Y + cAxisY.ConvertValueToHeight(cPoint.Price) + 1;
+				AxisXUnit cUnit = cAxisX.ConvertBarNumberToWidth(cPoint.BarNumber.Value);
+				Size cSize = __cGDI.MeasureString(textObject.Text);
 
-			iY = CalculateYFromStyle(iY, cSize, textObject.VStyle);
-			int iX = CalculateXFromStyle(cUnit.CenterPoint, cSize, textObject.HStyle);
+				iY = CalculateYFromStyle(iY, cSize, textObject.VStyle);
+				iX = CalculateXFromStyle(cUnit.CenterPoint, cSize, textObject.HStyle);
+			}
 
 			Rectangle cLayerRect = layer.LayerRectangleWithoutAxisY;
-			if (useROP) {
+			if (useROP || bAbsolute) {
 				__cGDI.BeginRopDraw();
 				__cGDI.DrawRopString(textObject.Text, textObject.Color, iX, iY);
 				__cGDI.EndRopDraw();
@@ -129,6 +136,8 @@ namespace Zeghs.Drawing.Plots {
 
 			if (bUseBG) {
 				__cGDI.SelectBackground(iOldBackground);
+			} else {
+				__cGDI.ClearTransparent(iOldBackground);
 			}
 		}
 

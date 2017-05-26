@@ -97,7 +97,7 @@ namespace PowerLanguage {
 		public ChartPoint(DateTime time, double price) {
 			__iBarNumber = 0;
 			__dPrice = price;
-			__cTime = DateTime.MinValue;
+			__cTime = time;
 		}
 
 		/// <summary>

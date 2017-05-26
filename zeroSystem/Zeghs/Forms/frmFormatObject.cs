@@ -88,20 +88,21 @@ namespace Zeghs.Forms {
 			if (profile == null) {
 				__cCharts = new List<ChartSetting>(4);
 
-				ChartProperty DefaultProperty = GlobalSettings.ChartProfile.DefaultProperty;
+				ChartProperty cDefaultProperty = GlobalSettings.ChartProfile.DefaultProperty;
 				__cChartProperty = new ChartProperty();
-				__cChartProperty.AxisFont = DefaultProperty.AxisFont;
-				__cChartProperty.LegendFont = DefaultProperty.LegendFont;
-				__cChartProperty.TextFont = DefaultProperty.TextFont;
-				__cChartProperty.TitleFont = DefaultProperty.TitleFont;
-				__cChartProperty.TitleFont = DefaultProperty.TitleFont;
-				__cChartProperty.AxisColor = DefaultProperty.AxisColor;
-				__cChartProperty.BackgroundColor = DefaultProperty.BackgroundColor;
-				__cChartProperty.DrawAideLineColor = DefaultProperty.DrawAideLineColor;
-				__cChartProperty.ForeColor = DefaultProperty.ForeColor;
-				__cChartProperty.GridColor = DefaultProperty.GridColor;
-				__cChartProperty.TradeLineColor = DefaultProperty.TradeLineColor;
-				__cChartProperty.TradeSymbolColor = DefaultProperty.TradeSymbolColor;
+				__cChartProperty.AxisFont = cDefaultProperty.AxisFont;
+				__cChartProperty.LegendFont = cDefaultProperty.LegendFont;
+				__cChartProperty.TextFont = cDefaultProperty.TextFont;
+				__cChartProperty.TitleFont = cDefaultProperty.TitleFont;
+				__cChartProperty.TitleFont = cDefaultProperty.TitleFont;
+				__cChartProperty.AxisColor = cDefaultProperty.AxisColor;
+				__cChartProperty.BackgroundColor = cDefaultProperty.BackgroundColor;
+				__cChartProperty.DrawAideLineColor = cDefaultProperty.DrawAideLineColor;
+				__cChartProperty.ForeColor = cDefaultProperty.ForeColor;
+				__cChartProperty.GridColor = cDefaultProperty.GridColor;
+				__cChartProperty.TradeLineColor = cDefaultProperty.TradeLineColor;
+				__cChartProperty.TradeSymbolColor = cDefaultProperty.TradeSymbolColor;
+				__cChartProperty.DrawingSource = cDefaultProperty.DrawingSource;
 				__cChartProperty.IsShowGrid = true;
 				__cChartProperty.ChartSettings = __cCharts;
 			} else {

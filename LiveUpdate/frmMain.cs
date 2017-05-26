@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Drawing;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using Zeghs.Utils;
@@ -21,6 +22,11 @@ namespace LiveUpdate {
  
 		public frmMain() {
 			InitializeComponent();
+			
+			labCopyright.Parent = imgBanner;
+			labLiveUpdate.Parent = imgBanner;
+			labCopyright.BackColor = Color.Transparent;
+			labLiveUpdate.BackColor = Color.Transparent;
 		}
 
 		internal bool CheckUpdate(string url) {

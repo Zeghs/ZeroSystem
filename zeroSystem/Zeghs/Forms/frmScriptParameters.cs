@@ -21,7 +21,7 @@ namespace Zeghs.Forms {
 				InputAttribute cInput = args[i];
 
 				_ParameterInfo cParameter = new _ParameterInfo();
-				cParameter.Comment = (cInput.Comment == null) ? cInput.Name : cInput.Comment;
+			 	cParameter.Comment = (cInput.Comment == null) ? cInput.Name : cInput.Comment;
 				cParameter.Value = cInput.Value.ToString();
 
 				source.Add(cParameter);

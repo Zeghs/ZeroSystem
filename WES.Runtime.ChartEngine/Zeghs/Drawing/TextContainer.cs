@@ -12,6 +12,7 @@ namespace Zeghs.Drawing {
 		private Font __cTextFont = null;
 		private Color __cForeColor = Color.Empty;
 		private Color __cBackgroundColor = Color.Empty;
+		private List<TextObject> __cAbsoluteObjects = null;
 		private VariableSeries<List<TextObject>> __cTextObjects = null;
 
 		/// <summary>
@@ -40,14 +41,20 @@ namespace Zeghs.Drawing {
 		/// </summary>
 		/// <param name="textObject">文字繪圖物件類別</param>
 		public void AddTextObject(TextObject textObject) {
-			lock (__cTextObjects) {
-				List<TextObject> cObjects = __cTextObjects.Value;
-				if (cObjects == null) {
-					cObjects = new List<TextObject>(8);
-					__cTextObjects.Value = cObjects;
+			if (textObject.AbsolutePosition) {
+				lock (__cAbsoluteObjects) {
+					__cAbsoluteObjects.Add(textObject);
 				}
+			} else {
+				lock (__cTextObjects) {
+					List<TextObject> cObjects = __cTextObjects.Value;
+					if (cObjects == null) {
+						cObjects = new List<TextObject>(8);
+						__cTextObjects.Value = cObjects;
+					}
 
-				cObjects.Add(textObject);
+					cObjects.Add(textObject);
+				}
 			}
 		}
 
@@ -78,11 +85,11 @@ namespace Zeghs.Drawing {
 		/// </summary>
 		/// <param name="point">文字繪圖物件的座標位置</param>
 		/// <param name="text">繪圖文字內容</param>
-		/// <param name="onSameSubchart">是否在同一個副圖中</param>
+		/// <param name="absolutePosition">是否座標位置為螢幕座標而非價格與時間軸座標</param>
 		/// <returns>返回值: ITextObject 介面</returns>
-		public ITextObject Create(ChartPoint point, string text, bool onSameSubchart) {
+		public ITextObject Create(ChartPoint point, string text, bool absolutePosition) {
 			TextObject cTextObject = CreateObject(point, text);
-			cTextObject.OnSameSubchart = onSameSubchart;
+			cTextObject.AbsolutePosition = absolutePosition;
 			AddTextObject(cTextObject);
 
 			return cTextObject;
@@ -100,6 +107,23 @@ namespace Zeghs.Drawing {
 			cTextObject.DataStream = dataStream;
 			AddTextObject(cTextObject);
 
+			return cTextObject;
+		}
+
+		/// <summary>
+		///   建立文字繪圖物件
+		/// </summary>
+		/// <param name="point">文字繪圖物件的座標位置</param>
+		/// <param name="text">繪圖文字內容</param>
+		/// <param name="dataStream">資料串流編號</param>
+		/// <param name="absolutePosition">是否座標位置為螢幕座標而非價格與時間軸座標</param>
+		/// <returns>返回值: ITextObject 介面</returns>
+		public ITextObject Create(ChartPoint point, string text, int dataStream, bool absolutePosition = false) {
+			TextObject cTextObject = CreateObject(point, text);
+			cTextObject.DataStream = dataStream;
+			cTextObject.AbsolutePosition = absolutePosition;
+			AddTextObject(cTextObject);
+			
 			return cTextObject;
 		}
 
@@ -149,6 +173,17 @@ namespace Zeghs.Drawing {
 					}
 				}
 			}
+
+			//是否有使用絕對位置的文字繪圖物件(絕對位置的物件不受 barNumber 影響, 每次都需要加入到繪製清單)
+			if (__cAbsoluteObjects.Count > 0) {
+				iCount = __cAbsoluteObjects.Count;
+				for (int i = 0; i < iCount; i++) {
+					TextObject cObject = __cAbsoluteObjects[i];
+					if (cObject.Exist && cObject.DrawingSourceFlag == iFlag) {
+						cTextObjects.Add(cObject);
+					}
+				}
+			}
 			return cTextObjects;
 		}
 
@@ -157,6 +192,7 @@ namespace Zeghs.Drawing {
 		/// </summary>
 		/// <param name="master">IStudyControl 腳本控制介面</param>
 		public void Initialate(IStudyControl master) {
+			__cAbsoluteObjects = new List<TextObject>(32);
 			__cTextObjects = new VariableSeries<List<TextObject>>(master);
 		}
 
@@ -171,7 +207,9 @@ namespace Zeghs.Drawing {
 		}
 
 		private TextObject CreateObject(ChartPoint point, string text) {
-			point.BarNumber = __cTextObjects.Current;
+			if (point.BarNumber == 0) {
+				point.BarNumber = __cTextObjects.Current;
+			}
 
 			TextObject cObject = new TextObject();
 			cObject.Location = point;

@@ -9,7 +9,7 @@ namespace Zeghs.Settings {
 	///   Profile 設定檔類別
 	/// </summary>
 	public sealed class ProfileSetting {
-		internal static ProfileSetting CreateProfile(JToken setting) {
+		public static ProfileSetting CreateProfile(JToken setting) {
 			ProfileSetting cProfile = new ProfileSetting();
 			int iScriptType = setting["ScriptType"].Value<int>();
 			switch (iScriptType) {
