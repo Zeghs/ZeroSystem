@@ -58,8 +58,14 @@
 			this.pageItem_Parameters = new System.Windows.Forms.TabPage();
 			this.dataGrid = new SourceGrid.DataGrid();
 			this.pageItem_Commissions = new System.Windows.Forms.TabPage();
+			this.toolbar = new System.Windows.Forms.ToolStrip();
+			this.toolItem_Create = new System.Windows.Forms.ToolStripButton();
+			this.toolItem_Remove = new System.Windows.Forms.ToolStripButton();
+			this.ruleGrid = new SourceGrid.DataGrid();
 			this.tabControl.SuspendLayout();
 			this.pageItem_Parameters.SuspendLayout();
+			this.pageItem_Commissions.SuspendLayout();
+			this.toolbar.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnOK
@@ -121,6 +127,8 @@
 			// 
 			// pageItem_Commissions
 			// 
+			this.pageItem_Commissions.Controls.Add(this.ruleGrid);
+			this.pageItem_Commissions.Controls.Add(this.toolbar);
 			this.pageItem_Commissions.Location = new System.Drawing.Point(4, 21);
 			this.pageItem_Commissions.Name = "pageItem_Commissions";
 			this.pageItem_Commissions.Padding = new System.Windows.Forms.Padding(3);
@@ -128,6 +136,53 @@
 			this.pageItem_Commissions.TabIndex = 1;
 			this.pageItem_Commissions.Text = "交易成本";
 			this.pageItem_Commissions.UseVisualStyleBackColor = true;
+			// 
+			// toolbar
+			// 
+			this.toolbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolItem_Create,
+            this.toolItem_Remove});
+			this.toolbar.Location = new System.Drawing.Point(3, 3);
+			this.toolbar.Name = "toolbar";
+			this.toolbar.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+			this.toolbar.Size = new System.Drawing.Size(376, 25);
+			this.toolbar.TabIndex = 0;
+			this.toolbar.Text = "toolStrip1";
+			// 
+			// toolItem_Create
+			// 
+			this.toolItem_Create.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolItem_Create.Image = global::ZeroSystem.Properties.Resources.frmScriptParameters_toolbar_toolItem_Create;
+			this.toolItem_Create.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolItem_Create.Name = "toolItem_Create";
+			this.toolItem_Create.Size = new System.Drawing.Size(23, 22);
+			this.toolItem_Create.ToolTipText = "新增規則";
+			this.toolItem_Create.Click += new System.EventHandler(this.toolItem_Create_Click);
+			// 
+			// toolItem_Remove
+			// 
+			this.toolItem_Remove.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolItem_Remove.Image = global::ZeroSystem.Properties.Resources.frmScriptParameters_toolbar_toolItem_Delete;
+			this.toolItem_Remove.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolItem_Remove.Name = "toolItem_Remove";
+			this.toolItem_Remove.Size = new System.Drawing.Size(23, 22);
+			this.toolItem_Remove.ToolTipText = "刪除規則";
+			// 
+			// ruleGrid
+			// 
+			this.ruleGrid.BackColor = System.Drawing.SystemColors.Window;
+			this.ruleGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.ruleGrid.DeleteQuestionMessage = "您確定要刪除此筆資訊?";
+			this.ruleGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ruleGrid.EnableSort = false;
+			this.ruleGrid.FixedRows = 1;
+			this.ruleGrid.Location = new System.Drawing.Point(3, 28);
+			this.ruleGrid.Name = "ruleGrid";
+			this.ruleGrid.SelectionMode = SourceGrid.GridSelectionMode.Row;
+			this.ruleGrid.Size = new System.Drawing.Size(376, 174);
+			this.ruleGrid.TabIndex = 6;
+			this.ruleGrid.TabStop = true;
+			this.ruleGrid.ToolTipText = "";
 			// 
 			// frmScriptParameters
 			// 
@@ -145,6 +200,10 @@
 			this.TopMost = true;
 			this.tabControl.ResumeLayout(false);
 			this.pageItem_Parameters.ResumeLayout(false);
+			this.pageItem_Commissions.ResumeLayout(false);
+			this.pageItem_Commissions.PerformLayout();
+			this.toolbar.ResumeLayout(false);
+			this.toolbar.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -157,5 +216,9 @@
 		private System.Windows.Forms.TabPage pageItem_Parameters;
 		private SourceGrid.DataGrid dataGrid;
 		private System.Windows.Forms.TabPage pageItem_Commissions;
+		private System.Windows.Forms.ToolStrip toolbar;
+		private System.Windows.Forms.ToolStripButton toolItem_Create;
+		private System.Windows.Forms.ToolStripButton toolItem_Remove;
+		private SourceGrid.DataGrid ruleGrid;
 	}
 }

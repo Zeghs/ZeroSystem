@@ -12,7 +12,7 @@ namespace Netwings.Forms {
 			InitializeComponent();
 		}
 
-		private void bOK_Click(object sender, EventArgs e) {
+		private void btnOK_Click(object sender, EventArgs e) {
 			double dFee = 0;
 			double.TryParse(txtFee.Text, out dFee);
 			this.Fee = dFee;
@@ -20,7 +20,7 @@ namespace Netwings.Forms {
 			this.DialogResult = DialogResult.OK;
 		}
 
-		private void bCancel_Click(object sender, EventArgs e) {
+		private void btnCancel_Click(object sender, EventArgs e) {
 			this.DialogResult = DialogResult.Cancel;
 		}
 	}

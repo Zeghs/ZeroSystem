@@ -3,20 +3,32 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using PowerLanguage;
 using Zeghs.Data;
+using Zeghs.Orders;
+using Zeghs.Services;
 
 namespace Zeghs.Forms {
 	public partial class frmScriptParameters : Form {
 		private List<InputAttribute> __cParameters = null;
+		private AbstractOrderService __cOrderService = null;
 
 		public frmScriptParameters() {
 			InitializeComponent();
 			InitializeSourceGrid();
 		}
 
-		internal void SetParameters(List<InputAttribute> args) {
+		internal void SetParameters(AbstractOrderService orderService, List<InputAttribute> args) {
 			__cParameters = args;
+			__cOrderService = orderService;
 
-			int iCount = args.Count;
+			int iCount = 0;
+			List<ICommission> cCommissions = __cOrderService.Commissions;
+			if (cCommissions != null) {
+				iCount = cCommissions.Count;
+				for (int i = 0; i < iCount; i++) {
+				}
+			}
+
+			iCount = args.Count;
 			for (int i = 0; i < iCount; i++) {
 				InputAttribute cInput = args[i];
 
@@ -42,6 +54,14 @@ namespace Zeghs.Forms {
 			}
 
 			this.DialogResult = DialogResult.OK;
+		}
+
+		private void toolItem_Create_Click(object sender, EventArgs e) {
+			frmCommissionRuleSettings frmCommissionRuleSettings = new frmCommissionRuleSettings(__cOrderService);
+			DialogResult cResult = frmCommissionRuleSettings.ShowDialog();
+			if (cResult == DialogResult.OK) {
+
+			}
 		}
 	}
 }

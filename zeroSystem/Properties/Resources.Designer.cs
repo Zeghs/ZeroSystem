@@ -228,6 +228,20 @@ namespace ZeroSystem.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap frmScriptParameters_toolbar_toolItem_Create {
+            get {
+                object obj = ResourceManager.GetObject("frmScriptParameters_toolbar_toolItem_Create", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap frmScriptParameters_toolbar_toolItem_Delete {
+            get {
+                object obj = ResourceManager.GetObject("frmScriptParameters_toolbar_toolItem_Delete", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap frmWelcome_background {
             get {
                 object obj = ResourceManager.GetObject("frmWelcome_background", resourceCulture);

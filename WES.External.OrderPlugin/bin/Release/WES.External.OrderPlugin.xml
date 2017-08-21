@@ -267,6 +267,11 @@
               [取得] 主要的 Bars 物件
             </summary>
         </member>
+        <member name="P:Zeghs.Services.AbstractOrderService.Commissions">
+            <summary>
+              [取得] 佣金規則列表
+            </summary>
+        </member>
         <member name="P:Zeghs.Services.AbstractOrderService.CurrentPosition">
             <summary>
               [取得] 目前留倉部位

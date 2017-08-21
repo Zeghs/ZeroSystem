@@ -48,6 +48,7 @@
     <Compile Include="PowerLanguage\Function\DMI.cs" />
     <Compile Include="PowerLanguage\Function\KD.cs" />
     <Compile Include="PowerLanguage\Function\MACD.cs" />
+    <Compile Include="PowerLanguage\Function\SAR.cs" />
     <Compile Include="PowerLanguage\_Variable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

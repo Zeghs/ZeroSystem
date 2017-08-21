@@ -110,7 +110,7 @@ namespace Zeghs.IO {
 		///   讀取資料請求結構列表內的 Instrument 資料
 		/// </summary>
 		/// <param name="requests">資料請求結構列表</param>
-		public void LoadDataRange(List<InstrumentDataRequest> requests) {
+		public void LoadDataRange(List<InstrumentDataRequest> requests, bool useCache = true) {
 			int iCount = 0;
 			lock (__cInstruments) {
 				iCount = __cInstruments.Count;
@@ -119,7 +119,7 @@ namespace Zeghs.IO {
 
 			foreach (InstrumentDataRequest request in requests) {
 				SeriesManager.Manager.SetQuoteService(request.DataFeed);
-				SeriesManager.Manager.AsyncGetSeries(request, SeriesManager_onSeriesResult, true, iCount++);
+				SeriesManager.Manager.AsyncGetSeries(request, SeriesManager_onSeriesResult, useCache, iCount++);
 			}
 		}
 

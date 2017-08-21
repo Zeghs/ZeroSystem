@@ -38,8 +38,9 @@
 		/// </summary>
 		/// <param name="master">CStudyAbstract 類別</param>
 		/// <param name="dataStream">資料串流編號</param>
-		public BIAS(CStudyAbstract master, int dataStream = 1) 
-			: base(master, dataStream) {
+		/// <param name="manageFromStudy">由系統自動管理與釋放資源(預設:true)</param>
+		public BIAS(CStudyAbstract master, int dataStream = 1, bool manageFromStudy = true)
+			: base(master, dataStream, manageFromStudy) {
 
 			this.Length = 6;  //預設周期長度為6
 			this.AverageMode = EAverageMode.SMA;  //預設移動平均模式為簡單移動平均

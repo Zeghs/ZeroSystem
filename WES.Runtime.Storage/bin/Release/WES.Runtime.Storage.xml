@@ -528,7 +528,7 @@
         </member>
         <member name="P:Zeghs.Data.SeriesSymbolDataRand.Current">
             <summary>
-              [取得] 目前 Bars 索引值(索引從 1 開始)
+              [取得] 目前 Bars 索引值
             </summary>
         </member>
         <member name="P:Zeghs.Data.SeriesSymbolDataRand.High">
@@ -716,14 +716,21 @@
             <summary>
               從目前位置移動至下一個 Bars
             </summary>
+            <returns>返回值: true=移動至下一個 Bars 成功, false=已經是最後一個 Bars</returns>
         </member>
-        <member name="M:Zeghs.Data.Instrument.GetBarsState(System.DateTime,System.Boolean)">
+        <member name="M:Zeghs.Data.Instrument.GetBarsState(System.DateTime)">
             <summary>
               [取得] 目前當下 Bars 狀態 
             </summary>
             <param name="time">欲比較的時間</param>
-            <param name="isLoop">循環旗標</param>
-            <returns>返回值: EBarState 狀態</returns>
+            <returns>返回值: true=目前 Bars 狀態在傳入的時間區間內, false=目前 Bars 狀態在傳入的時間區間後面</returns>
+        </member>
+        <member name="M:Zeghs.Data.Instrument.Next(System.DateTime)">
+            <summary>
+              從目前位置移動至下一個 Bars
+            </summary>
+            <param name="time">參考時間值(如果有傳入此時間, 會比對此時間與目前 CurrentBar 所在的時間區間, 如果傳入 DateTime.MinValue 則傳入目前 CurrentBar 所在的時間區間)</param>
+            <returns>返回值: true=移動至下一個 Bars 成功, false=已經是最後一個 Bars</returns>
         </member>
         <member name="E:Zeghs.Data.Instrument.onPositionChange">
             <summary>
@@ -863,7 +870,7 @@
             <param name="index">資料存放索引值(從 0 起始)</param>
             <returns>返回值: Instrument 商品資訊類別</returns>
         </member>
-        <member name="M:Zeghs.IO.DataLoader.LoadDataRange(System.Collections.Generic.List{PowerLanguage.InstrumentDataRequest})">
+        <member name="M:Zeghs.IO.DataLoader.LoadDataRange(System.Collections.Generic.List{PowerLanguage.InstrumentDataRequest},System.Boolean)">
             <summary>
               讀取資料請求結構列表內的 Instrument 資料
             </summary>

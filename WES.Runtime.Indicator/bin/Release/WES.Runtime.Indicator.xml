@@ -90,17 +90,58 @@
               [取得/設定] 目前最新的變數值(以 CurrentBar 為最新依據)
             </summary>
         </member>
-        <member name="T:PowerLanguage.Function.KD">
+        <member name="T:PowerLanguage.Function.SAR">
             <summary>
-              [KDJ] 隨機指標
+              SAR指標(Stop And Reverse)
             </summary>
         </member>
-        <member name="M:PowerLanguage.Function.KD.#ctor(PowerLanguage.CStudyAbstract,System.Int32)">
+        <member name="M:PowerLanguage.Function.SAR.#ctor(PowerLanguage.CStudyAbstract,System.Int32,System.Boolean)">
             <summary>
               建構子
             </summary>
             <param name="master">CStudyAbstract 類別</param>
             <param name="dataStream">資料串流編號</param>
+            <param name="manageFromStudy">由系統自動管理與釋放資源(預設:true)</param>
+        </member>
+        <member name="M:PowerLanguage.Function.SAR.Create">
+            <summary>
+              建立模型時所呼叫的方法
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.Function.SAR.CalcBar">
+            <summary>
+              計算 Bars 時所呼叫的方法
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Function.SAR.Length">
+            <summary>
+              [取得/設定] 週期長度
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Function.SAR.Limit">
+            <summary>
+              [取得] 極值
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.Function.SAR.Item(System.Int32)">
+            <summary>
+              [取得] SAR 值
+            </summary>
+            <param name="barsAgo">目前或是之前的索引(0=目前的 Bar)</param>
+            <returns>返回值: 從索引值獲得的所需資料</returns>
+        </member>
+        <member name="T:PowerLanguage.Function.KD">
+            <summary>
+              [KDJ] 隨機指標
+            </summary>
+        </member>
+        <member name="M:PowerLanguage.Function.KD.#ctor(PowerLanguage.CStudyAbstract,System.Int32,System.Boolean)">
+            <summary>
+              建構子
+            </summary>
+            <param name="master">CStudyAbstract 類別</param>
+            <param name="dataStream">資料串流編號</param>
+            <param name="manageFromStudy">由系統自動管理與釋放資源(預設:true)</param>
         </member>
         <member name="M:PowerLanguage.Function.KD.Create">
             <summary>
@@ -139,12 +180,13 @@
               [DMI] 趨向指標
             </summary>
         </member>
-        <member name="M:PowerLanguage.Function.DMI.#ctor(PowerLanguage.CStudyAbstract,System.Int32)">
+        <member name="M:PowerLanguage.Function.DMI.#ctor(PowerLanguage.CStudyAbstract,System.Int32,System.Boolean)">
             <summary>
               建構子
             </summary>
             <param name="master">CStudyAbstract 類別</param>
             <param name="dataStream">資料串流編號</param>
+            <param name="manageFromStudy">由系統自動管理與釋放資源(預設:true)</param>
         </member>
         <member name="M:PowerLanguage.Function.DMI.Create">
             <summary>
@@ -188,12 +230,13 @@
               [MACD] 指數平滑異同平均線
             </summary>
         </member>
-        <member name="M:PowerLanguage.Function.MACD.#ctor(PowerLanguage.CStudyAbstract,System.Int32)">
+        <member name="M:PowerLanguage.Function.MACD.#ctor(PowerLanguage.CStudyAbstract,System.Int32,System.Boolean)">
             <summary>
               建構子
             </summary>
             <param name="master">CStudyAbstract 類別</param>
             <param name="dataStream">資料串流編號</param>
+            <param name="manageFromStudy">由系統自動管理與釋放資源(預設:true)</param>
         </member>
         <member name="M:PowerLanguage.Function.MACD.Create">
             <summary>
@@ -242,12 +285,13 @@
               [BIAS] 乖離率指標
             </summary>
         </member>
-        <member name="M:PowerLanguage.Function.BIAS.#ctor(PowerLanguage.CStudyAbstract,System.Int32)">
+        <member name="M:PowerLanguage.Function.BIAS.#ctor(PowerLanguage.CStudyAbstract,System.Int32,System.Boolean)">
             <summary>
               建構子
             </summary>
             <param name="master">CStudyAbstract 類別</param>
             <param name="dataStream">資料串流編號</param>
+            <param name="manageFromStudy">由系統自動管理與釋放資源(預設:true)</param>
         </member>
         <member name="M:PowerLanguage.Function.BIAS.Create">
             <summary>
@@ -281,12 +325,13 @@
               [BollingerBands] 布林通道指標
             </summary>
         </member>
-        <member name="M:PowerLanguage.Function.BollingerBands.#ctor(PowerLanguage.CStudyAbstract,System.Int32)">
+        <member name="M:PowerLanguage.Function.BollingerBands.#ctor(PowerLanguage.CStudyAbstract,System.Int32,System.Boolean)">
             <summary>
               建構子
             </summary>
             <param name="master">CStudyAbstract 類別</param>
             <param name="dataStream">資料串流編號</param>
+            <param name="manageFromStudy">由系統自動管理與釋放資源(預設:true)</param>
         </member>
         <member name="M:PowerLanguage.Function.BollingerBands.Create">
             <summary>

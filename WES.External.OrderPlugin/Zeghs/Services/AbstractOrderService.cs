@@ -31,6 +31,15 @@ namespace Zeghs.Services {
 		}
 
 		/// <summary>
+		///   [取得] 佣金規則列表
+		/// </summary>
+		public List<ICommission> Commissions {
+			get {
+				return __cCommissions;
+			}
+		}
+
+		/// <summary>
 		///   [取得] 目前留倉部位
 		/// </summary>
 		public abstract IMarketPosition CurrentPosition {
@@ -196,6 +205,10 @@ namespace Zeghs.Services {
 
 				if (disposing) {
 					onResponse = null;
+
+					if (__cCommissions != null) {
+						__cCommissions.Clear();
+					}
 				}
 			}
 		}
@@ -214,4 +227,4 @@ namespace Zeghs.Services {
 			}
 		}
 	}
-}
+}  //230行

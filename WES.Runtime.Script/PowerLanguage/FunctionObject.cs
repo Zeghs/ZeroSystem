@@ -53,7 +53,8 @@ namespace PowerLanguage {
 		/// </summary>
 		/// <param name="master">CStudyAbstract 類別</param>
 		/// <param name="dataStream">資料串流編號</param>
-		public FunctionObject(CStudyAbstract master, int dataStream = 1) {
+		/// <param name="manageFromStudy">由 CStudyAbstract 自動管理與釋放資源(預設:true)</param>
+		public FunctionObject(CStudyAbstract master, int dataStream = 1, bool manageFromStudy = true) {
 			this.MasterDataStream = dataStream;
 			
 			__cVariables = new List<IVariables>(8);
@@ -65,7 +66,9 @@ namespace PowerLanguage {
 				cInstrument.onPositionChange += Instrument_onPositionChange;
 
 				this.Bars = cInstrument;
-				master.AddFunction(this);
+				if (manageFromStudy) {
+					master.AddFunction(this);
+				}
 
 				Create();
 				StartCalc();
@@ -173,9 +176,7 @@ namespace PowerLanguage {
 				lock (__cVariables) {
 					Parallel.For(0, iCount, (i) => {
 						IVariables cVariables = __cVariables[i];
-
-						Instrument cInstrument = __cInstruments[cVariables.DataStream - 1];
-						cVariables.Move(cInstrument.CurrentBar);
+						cVariables.Move(e.Current);
 					});
 				}
 			}

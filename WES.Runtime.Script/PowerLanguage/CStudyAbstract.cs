@@ -138,7 +138,7 @@ namespace PowerLanguage {
 		/// <summary>
 		///   腳本內部資源釋放行為
 		/// </summary>
-		internal abstract void CStudyDestory();
+		internal abstract void CStudyDestroy();
 
 		/// <summary>
 		///   腳本內部初始化行為
@@ -170,7 +170,7 @@ namespace PowerLanguage {
 						if (logger.IsErrorEnabled) logger.ErrorFormat("{0}\r\n{1}", __errExcep2.Message, __errExcep2.StackTrace);
 					}
 
-					CStudyDestory();
+					CStudyDestroy();
 
 					//清理使用者繪圖文字物件
 					__cDrawTexts.Clear();

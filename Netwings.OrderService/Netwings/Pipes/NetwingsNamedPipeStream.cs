@@ -78,7 +78,7 @@ namespace Netwings.Pipes {
 
 		private void onAccept(IAsyncResult ar) {
 			if (!__bDisposed) {
-				NamedPipeServerStream cNamedPipeServer = (NamedPipeServerStream) ar.AsyncState;
+				NamedPipeServerStream cNamedPipeServer = ar.AsyncState as NamedPipeServerStream;
 
 				try {
 					cNamedPipeServer.EndWaitForConnection(ar);
@@ -93,7 +93,7 @@ namespace Netwings.Pipes {
 		}
 
 		private void onRead(IAsyncResult ar) {
-			NamedPipeServerStream cNamedPipeServer = (NamedPipeServerStream) ar.AsyncState;
+			NamedPipeServerStream cNamedPipeServer = ar.AsyncState as NamedPipeServerStream;
 
 			try {
 				int iNumBytes = cNamedPipeServer.EndRead(ar);

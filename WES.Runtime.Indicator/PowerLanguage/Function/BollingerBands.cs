@@ -73,7 +73,8 @@ namespace PowerLanguage.Function {
 		/// </summary>
 		/// <param name="master">CStudyAbstract 類別</param>
 		/// <param name="dataStream">資料串流編號</param>
-		public BollingerBands(CStudyAbstract master, int dataStream = 1) 
+		/// <param name="manageFromStudy">由系統自動管理與釋放資源(預設:true)</param>
+		public BollingerBands(CStudyAbstract master, int dataStream = 1, bool manageFromStudy = true) 
 			: base(master, dataStream) {
 
 			this.Length = 20;  //預設周期長度為20

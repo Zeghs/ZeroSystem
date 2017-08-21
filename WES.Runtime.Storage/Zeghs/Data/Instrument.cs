@@ -16,7 +16,7 @@ namespace Zeghs.Data {
 		/// </summary>
 		public event EventHandler<SeriesPositionChangeEvent> onPositionChange = null;
 
-		private int __iCurrentBar = 0;
+		private int __iCurrentBar = 0;  //目前 Bars 索引值(從 1 開始為第一根 Bars , 0=尚未開始執行 Next 方法時索引保持在此)
 		private bool __bDisposed = false;
 		private SeriesSymbolData __cSource = null;
 		private IQuoteStorage __cQuoteStorage = null;
@@ -55,12 +55,12 @@ namespace Zeghs.Data {
 		/// </summary>
 		public int CurrentBar {
 			get {
-				return __iCurrentBar;
+				return (__iCurrentBar == 0) ? 1 : __iCurrentBar;
 			}
 
 			private set {
 				__iCurrentBar = value;
-				__cFullSymbolData.Current = value;
+				__cFullSymbolData.Current = (__iCurrentBar == 0) ? 1 : __iCurrentBar;
 			}
 		}
 
@@ -71,7 +71,6 @@ namespace Zeghs.Data {
 			get {
 				if (__cQuoteStorage != null) {
 					string sSymbolId = __cSource.DataRequest.Symbol;
-					
 					IQuote cQuote = __cQuoteStorage.GetQuote(sSymbolId);
 					if (cQuote != null) {
 						return cQuote.DOM;
@@ -211,9 +210,7 @@ namespace Zeghs.Data {
 			__cSource = source;
 			__cFullSymbolData = new SeriesSymbolDataRand(source, maxBarsReferance);
 
-			this.CurrentBar = 1;  //預設值
 			string sDataSource = __cSource.DataRequest.DataFeed;
-			
 			AbstractQuoteService cService = QuoteManager.Manager.GetQuoteService(sDataSource);
 			if (cService != null) {
 				__cQuoteStorage = cService.Storage;
@@ -249,35 +246,15 @@ namespace Zeghs.Data {
 		/// </summary>
 		/// <param name="time">指定的時間</param>
 		public void MoveBars(DateTime time) {
-			bool bLoop = false;
-			while (bLoop = GetBarsState(time, bLoop)) {
-				if (onPositionChange != null) {
-					onPositionChange(this, new SeriesPositionChangeEvent(__iCurrentBar, __cBarsState));
-				}
-
-				if (!Next()) {
-					break;
-				}
-			}
+			while (this.Next(time));
 		}
 
 		/// <summary>
 		///   從目前位置移動至下一個 Bars
 		/// </summary>
+		/// <returns>返回值: true=移動至下一個 Bars 成功, false=已經是最後一個 Bars</returns>
 		public bool Next() {
-			if (__cFullSymbolData.Count == 0) {  //如果沒有資料就不用再移動 Bars
-				return false;
-			} else {
-				bool bNext = true;
-				++this.CurrentBar;
-
-				int iCount = __cFullSymbolData.TryOutside();
-				if (iCount > 0) {
-					this.CurrentBar = iCount;
-					bNext = false;
-				}
-				return bNext;
-			}
+			return this.Next(DateTime.MinValue);
 		}
 
 		private void Dispose(bool disposing) {
@@ -296,27 +273,48 @@ namespace Zeghs.Data {
 		///   [取得] 目前當下 Bars 狀態 
 		/// </summary>
 		/// <param name="time">欲比較的時間</param>
-		/// <param name="isLoop">循環旗標</param>
-		/// <returns>返回值: EBarState 狀態</returns>
-		private bool GetBarsState(DateTime time, bool isLoop) {
-			bool bRet = false;
-			if (time < __cFullSymbolData.Time[0]) {  //如果傳入的時間小於目前 Bars 的時間
-				if (isLoop) {
-					--this.CurrentBar;
-					return bRet;
+		/// <returns>返回值: true=目前 Bars 狀態在傳入的時間區間內, false=目前 Bars 狀態在傳入的時間區間後面</returns>
+		private bool GetBarsState(DateTime time) {
+			if (time < __cFullSymbolData.Time.Value) {  //如果傳入的時間小於目前 Bars 的時間
+				--this.CurrentBar;
+				return false;
+			} else {
+				bool bInside = __cSource.UpdateTime < __cFullSymbolData.Time.Value;
+				if (bInside) {
+					__cBarsState = (__cFullSymbolData.High.Value == __cFullSymbolData.Low.Value) ? EBarState.Open : EBarState.Inside; 
+				} else {
+					__cBarsState = EBarState.Close;
+				}
+				return true;
+			}
+		}
+		
+		/// <summary>
+		///   從目前位置移動至下一個 Bars
+		/// </summary>
+		/// <param name="time">參考時間值(如果有傳入此時間, 會比對此時間與目前 CurrentBar 所在的時間區間, 如果傳入 DateTime.MinValue 則傳入目前 CurrentBar 所在的時間區間)</param>
+		/// <returns>返回值: true=移動至下一個 Bars 成功, false=已經是最後一個 Bars</returns>
+		private bool Next(DateTime time) {
+			if (__cFullSymbolData.Count == 0) {  //如果沒有資料就不用再移動 Bars
+				return false;
+			} else {
+				bool bNext = true;
+				++this.CurrentBar;
+
+				int iCount = __cFullSymbolData.TryOutside();
+				if (iCount > 0) {
+					this.CurrentBar = iCount;
+					bNext = false;
 				}
 
-				double dOpen = __cFullSymbolData.Open[0];  //取出開盤價格(如果高低收都等於開盤價格則表示此 Bars 是新建立剛剛開盤的資訊)
-				if (dOpen == __cFullSymbolData.High[0] && dOpen == __cFullSymbolData.Low[0] && dOpen == __cFullSymbolData.Close[0]) {
-					__cBarsState = EBarState.Open;
-				} else {
-					__cBarsState = EBarState.Inside;
+				bool bRet = GetBarsState((time == DateTime.MinValue) ? __cFullSymbolData.Time.Value : time);
+				if (bRet) {
+					if (onPositionChange != null) {
+						onPositionChange(this, new SeriesPositionChangeEvent(__iCurrentBar, __cBarsState));
+					}
 				}
-			} else {
-				__cBarsState = (__cSource.UpdateTime < __cFullSymbolData.Time[0]) ? EBarState.Inside : EBarState.Close;  //判斷 Bars 更新時間是否已經超過目前 Bars 的區間(如果超過表示此 Bars 區間已經收盤)
-				bRet = true;
+				return bNext && bRet;
 			}
-			return bRet;
 		}
 	}
-}  //322行
+}  //320行

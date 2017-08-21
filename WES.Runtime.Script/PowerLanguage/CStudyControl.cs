@@ -104,10 +104,10 @@ namespace PowerLanguage {
 		/// <summary>
 		///   移除資料串流
 		/// </summary>
-		/// <param name="data_stream">資料串流編號(0 為主要依據不能移除)</param>
+		/// <param name="data_stream">資料串流編號(1 為主要依據不能移除)</param>
 		public void RemoveDataStream(int data_stream) {
-			if (data_stream > 0 && data_stream < __cDataLoader.MaxInstrumentCount) {
-				__cDataLoader.RemoveData(data_stream);
+			if (data_stream > 1 && data_stream <= __cDataLoader.MaxInstrumentCount) {
+				__cDataLoader.RemoveData(data_stream - 1);
 			}
 		}
 
@@ -186,7 +186,7 @@ namespace PowerLanguage {
 						while (__iTickCount > 0) {
 							Interlocked.Decrement(ref __iTickCount);
 
-							do {
+							while (cBaseInstrument.Next()) {
 								DateTime cTime = cBaseInstrument.Time[0];
 								int iCount = __cDataLoader.MaxInstrumentCount;
 								Parallel.For(1, iCount, (i) => {
@@ -198,7 +198,7 @@ namespace PowerLanguage {
 								});
 
 								OnUpdate();
-							} while (cBaseInstrument.Next());
+							}
 						}
 					}
 

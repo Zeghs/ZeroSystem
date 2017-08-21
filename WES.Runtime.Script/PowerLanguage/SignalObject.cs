@@ -85,7 +85,7 @@ namespace PowerLanguage {
 			}
 		}
 
-		internal override void CStudyDestory() {
+		internal override void CStudyDestroy() {
 			onTradeResponse = null;
 
 			if (__cOrderService != null) {

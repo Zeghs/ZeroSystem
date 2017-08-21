@@ -102,7 +102,7 @@
             <summary>
               移除資料串流
             </summary>
-            <param name="data_stream">資料串流編號(0 為主要依據不能移除)</param>
+            <param name="data_stream">資料串流編號(1 為主要依據不能移除)</param>
         </member>
         <member name="M:PowerLanguage.CStudyControl.Dispose(System.Boolean)">
             <summary>
@@ -210,7 +210,7 @@
               停止計算 Bars 時所呼叫的方法
             </summary>
         </member>
-        <member name="M:PowerLanguage.CStudyAbstract.CStudyDestory">
+        <member name="M:PowerLanguage.CStudyAbstract.CStudyDestroy">
             <summary>
               腳本內部資源釋放行為
             </summary>
@@ -297,12 +297,13 @@
             </summary>
             <typeparam name="T">泛型型別</typeparam>
         </member>
-        <member name="M:PowerLanguage.FunctionObject`1.#ctor(PowerLanguage.CStudyAbstract,System.Int32)">
+        <member name="M:PowerLanguage.FunctionObject`1.#ctor(PowerLanguage.CStudyAbstract,System.Int32,System.Boolean)">
             <summary>
               建構子
             </summary>
             <param name="master">CStudyAbstract 類別</param>
             <param name="dataStream">資料串流編號</param>
+            <param name="manageFromStudy">由 CStudyAbstract 自動管理與釋放資源(預設:true)</param>
         </member>
         <member name="M:PowerLanguage.FunctionObject`1.AddVariable(PowerLanguage.IVariables)">
             <summary>

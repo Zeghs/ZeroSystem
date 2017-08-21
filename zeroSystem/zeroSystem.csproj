@@ -90,6 +90,12 @@
     <Compile Include="Zeghs\Forms\frmAbout.Designer.cs">
       <DependentUpon>frmAbout.cs</DependentUpon>
     </Compile>
+    <Compile Include="Zeghs\Forms\frmCommissionRuleSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Zeghs\Forms\frmCommissionRuleSettings.Designer.cs">
+      <DependentUpon>frmCommissionRuleSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Zeghs\Forms\frmLogViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -220,6 +226,9 @@
     </Compile>
     <EmbeddedResource Include="Zeghs\Forms\frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Zeghs\Forms\frmCommissionRuleSettings.resx">
+      <DependentUpon>frmCommissionRuleSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Zeghs\Forms\frmConsoleViewer.resx">
       <DependentUpon>frmConsoleViewer.cs</DependentUpon>
@@ -375,6 +384,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\frmScriptParameters_toolbar_toolItem_Delete.png" />
+    <None Include="Resources\frmScriptParameters_toolbar_toolItem_Create.png" />
     <None Include="Resources\frmMain_menubar_menuItem_exportProfile.png" />
     <None Include="Resources\frmMain_menubar_menuItem_importProfile.png" />
     <None Include="Resources\frmMain_toolbar_toolItem_cursor.png" />

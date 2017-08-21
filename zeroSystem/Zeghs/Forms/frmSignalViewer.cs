@@ -45,6 +45,7 @@ namespace Zeghs.Forms {
 		private ProfileSetting __cProfile = null;
 		private SignalObject __cSignalObject = null;
 		private List<InputAttribute> __cParameters = null;
+		private AbstractOrderService __cOrderService = null;
 
 		internal ZChart Chart {
 			get {
@@ -175,12 +176,12 @@ namespace Zeghs.Forms {
 		}
 
 		private void ShowScriptParameters() {
+			frmScriptParameters frmScriptParameters = new frmScriptParameters();
+			frmScriptParameters.SetParameters(__cOrderService, __cParameters);
+			frmScriptParameters.ShowDialog();
+
 			int iCount = __cParameters.Count;
 			if (iCount > 0) {
-				frmScriptParameters frmScriptParameters = new frmScriptParameters();
-				frmScriptParameters.SetParameters(__cParameters);
-				frmScriptParameters.ShowDialog();
-
 				__cProfile.Parameters = new List<string>(iCount);
 				List<string> sArgs = __cProfile.Parameters;
 				for (int i = 0; i < iCount; i++) {
@@ -347,6 +348,7 @@ namespace Zeghs.Forms {
 		}
 
 		private void SignalObject_onScriptParameters(object sender, ScriptParametersEvent e) {
+			__cOrderService = e.OrderService;
 			__cParameters = e.ScriptParameters;
 
 			int iCount = __cParameters.Count;

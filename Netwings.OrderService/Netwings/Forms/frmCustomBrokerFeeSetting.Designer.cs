@@ -27,8 +27,8 @@
 			this.labMemo = new System.Windows.Forms.Label();
 			this.txtFee = new System.Windows.Forms.TextBox();
 			this.labFee = new System.Windows.Forms.Label();
-			this.bOK = new System.Windows.Forms.Button();
-			this.bCancel = new System.Windows.Forms.Button();
+			this.btnOK = new System.Windows.Forms.Button();
+			this.btnCancel = new System.Windows.Forms.Button();
 			this.groupSetting.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -71,33 +71,33 @@
 			this.labFee.TabIndex = 0;
 			this.labFee.Text = "手續費";
 			// 
-			// bOK
+			// btnOK
 			// 
-			this.bOK.Location = new System.Drawing.Point(36, 116);
-			this.bOK.Name = "bOK";
-			this.bOK.Size = new System.Drawing.Size(75, 23);
-			this.bOK.TabIndex = 1;
-			this.bOK.Text = "OK";
-			this.bOK.UseVisualStyleBackColor = true;
-			this.bOK.Click += new System.EventHandler(this.bOK_Click);
+			this.btnOK.Location = new System.Drawing.Point(36, 116);
+			this.btnOK.Name = "btnOK";
+			this.btnOK.Size = new System.Drawing.Size(75, 23);
+			this.btnOK.TabIndex = 1;
+			this.btnOK.Text = "OK";
+			this.btnOK.UseVisualStyleBackColor = true;
+			this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
 			// 
-			// bCancel
+			// btnCancel
 			// 
-			this.bCancel.Location = new System.Drawing.Point(117, 116);
-			this.bCancel.Name = "bCancel";
-			this.bCancel.Size = new System.Drawing.Size(75, 23);
-			this.bCancel.TabIndex = 2;
-			this.bCancel.Text = "Cancel";
-			this.bCancel.UseVisualStyleBackColor = true;
-			this.bCancel.Click += new System.EventHandler(this.bCancel_Click);
+			this.btnCancel.Location = new System.Drawing.Point(117, 116);
+			this.btnCancel.Name = "btnCancel";
+			this.btnCancel.Size = new System.Drawing.Size(75, 23);
+			this.btnCancel.TabIndex = 2;
+			this.btnCancel.Text = "Cancel";
+			this.btnCancel.UseVisualStyleBackColor = true;
+			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
 			// 
 			// frmCustomBrokerFeeSetting
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(223, 151);
-			this.Controls.Add(this.bCancel);
-			this.Controls.Add(this.bOK);
+			this.Controls.Add(this.btnCancel);
+			this.Controls.Add(this.btnOK);
 			this.Controls.Add(this.groupSetting);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -117,7 +117,7 @@
 		private System.Windows.Forms.Label labMemo;
 		private System.Windows.Forms.TextBox txtFee;
 		private System.Windows.Forms.Label labFee;
-		private System.Windows.Forms.Button bOK;
-		private System.Windows.Forms.Button bCancel;
+		private System.Windows.Forms.Button btnOK;
+		private System.Windows.Forms.Button btnCancel;
 	}
 }

@@ -34,7 +34,7 @@ namespace Zeghs.Data {
 		}
 
 		/// <summary>
-		///   [取得] 目前 Bars 索引值(索引從 1 開始)
+		///   [取得] 目前 Bars 索引值
 		/// </summary>
 		public int Current {
 			get {
@@ -135,6 +135,7 @@ namespace Zeghs.Data {
 					__iIgnoreBarsCount = 0;
 				}
 			}
+			this.Current = 1;  //預設值索引從 1 開始
 		}
 
 		/// <summary>
@@ -156,6 +157,7 @@ namespace Zeghs.Data {
 		private void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
+				
 				if (disposing) {
 					__cTimes.Dispose();
 					__cOpens.Dispose();
@@ -167,4 +169,4 @@ namespace Zeghs.Data {
 			}
 		}
 	}
-}  //170行
+}  //172行
