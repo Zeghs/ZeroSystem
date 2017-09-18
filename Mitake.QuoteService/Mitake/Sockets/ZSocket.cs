@@ -36,7 +36,7 @@ namespace Mitake.Sockets {
                         try {
                                 this.Connect(cRemote);
                         } catch (Exception __errExcep) {
-				if (logger.IsWarnEnabled) logger.WarnFormat("{0}\r\n{1}", __errExcep.Message, __errExcep.StackTrace);
+				if (logger.IsErrorEnabled) logger.ErrorFormat("{0}\r\n{1}", __errExcep.Message, __errExcep.StackTrace);
                         }
 
                         if (this.Connected) {

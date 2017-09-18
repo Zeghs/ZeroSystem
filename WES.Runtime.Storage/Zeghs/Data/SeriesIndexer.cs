@@ -19,7 +19,7 @@ namespace Zeghs.Data {
 		}
 
 		/// <summary>
-		///   [取得] 序列資料總個數
+		///   [取得] 序列資料總個數(歷史序列資料+今日即時序列資料)
 		/// </summary>
 		internal int Count {
 			get {

@@ -51,8 +51,8 @@ namespace Mitake.Sockets {
                         lock (__cStackPool) {
                                 if (__cStackPool.Count > 0) {
                                         cEventArgs = __cStackPool.Pop();
-                                        
-                                        SocketToken cToken = (SocketToken)cEventArgs.UserToken;
+
+					SocketToken cToken = cEventArgs.UserToken as SocketToken;
                                         cToken.Clear();
                                         cEventArgs.SetBuffer(cToken.ReceiveBuffer.Data, 0, SocketToken.MAX_BUFFER_SIZE);  
                                 }

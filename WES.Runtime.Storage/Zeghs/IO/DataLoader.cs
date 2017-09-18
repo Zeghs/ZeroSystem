@@ -64,11 +64,15 @@ namespace Zeghs.IO {
 		/// </summary>
 		/// <param name="request">資料請求結構</param>
 		/// <param name="result">當成功取得 Instrument 商品資料會使用此委派方法回傳資料</param>
+		/// <param name="useCache">是否使用快取 [預設:false](true=序列資料結構建立後保存在快取內，下次需要使用直接從快取拿取, false=重新建立序列資料結構，建立的序列資料需要自行移除否則會占用記憶體空間)</param>
 		/// <param name="args">使用者自訂參數</param>
-		public void BeginLoadData(InstrumentDataRequest request, LoadDataCallback result, object args = null) {
+		public void BeginLoadData(InstrumentDataRequest request, LoadDataCallback result, bool useCache = false, object args = null) {
 			SeriesManager.Manager.SetQuoteService(request.DataFeed);
 			SeriesManager.Manager.AsyncGetSeries(request, (object sender, SeriesResultEvent e) => {
-				Instrument cInstrument = new Instrument(e.Data, __iMaxBarsReference);  //建立 Instrument 商品資料
+				SeriesSymbolDataRand cSeriesSymbolDataRand = e.Data;
+				cSeriesSymbolDataRand.SetMaxbarsReferance(__iMaxBarsReference);
+				Instrument cInstrument = new Instrument(cSeriesSymbolDataRand);  //建立 Instrument 商品資料
+				
 				Instrument cBars_0 = GetInstrument(0);  //取得目前第 0 個 Instrument 商品資料
 				if (cBars_0 != null) {
 					cInstrument.MoveBars(cBars_0.LastBarTime);
@@ -80,8 +84,9 @@ namespace Zeghs.IO {
 				if (cService != null) {
 					cQuote = cService.Storage.GetQuote(cRequest.Symbol);
 				}
+				
 				result(new DataLoaderResult(cInstrument, cQuote, args));
-			}, false);
+			}, useCache);
 		}
 
 		/// <summary>
@@ -110,6 +115,7 @@ namespace Zeghs.IO {
 		///   讀取資料請求結構列表內的 Instrument 資料
 		/// </summary>
 		/// <param name="requests">資料請求結構列表</param>
+		/// <param name="useCache">是否使用快取(true=如果快取內有資料則從快取取得, false=不使用快取重新建立)</param>
 		public void LoadDataRange(List<InstrumentDataRequest> requests, bool useCache = true) {
 			int iCount = 0;
 			lock (__cInstruments) {
@@ -155,15 +161,16 @@ namespace Zeghs.IO {
 			__iMaxBarsReference = barsCount;
 		}
 
-		private void CreateInstrument(SeriesSymbolData series, int dataIndex) {
-			if (series != null) {
+		private void CreateInstrument(SeriesSymbolDataRand seriesSymbolDataRand, int dataIndex) {
+			if (seriesSymbolDataRand != null) {
 				if (logger.IsInfoEnabled) {
-					InstrumentDataRequest cDataRequest = series.DataRequest;
+					InstrumentDataRequest cDataRequest = seriesSymbolDataRand.Source.DataRequest;
 					logger.InfoFormat("[DataLoader.CreateInstrument] {0}:{1}{2} Instrument create completed...", cDataRequest.Symbol, cDataRequest.Resolution.Size, cDataRequest.Resolution.Type);
 				}
 
 				bool bCompleted = false;
-				Instrument cInstrument = new Instrument(series, __iMaxBarsReference);
+				seriesSymbolDataRand.SetMaxbarsReferance(__iMaxBarsReference);
+				Instrument cInstrument = new Instrument(seriesSymbolDataRand);
 				
 				lock (__cInstruments) {
 					__cInstruments[dataIndex] = cInstrument;
@@ -212,4 +219,4 @@ namespace Zeghs.IO {
 			CreateInstrument(e.Data, (int) e.Parameters);
 		}
 	}
-} //215行
+} //222行

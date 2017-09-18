@@ -541,6 +541,27 @@
             </summary>
             <param name="e">ResponseEvent 類別</param>
         </member>
+        <member name="M:PowerLanguage.SignalObject.CreateTrader(PowerLanguage.IInstrument,System.Object,System.String)">
+            <summary>
+              交易服務建立員
+            </summary>
+            <param name="instrument">商品資訊介面</param>
+            <param name="args">交易服務組件設定參數</param>
+            <param name="orderSource">交易服務來源名稱[預設:null](format: 交易組件名稱;交易服務類別名稱, null=使用預設交易服務來源類別名稱)</param>
+        </member>
+        <member name="M:PowerLanguage.SignalObject.DestroyTrader(System.String,System.Boolean)">
+            <summary>
+              釋放交易服務所有資源
+            </summary>
+            <param name="symbolId">商品代號</param>
+            <param name="freeInstrument">是否一併釋放商品資訊類別[預設:false](true=一併釋放, false=不釋放保留於快取內)</param>
+        </member>
+        <member name="M:PowerLanguage.SignalObject.SelectTrader(System.String)">
+            <summary>
+              選擇作用中的交易服務
+            </summary>
+            <param name="symbolId">商品代號</param>
+        </member>
         <member name="E:PowerLanguage.SignalObject.onTradeResponse">
             <summary>
               收到委託或是成交回報時需要觸發的事件

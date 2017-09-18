@@ -220,10 +220,11 @@ namespace PowerLanguage {
 			//腳本初始化工作
 			CStudyInitialize();
 			Create();
-			StartCalc();
-
-			//呼叫父類別作啟動工作
-			base.Start();
+			
+			if (!__bDisposed) {  //檢查是否呼叫了 Dispose 方法(在呼叫 Create 方法內, 可能會因為某些資訊不正確而需要停止腳本運作的情況下, 會在呼叫 Dispose 後, 便停止後續的策略執行)
+				StartCalc();
+				base.Start();  //呼叫父類別作啟動工作
+			}
 		}
 
 		private void ClearFunctions() {
@@ -252,4 +253,4 @@ namespace PowerLanguage {
 			}
 		}
 	}
-}  //255行
+}  //256行

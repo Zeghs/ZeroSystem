@@ -10,8 +10,8 @@ namespace Zeghs.Data {
 	/// <summary>
 	///   商品資料類別(存放開高低收量資訊)
 	/// </summary>
-	public sealed class SeriesSymbolData : ISeriesSymbolData, IDisposable {
-		private static int __iLastSeriesId = 0;  //存放最後一個 Series Id
+	internal sealed class SeriesSymbolData : ISeriesSymbolData, IDisposable {
+		private static int __iLastSeriesId = 0;  //存放最後一個 Series Id(此 Id 會一直遞增, 每次使用 new 產生此類別時就會自動遞增)
 		private static void MergeSeries(SeriesSymbolData target, DateTime period, double open, double high, double low, double close, double volume, bool isNewBars, bool isRealtime) {
 			if (isNewBars) {
 				target.AddSeries(period, open, high, low, close, volume, isRealtime);
@@ -21,6 +21,7 @@ namespace Zeghs.Data {
 		}
 
 		internal event EventHandler<DataRequestEvent> onRequest = null;
+		internal event EventHandler onRequestCompleted = null;
 		internal event EventHandler onReset = null;
 
 		private double __dOVolume = 0;
@@ -290,7 +291,7 @@ namespace Zeghs.Data {
 			string sDataSource = __cDataRequest.DataFeed;
 			AbstractQuoteService cService = QuoteManager.Manager.GetQuoteService(sDataSource);
 			if (cService != null) {
-				if (cService.TradeDate > LastBarTime.Date) {
+				if (cService.TradeDate > LastBarTime.Date) {  //如果即時報價服務交易日期大於最後 Bars 交易日期, 就合併今日即時資訊
 					this.Initialized = false;
 					__cDataRequest.Range.To = cService.TradeDate;
 					Indexer.RealtimeIndex = __cCloses.Count - __iRealtimeCount - 1;
@@ -303,6 +304,12 @@ namespace Zeghs.Data {
 						for (int i = iTickCount - 1; i >= 0; i--) {
 							Merge(cQuote.GetTick(i));
 						}
+					}
+				} else {  //盤後分檔與日檔資料已經公布, 不用在合併今日即時資訊
+					string sSymbolId = __cDataRequest.Symbol;
+					IQuote cQuote = cService.Storage.GetQuote(sSymbolId);
+					if (cQuote != null) {
+						__dOVolume = cQuote.RealTick.Volume;  //取得今日即時資訊的總成交量(當 tick 來時會比對tick 總成交量是否比此變數大, 如果比較大就合併到 Bars 內, 所以如果今日已有分日檔資訊, 此欄位需填入今日即時資訊總成交量, 才不會被重複合併到最後一根 Bars)
 					}
 				}
 			}
@@ -321,6 +328,10 @@ namespace Zeghs.Data {
 					if (!this.Initialized) {  //尚未初始化之前才需要更新(初始化之後已經併入即時報價資訊, 更新時間會是目前最新的報價時間)
 						__cUpdateTime = __cTimes[this.Indexer.RealtimeIndex];  //更新最後的更新時間(如果沒有即時報價資訊, 這個就是最後一根 Bars 的時間)
 					}
+
+					if (onRequestCompleted != null) {
+						onRequestCompleted(this, EventArgs.Empty);
+					}
 				} else {
 					RemoveRequest();  //請求失敗就移除請求事件(表示可能伺服器有問題或沒有歷史報價資訊無法執行請求服務)
 				}
@@ -329,6 +340,7 @@ namespace Zeghs.Data {
 
 		internal void RemoveRequest() {
 			onRequest = null;
+			onRequestCompleted = null;
 
 			__cTimes.RemoveRequest();
 			__cOpens.RemoveRequest();
@@ -371,9 +383,11 @@ namespace Zeghs.Data {
 		private void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
+				
 				if (disposing) {
 					onReset = null;
 					onRequest = null;
+					onRequestCompleted = null;
 					
 					__cTimes.Dispose();
 					__cOpens.Dispose();
@@ -401,6 +415,7 @@ namespace Zeghs.Data {
 				if (low < __cLows[iIndex]) {
 					__cLows.SetData(iIndex, low);
 				}
+				
 				__cVolumes.SetData(iIndex, __cVolumes[iIndex] + volume);
 			}
 		}
@@ -412,4 +427,4 @@ namespace Zeghs.Data {
 			OnRequest(new DataRequestEvent(iRequestCount, iTotals, __cDataRequest.Resolution.Rate));  //呼叫請求方法
 		}
 	}
-}  //415行
+}  //430行

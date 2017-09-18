@@ -186,7 +186,9 @@ namespace PowerLanguage {
 						while (__iTickCount > 0) {
 							Interlocked.Decrement(ref __iTickCount);
 
-							while (cBaseInstrument.Next()) {
+							bool bNext = true;
+							while (bNext) {
+								bNext = cBaseInstrument.Next();
 								DateTime cTime = cBaseInstrument.Time[0];
 								int iCount = __cDataLoader.MaxInstrumentCount;
 								Parallel.For(1, iCount, (i) => {
@@ -196,7 +198,7 @@ namespace PowerLanguage {
 										cInstrument.MoveBars(cTime);
 									}
 								});
-
+								
 								OnUpdate();
 							}
 						}
@@ -261,4 +263,4 @@ namespace PowerLanguage {
 			OnQuoteDateTime(e);
 		}
 	}
-}  //264行
+}  //266行

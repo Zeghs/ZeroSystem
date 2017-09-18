@@ -408,7 +408,7 @@
             </summary>
             <param name="dataRequest">資料請求結構</param>
             <param name="useCache">是否使用快取 [預設:true](true=序列資料結構建立後保存在快取內，下次需要使用直接從快取拿取, false=重新建立序列資料結構，建立的序列資料需要自行移除否則會占用記憶體空間)</param>
-            <returns>返回值: SeriesSymbolData 類別</returns>
+            <returns>返回值: SeriesSymbolDataRand 類別</returns>
         </member>
         <member name="M:Zeghs.Managers.SeriesManager.SetQuoteService(System.String)">
             <summary>
@@ -416,11 +416,11 @@
             </summary>
             <param name="dataSource">報價資訊來源名稱</param>
         </member>
-        <member name="M:Zeghs.Managers.SeriesManager.RemoveInstrument(Zeghs.Data.Instrument)">
+        <member name="M:Zeghs.Managers.SeriesManager.RemoveSeries(Zeghs.Data.SeriesSymbolDataRand)">
             <summary>
               移除商品資訊(如果 GetSeries 不是使用 useCache 模式都需要移除)
             </summary>
-            <param name="bars">商品資訊類別</param>
+            <param name="seriesSymbolDataRand">商品資訊類別</param>
         </member>
         <member name="P:Zeghs.Managers.SeriesManager.Settings">
             <summary>
@@ -511,10 +511,27 @@
             <param name="barsAgo">目前或是之前的索引(0=目前的 Bar)</param>
             <returns>返回值:從索引值獲得的所需資料</returns>
         </member>
+        <member name="T:Zeghs.Data.SeriesSymbolDataRand">
+            <summary>
+              隨機商品序列資料類別(提供給 Instrument 類別作來源資料使用)
+            </summary>
+        </member>
+        <member name="M:Zeghs.Data.SeriesSymbolDataRand.#ctor(Zeghs.Data.SeriesSymbolData)">
+            <summary>
+              建構子
+            </summary>
+            <param name="source">SeriesSymbolData 商品資料類別</param>
+        </member>
         <member name="M:Zeghs.Data.SeriesSymbolDataRand.Dispose">
             <summary>
               釋放腳本資源
             </summary>
+        </member>
+        <member name="M:Zeghs.Data.SeriesSymbolDataRand.SetMaxbarsReferance(System.Int32)">
+            <summary>
+              設定最大 Bars count 參考個數
+            </summary>
+            <param name="maxbarsReferance">最大 bars count 參考個數</param>
         </member>
         <member name="P:Zeghs.Data.SeriesSymbolDataRand.Close">
             <summary>
@@ -523,12 +540,12 @@
         </member>
         <member name="P:Zeghs.Data.SeriesSymbolDataRand.Count">
             <summary>
-              [取得] 序列資料總個數
+              [取得] 序列資料總個數(歷史序列資料+今日即時序列資料)
             </summary>
         </member>
         <member name="P:Zeghs.Data.SeriesSymbolDataRand.Current">
             <summary>
-              [取得] 目前 Bars 索引值
+              [取得] 目前 Bars 索引值(索引從 1 開始)
             </summary>
         </member>
         <member name="P:Zeghs.Data.SeriesSymbolDataRand.High">
@@ -566,6 +583,16 @@
               [取得] Bars 資料容器大小(包含預留的即時資料空間)
             </summary>
         </member>
+        <member name="P:Zeghs.Data.SeriesSymbolDataRand.DOM">
+            <summary>
+              [取得] 委託價量資訊
+            </summary>
+        </member>
+        <member name="P:Zeghs.Data.SeriesSymbolDataRand.Source">
+            <summary>
+              [取得] 來源 SeriesSymbolData 資料(此來源資料為)
+            </summary>
+        </member>
         <member name="T:Zeghs.Data.SeriesIndexer">
             <summary>
               SeriesSymbolData 資料索引子類別
@@ -584,7 +611,7 @@
         </member>
         <member name="P:Zeghs.Data.SeriesIndexer.Count">
             <summary>
-              [取得] 序列資料總個數
+              [取得] 序列資料總個數(歷史序列資料+今日即時序列資料)
             </summary>
         </member>
         <member name="P:Zeghs.Data.SeriesIndexer.HistoryIndex">
@@ -664,7 +691,7 @@
         </member>
         <member name="T:Zeghs.Events.SeriesResultEvent">
             <summary>
-              序列商品資料回報事件(使用非同步取得 SeriesSymbolData 會使用此類別存放回報結果)
+              序列商品資料回報事件(使用非同步取得 SeriesSymbolDataRand 會使用此類別存放回報結果)
             </summary>
         </member>
         <member name="P:Zeghs.Events.SeriesResultEvent.Data">
@@ -682,12 +709,11 @@
                商品資訊類別(包含開高低收資訊與商品屬性及其他重要資訊)
             </summary>
         </member>
-        <member name="M:Zeghs.Data.Instrument.#ctor(Zeghs.Data.SeriesSymbolData,System.Int32)">
+        <member name="M:Zeghs.Data.Instrument.#ctor(Zeghs.Data.SeriesSymbolDataRand)">
             <summary>
               建構子
             </summary>
-            <param name="source">SeriesSymbolData 類別</param>
-            <param name="maxBarsReferance">最大 Bars count 參考值(如果不需要很多歷史資訊計算則可以設定小一點, 設定數量不可以超過歷史資料載入總數量)</param>
+            <param name="seriesSymbolDataRand">SeriesSymbolDataRand 類別</param>
         </member>
         <member name="M:Zeghs.Data.Instrument.BindResetEvent(System.EventHandler)">
             <summary>
@@ -822,11 +848,6 @@
               [取得] 成交量陣列資訊
             </summary>
         </member>
-        <member name="P:Zeghs.Data.Instrument.Source">
-            <summary>
-              [取得] 來源 SeriesSymbolData 資料
-            </summary>
-        </member>
         <member name="T:Zeghs.IO.DataLoader">
             <summary>
               商品資訊 Instrument 資料讀取者類別
@@ -837,12 +858,13 @@
               資料讀取者介面
             </summary>
         </member>
-        <member name="M:Zeghs.IO.IDataLoader.BeginLoadData(PowerLanguage.InstrumentDataRequest,PowerLanguage.LoadDataCallback,System.Object)">
+        <member name="M:Zeghs.IO.IDataLoader.BeginLoadData(PowerLanguage.InstrumentDataRequest,PowerLanguage.LoadDataCallback,System.Boolean,System.Object)">
             <summary>
               非同步讀取資料請求結構內的 IInstrument 資料
             </summary>
             <param name="request">資料請求結構</param>
             <param name="result">當成功取得 IInstrument 商品資料會使用此委派方法回傳資料</param>
+            <param name="useCache">是否使用快取 [預設:false](true=序列資料結構建立後保存在快取內，下次需要使用直接從快取拿取, false=重新建立序列資料結構，建立的序列資料需要自行移除否則會占用記憶體空間)</param>
             <param name="args">使用者自訂參數</param>
         </member>
         <member name="M:Zeghs.IO.DataLoader.#ctor">
@@ -850,12 +872,13 @@
               建構子
             </summary>
         </member>
-        <member name="M:Zeghs.IO.DataLoader.BeginLoadData(PowerLanguage.InstrumentDataRequest,PowerLanguage.LoadDataCallback,System.Object)">
+        <member name="M:Zeghs.IO.DataLoader.BeginLoadData(PowerLanguage.InstrumentDataRequest,PowerLanguage.LoadDataCallback,System.Boolean,System.Object)">
             <summary>
               非同步讀取資料請求結構內的 Instrument 資料
             </summary>
             <param name="request">資料請求結構</param>
             <param name="result">當成功取得 Instrument 商品資料會使用此委派方法回傳資料</param>
+            <param name="useCache">是否使用快取 [預設:false](true=序列資料結構建立後保存在快取內，下次需要使用直接從快取拿取, false=重新建立序列資料結構，建立的序列資料需要自行移除否則會占用記憶體空間)</param>
             <param name="args">使用者自訂參數</param>
         </member>
         <member name="M:Zeghs.IO.DataLoader.Dispose">
@@ -875,6 +898,7 @@
               讀取資料請求結構列表內的 Instrument 資料
             </summary>
             <param name="requests">資料請求結構列表</param>
+            <param name="useCache">是否使用快取(true=如果快取內有資料則從快取取得, false=不使用快取重新建立)</param>
         </member>
         <member name="M:Zeghs.IO.DataLoader.RemoveData(System.Int32)">
             <summary>

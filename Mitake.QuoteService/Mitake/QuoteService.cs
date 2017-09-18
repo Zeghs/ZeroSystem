@@ -230,6 +230,8 @@ namespace Mitake {
 				}
 				
 				if (!RegisterServer(__cSocket, sServiceIP, iPort, 0x06)) {
+					__cSocket.Close();  //關閉 Stream Socket
+					__cSocket = null;
 					return false;
 				}
 
@@ -239,7 +241,12 @@ namespace Mitake {
 					__cSession.CloseProc += StockClient_onClose;
 				}
 				
-				if (!RegisterServer(__cSession, sServiceIP, iPort, 0x05)) {
+				if (!RegisterServer(__cSession, sServiceIP, iPort, 0x05)) {  //如果註冊失敗
+					__cSocket.Close();  //關閉 Stream Socket(一定要 Stream 與 Session 兩條通道都同時建立完成, 才算是連線成功) 
+					__cSocket = null;
+
+					__cSession.Close();  //關閉 Session Socket
+					__cSession = null;
 					return false;
 				}
 
@@ -270,17 +277,21 @@ namespace Mitake {
 			StockDecoder.TimerProc -= GetTradeDateFromLogin;
                         McpDecoder.McpPacketProc -= StockClient_onMcpPacket;
 
-                        try {
-                                if (__cSession != null) {
+			try {
+				if (__cSession != null) {
 					__cSession.CloseProc -= StockClient_onClose;
 					if (__cSession.Connected) {
 						__cSession.Send(MitakePacket.ToBuffer(new Logout())); //送出登出訊息
-                                        }
-                                        __cSession.Close();
-                                }
-                        } catch(Exception __errExcep1) {
+					}
+					__cSession.Close();
+				}
+			} catch (Exception __errExcep1) {
 				if (logger.IsErrorEnabled) logger.ErrorFormat("[QuoteService.Logout] {0}\r\n{1}", __errExcep1.Message, __errExcep1.StackTrace);
-                        }
+			} finally {
+				if (__cSession != null) {
+					__cSession.Close();
+				}
+			}
 
                         try {
                                 if (__cSocket != null) {
@@ -292,7 +303,11 @@ namespace Mitake {
                                 }
                         } catch (Exception __errExcep2) {
 				if (logger.IsErrorEnabled) logger.ErrorFormat("[QuoteService.Logout] {0}\r\n{1}", __errExcep2.Message, __errExcep2.StackTrace);
-                        }
+			} finally {
+				if (__cSocket != null) {
+					__cSocket.Close();
+				}
+			}
 
 			lock (__cTimer) {
 				__bTimeFlag = false;
@@ -627,4 +642,4 @@ namespace Mitake {
 			}
 		}
 	}
-} //630行
+} //645行

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using PowerLanguage;
 using Zeghs.Events;
 using Zeghs.Products;
-using Zeghs.Services;
 using Zeghs.Managers;
 
 namespace Zeghs.Data {
@@ -18,17 +17,15 @@ namespace Zeghs.Data {
 
 		private int __iCurrentBar = 0;  //目前 Bars 索引值(從 1 開始為第一根 Bars , 0=尚未開始執行 Next 方法時索引保持在此)
 		private bool __bDisposed = false;
-		private SeriesSymbolData __cSource = null;
-		private IQuoteStorage __cQuoteStorage = null;
-		private SeriesSymbolDataRand __cFullSymbolData = null;
 		private EBarState __cBarsState = EBarState.None;
+		private SeriesSymbolDataRand __cFullSymbolData = null;
 
 		/// <summary>
 		///   [取得] Bars 最新的更新時間
 		/// </summary>
 		public DateTime BarUpdateTime {
 			get {
-				return __cSource.UpdateTime;
+				return __cFullSymbolData.Source.UpdateTime;
 			}
 		}
 
@@ -55,12 +52,12 @@ namespace Zeghs.Data {
 		/// </summary>
 		public int CurrentBar {
 			get {
-				return (__iCurrentBar == 0) ? 1 : __iCurrentBar;
+				return (__iCurrentBar < 1) ? 1 : __iCurrentBar;
 			}
 
 			private set {
 				__iCurrentBar = value;
-				__cFullSymbolData.Current = (__iCurrentBar == 0) ? 1 : __iCurrentBar;
+				__cFullSymbolData.Current = (__iCurrentBar < 1) ? 1 : __iCurrentBar;
 			}
 		}
 
@@ -69,14 +66,7 @@ namespace Zeghs.Data {
 		/// </summary>
 		public IDOMData DOM {
 			get {
-				if (__cQuoteStorage != null) {
-					string sSymbolId = __cSource.DataRequest.Symbol;
-					IQuote cQuote = __cQuoteStorage.GetQuote(sSymbolId);
-					if (cQuote != null) {
-						return cQuote.DOM;
-					}
-				}
-				return null;
+				return __cFullSymbolData.DOM;
 			}
 		}
 
@@ -103,7 +93,7 @@ namespace Zeghs.Data {
 		/// </summary>
 		public IInstrumentSettings Info {
 			get {
-				InstrumentSettings cSettings =  __cSource.Settings;
+				InstrumentSettings cSettings =  __cFullSymbolData.Source.Settings;
 				cSettings.SetExpirationFromTime(__cFullSymbolData.Time[0]);
 				cSettings.SetPriceScaleFromClosePrice(__cFullSymbolData.Close[0]);
 				
@@ -125,7 +115,7 @@ namespace Zeghs.Data {
 		/// </summary>
 		public DateTime LastBarTime {
 			get {
-				return __cSource.LastBarTime;
+				return __cFullSymbolData.Source.LastBarTime;
 			}
 		}
 
@@ -152,7 +142,7 @@ namespace Zeghs.Data {
 		/// </summary>
 		public InstrumentDataRequest Request {
 			get {
-				return __cSource.DataRequest;
+				return __cFullSymbolData.Source.DataRequest;
 			}
 		}
 
@@ -161,7 +151,7 @@ namespace Zeghs.Data {
 		/// </summary>
 		public List<SessionObject> Sessions {
 			get {
-				return __cSource.Settings.Sessions;
+				return __cFullSymbolData.Source.Settings.Sessions;
 			}
 		}
 
@@ -193,28 +183,11 @@ namespace Zeghs.Data {
 		}
 
 		/// <summary>
-		///   [取得] 來源 SeriesSymbolData 資料
-		/// </summary>
-		internal SeriesSymbolData Source {
-			get {
-				return __cSource;
-			}
-		}
-
-		/// <summary>
 		///   建構子
 		/// </summary>
-		/// <param name="source">SeriesSymbolData 類別</param>
-		/// <param name="maxBarsReferance">最大 Bars count 參考值(如果不需要很多歷史資訊計算則可以設定小一點, 設定數量不可以超過歷史資料載入總數量)</param>
-		public Instrument(SeriesSymbolData source, int maxBarsReferance) {
-			__cSource = source;
-			__cFullSymbolData = new SeriesSymbolDataRand(source, maxBarsReferance);
-
-			string sDataSource = __cSource.DataRequest.DataFeed;
-			AbstractQuoteService cService = QuoteManager.Manager.GetQuoteService(sDataSource);
-			if (cService != null) {
-				__cQuoteStorage = cService.Storage;
-			}
+		/// <param name="seriesSymbolDataRand">SeriesSymbolDataRand 類別</param>
+		public Instrument(SeriesSymbolDataRand seriesSymbolDataRand) {
+			__cFullSymbolData = seriesSymbolDataRand;
 		}
 
 		/// <summary>
@@ -222,7 +195,7 @@ namespace Zeghs.Data {
 		/// </summary>
 		/// <param name="onReset">EventHandler 事件委派</param>
 		public void BindResetEvent(EventHandler onReset) {
-			__cSource.onReset += onReset;
+			__cFullSymbolData.Source.onReset += onReset;
 		}
 
 		/// <summary>
@@ -230,7 +203,7 @@ namespace Zeghs.Data {
 		/// </summary>
 		/// <param name="onReset">EventHandler 事件委派</param>
 		public void ClearResetEvent(EventHandler onReset) {
-			__cSource.onReset -= onReset;
+			__cFullSymbolData.Source.onReset -= onReset;
 		}
 
 		/// <summary>
@@ -254,17 +227,29 @@ namespace Zeghs.Data {
 		/// </summary>
 		/// <returns>返回值: true=移動至下一個 Bars 成功, false=已經是最後一個 Bars</returns>
 		public bool Next() {
+			if (__cBarsState == EBarState.Inside) {  //檢查是否為 Inside (如果是 Inside 表示尚未 Close)
+				bool bInside = __cFullSymbolData.Source.UpdateTime < __cFullSymbolData.Time.Value;  //判斷是否還是 Inside 如果是就直接離開
+				if (bInside) {
+					return false;  //如果是 Inside 表示最後一根 Bars 也尚未 Close 狀態, 不需要呼叫 Next 方法
+				} else {
+					__cBarsState = EBarState.Close;  //如果已經 Close 將狀態設定為 Close
+					if (onPositionChange != null) {  //發送 Close 狀態的 onPositionChange 事件(如果不補發送, 最後的 Close 狀態會被忽略導致其他問題, 所以還是要補送最後 Close 狀態)
+						onPositionChange(this, new SeriesPositionChangeEvent(__iCurrentBar, __cBarsState));
+					}
+				}
+			}
 			return this.Next(DateTime.MinValue);
 		}
 
 		private void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
+				
 				if (disposing) {
 					onPositionChange = null;
 
+					SeriesManager.Manager.RemoveSeries(__cFullSymbolData);
 					__cFullSymbolData.Dispose();
-					SeriesManager.Manager.RemoveInstrument(this);
 				}
 			}
 		}
@@ -275,18 +260,19 @@ namespace Zeghs.Data {
 		/// <param name="time">欲比較的時間</param>
 		/// <returns>返回值: true=目前 Bars 狀態在傳入的時間區間內, false=目前 Bars 狀態在傳入的時間區間後面</returns>
 		private bool GetBarsState(DateTime time) {
+			bool bRet = true;
 			if (time < __cFullSymbolData.Time.Value) {  //如果傳入的時間小於目前 Bars 的時間
 				--this.CurrentBar;
-				return false;
-			} else {
-				bool bInside = __cSource.UpdateTime < __cFullSymbolData.Time.Value;
-				if (bInside) {
-					__cBarsState = (__cFullSymbolData.High.Value == __cFullSymbolData.Low.Value) ? EBarState.Open : EBarState.Inside; 
-				} else {
-					__cBarsState = EBarState.Close;
-				}
-				return true;
+				bRet = false;
 			}
+
+			bool bInside = __cFullSymbolData.Source.UpdateTime < __cFullSymbolData.Time.Value;
+			if (bInside) {
+				__cBarsState = (__cFullSymbolData.High.Value == __cFullSymbolData.Low.Value) ? EBarState.Open : EBarState.Inside;
+			} else {
+				__cBarsState = EBarState.Close;
+			}
+			return bRet;
 		}
 		
 		/// <summary>
@@ -308,13 +294,11 @@ namespace Zeghs.Data {
 				}
 
 				bool bRet = GetBarsState((time == DateTime.MinValue) ? __cFullSymbolData.Time.Value : time);
-				if (bRet) {
-					if (onPositionChange != null) {
-						onPositionChange(this, new SeriesPositionChangeEvent(__iCurrentBar, __cBarsState));
-					}
+				if (onPositionChange != null) {
+					onPositionChange(this, new SeriesPositionChangeEvent(__iCurrentBar, __cBarsState));
 				}
 				return bNext && bRet;
 			}
 		}
 	}
-}  //320行
+}  //304行

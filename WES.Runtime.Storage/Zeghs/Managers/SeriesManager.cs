@@ -105,7 +105,7 @@ namespace Zeghs.Managers {
 				CheckLogin(dataRequest.DataFeed);
 				Complement(dataRequest);
 
-				SeriesSymbolData cSeries = InternalGetSeries(dataRequest, useCache);
+				SeriesSymbolDataRand cSeries = InternalGetSeries(dataRequest, useCache);
 				result(this, new SeriesResultEvent(cSeries, args));
 			});
 		}
@@ -115,8 +115,8 @@ namespace Zeghs.Managers {
 		/// </summary>
 		/// <param name="dataRequest">資料請求結構</param>
 		/// <param name="useCache">是否使用快取 [預設:true](true=序列資料結構建立後保存在快取內，下次需要使用直接從快取拿取, false=重新建立序列資料結構，建立的序列資料需要自行移除否則會占用記憶體空間)</param>
-		/// <returns>返回值: SeriesSymbolData 類別</returns>
-		public SeriesSymbolData GetSeries(InstrumentDataRequest dataRequest, bool useCache = true) {
+		/// <returns>返回值: SeriesSymbolDataRand 類別</returns>
+		public SeriesSymbolDataRand GetSeries(InstrumentDataRequest dataRequest, bool useCache = true) {
 			CheckLogin(dataRequest.DataFeed);
 			Complement(dataRequest);
 			
@@ -147,9 +147,9 @@ namespace Zeghs.Managers {
 		/// <summary>
 		///   移除商品資訊(如果 GetSeries 不是使用 useCache 模式都需要移除)
 		/// </summary>
-		/// <param name="bars">商品資訊類別</param>
-		internal void RemoveInstrument(Instrument bars) {
-			SeriesSymbolData cSeries = bars.Source;
+		/// <param name="seriesSymbolDataRand">商品資訊類別</param>
+		internal void RemoveSeries(SeriesSymbolDataRand seriesSymbolDataRand) {
+			SeriesSymbolData cSeries = seriesSymbolDataRand.Source;
 
 			SeriesStorage cStorage = null;
 			string sLSymbolId = cSeries.DataRequest.Symbol.ToLower();
@@ -265,7 +265,7 @@ namespace Zeghs.Managers {
 			}
 		}
 
-		private SeriesSymbolData InternalGetSeries(InstrumentDataRequest dataRequest, bool useCache) {
+		private SeriesSymbolDataRand InternalGetSeries(InstrumentDataRequest dataRequest, bool useCache) {
 			SeriesStorage cStorage = null;
 			string sLSymbolId = dataRequest.Symbol.ToLower();
 			lock (__cStorages) {
@@ -275,11 +275,11 @@ namespace Zeghs.Managers {
 				}
 			}
 
-			SeriesSymbolData cSeries = null;
+			SeriesSymbolDataRand cSeriesRand = null;
 			int iTotalSeconds = dataRequest.Resolution.TotalSeconds;
 			if (useCache) {  //是否使用快取
 				lock (cStorage) {  //需要 lock 這個區塊(避免非同步讀取資料時發生問題)
-					cSeries = cStorage.GetSeries(iTotalSeconds);
+					SeriesSymbolData cSeries = cStorage.GetSeries(iTotalSeconds);
 					if (cSeries == null) {
 						int iBaseSeconds = (iTotalSeconds < Resolution.MAX_BASE_TOTALSECONDS) ? Resolution.MIN_BASE_TOTALSECONDS : Resolution.MAX_BASE_TOTALSECONDS;
 						cSeries = cStorage.GetSeries(iBaseSeconds);
@@ -295,10 +295,11 @@ namespace Zeghs.Managers {
 					} else {
 						cSeries.OnRequest(new DataRequestEvent(dataRequest));  //如果已經存在則請求使用者需要的歷史資料區間(請求方法會檢查目前已下載的歷史資料區間是否足夠, 如果使用者需要的歷史資料區間比較大會向伺服器請求)
 					}
+					cSeriesRand = new SeriesSymbolDataRand(cSeries);
 				}
 			} else {
 				DataAdapter cAdapter = LoadAdapter(dataRequest, false);  //重新建立新的基礎週期序列資料(不使用快取, 不保存至快取內, 使用完畢之後立即 Dispose)
-				cSeries = cAdapter.Series;  //取得新的基礎周期序列資料
+				SeriesSymbolData cSeries = cAdapter.Series;  //取得新的基礎周期序列資料
 
 				int iBaseSeconds = (iTotalSeconds < Resolution.MAX_BASE_TOTALSECONDS) ? Resolution.MIN_BASE_TOTALSECONDS : Resolution.MAX_BASE_TOTALSECONDS;
 				if (iBaseSeconds != iTotalSeconds) {
@@ -309,10 +310,11 @@ namespace Zeghs.Managers {
 					cSeries = cTargetSeries;
 				}
 
+				cSeriesRand = new SeriesSymbolDataRand(cSeries);
 				cStorage.Add(cSeries, true);  //保存序列資料(存放在 SeriesStorage 內的序列資料才會自動合併最新的即時資訊報價)
 				cAdapter.Dispose();  //釋放資料配置者類別
 			}
-			return cSeries;
+			return cSeriesRand;
 		}
 
 		private DataAdapter LoadAdapter(InstrumentDataRequest dataRequest, bool useCache = true) {
@@ -425,4 +427,4 @@ namespace Zeghs.Managers {
 			}
 		}
 	}
-}  //428行
+}  //430行
