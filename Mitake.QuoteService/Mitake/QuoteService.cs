@@ -200,11 +200,11 @@ namespace Mitake {
 			if (logger.IsInfoEnabled) logger.InfoFormat("[QuoteService.Login] Login signer service... service={0}({1}), userId={2}", this.RemoteIP, this.RemotePort, this.UserId);
 			AuthenticationLogin authLogin = new AuthenticationLogin(this.UserId, this.Password, 0, 0);
 			try {
-				Socket __cLogin = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-				__cLogin.Connect(new IPEndPoint(IPAddress.Parse(this.RemoteIP), this.RemotePort));
-				__cLogin.Send(MitakePacket.ToBuffer(authLogin));
-				iBufferSize = __cLogin.Receive(bArray);
-				__cLogin.Close();
+				Socket cLogin = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+				cLogin.Connect(new IPEndPoint(IPAddress.Parse(this.RemoteIP), this.RemotePort));
+				cLogin.Send(MitakePacket.ToBuffer(authLogin));
+				iBufferSize = cLogin.Receive(bArray);
+				cLogin.Close();
 			} catch (Exception __errExcep) {
 				logger.ErrorFormat("{0}\r\n{1}", __errExcep.Message, __errExcep.StackTrace);
 				return false;

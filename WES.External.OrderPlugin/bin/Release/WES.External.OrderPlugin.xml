@@ -214,11 +214,12 @@
             </summary>
             <param name="commissions">佣金規則列表</param>
         </member>
-        <member name="M:Zeghs.Services.AbstractOrderService.SetInstrument(Zeghs.Data.Instrument)">
+        <member name="M:Zeghs.Services.AbstractOrderService.SetInstrument(Zeghs.Data.Instrument,System.Int32)">
             <summary>
               設定 Instrument 資訊
             </summary>
             <param name="bars">Instrument 類別</param>
+            <param name="data_stream">資料串流編號</param>
         </member>
         <member name="M:Zeghs.Services.AbstractOrderService.Stop(PowerLanguage.SOrderParameters)">
             <summary>
@@ -275,6 +276,11 @@
         <member name="P:Zeghs.Services.AbstractOrderService.CurrentPosition">
             <summary>
               [取得] 目前留倉部位
+            </summary>
+        </member>
+        <member name="P:Zeghs.Services.AbstractOrderService.DataStream">
+            <summary>
+              [取得] Bars 物件的資料串流編號
             </summary>
         </member>
         <member name="P:Zeghs.Services.AbstractOrderService.Positions">

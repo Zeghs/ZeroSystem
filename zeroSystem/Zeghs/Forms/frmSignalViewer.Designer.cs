@@ -283,7 +283,7 @@
             this.menuItemSigner,
             this.menuItemTradeDetails});
 			this.contextMenu.Name = "contextMenu";
-			this.contextMenu.Size = new System.Drawing.Size(119, 48);
+			this.contextMenu.Size = new System.Drawing.Size(153, 70);
 			// 
 			// menuItemSigner
 			// 
@@ -292,7 +292,7 @@
             this.menuItemDataSource,
             this.menuItemRemove});
 			this.menuItemSigner.Name = "menuItemSigner";
-			this.menuItemSigner.Size = new System.Drawing.Size(118, 22);
+			this.menuItemSigner.Size = new System.Drawing.Size(152, 22);
 			this.menuItemSigner.Text = "信號交易";
 			// 
 			// menuItemParameters
@@ -319,7 +319,7 @@
 			// menuItemTradeDetails
 			// 
 			this.menuItemTradeDetails.Name = "menuItemTradeDetails";
-			this.menuItemTradeDetails.Size = new System.Drawing.Size(118, 22);
+			this.menuItemTradeDetails.Size = new System.Drawing.Size(152, 22);
 			this.menuItemTradeDetails.Text = "交易明細";
 			this.menuItemTradeDetails.Click += new System.EventHandler(this.menuItemTradeDetails_Click);
 			// 

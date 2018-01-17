@@ -60,6 +60,22 @@ namespace Zeghs.IO {
 		}
 
 		/// <summary>
+		///   加入 Instrument 資料
+		/// </summary>
+		/// <param name="instrument">Instrument 商品資訊類別</param>
+		public void AddData(Instrument instrument) {
+			int iDataIndex = 0;
+			lock (__cInstruments) {
+				__cInstruments.Add(instrument);
+				iDataIndex = __iMaxInstrumentCount++;
+			}
+
+			if (onAddInstrument != null) {
+				onAddInstrument(this, new InstrumentChangeEvent(instrument, iDataIndex));
+			}
+		}
+
+		/// <summary>
 		///   非同步讀取資料請求結構內的 Instrument 資料
 		/// </summary>
 		/// <param name="request">資料請求結構</param>
@@ -219,4 +235,4 @@ namespace Zeghs.IO {
 			CreateInstrument(e.Data, (int) e.Parameters);
 		}
 	}
-} //222行
+} //238行

@@ -63,6 +63,7 @@ namespace Netwings {
 
 		private int __iPrevious = 0;
 		private int __iTrustIndex = 1;
+		private int __iDecimalPoint = 0;  //小數點位數
 		private int __iMaxTrustIndex = 1;
 		private bool __bBusy = false;
 		private bool __bDisposed = false;
@@ -245,7 +246,7 @@ namespace Netwings {
 		/// <param name="openNextBar">是否開倉在下一根 Bars</param>
 		public virtual bool Send(EOrderAction action, OrderCategory category, double limitPrice, int lots, bool isReverse, double touchPrice = 0, string name = null, bool openNextBar = false) {
 			if (this.Bars.IsLastBars) {
-				return CheckTrust(action, category, limitPrice, lots, name, isReverse, openNextBar);
+				return CheckTrust(action, category, (limitPrice > 0) ? Math.Round(limitPrice, __iDecimalPoint) : 0, lots, name, isReverse, openNextBar);
 			}
 			return false;
 		}
@@ -254,15 +255,21 @@ namespace Netwings {
 		///   設定 Instrument 資訊
 		/// </summary>
 		/// <param name="bars">Instrument 類別</param>
-		public override void SetInstrument(Instrument bars) {
-			base.SetInstrument(bars);
+		/// <param name="data_stream">資料串流編號</param>
+		public override void SetInstrument(Instrument bars, int data_stream) {
+			base.SetInstrument(bars, data_stream);
+
+			string sDecimal = Bars.Info.PriceScale.ToString();  //取得價格座標並轉換成字串
+			int iIndex = sDecimal.IndexOf(".") + 1;  //搜尋小數點位數
+			if (iIndex > 0) {
+				__iDecimalPoint = sDecimal.Length - iIndex;  //計算小數位數
+			}
 			__cCurrentPosition.SetBigPointValue(Bars.Info.BigPointValue);  //設定每一大點的交易金額
 		}
 
 		protected override void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
-				
 				if (disposing) {
 					base.Dispose(disposing);
 
@@ -605,4 +612,4 @@ namespace Netwings {
 			}
 		}
 	}
-} //608行
+} //615行

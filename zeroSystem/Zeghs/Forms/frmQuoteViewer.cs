@@ -70,7 +70,8 @@ namespace Zeghs.Forms {
 				foreach (string sDataSource in __cDataSources) {
 					AbstractQuoteService cService = QuoteManager.Manager.GetQuoteService(sDataSource);
 					cService.onQuote -= QuoteService_onQuote;
-					cService.onSubscribeCompleted -= QuoteService_onSubscribeCompleted;
+					cService.onSubscribeCompleted -= QuoteService_onCompleted;
+					cService.onComplementCompleted -= QuoteService_onCompleted;
 				}
 				__cDataSources.Clear();
 			}
@@ -99,7 +100,8 @@ namespace Zeghs.Forms {
 				if (bNotHave) {
 					AbstractQuoteService cService = QuoteManager.Manager.GetQuoteService(sDataSource);
 					cService.onQuote += QuoteService_onQuote;
-					cService.onSubscribeCompleted += QuoteService_onSubscribeCompleted;
+					cService.onSubscribeCompleted += QuoteService_onCompleted;
+					cService.onComplementCompleted += QuoteService_onCompleted;
 				}
 			} else {
 				lock (__cDataSources) {
@@ -115,7 +117,7 @@ namespace Zeghs.Forms {
 			__cTimer.Start();
 		}
 
-		private void QuoteService_onSubscribeCompleted(object sender, QuoteComplementCompletedEvent e) {
+		private void QuoteService_onCompleted(object sender, QuoteComplementCompletedEvent e) {
 			AbstractQuoteService cService = QuoteManager.Manager.GetQuoteService(e.DataSource);
 			IQuote cQuote = cService.Storage.GetQuote(e.SymbolId);
 			if (cQuote != null) {

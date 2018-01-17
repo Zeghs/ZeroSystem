@@ -872,6 +872,12 @@
               建構子
             </summary>
         </member>
+        <member name="M:Zeghs.IO.DataLoader.AddData(Zeghs.Data.Instrument)">
+            <summary>
+              加入 Instrument 資料
+            </summary>
+            <param name="instrument">Instrument 商品資訊類別</param>
+        </member>
         <member name="M:Zeghs.IO.DataLoader.BeginLoadData(PowerLanguage.InstrumentDataRequest,PowerLanguage.LoadDataCallback,System.Boolean,System.Object)">
             <summary>
               非同步讀取資料請求結構內的 Instrument 資料

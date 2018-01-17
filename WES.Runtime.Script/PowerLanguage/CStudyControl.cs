@@ -18,7 +18,7 @@ namespace PowerLanguage {
 
 		private bool __bBusy = false;      //忙碌旗標
 		private bool __bDisposed = false;  //Dispose旗標
-		private int __iTickCount = 1;
+		private int __iTickCount = 2;
 		private DataLoader __cDataLoader = null;
 		private HashSet<string> __cDataSources = null;
 		private object __oLock = new object();
@@ -86,11 +86,11 @@ namespace PowerLanguage {
 		}
 
 		/// <summary>
-		///   釋放腳本資源
+		///   加入資料串流
 		/// </summary>
-		public void Dispose() {
-			Dispose(true);
-			GC.SuppressFinalize(this);
+		/// <param name="instrument">IInstrument 商品資訊介面</param>
+		public void AddDataStream(IInstrument instrument) {
+			__cDataLoader.AddData(instrument as Instrument);
 		}
 
 		/// <summary>
@@ -99,6 +99,14 @@ namespace PowerLanguage {
 		/// <param name="dataRequests">InstrumentDataRequest 列表</param>
 		public void AddDataStreams(List<InstrumentDataRequest> dataRequests) {
 			__cDataLoader.LoadDataRange(dataRequests);
+		}
+
+		/// <summary>
+		///   釋放腳本資源
+		/// </summary>
+		public void Dispose() {
+			Dispose(true);
+			GC.SuppressFinalize(this);
 		}
 
 		/// <summary>
@@ -118,6 +126,7 @@ namespace PowerLanguage {
 		internal virtual void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
+				
 				if (disposing) {
 					onReady = null;
 					onUpdate = null;
@@ -263,4 +272,4 @@ namespace PowerLanguage {
 			OnQuoteDateTime(e);
 		}
 	}
-}  //266行
+}  //275行

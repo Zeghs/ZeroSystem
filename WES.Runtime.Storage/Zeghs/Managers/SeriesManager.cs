@@ -45,7 +45,7 @@ namespace Zeghs.Managers {
 		///   讀取 Series 設定值
 		/// </summary>
 		public static void LoadSettings() {
-			string sFileName = "WES.Runtime.Storage.set";
+			string sFileName = Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location) + ".set";
 			
 			if (File.Exists(sFileName)) {  //檔案存在就讀取
 				string sSettings = File.ReadAllText(sFileName, Encoding.UTF8);
@@ -138,6 +138,7 @@ namespace Zeghs.Managers {
 
 						cService.onQuote += QuoteService_onQuote;
 						cService.onReset += QuoteService_onReset;
+						cService.onComplementCompleted += QuoteService_onComplementCompleted;
 						__cDataSources.Add(dataSource);
 					}
 				}
@@ -213,6 +214,7 @@ namespace Zeghs.Managers {
 								cArgs = new _AsyncEventArgs();
 								cWaitHandle = new ManualResetEvent(false);
 								cArgs.handle = cWaitHandle;
+								
 								__cAsyncArgs.Add(dataSource, cArgs);
 							}
 						}
@@ -235,10 +237,6 @@ namespace Zeghs.Managers {
 					if (cQuote != null && cQuote.ComplementStatus != ComplementStatus.Complemented) {
 						EventWaitHandle cWaitHandle = null;
 						lock (__cAsyncArgs) {
-							if (__cAsyncArgs.Count == 0) {
-								cService.onComplementCompleted += QuoteService_onComplementCompleted;
-							}
-
 							_AsyncEventArgs cArgs = null;
 							string sHashKey = string.Format("{0}_{1}", sDataSource, sSymbolId);
 							if (__cAsyncArgs.TryGetValue(sHashKey, out cArgs)) {
@@ -290,9 +288,10 @@ namespace Zeghs.Managers {
 						}
 
 						if (iBaseSeconds != iTotalSeconds) {
-							cSeries = cStorage.Create(dataRequest);
+							cSeries = cStorage.Create(dataRequest);  //利用基礎周期建立其他的資料周期, 並加入至 SeriesStorage
 						}
 					} else {
+						dataRequest.Resolution = cSeries.DataRequest.Resolution;  //將目標的週期結構更新至傳入的 InstrumentDataRequest 週期結構
 						cSeries.OnRequest(new DataRequestEvent(dataRequest));  //如果已經存在則請求使用者需要的歷史資料區間(請求方法會檢查目前已下載的歷史資料區間是否足夠, 如果使用者需要的歷史資料區間比較大會向伺服器請求)
 					}
 					cSeriesRand = new SeriesSymbolDataRand(cSeries);
@@ -375,10 +374,6 @@ namespace Zeghs.Managers {
 			lock (__cAsyncArgs) {
 				if (__cAsyncArgs.TryGetValue(sHashKey, out cArgs)) {
 					__cAsyncArgs.Remove(sHashKey);
-
-					if (__cAsyncArgs.Count == 0) {
-						cService.onComplementCompleted -= QuoteService_onComplementCompleted;
-					}
 				}
 			}
 
@@ -427,4 +422,4 @@ namespace Zeghs.Managers {
 			}
 		}
 	}
-}  //430行
+}  //425行

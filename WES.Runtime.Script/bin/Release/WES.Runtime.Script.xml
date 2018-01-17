@@ -87,16 +87,22 @@
               建構子
             </summary>
         </member>
-        <member name="M:PowerLanguage.CStudyControl.Dispose">
+        <member name="M:PowerLanguage.CStudyControl.AddDataStream(PowerLanguage.IInstrument)">
             <summary>
-              釋放腳本資源
+              加入資料串流
             </summary>
+            <param name="instrument">IInstrument 商品資訊介面</param>
         </member>
         <member name="M:PowerLanguage.CStudyControl.AddDataStreams(System.Collections.Generic.List{PowerLanguage.InstrumentDataRequest})">
             <summary>
               加入資料串流
             </summary>
             <param name="dataRequests">InstrumentDataRequest 列表</param>
+        </member>
+        <member name="M:PowerLanguage.CStudyControl.Dispose">
+            <summary>
+              釋放腳本資源
+            </summary>
         </member>
         <member name="M:PowerLanguage.CStudyControl.RemoveDataStream(System.Int32)">
             <summary>

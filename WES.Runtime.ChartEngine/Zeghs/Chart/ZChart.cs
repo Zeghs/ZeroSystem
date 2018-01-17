@@ -260,44 +260,44 @@ namespace Zeghs.Chart {
 				__cLayers[i].OnUpdate(__cInstrument.CurrentBar);
 			}
 
-			int iBarNumber = __cAxisX.BarNumber + __cAxisX.BarCount - 1;
-			int iDiff = __cInstrument.CurrentBar - ((iBarNumber > __cAxisX.DataCount) ? __cAxisX.DataCount : iBarNumber);
-			switch (iDiff) {
-				case 1:  //有新的 Bars 出現(自動移動到新的 Bars 並更新)
-					if (!__bBusy) {
-						__cAxisX.BarNumber = __cInstrument.CurrentBar;
-						this.Refresh();
-					}
-					break;
-				default:
-					if (iDiff == 0) {
-						if (__bFirst) {
-							__bFirst = false;
-							__cBehavior.Enabled = true;
+			if (__bFirst) {
+				if (__cInstrument.IsLastBars) {
+					__bFirst = false;
+					__cBehavior.Enabled = true;
+					this.Refresh();
+				}
+			} else {
+				int iBarNumber = __cAxisX.BarNumber + __cAxisX.BarCount - 1;
+				int iDiff = __cInstrument.CurrentBar - ((iBarNumber > __cAxisX.DataCount) ? __cAxisX.DataCount : iBarNumber);
+				switch (iDiff) {
+					case 1:  //有新的 Bars 出現(自動移動到新的 Bars 並更新)
+						if (!__bBusy) {
+							__cAxisX.BarNumber = __cInstrument.CurrentBar;
 							this.Refresh();
-						} else {
-							if (!__cAxisX.Refresh) {
-								if (!__bBusy) {
-									__bBusy = true;
+						}
+						break;
+					case 0:
+						if (!__cAxisX.Refresh) {
+							if (!__bBusy) {
+								__bBusy = true;
 
-									Task.Factory.StartNew(() => {
-										__cPainter.Clear(__cProperty.BackgroundColor, __cChartRect, false);
-										for (int i = 0; i < iCount; i++) {
-											if (!__cPainter.DrawLayer(__cLayers[i], __cProperty, true)) {
-												this.AxisX.Refresh = true;
+								Task.Factory.StartNew(() => {
+									__cPainter.Clear(__cProperty.BackgroundColor, __cChartRect, false);
+									for (int i = 0; i < iCount; i++) {
+										if (!__cPainter.DrawLayer(__cLayers[i], __cProperty, true)) {
+											this.AxisX.Refresh = true;
 
-												__bBusy = false;
-												this.Refresh();
-												return;
-											}
+											__bBusy = false;
+											this.Refresh();
+											return;
 										}
-										__bBusy = false;
-									});
-								}
+									}
+									__bBusy = false;
+								});
 							}
 						}
-					}
-					break;
+						break;
+				}
 			}
 		}
 
@@ -307,8 +307,7 @@ namespace Zeghs.Chart {
 				Rectangle cAxisRect = __cAxisX.AxisRectangle;
 				int iAxisX_Y = __cChartRect.Height - cAxisRect.Height;
 
-				int iY = 0;
-				int iAxisYWidth = 0;
+				int iY = 0, iAxisYWidth = 0;
 				double dTotalHeight = iAxisX_Y;
 				for (int i = 0; i < iCount; i++) {
 					Layer cLayer = __cLayers[i];
@@ -382,7 +381,6 @@ namespace Zeghs.Chart {
 					for (int i = 0; i < iCount; i++) {
 						__cPainter.DrawLayer(__cLayers[i], __cProperty, false);
 					}
-
 					__cBehavior.DrawObjects();  //繪製使用者所繪製的物件
 				}
 				__bBusy = false;

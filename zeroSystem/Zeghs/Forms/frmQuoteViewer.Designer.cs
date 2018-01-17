@@ -12,6 +12,7 @@
 		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing) {
 			if (disposing) {
+				Zeghs.Managers.QuoteManager.Manager.onQuoteServiceSwitchChanged -= QuoteManager_onQuoteServiceSwitchChanged;
 				RemoveQuoteServices();  //移除所有報價服務
 
 				__cTimer.Dispose();  //釋放Timer

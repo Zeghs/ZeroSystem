@@ -121,7 +121,7 @@ namespace Zeghs.Services {
 							EOrderAction cAction = cOrder.Action;
 							if (cAction == EOrderAction.Buy || cAction == EOrderAction.SellShort) {
 								TradeList<ITrade> cOpenTrades = cResponse.OpenTrades;
-								if (cOpenTrades.Count > 0) {
+								if (cOpenTrades != null && cOpenTrades.Count > 0) {
 									ITrade cTrade = cOpenTrades.GetTrade(sTicket);
 									if (cTrade != null) {
 										__cOpens.Add(new _TradeInfo(cTrade, sSymbolId));

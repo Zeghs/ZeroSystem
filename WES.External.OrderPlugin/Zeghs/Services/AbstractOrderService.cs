@@ -18,6 +18,7 @@ namespace Zeghs.Services {
 		/// </summary>
 		public event EventHandler<ResponseEvent> onResponse = null;
 
+		private int __iDataStream = 0;
 		private bool __bDisposed = false;
 		private List<ICommission> __cCommissions = null;
 		private Contracts __cDefaultContracts = Contracts.Default; //預設的下單數量
@@ -46,9 +47,12 @@ namespace Zeghs.Services {
 			get;
 		}
 
-		internal Contracts DefaultContracts {
+		/// <summary>
+		///   [取得] Bars 物件的資料串流編號
+		/// </summary>
+		public int DataStream {
 			get {
-				return __cDefaultContracts;
+				return __iDataStream;
 			}
 		}
 
@@ -57,6 +61,12 @@ namespace Zeghs.Services {
 		/// </summary>
 		public abstract PositionSeries Positions {
 			get;
+		}
+
+		internal Contracts DefaultContracts {
+			get {
+				return __cDefaultContracts;
+			}
 		}
 
 		/// <summary>
@@ -151,8 +161,10 @@ namespace Zeghs.Services {
 		///   設定 Instrument 資訊
 		/// </summary>
 		/// <param name="bars">Instrument 類別</param>
-		public virtual void SetInstrument(Instrument bars) {
+		/// <param name="data_stream">資料串流編號</param>
+		public virtual void SetInstrument(Instrument bars, int data_stream) {
 			this.Bars = bars;
+			this.__iDataStream = data_stream;
 		}
 
 		/// <summary>
@@ -227,4 +239,4 @@ namespace Zeghs.Services {
 			}
 		}
 	}
-}  //230行
+}  //242行
