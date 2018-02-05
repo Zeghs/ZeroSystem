@@ -31,7 +31,6 @@ namespace Zeghs.IO {
 
 		internal DataAdapter(InstrumentDataRequest request) {
 			__cCookies = new CookieContainer();
-			int iCount = request.Range.Count;
 
 			__cSeries = new SeriesSymbolData(request);
 			__cSeries.onRequest += SeriesSymbolData_onRequest;
@@ -120,6 +119,7 @@ namespace Zeghs.IO {
 
 				if (e.Result == 0) {
 					e.Count += iBaseCount;
+					
 					if (e.IsAlreadyRequestAllData) {
 						__cSeries.RemoveRequest();  //如果已經全部讀取完畢就取消事件
 

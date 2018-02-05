@@ -9,10 +9,9 @@ namespace Zeghs.Data {
 	/// </summary>
 	public sealed class SeriesSymbolDataRand : ISeriesSymbolDataRand, IDisposable {
 		private bool __bDisposed = false;
-		private int __iCurrent = 0;
 		private int __iCurrentBar = 1;
+		private int __iHistoryIndex = 0;
 		private int __iBaseAdjustTotal = 0;
-		private int __iIgnoreBarsCount = 0;
 		private Series<double> __cLows = null;
 		private Series<double> __cHighs = null;
 		private Series<double> __cOpens = null;
@@ -46,20 +45,19 @@ namespace Zeghs.Data {
 		/// </summary>
 		public int Current {
 			get {
-				return __iCurrent;
+				return __iHistoryIndex + (__cIndexer.AdjustTotalCount - __iBaseAdjustTotal) + __iCurrentBar;
 			}
 
 			internal set {
 				__iCurrentBar = value;
-				__iCurrent = __cIndexer.AdjustTotalCount - __iBaseAdjustTotal + __iIgnoreBarsCount + __iCurrentBar;
+				int iCurrent = __iHistoryIndex + (__cIndexer.AdjustTotalCount - __iBaseAdjustTotal) + __iCurrentBar;
 
-				int iIndex = __cIndexer.HistoryIndex + __iCurrent;
-				__cOpens.Current = iIndex;
-				__cHighs.Current = iIndex;
-				__cLows.Current = iIndex;
-				__cCloses.Current = iIndex;
-				__cTimes.Current = iIndex;
-				__cVolumes.Current = iIndex;
+				__cOpens.Current = iCurrent;
+				__cHighs.Current = iCurrent;
+				__cLows.Current = iCurrent;
+				__cCloses.Current = iCurrent;
+				__cTimes.Current = iCurrent;
+				__cVolumes.Current = iCurrent;
 			}
 		}
 
@@ -113,7 +111,7 @@ namespace Zeghs.Data {
 		/// </summary>
 		internal int BarsCount {
 			get {
-				return this.BarsSize - (__cCloses.Count - __cIndexer.Count);
+				return __cIndexer.RealtimeIndex - (__iHistoryIndex + (__cIndexer.AdjustTotalCount - __iBaseAdjustTotal)) + 1;
 			}
 		}
 
@@ -122,7 +120,7 @@ namespace Zeghs.Data {
 		/// </summary>
 		internal int BarsSize {
 			get {
-				return __cCloses.Count - __iIgnoreBarsCount - (__cIndexer.AdjustTotalCount - __iBaseAdjustTotal);
+				return __cCloses.Count - (__iHistoryIndex + (__cIndexer.AdjustTotalCount - __iBaseAdjustTotal));
 			}
 		}
 
@@ -144,7 +142,7 @@ namespace Zeghs.Data {
 
 		internal bool IsLastBars {
 			get {
-				int iIndex = __cIndexer.HistoryIndex + __iCurrent - 1;
+				int iIndex = this.Current - 1;
 				return iIndex == __cIndexer.RealtimeIndex;
 			}
 		}
@@ -162,7 +160,8 @@ namespace Zeghs.Data {
 		///   建構子
 		/// </summary>
 		/// <param name="source">SeriesSymbolData 商品資料類別</param>
-		internal SeriesSymbolDataRand(SeriesSymbolData source) {
+		/// <param name="request">資料請求結構</param>
+		internal SeriesSymbolDataRand(SeriesSymbolData source, InstrumentDataRequest request) {
 			__cSource = source;
 			__cSource.onRequestCompleted += SeriesSymbolData_onRequestCompleted;  //附掛請求歷史資料完成的事件通知
 
@@ -170,6 +169,7 @@ namespace Zeghs.Data {
 			__iBaseAdjustTotal = __cIndexer.AdjustTotalCount;
 			source.Clone(out __cTimes, out __cOpens, out __cHighs, out __cLows, out __cCloses, out __cVolumes);
 
+			__iHistoryIndex = __cCloses.Count - (request.Range.Count + source.RealtimeCount);
 			this.Current = 1;  //預設值索引從 1 開始(內部會自動計算對應至 SeriesSymbolData 序列資料的正確索引位置)
 
 			string sDataSource = source.DataRequest.DataFeed;
@@ -193,17 +193,15 @@ namespace Zeghs.Data {
 		/// <param name="maxbarsReferance">最大 bars count 參考個數</param>
 		public void SetMaxbarsReferance(int maxbarsReferance) {
 			if (maxbarsReferance > 0) {
-				__iIgnoreBarsCount = __cCloses.Count - __cSource.RealtimeCount - maxbarsReferance;
-				if (__iIgnoreBarsCount < 0) {
-					__iIgnoreBarsCount = 0;
-				}
+				int iHistoryIndex = __cCloses.Count - (maxbarsReferance + __cSource.RealtimeCount);
+				__iHistoryIndex = (iHistoryIndex < 0) ? __iHistoryIndex : iHistoryIndex;
 			}
 		}
 
 		internal int TryOutside() {
-			int iRet = 0, iIndex = __cIndexer.HistoryIndex + __iCurrent - 1;
-			if (iIndex > __cIndexer.RealtimeIndex) {
-				iRet = __cIndexer.Count - __iIgnoreBarsCount - (__cIndexer.AdjustTotalCount - __iBaseAdjustTotal);
+			int iRet = 0, iIndex = this.Current - 1;
+			if (iIndex > __cIndexer.RealtimeIndex) {  //如果目前索引已經超過即時資料索引
+				iRet = this.BarsCount;  //傳回目前 Bars 總數量
 			}
 			return iRet;
 		}
@@ -211,7 +209,6 @@ namespace Zeghs.Data {
 		private void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
-				
 				if (disposing) {
 					__cSource.onRequestCompleted -= SeriesSymbolData_onRequestCompleted;  //卸載請求歷史資料完成的事件通知
 
@@ -230,4 +227,4 @@ namespace Zeghs.Data {
 			this.Current = __iCurrentBar;  //如果沒有使用此事件通知, 則需要有新的即時資訊進來才會重新修正 Current , 這樣在 Chart 上會看到資料並沒有到最新的 Bars 上
 		}
 	}
-}  //233行
+}  //230行

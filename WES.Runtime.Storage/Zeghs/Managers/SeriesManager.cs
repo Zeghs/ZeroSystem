@@ -139,6 +139,7 @@ namespace Zeghs.Managers {
 						cService.onQuote += QuoteService_onQuote;
 						cService.onReset += QuoteService_onReset;
 						cService.onComplementCompleted += QuoteService_onComplementCompleted;
+						
 						__cDataSources.Add(dataSource);
 					}
 				}
@@ -282,22 +283,29 @@ namespace Zeghs.Managers {
 						int iBaseSeconds = (iTotalSeconds < Resolution.MAX_BASE_TOTALSECONDS) ? Resolution.MIN_BASE_TOTALSECONDS : Resolution.MAX_BASE_TOTALSECONDS;
 						cSeries = cStorage.GetSeries(iBaseSeconds);
 						if (cSeries == null) {
-							DataAdapter cAdapter = LoadAdapter(dataRequest);
+							DataAdapter cAdapter = LoadAdapter(ref dataRequest);
 							cSeries = cAdapter.Series;
 							cStorage.Add(cSeries);
 						}
 
-						if (iBaseSeconds != iTotalSeconds) {
-							cSeries = cStorage.Create(dataRequest);  //利用基礎周期建立其他的資料周期, 並加入至 SeriesStorage
+						if (iBaseSeconds == iTotalSeconds) {
+							goto exit;
+						} else {
+							cSeries = cSeries.CreateSeries(dataRequest); //利用基礎周期建立其他的資料周期
+							cStorage.Add(cSeries);  //加入至 SeriesStorage
 						}
-					} else {
-						dataRequest.Resolution = cSeries.DataRequest.Resolution;  //將目標的週期結構更新至傳入的 InstrumentDataRequest 週期結構
-						cSeries.OnRequest(new DataRequestEvent(dataRequest));  //如果已經存在則請求使用者需要的歷史資料區間(請求方法會檢查目前已下載的歷史資料區間是否足夠, 如果使用者需要的歷史資料區間比較大會向伺服器請求)
 					}
-					cSeriesRand = new SeriesSymbolDataRand(cSeries);
+
+					dataRequest.Resolution = cSeries.DataRequest.Resolution;  //將目標的週期結構更新至傳入的 InstrumentDataRequest 週期結構
+					
+					DataRequestEvent cRequestEvent = new DataRequestEvent(dataRequest);
+					cSeries.OnRequest(cRequestEvent);  //如果已經存在則請求使用者需要的歷史資料區間(請求方法會檢查目前已下載的歷史資料區間是否足夠, 如果使用者需要的歷史資料區間比較大會向伺服器請求)
+					dataRequest.Range.Count = cRequestEvent.Count;  //將請求後的正確數量傳入至結構內
+				exit:
+					cSeriesRand = new SeriesSymbolDataRand(cSeries, dataRequest);
 				}
 			} else {
-				DataAdapter cAdapter = LoadAdapter(dataRequest, false);  //重新建立新的基礎週期序列資料(不使用快取, 不保存至快取內, 使用完畢之後立即 Dispose)
+				DataAdapter cAdapter = LoadAdapter(ref dataRequest, false);  //重新建立新的基礎週期序列資料(不使用快取, 不保存至快取內, 使用完畢之後立即 Dispose)
 				SeriesSymbolData cSeries = cAdapter.Series;  //取得新的基礎周期序列資料
 
 				int iBaseSeconds = (iTotalSeconds < Resolution.MAX_BASE_TOTALSECONDS) ? Resolution.MIN_BASE_TOTALSECONDS : Resolution.MAX_BASE_TOTALSECONDS;
@@ -309,19 +317,22 @@ namespace Zeghs.Managers {
 					cSeries = cTargetSeries;
 				}
 
-				cSeriesRand = new SeriesSymbolDataRand(cSeries);
+				cSeriesRand = new SeriesSymbolDataRand(cSeries, dataRequest);
 				cStorage.Add(cSeries, true);  //保存序列資料(存放在 SeriesStorage 內的序列資料才會自動合併最新的即時資訊報價)
 				cAdapter.Dispose();  //釋放資料配置者類別
 			}
 			return cSeriesRand;
 		}
 
-		private DataAdapter LoadAdapter(InstrumentDataRequest dataRequest, bool useCache = true) {
-			dataRequest.Resolution = Resolution.GetBaseValue(dataRequest.Resolution);
-			DataAdapter cAdapter = new DataAdapter(dataRequest);
+		private DataAdapter LoadAdapter(ref InstrumentDataRequest dataRequest, bool useCache = true) {
+			InstrumentDataRequest cRequest = dataRequest;
+			cRequest.Resolution = Resolution.GetBaseValue(dataRequest.Resolution);
+			DataAdapter cAdapter = new DataAdapter(cRequest);
+
+			InstrumentDataRequest cDataRequest = cAdapter.Series.DataRequest;
+			dataRequest.Range.Count = cDataRequest.Range.Count;  //將正確的請求歷史資料數量傳入至結構
 
 			if (useCache) {  //使用快取(true=建立完 DataAdapter 之後，將其保存至快取內以方便後續請求時使用)
-				InstrumentDataRequest cDataRequest = cAdapter.Series.DataRequest;
 				if (!cDataRequest.Range.IsAlreadyRequestAllData) {
 					cAdapter.onCompleted += DataAdapter_onCompleted;
 
@@ -409,7 +420,6 @@ namespace Zeghs.Managers {
 			lock (__cQueue) {
 				__cQueue.Enqueue(e);
 			}
-
 			AsyncMergeTick();
 		}
 
@@ -422,4 +432,4 @@ namespace Zeghs.Managers {
 			}
 		}
 	}
-}  //425行
+}  //435行

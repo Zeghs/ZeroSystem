@@ -38,6 +38,7 @@ namespace Zeghs.Data {
 		private InstrumentSettings __cSettings = null;
 		private InstrumentDataRequest __cDataRequest;
 		private object __oLock = new object();
+		private object __oLockRequest = new object();
 
 		/// <summary>
 		///   [取得] 收盤價陣列資訊
@@ -140,7 +141,6 @@ namespace Zeghs.Data {
 
 		internal SeriesSymbolData(InstrumentDataRequest dataRequest, InstrumentSettings settings = null) {
 			this.Id = 0x40000000 | System.Threading.Interlocked.Increment(ref __iLastSeriesId);
-
 			this.Indexer = new SeriesIndexer();
 			__cDataRequest = dataRequest;
 			__cSettings = ((settings == null) ? new InstrumentSettings(ref __cDataRequest) : settings.Create(ref __cDataRequest));
@@ -248,7 +248,7 @@ namespace Zeghs.Data {
 				DateTime cBaseTime = __cTimes[i];
 				bool bNewBars = Resolution.GetNearestPeriod(cPeriods, ref cBaseTime);
 				MergeSeries(target, cBaseTime, __cOpens[i], __cHighs[i], __cLows[i], __cCloses[i], __cVolumes[i], bNewBars, false);
-				
+
 				if (bNewBars) {
 					target.Indexer.SetBaseIndex(i);
 				}
@@ -383,7 +383,6 @@ namespace Zeghs.Data {
 		private void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
-				
 				if (disposing) {
 					onReset = null;
 					onRequest = null;
@@ -415,16 +414,17 @@ namespace Zeghs.Data {
 				if (low < __cLows[iIndex]) {
 					__cLows.SetData(iIndex, low);
 				}
-				
 				__cVolumes.SetData(iIndex, __cVolumes[iIndex] + volume);
 			}
 		}
 
-		private void Series_onRequest(object sender, SeriesRequestEvent e) {
+		private void Series_onRequest(object sender, SeriesRequestEvent e) {  //此方法由 Open, Close, Time... 這些序列資料類別作綁定, 當使用者需要往前請求歷史資料時會觸發這個事件方法
 			int iRequestCount = ~e.Position + 1;  //e.Position為負值(往前100根 Bar = -100), 使用補數運算變成 100 作為請求 Bars 資料個數
 			int iTotals = iRequestCount + __cDataRequest.Range.Count;  //資料總個數(欲請求個數 + 目前已下載完後的資料個數)
 
-			OnRequest(new DataRequestEvent(iRequestCount, iTotals, __cDataRequest.Resolution.Rate));  //呼叫請求方法
+			lock (__oLockRequest) {  //鎖定資源(請求序列資料時讓請求執行緒同步處理)
+				OnRequest(new DataRequestEvent(iRequestCount, iTotals, __cDataRequest.Resolution.Rate));  //呼叫請求方法
+			}
 		}
 	}
 }  //430行

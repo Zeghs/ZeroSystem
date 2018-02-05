@@ -516,11 +516,12 @@
               隨機商品序列資料類別(提供給 Instrument 類別作來源資料使用)
             </summary>
         </member>
-        <member name="M:Zeghs.Data.SeriesSymbolDataRand.#ctor(Zeghs.Data.SeriesSymbolData)">
+        <member name="M:Zeghs.Data.SeriesSymbolDataRand.#ctor(Zeghs.Data.SeriesSymbolData,PowerLanguage.InstrumentDataRequest)">
             <summary>
               建構子
             </summary>
             <param name="source">SeriesSymbolData 商品資料類別</param>
+            <param name="request">資料請求結構</param>
         </member>
         <member name="M:Zeghs.Data.SeriesSymbolDataRand.Dispose">
             <summary>
@@ -1012,13 +1013,6 @@
             <summary>
               清除 SeriesStorage
             </summary>
-        </member>
-        <member name="M:Zeghs.Data.SeriesStorage.Create(PowerLanguage.InstrumentDataRequest)">
-            <summary>
-              建立指定的時間週期 SeriesSymbolData 列表
-            </summary>
-            <param name="dataRequest">InstrumentDataRequest 類別</param>
-            <returns>返回值: SeriesSymbolData 類別</returns>
         </member>
         <member name="M:Zeghs.Data.SeriesStorage.GetSeries(System.Int32)">
             <summary>

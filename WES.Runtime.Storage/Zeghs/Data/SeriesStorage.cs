@@ -77,29 +77,13 @@ namespace Zeghs.Data {
 		}
 
 		/// <summary>
-		///   建立指定的時間週期 SeriesSymbolData 列表
-		/// </summary>
-		/// <param name="dataRequest">InstrumentDataRequest 類別</param>
-		/// <returns>返回值: SeriesSymbolData 類別</returns>
-		internal SeriesSymbolData Create(InstrumentDataRequest dataRequest) {
-			int iTotalSeconds = dataRequest.Resolution.TotalSeconds;
-			SeriesSymbolData cBaseSeries = GetSeries(((iTotalSeconds < Resolution.MAX_BASE_TOTALSECONDS) ? Resolution.MIN_BASE_TOTALSECONDS : Resolution.MAX_BASE_TOTALSECONDS));
-			
-			SeriesSymbolData cTargetSeries = cBaseSeries.CreateSeries(dataRequest);
-			this.Add(cTargetSeries);
-
-			dataRequest.Resolution = cTargetSeries.DataRequest.Resolution;  //將修正後的週期結構更新至傳入的 InstrumentDataRequest 週期結構(修正後的周期結構才有週期轉換比率)
-			cTargetSeries.OnRequest(new DataRequestEvent(dataRequest));
-			return cTargetSeries;
-		}
-
-		/// <summary>
 		///   取得指定的總秒數週期 SeriesSymbolData 列表
 		/// </summary>
 		/// <param name="hashKey">可以為時間週期總秒數或是 Identify</param>
 		internal SeriesSymbolData GetSeries(int hashKey) {
 			int iIndex = 0;
 			SeriesSymbolData cSeries = null;
+			
 			lock (__cIndexs) {
 				if (__cIndexs.TryGetValue(hashKey, out iIndex)) {
 					cSeries = __cSeries[iIndex];
@@ -111,6 +95,7 @@ namespace Zeghs.Data {
 		internal void MergeTick(ITick tick) {
 			lock (__cIndexs) {
 				int iCount = __cSeries.Count;
+				
 				Parallel.For(0, iCount, (i) => {
 					SeriesSymbolData cSeries = __cSeries[i];
 					if (cSeries.Initialized) {
@@ -183,7 +168,7 @@ namespace Zeghs.Data {
 							int iRequestCount = iTotals - cBaseSeries.DataRequest.Range.Count;  //計算後的資料總個數 - 基礎週期目前已下載後的資料個數 = 欲請求的的個數
 							cRequestEvent = new DataRequestEvent(iRequestCount, iTotals, cBaseSeries.DataRequest.Resolution.Rate);
 						}
-
+						
 						cBaseSeries.OnRequest(cRequestEvent);  //回補歷史資訊
 					}
 
@@ -211,4 +196,4 @@ namespace Zeghs.Data {
 			}
 		}
 	}
-}  //214行
+}  //199行
