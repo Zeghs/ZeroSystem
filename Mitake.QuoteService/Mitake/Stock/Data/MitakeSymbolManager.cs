@@ -95,7 +95,7 @@ namespace Mitake.Stock.Data {
 						iContractIndex = GetContractTimeIndex(sCommodityId, iFYear, iFMonth);
 						if (iContractIndex > -1) {
 							if (stockId[0] == '7' && stockId[1] == '6') {  //檢查是否為夜台或夜小台
-								sSymbolId = string.Format("n{0}{1}.tw", sCommodityId, iContractIndex);
+								sSymbolId = string.Format("{0}N{1}.tw", sCommodityId, iContractIndex);
 							} else {
 								sSymbolId = string.Format("{0}{1}.tw", sCommodityId, iContractIndex);
 							}
