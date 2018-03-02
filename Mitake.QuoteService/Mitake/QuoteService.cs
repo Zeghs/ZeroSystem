@@ -28,6 +28,7 @@ namespace Mitake {
         public class QuoteService : AbstractQuoteService {
 		private const double TIME_ZONE = 8.0d;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(QuoteService));
+		private static readonly TimeSpan __cSymbolUpdateTime = new TimeSpan(7, 30, 0);  //股票代號表預設更新時間
 
 		private bool __bReset = false;         //判斷是否為清盤指令所觸發的登入登出(收到清盤後, 會重新登入伺服器)
 		private bool __bReseted = false;       //判斷是否已經清盤完畢
@@ -283,6 +284,7 @@ namespace Mitake {
 					if (__cSession.Connected) {
 						__cSession.Send(MitakePacket.ToBuffer(new Logout())); //送出登出訊息
 					}
+					
 					__cSession.Close();
 				}
 			} catch (Exception __errExcep1) {
@@ -299,7 +301,8 @@ namespace Mitake {
 					if (__cSocket.Connected) {
                                                 __cSocket.Send(MitakePacket.ToBuffer(new Logout())); //送出登出訊息
                                         }
-                                        __cSocket.Close();
+                                      
+					__cSocket.Close();
                                 }
                         } catch (Exception __errExcep2) {
 				if (logger.IsErrorEnabled) logger.ErrorFormat("[QuoteService.Logout] {0}\r\n{1}", __errExcep2.Message, __errExcep2.StackTrace);
@@ -438,29 +441,35 @@ namespace Mitake {
                 }
 
 		private void GetTradeDateFromLogin(object sender, TimerEvent e) {
-			StockDecoder.TimerProc -= GetTradeDateFromLogin;
-			__cTradeDate = e.TradeDate;
-			Mitake.Stock.Util.Time.SetToday(__cTradeDate);
-
-			Task.Factory.StartNew(() => {
-				if (__bReset) {
-					this.IsLogin = true;
-					if (!__bReseted) {  //如果還沒有清盤完畢, 就執行清盤動作
-						MitakeSymbolManager.Update(DateTime.UtcNow.AddHours(TIME_ZONE), false);
-						OnReset(new QuoteResetEvent(this.DataSource));
-						if (logger.IsInfoEnabled) logger.InfoFormat("[QuoteService.Reset] Service \"{0}\" data reset success...", this.DataSource);
-
-						__bReseted = true;  //設定已經清盤完畢的旗標
-					}
-				} else {
-					if (this.IsUpdate) {
-						SymbolUpdate();  //回補股票代號(每天只回補一次股票代號)
-					} else {
-						this.IsLogin = true;
-						OnLoginCompleted();
-					}
+			if (__bReseted) {  //是否已經清盤完畢(如果清盤完畢則等候更新股票代號表的時間到達)
+				if (e.QuoteDateTime.TimeOfDay >= __cSymbolUpdateTime) {  //檢查是否到了更新股票代號表的時間(每天只更新一次)
+					StockDecoder.TimerProc -= GetTradeDateFromLogin;
+					SymbolUpdate();  //回補股票代號(每天只回補一次股票代號)
 				}
-			});
+			} else {
+				__cTradeDate = e.TradeDate;
+				Mitake.Stock.Util.Time.SetToday(__cTradeDate);
+
+				Task.Factory.StartNew(() => {
+					if (__bReset) {
+						if (!__bReseted) {  //如果還沒有清盤完畢, 就執行清盤動作
+							OnReset(new QuoteResetEvent(this.DataSource));
+							if (logger.IsInfoEnabled) logger.InfoFormat("[QuoteService.Reset] Service \"{0}\" data reset success...", this.DataSource);
+
+							__bReseted = true;  //設定已經清盤完畢的旗標
+						}
+					} else {
+						StockDecoder.TimerProc -= GetTradeDateFromLogin;
+
+						if (this.IsUpdate) {
+							SymbolUpdate();  //回補股票代號(每天只回補一次股票代號)
+						} else {
+							this.IsLogin = true;
+							OnLoginCompleted();
+						}
+					}
+				});
+			}
 		}
 		
 		private bool RegisterServer(ZSocket socket, string serviceIP, int servicePort, byte command) {
@@ -601,7 +610,8 @@ namespace Mitake {
 			if (__cSession == e.ActiveSocket) {
                                 __iNoPacketCount2 = 0;
                         }
-                        StockDecoder.Decode(e.ActiveSocket, e.Token, this.IsDecode);
+                      
+			StockDecoder.Decode(e.ActiveSocket, e.Token, this.IsDecode);
                 }
 
                 private void StockClient_onClose(object sender, CloseEvent e) {
@@ -642,4 +652,4 @@ namespace Mitake {
 			}
 		}
 	}
-} //645行
+} //655行

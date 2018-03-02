@@ -878,6 +878,7 @@
               加入 Instrument 資料
             </summary>
             <param name="instrument">Instrument 商品資訊類別</param>
+            <returns>返回值: 資料存放索引值(從 0 開始)</returns>
         </member>
         <member name="M:Zeghs.IO.DataLoader.BeginLoadData(PowerLanguage.InstrumentDataRequest,PowerLanguage.LoadDataCallback,System.Boolean,System.Object)">
             <summary>

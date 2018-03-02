@@ -81,10 +81,8 @@ namespace Mitake.Stock.Decode {
 			}
 
 			if (sSymbolId.Length > 0) {
-				cSymbolInfo.SymbolId = sSymbolId;
-
 				//轉換為標準台股商品代號格式
-				string sProductId = MitakeSymbolManager.Convert(cSymbolInfo.SymbolId, (cSymbolInfo.市場別 == 2) ? cSymbolInfo.市場分類 : 0);
+				string sProductId = MitakeSymbolManager.Convert(cSymbolInfo.SymbolId, sSymbolId, (cSymbolInfo.市場別 == 2) ? cSymbolInfo.市場分類 : 0);
 				if (sProductId != null) {
 					cSymbolInfo.SymbolId = sProductId;
 

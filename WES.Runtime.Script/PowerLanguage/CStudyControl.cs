@@ -89,8 +89,9 @@ namespace PowerLanguage {
 		///   加入資料串流
 		/// </summary>
 		/// <param name="instrument">IInstrument 商品資訊介面</param>
-		public void AddDataStream(IInstrument instrument) {
-			__cDataLoader.AddData(instrument as Instrument);
+		/// <returns>回傳值: 資料串流編號</returns>
+		public int AddDataStream(IInstrument instrument) {
+			return __cDataLoader.AddData(instrument as Instrument) + 1;
 		}
 
 		/// <summary>
@@ -126,7 +127,6 @@ namespace PowerLanguage {
 		internal virtual void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
-				
 				if (disposing) {
 					onReady = null;
 					onUpdate = null;
@@ -198,7 +198,7 @@ namespace PowerLanguage {
 							bool bNext = true;
 							while (bNext) {
 								bNext = cBaseInstrument.Next();
-								DateTime cTime = cBaseInstrument.Time[0];
+								DateTime cTime = cBaseInstrument.Time.Value;
 								int iCount = __cDataLoader.MaxInstrumentCount;
 								Parallel.For(1, iCount, (i) => {
 									Instrument cInstrument = __cDataLoader.GetInstrument(i);
@@ -232,7 +232,7 @@ namespace PowerLanguage {
 				}
 				__cDataSources.Clear();
 			}
-
+			
 			__cDataLoader.Dispose();  //釋放資料讀取者資源
 		}
 

@@ -1568,10 +1568,11 @@
              [上櫃]電子通路
             </summary>
         </member>
-        <member name="M:Mitake.Stock.Data.MitakeSymbolManager.Convert(System.String,System.Int32)">
+        <member name="M:Mitake.Stock.Data.MitakeSymbolManager.Convert(System.String,System.String,System.Int32)">
             <summary>
               轉換Mitake資訊源內部商品代號為標準台股商品代號
             </summary>
+            <param name="stockId">商品證交所編號</param>
             <param name="symbolId">商品代號</param>
             <param name="marketType">市場別  1=期貨, 2=選擇權</param>
             <returns>返回值:轉換後的商品代號</returns>

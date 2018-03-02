@@ -164,7 +164,7 @@ namespace PowerLanguage {
 
 			int iDataStream = 1;
 			if (__cTradeServices.Count > 0) {  //如果為 0 則表示尚未建立任何一個下單交易服務(如果 > 0 則將建立的 instrument 加入至 instruments 陣列內, 加入陣列的資料才會跟著 Bars 資料同步 Move Current 位置)
-				AddDataStream(instrument);
+				iDataStream = AddDataStream(instrument);
 			}
 
 			orderSource = (orderSource == null) ? __cProperty.OrderSource : orderSource;

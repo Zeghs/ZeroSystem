@@ -63,7 +63,8 @@ namespace Zeghs.IO {
 		///   加入 Instrument 資料
 		/// </summary>
 		/// <param name="instrument">Instrument 商品資訊類別</param>
-		public void AddData(Instrument instrument) {
+		/// <returns>返回值: 資料存放索引值(從 0 開始)</returns>
+		public int AddData(Instrument instrument) {
 			int iDataIndex = 0;
 			lock (__cInstruments) {
 				__cInstruments.Add(instrument);
@@ -73,6 +74,7 @@ namespace Zeghs.IO {
 			if (onAddInstrument != null) {
 				onAddInstrument(this, new InstrumentChangeEvent(instrument, iDataIndex));
 			}
+			return iDataIndex;
 		}
 
 		/// <summary>
@@ -235,4 +237,4 @@ namespace Zeghs.IO {
 			CreateInstrument(e.Data, (int) e.Parameters);
 		}
 	}
-} //238行
+} //240行

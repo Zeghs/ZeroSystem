@@ -92,6 +92,7 @@
               加入資料串流
             </summary>
             <param name="instrument">IInstrument 商品資訊介面</param>
+            <returns>回傳值: 資料串流編號</returns>
         </member>
         <member name="M:PowerLanguage.CStudyControl.AddDataStreams(System.Collections.Generic.List{PowerLanguage.InstrumentDataRequest})">
             <summary>

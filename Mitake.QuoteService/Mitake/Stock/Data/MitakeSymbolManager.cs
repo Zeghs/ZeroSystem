@@ -72,10 +72,11 @@ namespace Mitake.Stock.Data {
 		/// <summary>
 		///   轉換Mitake資訊源內部商品代號為標準台股商品代號
 		/// </summary>
+		/// <param name="stockId">商品證交所編號</param>
 		/// <param name="symbolId">商品代號</param>
 		/// <param name="marketType">市場別  1=期貨, 2=選擇權</param>
 		/// <returns>返回值:轉換後的商品代號</returns>
-		internal static string Convert(string symbolId, int marketType) {
+		internal static string Convert(string stockId, string symbolId, int marketType) {
 			int iContractIndex = 0;
 			string sSymbolId = null, sCommodityId = null;
 
@@ -93,7 +94,11 @@ namespace Mitake.Stock.Data {
 						
 						iContractIndex = GetContractTimeIndex(sCommodityId, iFYear, iFMonth);
 						if (iContractIndex > -1) {
-							sSymbolId = string.Format("{0}{1}.tw", sCommodityId, iContractIndex);
+							if (stockId[0] == '7' && stockId[1] == '6') {  //檢查是否為夜台或夜小台
+								sSymbolId = string.Format("n{0}{1}.tw", sCommodityId, iContractIndex);
+							} else {
+								sSymbolId = string.Format("{0}{1}.tw", sCommodityId, iContractIndex);
+							}
 						}
 					}
 					break;
@@ -193,7 +198,7 @@ namespace Mitake.Stock.Data {
 			return cBuilder.ToString();
 		}
 
-		internal static void Update(DateTime date, bool isReBuild = true) {
+		internal static void Update(DateTime date) {
 			__cToday = date.Date;
 			__cSymbolList.Clear();
 			__cMitakeQuoteInformations.Clear();
@@ -201,16 +206,14 @@ namespace Mitake.Stock.Data {
 			AbstractExchange cExchange = ProductManager.Manager.GetExchange(__sExchangeName);
 			cExchange.Update(date); //更新交易所商品屬性資訊
 
-			if (isReBuild) { //是否要重新建立股票代號表資訊
-				cExchange.UpdateTime = DateTime.Today.AddDays(-2);  //設定為兩天前(強迫更新)
-				cExchange.Clear();  //如果要更新則全部清除
-				
-				//新增上櫃指數(Mitake股票清單內沒有這支指數需要自行新增)
-				cExchange.AddProduct(MitakeSymbolManager.GetIndexSymbolInformation(9998));
+			cExchange.UpdateTime = DateTime.Today.AddDays(-2);  //設定為兩天前(強迫更新)
+			cExchange.Clear();  //如果要更新則全部清除
 
-				//新增上市指數(Mitake股票清單內沒有這支指數需要自行新增)
-				cExchange.AddProduct(MitakeSymbolManager.GetIndexSymbolInformation(9999));
-			}
+			//新增上櫃指數(Mitake股票清單內沒有這支指數需要自行新增)
+			cExchange.AddProduct(MitakeSymbolManager.GetIndexSymbolInformation(9998));
+
+			//新增上市指數(Mitake股票清單內沒有這支指數需要自行新增)
+			cExchange.AddProduct(MitakeSymbolManager.GetIndexSymbolInformation(9999));
 		}
 
 		private static int GetContractTimeIndex(string commodityId, int year, int month, int week = 0) {
@@ -244,4 +247,4 @@ namespace Mitake.Stock.Data {
 			return iRet;
 		}
 	}
-}  //247行
+}  //250行
