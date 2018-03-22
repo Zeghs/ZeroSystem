@@ -49,7 +49,7 @@ namespace ChartEngine.Tester {
 				},
 				IsSubChart = true,
 				IsShowNewPrice = true,
-				LayerIndex = 1,
+				LayerIndex = 0,
 				LegendColor = Color.Red,
 				ChartType = EChartType.OHLC,
 				PenStyles = new PowerLanguage.PenStyle[] {

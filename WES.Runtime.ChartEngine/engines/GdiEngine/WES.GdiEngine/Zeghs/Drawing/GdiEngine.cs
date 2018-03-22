@@ -178,6 +178,7 @@ namespace Zeghs.Drawing {
 			if (iCount > 0) {
 				AxisY cAxisY = layer.AxisY;
 				if (onlyUpdateLastBar || cAxisY.Refresh) {
+					bool bRefresh = cAxisY.Refresh;
 					for (int i = 0; i < iCount; i++) {
 						AbstractPlot cPlot = cPlots[i];
 						if (cPlot.IsSubChart) {
@@ -187,7 +188,7 @@ namespace Zeghs.Drawing {
 						}
 					}
 
-					if (cAxisY.Refresh) {
+					if (bRefresh) {
 						//繪製 Layer 邊框
 						Rectangle cRect = layer.LayerRectangleWithoutAxisY;
 						IntPtr cOldPen = __cGDI.SelectPen(new PowerLanguage.PenStyle(property.ForeColor, 1));

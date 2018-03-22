@@ -229,7 +229,7 @@ namespace Zeghs.Forms {
 		}
 
 		private void frmSignalViewer_Load(object sender, EventArgs e) {
-			__iFixGridBottomCount = this.dataGrid_Trade.ClientSize.Height / 21 - 3;
+			__iFixGridBottomCount = this.dataGrid_Trade.ClientSize.Height / 21 - 2;
 
 			CreateChartEngine();
 

@@ -52,8 +52,10 @@
     <Reference Include="WES.External.QuotePlugin">
       <HintPath>..\..\..\..\WES.External.QuotePlugin\bin\Release\WES.External.QuotePlugin.dll</HintPath>
     </Reference>
-    <Reference Include="WES.Runtime.ChartEngine">
-      <HintPath>..\..\..\bin\Release\WES.Runtime.ChartEngine.dll</HintPath>
+    <Reference Include="WES.Runtime.ChartEngine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <ExecutableExtension>.exe</ExecutableExtension>
+      <HintPath>..\..\..\..\zeroSystem\bin\Release\WES.Runtime.ChartEngine.dll</HintPath>
     </Reference>
     <Reference Include="WES.Runtime.Product">
       <HintPath>..\..\..\..\WES.Runtime.Product\bin\Release\WES.Runtime.Product.dll</HintPath>
