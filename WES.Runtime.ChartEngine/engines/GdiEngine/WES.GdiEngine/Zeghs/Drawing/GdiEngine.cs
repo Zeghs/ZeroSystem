@@ -177,8 +177,8 @@ namespace Zeghs.Drawing {
 			int iCount = cPlots.Count;
 			if (iCount > 0) {
 				AxisY cAxisY = layer.AxisY;
-				if (onlyUpdateLastBar || cAxisY.Refresh) {
-					bool bRefresh = cAxisY.Refresh;
+				bool bRefresh = cAxisY.Refresh;
+				if (onlyUpdateLastBar || bRefresh) {
 					for (int i = 0; i < iCount; i++) {
 						AbstractPlot cPlot = cPlots[i];
 						if (cPlot.IsSubChart) {
@@ -226,7 +226,6 @@ namespace Zeghs.Drawing {
 		protected override void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
-
 				if (disposing) {
 					__cGDI.Dispose();
 				}
