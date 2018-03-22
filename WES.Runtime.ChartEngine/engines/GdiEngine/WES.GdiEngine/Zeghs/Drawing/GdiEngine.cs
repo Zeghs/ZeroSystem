@@ -8,6 +8,9 @@ using Zeghs.Drawing.Plots;
 using Zeghs.Drawing.Actions;
 
 namespace Zeghs.Drawing {
+	/// <summary>
+	///   GDI Plus 繪圖引擎模組
+	/// </summary>
 	public sealed class GdiEngine : AbstractPaintEngine {
 		private bool __bDisposed = false;
 		private Gdi __cGDI = null;
@@ -175,17 +178,16 @@ namespace Zeghs.Drawing {
 			if (iCount > 0) {
 				AxisY cAxisY = layer.AxisY;
 				if (onlyUpdateLastBar || cAxisY.Refresh) {
-					bool bFlag = !cAxisY.Refresh;
 					for (int i = 0; i < iCount; i++) {
 						AbstractPlot cPlot = cPlots[i];
 						if (cPlot.IsSubChart) {
-							if (!cPlot.DrawPlot(layer, property, bFlag)) {
+							if (!cPlot.DrawPlot(layer, property, onlyUpdateLastBar)) {
 								return false;
 							}
 						}
 					}
-					
-					if (!bFlag) {
+
+					if (cAxisY.Refresh) {
 						//繪製 Layer 邊框
 						Rectangle cRect = layer.LayerRectangleWithoutAxisY;
 						IntPtr cOldPen = __cGDI.SelectPen(new PowerLanguage.PenStyle(property.ForeColor, 1));
