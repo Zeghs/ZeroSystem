@@ -113,7 +113,7 @@ namespace Zeghs.Data {
 			return TypeDescriptor.GetProperties(typeof(T));
 		}
 
-		public object GetItemValue(int index, PropertyDescriptor property) {
+		public virtual object GetItemValue(int index, PropertyDescriptor property) {
 			return property.GetValue(this[index]);
 		}
 

@@ -83,10 +83,7 @@ namespace Netwings {
 							SendTrust(__cCurrent, __cCurrent.Ticket);
 						}
 					} else if (__cTemp != null) {
-						bool bSuccess = this.Send(__cTemp.Action, __cTemp.Category, 0, __cTemp.Contracts, false, 0, __cTemp.Name);
-						if (bSuccess) {
-							__iTimeCount = 0;  //歸 0 重新計時(當達到設定值才需要重新處理取消與發送單, 尚未達到就讓委託單在市場上可以多成交幾張)
-						}
+						this.Send(__cTemp.Action, __cTemp.Category, 0, __cTemp.Contracts, false, 0, __cTemp.Name);
 					}
 
 					__iTimeCount -= TIMER_INTERVAL;  //當達到設定值就不需要再重新累積(加快處理重新送單與取消單, 直到又再次成功送單在歸 0 重新計時)
@@ -127,4 +124,4 @@ namespace Netwings {
 			}
 		}
 	}
-}  //130行
+}  //127行

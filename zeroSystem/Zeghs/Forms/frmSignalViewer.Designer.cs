@@ -124,6 +124,9 @@
 			this.dataGrid_History.Columns[9].Width = 110;
 			this.dataGrid_History.Columns[10].Width = 200;
 
+			//設定總計欄位合併(沒有使用的欄位直接合併, 有使用的欄位不需合併)
+			this.dataGrid_History.Summation(4, 1, 1, 1, 1, 1, 2);
+
 			//修改選擇條的框線寬度與顏色
 			SourceGrid.Selection.SelectionBase cSelectionBase = this.dataGrid_History.Selection as SourceGrid.Selection.SelectionBase;
 			cSelectionBase.Border = new DevAge.Drawing.RectangleBorder(new DevAge.Drawing.BorderLine(cSelectionBase.BackColor, 1));
@@ -140,7 +143,7 @@
 		private void InitializeComponent() {
 			this.components = new System.ComponentModel.Container();
 			this.dataGrid_Trust = new SourceGrid.DataGrid();
-			this.dataGrid_History = new SourceGrid.DataGrid();
+			this.dataGrid_History = new Zeghs.Controls.CustomGrid();
 			this.dataGrid_Trade = new SourceGrid.DataGrid();
 			this.tabControl = new Zeghs.Controls.CustomTabControl();
 			this.pageItem_Trust = new System.Windows.Forms.TabPage();
@@ -221,6 +224,7 @@
 			this.tabControl.SelectedIndex = 0;
 			this.tabControl.Size = new System.Drawing.Size(395, 150);
 			this.tabControl.TabIndex = 0;
+			this.tabControl.DoubleClick += new System.EventHandler(this.tabControl_DoubleClick);
 			// 
 			// pageItem_Trust
 			// 
@@ -283,7 +287,7 @@
             this.menuItemSigner,
             this.menuItemTradeDetails});
 			this.contextMenu.Name = "contextMenu";
-			this.contextMenu.Size = new System.Drawing.Size(153, 70);
+			this.contextMenu.Size = new System.Drawing.Size(119, 48);
 			// 
 			// menuItemSigner
 			// 
@@ -292,34 +296,34 @@
             this.menuItemDataSource,
             this.menuItemRemove});
 			this.menuItemSigner.Name = "menuItemSigner";
-			this.menuItemSigner.Size = new System.Drawing.Size(152, 22);
+			this.menuItemSigner.Size = new System.Drawing.Size(118, 22);
 			this.menuItemSigner.Text = "信號交易";
 			// 
 			// menuItemParameters
 			// 
 			this.menuItemParameters.Name = "menuItemParameters";
-			this.menuItemParameters.Size = new System.Drawing.Size(152, 22);
+			this.menuItemParameters.Size = new System.Drawing.Size(118, 22);
 			this.menuItemParameters.Text = "參數設定";
 			this.menuItemParameters.Click += new System.EventHandler(this.menuItemParameters_Click);
 			// 
 			// menuItemDataSource
 			// 
 			this.menuItemDataSource.Name = "menuItemDataSource";
-			this.menuItemDataSource.Size = new System.Drawing.Size(152, 22);
+			this.menuItemDataSource.Size = new System.Drawing.Size(118, 22);
 			this.menuItemDataSource.Text = "資料來源";
 			this.menuItemDataSource.Click += new System.EventHandler(this.menuItemDataSource_Click);
 			// 
 			// menuItemRemove
 			// 
 			this.menuItemRemove.Name = "menuItemRemove";
-			this.menuItemRemove.Size = new System.Drawing.Size(152, 22);
+			this.menuItemRemove.Size = new System.Drawing.Size(118, 22);
 			this.menuItemRemove.Text = "刪除信號";
 			this.menuItemRemove.Click += new System.EventHandler(this.menuItemRemove_Click);
 			// 
 			// menuItemTradeDetails
 			// 
 			this.menuItemTradeDetails.Name = "menuItemTradeDetails";
-			this.menuItemTradeDetails.Size = new System.Drawing.Size(152, 22);
+			this.menuItemTradeDetails.Size = new System.Drawing.Size(118, 22);
 			this.menuItemTradeDetails.Text = "交易明細";
 			this.menuItemTradeDetails.Click += new System.EventHandler(this.menuItemTradeDetails_Click);
 			// 
@@ -338,8 +342,8 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(394, 294);
 			this.ContextMenuStrip = this.contextMenu;
-			this.Controls.Add(this.chart);
 			this.Controls.Add(this.tabControl);
+			this.Controls.Add(this.chart);
 			this.Name = "frmSignalViewer";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSignalViewer_FormClosing);
 			this.Load += new System.EventHandler(this.frmSignalViewer_Load);
@@ -361,8 +365,8 @@
 		#endregion
 
 		private SourceGrid.DataGrid dataGrid_Trust;
-		private SourceGrid.DataGrid dataGrid_History;
 		private SourceGrid.DataGrid dataGrid_Trade;
+		private Zeghs.Controls.CustomGrid dataGrid_History;
 		private Controls.CustomTabControl tabControl;
 		private System.Windows.Forms.TabPage pageItem_Trust;
 		private System.Windows.Forms.TabPage pageItem_Trade;

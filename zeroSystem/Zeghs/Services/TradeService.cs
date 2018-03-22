@@ -17,11 +17,11 @@ namespace Zeghs.Services {
 		private TradeBoundList __cOpens = null;
 		private TradeBoundList __cTrusts = null;
 		private Queue<ResponseEvent> __cQueue = null;
-		private SimpleBoundList<_TradeInfo> __cCloses = null;
+		private HistoryBoundList __cCloses = null;
 
 		private object __oLock = new object();
 
-		internal SimpleBoundList<_TradeInfo> Closes {
+		internal HistoryBoundList Closes {
 			get {
 				return __cCloses;
 			}
@@ -41,7 +41,7 @@ namespace Zeghs.Services {
 
 		internal TradeService() {
 			__cQueue = new Queue<ResponseEvent>(64);
-			__cCloses = new SimpleBoundList<_TradeInfo>(512);
+			__cCloses = new HistoryBoundList(512);
 			__cOpens = new TradeBoundList(64);
 			__cTrusts = new TradeBoundList(32);
 

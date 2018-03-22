@@ -24,4 +24,4 @@ namespace Netwings.Forms {
 			this.DialogResult = DialogResult.Cancel;
 		}
 	}
-}
+} 

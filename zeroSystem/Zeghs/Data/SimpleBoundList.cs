@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using DevAge;
 
 namespace Zeghs.Data {
-	internal sealed class SimpleBoundList<T> : AbstractBoundList<T> {
+	internal class SimpleBoundList<T> : AbstractBoundList<T> {
 		private List<T> __cSource = null;
 
 		public override int Count {
@@ -39,7 +39,7 @@ namespace Zeghs.Data {
 			return __cSource.IndexOf((T) item);
 		}
 
-		internal void Add(T item) {
+		internal virtual void Add(T item) {
 			lock (__cSource) {
 				__cSource.Add(item);
 			}
@@ -47,6 +47,12 @@ namespace Zeghs.Data {
 
 		internal void SetDataSource(List<T> source) {
 			__cSource = source;
+		}
+
+		protected void Insert(int index, T item) {
+			lock (__cSource) {
+				__cSource.Insert(index, item);
+			}
 		}
 
 		protected override T OnAddNew() {

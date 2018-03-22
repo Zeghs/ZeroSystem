@@ -145,7 +145,9 @@ namespace Zeghs.Forms {
 				tabControl.Top = this.ClientSize.Height - tabControl.Height - 1;
 				tabControl.Width = this.ClientSize.Width - 1;
 
-				chart.Height = tabControl.Top - chart.Top - 1;
+				if (tabControl.Dock == DockStyle.None) {
+					chart.Height = tabControl.Top - chart.Top - 1;
+				}
 			}
 
 			if (__bShown) {
@@ -227,7 +229,7 @@ namespace Zeghs.Forms {
 		}
 
 		private void frmSignalViewer_Load(object sender, EventArgs e) {
-			__iFixGridBottomCount = this.dataGrid_Trade.ClientSize.Height / 21 - 2;
+			__iFixGridBottomCount = this.dataGrid_Trade.ClientSize.Height / 21 - 3;
 
 			CreateChartEngine();
 
@@ -313,6 +315,15 @@ namespace Zeghs.Forms {
 		private void dataGrid_History_VisibleChanged(object sender, EventArgs e) {
 			RefreshGrid(this.dataGrid_History, __cTradeService.Closes);
 			ScrollBottom(this.dataGrid_History);
+		}
+
+		private void tabControl_DoubleClick(object sender, EventArgs e) {
+			if (tabControl.Dock == DockStyle.Fill) {
+				tabControl.Dock = DockStyle.None;
+				tabControl.Top = this.ClientSize.Height - tabControl.Height - 1;
+			} else {
+				tabControl.Dock = DockStyle.Fill;
+			}
 		}
 
 		private void txtOutput_VisibleChanged(object sender, EventArgs e) {

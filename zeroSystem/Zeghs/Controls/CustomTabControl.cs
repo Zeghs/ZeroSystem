@@ -6,14 +6,14 @@ using System.Runtime.InteropServices;
 using Zeghs.Forms;
 
 namespace Zeghs.Controls {
-	public sealed class CustomTabControl : TabControl {
+	internal sealed class CustomTabControl : TabControl {
 		private const int TCM_ADJUSTRECT = 0x1328;
 		
 		private struct RECT {
 			internal int Left, Top, Right, Bottom;
 		}
 
-		public CustomTabControl() {
+		internal CustomTabControl() {
 			this.Alignment = TabAlignment.Bottom;
 		}
 	

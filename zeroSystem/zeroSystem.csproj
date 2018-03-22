@@ -66,6 +66,9 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Zeghs\Controls\CustomGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Zeghs\Controls\CustomTabControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -73,6 +76,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Zeghs\Data\AbstractBoundList.cs" />
+    <Compile Include="Zeghs\Data\HistoryBoundList.cs" />
     <Compile Include="Zeghs\Data\LimitedBoundList.cs" />
     <Compile Include="Zeghs\Data\LogData.cs" />
     <Compile Include="Zeghs\Data\OutputData.cs" />

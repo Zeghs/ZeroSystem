@@ -3,8 +3,8 @@ using System.Drawing;
 using System.Windows.Forms;
 
 namespace Zeghs.Controls {
-	public sealed class LineWidthComboBox : ComboBox {
-		public LineWidthComboBox() {
+	internal sealed class LineWidthComboBox : ComboBox {
+		internal LineWidthComboBox() {
 			this.DrawMode = DrawMode.OwnerDrawFixed;
 			this.DropDownStyle = ComboBoxStyle.DropDownList;
 		}
