@@ -19,7 +19,7 @@
 
 		private void InitializeSourceGrid() {
 			this.dataGrid.Rows.RowHeight = 21;  //處理第一列中文字體會被遮住的問題
-			this.dataGrid.Columns.Add("ModuleName", "報價元件", typeof(string));
+			this.dataGrid.Columns.Add("ModuleName", "交易元件", typeof(string));
 			this.dataGrid.Columns.Add("FileVersion", "檔案版本", typeof(string));
 			this.dataGrid.Columns.Add("ProductVersion", "元件版本", typeof(string));
 			this.dataGrid.Columns.Add("Description", "說明", typeof(string));
