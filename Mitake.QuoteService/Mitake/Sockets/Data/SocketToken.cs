@@ -91,7 +91,7 @@ namespace Mitake.Sockets.Data {
                         __cStockEvent = new StockEvent();
                         __cMcpEvent = new McpPacketEvent();
 
-                        __cPackage = new PacketBuffer(4096);
+			__cPackage = new PacketBuffer(MAX_BUFFER_SIZE);
                         __cTempBuffer = new PacketBuffer(MAX_BUFFER_SIZE);
 
                         if (Buffer == null) {

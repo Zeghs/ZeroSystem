@@ -8,7 +8,7 @@ namespace Mitake.Stock.Data {
         ///   股票資料儲存空間(類別唯一化物件)
         /// </summary>
         public sealed class MitakeStorage : IQuoteStorage {
-                internal const int BASE_STOCK_CAPACITY = 4096;
+                internal const int BASE_STOCK_CAPACITY = 32768;
                 private static readonly MitakeStorage __current = new MitakeStorage();
 
 		private List<MitakeQuote> __cQuotes = null;                 //股票資料陣列
