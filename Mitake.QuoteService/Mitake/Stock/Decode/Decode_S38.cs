@@ -60,15 +60,15 @@ namespace Mitake.Stock.Decode {
 			if (cSymbolInfo.市場別 == 2) { //判斷是否為期貨
 				if (cSymbolInfo.市場分類 == 2) {
 					//如果市場分類 == 2，則可能是選擇權(SID2 = 10Bytes)
-					sSymbolId = Encoding.UTF8.GetString(buffer.Data, buffer.Position, 10).Trim();
+					sSymbolId = Encoding.UTF8.GetString(buffer.Data, buffer.Position, 10).Trim('\0', ' ');
 					buffer.Position += 10;
 				} else {
-					sSymbolId = Encoding.UTF8.GetString(buffer.Data, buffer.Position, 10).Trim();
+					sSymbolId = Encoding.UTF8.GetString(buffer.Data, buffer.Position, 13).Trim('\0', ' ');
 					buffer.Position += 13;
 				}
 			} else {
 				//取得SID2
-				sSymbolId = Encoding.UTF8.GetString(buffer.Data, buffer.Position, 6).Trim();
+				sSymbolId = Encoding.UTF8.GetString(buffer.Data, buffer.Position, 6).Trim('\0', ' ');
 				buffer.Position += 6;
 
 				//取得個股產業類別
@@ -126,8 +126,12 @@ namespace Mitake.Stock.Decode {
 					sCommodityId = symbolInformation.SymbolId.Substring(0, 3);
 
 					switch (symbolInformation.市場分類) {
-						case 1: //一般
+						case 1: //一般期貨
+						case 3: //期貨股票
 							cCategory = ESymbolCategory.Future;
+							if (symbolInformation.市場分類 == 3) {
+								sCommodityId = "STOCK_FUTURE";
+							}
 							break;
 						case 2:  //選擇權
 							if (MitakeSymbolManager.IsIndexOption(sCommodityId)) {

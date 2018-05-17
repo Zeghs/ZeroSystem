@@ -1574,7 +1574,7 @@
             </summary>
             <param name="stockId">商品證交所編號</param>
             <param name="symbolId">商品代號</param>
-            <param name="marketType">市場別  1=期貨, 2=選擇權</param>
+            <param name="marketType">市場別  1=期貨, 2=選擇權, 3=期貨股票</param>
             <returns>返回值:轉換後的商品代號</returns>
         </member>
         <member name="M:Mitake.Stock.Data.MitakeSymbolManager.ConvertToSerial(System.String)">

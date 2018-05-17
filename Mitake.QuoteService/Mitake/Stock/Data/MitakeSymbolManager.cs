@@ -74,7 +74,7 @@ namespace Mitake.Stock.Data {
 		/// </summary>
 		/// <param name="stockId">商品證交所編號</param>
 		/// <param name="symbolId">商品代號</param>
-		/// <param name="marketType">市場別  1=期貨, 2=選擇權</param>
+		/// <param name="marketType">市場別  1=期貨, 2=選擇權, 3=期貨股票</param>
 		/// <returns>返回值:轉換後的商品代號</returns>
 		internal static string Convert(string stockId, string symbolId, int marketType) {
 			int iContractIndex = 0;
@@ -83,6 +83,7 @@ namespace Mitake.Stock.Data {
 			int iLength = symbolId.Length;
 			switch (marketType) {
 				case 1:  //期貨
+				case 3:  //期貨股票
 					if (iLength == 5) {
 						int iFYear = (symbolId[4] - '0');
 						int iFMonth = (symbolId[3] - 'A') + 1;
@@ -92,7 +93,7 @@ namespace Mitake.Stock.Data {
 							sCommodityId = symbolId.Substring(0, 3);
 						}
 						
-						iContractIndex = GetContractTimeIndex(sCommodityId, iFYear, iFMonth);
+						iContractIndex = GetContractTimeIndex((marketType == 3) ? "STOCK_FUTURE" : sCommodityId, iFYear, iFMonth);
 						if (iContractIndex > -1) {
 							if (stockId[0] == '7' && stockId[1] == '6') {  //檢查是否為夜台或夜小台
 								sSymbolId = string.Format("{0}N{1}.tw", sCommodityId, iContractIndex);
@@ -194,7 +195,6 @@ namespace Mitake.Stock.Data {
 			cBuilder.AppendLine(sSetting1);
 			cBuilder.AppendLine(sSetting2);
 			cBuilder.AppendLine(sSetting3);
-			
 			return cBuilder.ToString();
 		}
 
