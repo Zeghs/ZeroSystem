@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace Zeghs.Data {
 	internal sealed class TradeBoundList : AbstractBoundList<_TradeInfo> {
-		private int __iBaseIndex = 0;
 		private List<_TradeInfo> __cSource = null;
 		private Dictionary<string, int> __cIndex = null;
 
@@ -28,17 +27,13 @@ namespace Zeghs.Data {
 
 		public override int Count {
 			get {
-				return __cIndex.Count;  //索引存放的個數即資料總個數
+				return __cSource.Count;
 			}
 		}
 
 		public override object this[int index] {
 			get {
-				_TradeInfo cTradeInfo = null;
-				lock (__cIndex) {
-					cTradeInfo = __cSource[__iBaseIndex + index];
-				}
-				return cTradeInfo;
+				return __cSource[index];
 			}
 		}
 
@@ -66,11 +61,7 @@ namespace Zeghs.Data {
 		}
 
 		internal _TradeInfo GetItemAt(int index) {
-			_TradeInfo cTradeInfo = null;
-			lock (__cIndex) {
-				cTradeInfo = __cSource[__iBaseIndex + index];
-			}
-			return cTradeInfo;
+			return __cSource[index];
 		}
 
 		internal int IndexOf(string ticket) {
@@ -86,15 +77,17 @@ namespace Zeghs.Data {
 			int iIndex = 0;
 			lock (__cIndex) {
 				if (__cIndex.TryGetValue(ticket, out iIndex)) {
-					__cSource[iIndex] = null;
-					__cIndex.Remove(ticket);
+					int iLast = __cSource.Count - 1;
+					if (iLast > 0 && iLast > iIndex) {
+						_TradeInfo cLast = __cSource[iLast];
 
-					if (__cIndex.Count == 0) {
-						__cSource.Clear();
-						__iBaseIndex = 0;
-					} else {
-						++__iBaseIndex;
+						string cLastKey = cLast.Ticket;
+						__cIndex[cLastKey] = iIndex;
+						__cSource[iIndex] = cLast;
 					}
+
+					__cSource.RemoveAt(iLast);
+					__cIndex.Remove(ticket);
 				}
 			}
 		}

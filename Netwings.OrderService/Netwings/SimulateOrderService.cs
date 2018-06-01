@@ -306,7 +306,7 @@ namespace Netwings {
 					CancelLimit(action);  //取消所有反向之前的限價委託單
 				}
 				
-				SendTrust(cOrder);  //傳送新委託單給下單機
+				SendTrust(cOrder);  //傳送新委託單(模擬成交)
 			}
 			return true;
 		}
