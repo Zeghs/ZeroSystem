@@ -22,8 +22,25 @@ namespace Zeghs.Forms {
 			InitializeSourceGrid();
 		}
 
-		internal void SetScriptSetting(ScriptSetting setting) {
+		internal void SetScriptSetting(ScriptSetting setting, bool isModify) {
 			__cProperty = (setting as SignalSetting).Property;
+
+			if (isModify) {
+				txtInitCapital.Text = __cProperty.InitialCapital.ToString();
+				
+				txtDefaultContracts.Text = __cProperty.DefaultContracts.ToString();
+				txtDefaultContracts.Enabled = false;
+
+				txtMaxBarsReference.Text = __cProperty.MaximumBarsReference.ToString();
+				txtMaxBarsReference.Enabled = false;
+
+				dataGrid.Enabled = false;
+
+				comboOrderService.Text = __cProperty.OrderSource.Split(';')[1];
+				comboOrderService.Enabled = false;
+
+				btnOK.Enabled = true;
+			}
 		}
 
 		private void frmSignalProperty_Load(object sender, EventArgs e) {

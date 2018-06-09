@@ -60,6 +60,7 @@ namespace Zeghs.Forms {
 		private int __iPrevDataRequestCount = 0;
 		private bool __bModifyDataRequest = false;
 		private bool __bPropertyCompleted = false;
+		private bool __bFormatObjectModify = false;  //是否為修改狀態
 		private string __sScriptName = null;
 		private ProfileSetting __cProfile = null;
 		private List<ChartSetting> __cCharts = null;
@@ -113,6 +114,7 @@ namespace Zeghs.Forms {
 
 				__iPrevDataRequestCount = __cScriptSetting.DataRequests.Count;
 				__bPropertyCompleted = true;
+				__bFormatObjectModify = true;
 			}
 
 			InitializeComponent();
@@ -150,7 +152,6 @@ namespace Zeghs.Forms {
 				source.Refresh();
 
 				btnOK.Enabled = true;
-				btnProperty.Enabled = false;
 				btnDataStreamRemove.Enabled = true;
 			}
 		}
@@ -240,7 +241,7 @@ namespace Zeghs.Forms {
 					break;
 				case ScriptType.Signal:
 					frmSignalProperty frmSignalProperty = new frmSignalProperty();
-					frmSignalProperty.SetScriptSetting(__cScriptSetting);
+					frmSignalProperty.SetScriptSetting(__cScriptSetting, __bFormatObjectModify);
 					frmSignalProperty.ShowDialog();
 
 					__bPropertyCompleted = frmSignalProperty.IsSetupCompleted;
