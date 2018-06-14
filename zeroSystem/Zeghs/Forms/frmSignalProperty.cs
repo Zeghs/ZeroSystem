@@ -72,6 +72,8 @@ namespace Zeghs.Forms {
 				OrderServiceInformation cOrderInfo = dataGrid.SelectedDataRows[0] as OrderServiceInformation;
 				__cProperty.OrderSource = string.Format("{0};{1}", cOrderInfo.ModuleName, comboOrderService.Text);
 				__bCompleted = true;
+			} else if (!dataGrid.Enabled) {
+				__bCompleted = true;
 			}
 			this.DialogResult = DialogResult.OK;
 		}
