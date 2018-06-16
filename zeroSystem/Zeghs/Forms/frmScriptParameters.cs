@@ -21,22 +21,27 @@ namespace Zeghs.Forms {
 			__cOrderService = orderService;
 
 			int iCount = 0;
-			List<ICommission> cCommissions = __cOrderService.Commissions;
-			if (cCommissions != null) {
-				iCount = cCommissions.Count;
-				for (int i = 0; i < iCount; i++) {
+			if (__cOrderService != null) {
+				List<ICommission> cCommissions = __cOrderService.Commissions;
+				if (cCommissions != null) {
+					iCount = cCommissions.Count;
+					for (int i = 0; i < iCount; i++) {
+					}
 				}
 			}
 
-			iCount = args.Count;
-			for (int i = 0; i < iCount; i++) {
-				InputAttribute cInput = args[i];
+			if (args != null) {
+				iCount = args.Count;
+				for (int i = 0; i < iCount; i++) {
+					InputAttribute cInput = args[i];
 
-				_ParameterInfo cParameter = new _ParameterInfo();
-			 	cParameter.Comment = (cInput.Comment == null) ? cInput.Name : cInput.Comment;
-				cParameter.Value = cInput.Value.ToString();
+					_ParameterInfo cParameter = new _ParameterInfo();
+					cParameter.Comment = (cInput.Comment == null) ? cInput.Name : cInput.Comment;
+					cParameter.Value = cInput.Value.ToString();
 
-				source.Add(cParameter);
+					source.Add(cParameter);
+				}
+				this.dataGrid.GetCell(1, 1).Editor = new SourceGrid.Cells.Editors.ComboBox(typeof(string), new string[] {"true", "false"}, false);
 			}
 		}
 
@@ -61,6 +66,19 @@ namespace Zeghs.Forms {
 			DialogResult cResult = frmCommissionRuleSettings.ShowDialog();
 			if (cResult == DialogResult.OK) {
 
+			}
+		}
+
+		private void dataGrid_DoubleClick(object sender, EventArgs e) {
+			SourceGrid.Position cPosition = this.dataGrid.Selection.ActivePosition;
+			if (cPosition != SourceGrid.Position.Empty) {
+				_ParameterInfo cParam = source[cPosition.Row - 1] as _ParameterInfo;
+				string sValue = cParam.Value;
+				if(sValue.StartsWith("True") || sValue.StartsWith("False")) {
+					this.dataGrid.Columns[1].DataCell.Editor = __cComboBox;
+				} else {
+					this.dataGrid.Columns[1].DataCell.Editor = __cTextBox;
+				}
 			}
 		}
 	}

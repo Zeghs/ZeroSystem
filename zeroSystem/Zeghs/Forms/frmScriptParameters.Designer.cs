@@ -13,6 +13,8 @@
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
+		private SourceGrid.Cells.Editors.ComboBox __cComboBox = null;
+		private SourceGrid.Cells.Editors.EditorBase __cTextBox = null;
 		private Zeghs.Data.SimpleBoundList<Zeghs.Data._ParameterInfo> source = null;
 
 		/// <summary>
@@ -39,6 +41,12 @@
 			SourceGrid.Selection.SelectionBase cSelectionBase = this.dataGrid.Selection as SourceGrid.Selection.SelectionBase;
 			cSelectionBase.Border = new DevAge.Drawing.RectangleBorder(new DevAge.Drawing.BorderLine(cSelectionBase.BackColor, 1));
 
+			//建立必要的 Editor 控制項
+			__cTextBox = this.dataGrid.Columns[1].DataCell.Editor;  //保存原始 Editor 控制像
+			__cTextBox.AllowNull = false;
+			__cComboBox = new SourceGrid.Cells.Editors.ComboBox(typeof(string), new string[] { "True", "False" }, true);
+			__cComboBox.AllowNull = false;
+
 			//建立資料來源
 			source = new Data.SimpleBoundList<Data._ParameterInfo>(64);
 			source.AllowEdit = true;
@@ -58,10 +66,10 @@
 			this.pageItem_Parameters = new System.Windows.Forms.TabPage();
 			this.dataGrid = new SourceGrid.DataGrid();
 			this.pageItem_Commissions = new System.Windows.Forms.TabPage();
+			this.ruleGrid = new SourceGrid.DataGrid();
 			this.toolbar = new System.Windows.Forms.ToolStrip();
 			this.toolItem_Create = new System.Windows.Forms.ToolStripButton();
 			this.toolItem_Remove = new System.Windows.Forms.ToolStripButton();
-			this.ruleGrid = new SourceGrid.DataGrid();
 			this.tabControl.SuspendLayout();
 			this.pageItem_Parameters.SuspendLayout();
 			this.pageItem_Commissions.SuspendLayout();
@@ -124,6 +132,7 @@
 			this.dataGrid.TabIndex = 5;
 			this.dataGrid.TabStop = true;
 			this.dataGrid.ToolTipText = "";
+			this.dataGrid.DoubleClick += new System.EventHandler(this.dataGrid_DoubleClick);
 			// 
 			// pageItem_Commissions
 			// 
@@ -136,6 +145,22 @@
 			this.pageItem_Commissions.TabIndex = 1;
 			this.pageItem_Commissions.Text = "交易成本";
 			this.pageItem_Commissions.UseVisualStyleBackColor = true;
+			// 
+			// ruleGrid
+			// 
+			this.ruleGrid.BackColor = System.Drawing.SystemColors.Window;
+			this.ruleGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.ruleGrid.DeleteQuestionMessage = "您確定要刪除此筆資訊?";
+			this.ruleGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ruleGrid.EnableSort = false;
+			this.ruleGrid.FixedRows = 1;
+			this.ruleGrid.Location = new System.Drawing.Point(3, 28);
+			this.ruleGrid.Name = "ruleGrid";
+			this.ruleGrid.SelectionMode = SourceGrid.GridSelectionMode.Row;
+			this.ruleGrid.Size = new System.Drawing.Size(376, 174);
+			this.ruleGrid.TabIndex = 6;
+			this.ruleGrid.TabStop = true;
+			this.ruleGrid.ToolTipText = "";
 			// 
 			// toolbar
 			// 
@@ -167,22 +192,6 @@
 			this.toolItem_Remove.Name = "toolItem_Remove";
 			this.toolItem_Remove.Size = new System.Drawing.Size(23, 22);
 			this.toolItem_Remove.ToolTipText = "刪除規則";
-			// 
-			// ruleGrid
-			// 
-			this.ruleGrid.BackColor = System.Drawing.SystemColors.Window;
-			this.ruleGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.ruleGrid.DeleteQuestionMessage = "您確定要刪除此筆資訊?";
-			this.ruleGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ruleGrid.EnableSort = false;
-			this.ruleGrid.FixedRows = 1;
-			this.ruleGrid.Location = new System.Drawing.Point(3, 28);
-			this.ruleGrid.Name = "ruleGrid";
-			this.ruleGrid.SelectionMode = SourceGrid.GridSelectionMode.Row;
-			this.ruleGrid.Size = new System.Drawing.Size(376, 174);
-			this.ruleGrid.TabIndex = 6;
-			this.ruleGrid.TabStop = true;
-			this.ruleGrid.ToolTipText = "";
 			// 
 			// frmScriptParameters
 			// 

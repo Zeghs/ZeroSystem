@@ -182,12 +182,14 @@ namespace Zeghs.Forms {
 			frmScriptParameters.SetParameters(__cOrderService, __cParameters);
 			frmScriptParameters.ShowDialog();
 
-			int iCount = __cParameters.Count;
-			if (iCount > 0) {
-				__cProfile.Parameters = new List<string>(iCount);
-				List<string> sArgs = __cProfile.Parameters;
-				for (int i = 0; i < iCount; i++) {
-					sArgs.Add(__cParameters[i].Value.ToString());
+			if (__cParameters != null) {
+				int iCount = __cParameters.Count;
+				if (iCount > 0) {
+					__cProfile.Parameters = new List<string>(iCount);
+					List<string> sArgs = __cProfile.Parameters;
+					for (int i = 0; i < iCount; i++) {
+						sArgs.Add(__cParameters[i].Value.ToString());
+					}
 				}
 			}
 		}

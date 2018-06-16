@@ -43,11 +43,11 @@
 			// labMemo
 			// 
 			this.labMemo.AutoSize = true;
-			this.labMemo.Font = new System.Drawing.Font("Impact", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labMemo.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labMemo.ForeColor = System.Drawing.Color.White;
 			this.labMemo.Location = new System.Drawing.Point(5, 43);
 			this.labMemo.Name = "labMemo";
-			this.labMemo.Size = new System.Drawing.Size(221, 16);
+			this.labMemo.Size = new System.Drawing.Size(267, 16);
 			this.labMemo.TabIndex = 1;
 			this.labMemo.Text = "Zoning and Emotional Range Omitted System";
 			// 
@@ -55,20 +55,20 @@
 			// 
 			this.labCopyright.AutoSize = true;
 			this.labCopyright.BackColor = System.Drawing.Color.Black;
-			this.labCopyright.Font = new System.Drawing.Font("Impact", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labCopyright.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labCopyright.ForeColor = System.Drawing.Color.White;
-			this.labCopyright.Location = new System.Drawing.Point(87, 279);
+			this.labCopyright.Location = new System.Drawing.Point(64, 279);
 			this.labCopyright.Name = "labCopyright";
-			this.labCopyright.Size = new System.Drawing.Size(230, 16);
+			this.labCopyright.Size = new System.Drawing.Size(270, 16);
 			this.labCopyright.TabIndex = 2;
-			this.labCopyright.Text = "Copyright © Web Electric Services 2004 - 2017";
+			this.labCopyright.Text = "Copyright © Web Electric Services 2004 - 2018";
 			// 
 			// labVersion
 			// 
 			this.labVersion.AutoSize = true;
-			this.labVersion.Font = new System.Drawing.Font("Impact", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labVersion.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labVersion.ForeColor = System.Drawing.Color.White;
-			this.labVersion.Location = new System.Drawing.Point(229, 43);
+			this.labVersion.Location = new System.Drawing.Point(273, 43);
 			this.labVersion.Name = "labVersion";
 			this.labVersion.Size = new System.Drawing.Size(0, 16);
 			this.labVersion.TabIndex = 3;

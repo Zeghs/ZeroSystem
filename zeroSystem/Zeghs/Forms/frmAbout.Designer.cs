@@ -47,7 +47,7 @@
 			this.labProduct.AutoSize = true;
 			this.labProduct.Font = new System.Drawing.Font("Impact", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labProduct.ForeColor = System.Drawing.Color.RoyalBlue;
-			this.labProduct.Location = new System.Drawing.Point(60, 23);
+			this.labProduct.Location = new System.Drawing.Point(62, 21);
 			this.labProduct.Name = "labProduct";
 			this.labProduct.Size = new System.Drawing.Size(282, 60);
 			this.labProduct.TabIndex = 1;
@@ -56,30 +56,30 @@
 			// labCopyright
 			// 
 			this.labCopyright.AutoSize = true;
-			this.labCopyright.Font = new System.Drawing.Font("Impact", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labCopyright.Location = new System.Drawing.Point(84, 491);
+			this.labCopyright.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+			this.labCopyright.Location = new System.Drawing.Point(68, 493);
 			this.labCopyright.Name = "labCopyright";
-			this.labCopyright.Size = new System.Drawing.Size(230, 16);
+			this.labCopyright.Size = new System.Drawing.Size(270, 16);
 			this.labCopyright.TabIndex = 2;
-			this.labCopyright.Text = "Copyright © Web Electric Services 2004 - 2017";
+			this.labCopyright.Text = "Copyright © Web Electric Services 2004 - 2018";
 			// 
 			// labMemo
 			// 
 			this.labMemo.AutoSize = true;
-			this.labMemo.Font = new System.Drawing.Font("Impact", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labMemo.Location = new System.Drawing.Point(59, 84);
+			this.labMemo.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+			this.labMemo.Location = new System.Drawing.Point(54, 85);
 			this.labMemo.Name = "labMemo";
-			this.labMemo.Size = new System.Drawing.Size(290, 19);
+			this.labMemo.Size = new System.Drawing.Size(289, 17);
 			this.labMemo.TabIndex = 3;
 			this.labMemo.Text = "Zoning and Emotional Range Omitted System";
 			// 
 			// labCompany
 			// 
 			this.labCompany.AutoSize = true;
-			this.labCompany.Font = new System.Drawing.Font("Impact", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labCompany.Location = new System.Drawing.Point(87, 3);
+			this.labCompany.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+			this.labCompany.Location = new System.Drawing.Point(84, 4);
 			this.labCompany.Name = "labCompany";
-			this.labCompany.Size = new System.Drawing.Size(226, 19);
+			this.labCompany.Size = new System.Drawing.Size(231, 17);
 			this.labCompany.TabIndex = 4;
 			this.labCompany.Text = "Web Electric Services, by ZEGHS Lin.";
 			// 
