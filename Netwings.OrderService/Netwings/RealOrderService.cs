@@ -512,7 +512,7 @@ namespace Netwings {
 				switch (iDataType) {
 					case 0: //接收 REPOTR 完畢的回報類型(如果沒收到此命令會無窮盡等待)
 						__cResetEvent.Set();
-						if (logger.IsInfoEnabled) logger.Info("[Report] Order data response completed...");
+						if (logger.IsInfoEnabled) logger.InfoFormat("[Report] #{0} Order data response completed...", this.Bars.Request.Symbol);
 						break;
 					case 1: //委託回報
 						string sOrderSymbolId = null;
@@ -582,7 +582,6 @@ namespace Netwings {
 						TradeOrder cTempTrust = __cEntrusts.GetTrade(sDealId);
 						if (cTempTrust != null && cTempTrust.Contracts >= iDealLots) {  //檢查委託陣列內是否有相同的成交書號(委託書號)
 							cTempTrust.Contracts -= iDealLots;
-
 							bool bDealed = cTempTrust.Contracts == 0;
 							if (bDealed) {
 								OnResponse(cTempTrust, cTempTrust.SymbolId, ResponseType.Trust);
@@ -590,6 +589,7 @@ namespace Netwings {
 							}
 
 							TradeOrder cDealOrder = cTempTrust.Clone();
+							cDealOrder.IsCancel = false;
 							cDealOrder.IsDealed = cTempTrust.Contracts == 0;
 							cDealOrder.Contracts = iDealLots;
 							cDealOrder.Price = cDeal.成交價格;
