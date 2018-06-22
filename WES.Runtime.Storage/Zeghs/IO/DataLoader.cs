@@ -84,7 +84,8 @@ namespace Zeghs.IO {
 		/// <param name="result">當成功取得 Instrument 商品資料會使用此委派方法回傳資料</param>
 		/// <param name="useCache">是否使用快取 [預設:false](true=序列資料結構建立後保存在快取內，下次需要使用直接從快取拿取, false=重新建立序列資料結構，建立的序列資料需要自行移除否則會占用記憶體空間)</param>
 		/// <param name="args">使用者自訂參數</param>
-		public void BeginLoadData(InstrumentDataRequest request, LoadDataCallback result, bool useCache = false, object args = null) {
+		/// <param name="millisecondsTimeout">回補資料 Timeout 毫秒數 [預設:System.Threading.Timeout.Infinite (永遠等待直到回補完成)]</param>
+		public void BeginLoadData(InstrumentDataRequest request, LoadDataCallback result, bool useCache = false, object args = null, int millisecondsTimeout = System.Threading.Timeout.Infinite) {
 			SeriesManager.Manager.SetQuoteService(request.DataFeed);
 			SeriesManager.Manager.AsyncGetSeries(request, (object sender, SeriesResultEvent e) => {
 				SeriesSymbolDataRand cSeriesSymbolDataRand = e.Data;
@@ -102,9 +103,8 @@ namespace Zeghs.IO {
 				if (cService != null) {
 					cQuote = cService.Storage.GetQuote(cRequest.Symbol);
 				}
-				
 				result(new DataLoaderResult(cInstrument, cQuote, args));
-			}, useCache);
+			}, useCache, null, millisecondsTimeout);
 		}
 
 		/// <summary>

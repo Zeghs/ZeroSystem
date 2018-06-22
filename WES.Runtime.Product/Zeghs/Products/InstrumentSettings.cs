@@ -211,15 +211,26 @@ namespace Zeghs.Products {
 			__cProduct = cExchange.GetProduct(__sSymbolId);
 			__cProperty = cExchange.GetProperty(__sSymbolId, __sDataSource);
 
-			if (__cProperty != null) {
-				__cOptionType = __cProperty.GetCallOrPut(__cProduct);     //取得選擇權 Call or Put 類型
-				__dStrikePrice = __cProperty.GetStrikePrice(__cProduct);  //取得選擇權履約價格
-				
-				//取得合約到期日索引值
-				IContractTime cContractTime = __cProperty.ContractRule as IContractTime;
-				if (cContractTime != null) {
-					__iContractIndex = cContractTime.GetContractIndex(__sSymbolId);
+			//如果沒有商品資訊就使用 request.Symbol 第一個字元當作搜尋條件來取代
+			if (__cProduct == null) {
+				List<Product> cProducts = cExchange.SearchProducts(new string(__sSymbolId[0], 1), false);
+				foreach (Product cProduct in cProducts) {
+					AbstractProductProperty cProperty = cExchange.GetProperty(cProduct.SymbolId);
+					if (cProperty != null) {
+						__cProduct = cProduct;
+						__cProperty = cProperty;
+						break;
+					}
 				}
+			}
+
+			__cOptionType = __cProperty.GetCallOrPut(__cProduct);     //取得選擇權 Call or Put 類型
+			__dStrikePrice = __cProperty.GetStrikePrice(__cProduct);  //取得選擇權履約價格
+				
+			//取得合約到期日索引值
+			IContractTime cContractTime = __cProperty.ContractRule as IContractTime;
+			if (cContractTime != null) {
+				__iContractIndex = cContractTime.GetContractIndex(__sSymbolId);
 			}
 
 			this.Create(ref request);
@@ -234,7 +245,7 @@ namespace Zeghs.Products {
 		public InstrumentSettings Create(ref InstrumentDataRequest request) {
 			SessionObject cSession = GetSessionFromToday();
 			DataRequestType cRequestType = request.Range.RequestType;
-
+			
 			request.Resolution.CalculateRate(cSession.GetStartTimeForDaylight(), cSession.GetCloseTimeForDaylight(), __cProperty.Sessions.Count);
 			if (cRequestType == DataRequestType.DaysBack || cRequestType == DataRequestType.FromTo) {
 				request.Range.Count = request.Resolution.ConvertDaysToBars(request.Range.Count);
@@ -247,10 +258,10 @@ namespace Zeghs.Products {
 		/// </summary>
 		/// <returns>返回值:SessionObject類別</returns>
 		public SessionObject GetSessionFromToday() {
+			SessionObject cSession = null;
 			DateTime cToday = DateTime.UtcNow.AddHours(__dTimeZone);
 			DayOfWeek cWeek = cToday.DayOfWeek;
 
-			SessionObject cSession = null;
 			int iPeriodCount = __cProperty.Sessions.Count;
 			for (int i = 0; i < iPeriodCount; i++) {
 				cSession = __cProperty.Sessions[i];
@@ -289,4 +300,4 @@ namespace Zeghs.Products {
 			__dMinValue = dValues[1];    //最小跳動單位
 		}
 	}
-}  //292行
+}  //303行

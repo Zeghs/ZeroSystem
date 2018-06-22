@@ -100,10 +100,11 @@ namespace Zeghs.Managers {
 		/// <param name="result">序列商品資訊回報事件</param>
 		/// <param name="useCache">是否使用快取 [預設:true](true=序列資料結構建立後保存在快取內，下次需要使用直接從快取拿取, false=重新建立序列資料結構，建立的序列資料需要自行移除否則會占用記憶體空間)</param>
 		/// <param name="args">使用者自訂參數</param>
-		public void AsyncGetSeries(InstrumentDataRequest dataRequest, EventHandler<SeriesResultEvent> result, bool useCache = true, object args = null) {
+		/// <param name="millisecondsTimeout">回補資料 Timeout 毫秒數 [預設:System.Threading.Timeout.Infinite (永遠等待直到回補完成)]</param>
+		public void AsyncGetSeries(InstrumentDataRequest dataRequest, EventHandler<SeriesResultEvent> result, bool useCache = true, object args = null, int millisecondsTimeout = Timeout.Infinite) {
 			Task.Factory.StartNew(() => {
 				CheckLogin(dataRequest.DataFeed);
-				Complement(dataRequest);
+				Complement(dataRequest, millisecondsTimeout);
 
 				SeriesSymbolDataRand cSeries = InternalGetSeries(dataRequest, useCache);
 				result(this, new SeriesResultEvent(cSeries, args));
@@ -115,10 +116,11 @@ namespace Zeghs.Managers {
 		/// </summary>
 		/// <param name="dataRequest">資料請求結構</param>
 		/// <param name="useCache">是否使用快取 [預設:true](true=序列資料結構建立後保存在快取內，下次需要使用直接從快取拿取, false=重新建立序列資料結構，建立的序列資料需要自行移除否則會占用記憶體空間)</param>
+		/// <param name="millisecondsTimeout">回補資料 Timeout 毫秒數 [預設:System.Threading.Timeout.Infinite (永遠等待直到回補完成)]</param>
 		/// <returns>返回值: SeriesSymbolDataRand 類別</returns>
-		public SeriesSymbolDataRand GetSeries(InstrumentDataRequest dataRequest, bool useCache = true) {
+		public SeriesSymbolDataRand GetSeries(InstrumentDataRequest dataRequest, bool useCache = true, int millisecondsTimeout = Timeout.Infinite) {
 			CheckLogin(dataRequest.DataFeed);
-			Complement(dataRequest);
+			Complement(dataRequest, millisecondsTimeout);
 			
 			return InternalGetSeries(dataRequest, useCache);
 		}
@@ -228,7 +230,7 @@ namespace Zeghs.Managers {
 			}
 		}
 
-		private void Complement(InstrumentDataRequest request) {
+		private void Complement(InstrumentDataRequest request, int millisecondsTimeout) {
 			string sDataSource = request.DataFeed;
 			if (__cDataSources.Contains(sDataSource)) {
 				AbstractQuoteService cService = QuoteManager.Manager.GetQuoteService(sDataSource);
@@ -257,7 +259,14 @@ namespace Zeghs.Managers {
 						}
 
 						if (cWaitHandle != null) {
-							cWaitHandle.WaitOne();
+							if (!cWaitHandle.WaitOne(millisecondsTimeout)) {  //等待回補資訊(如果 millisecondsTimeout 為 -1 則會無限等待, 如果有設定 Timeout 在時間到了之後還沒回補完畢就直接釋放 WaitHandle 元件並移除)
+								cWaitHandle.Dispose();
+								
+								string sHashKey = string.Format("{0}_{1}", sDataSource, sSymbolId);
+								lock (__cAsyncArgs) {
+									__cAsyncArgs.Remove(sHashKey);
+								}
+							}
 						}
 					}
 				}
@@ -420,6 +429,7 @@ namespace Zeghs.Managers {
 			lock (__cQueue) {
 				__cQueue.Enqueue(e);
 			}
+			
 			AsyncMergeTick();
 		}
 
@@ -432,4 +442,4 @@ namespace Zeghs.Managers {
 			}
 		}
 	}
-}  //435行
+}  //445行

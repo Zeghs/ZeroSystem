@@ -147,7 +147,7 @@ namespace Zeghs.Data {
 			__cUpdateTime = DateTime.UtcNow.AddHours(__cSettings.TimeZone);
 			
 			SessionObject cSession = __cSettings.GetSessionFromToday();
-			__iRealtimeCount = (int) ((cSession.GetCloseTimeForDaylight() - cSession.GetStartTimeForDaylight()).TotalSeconds / dataRequest.Resolution.TotalSeconds + 1);
+			__iRealtimeCount = (cSession == null) ? 1 : (int) ((cSession.GetCloseTimeForDaylight() - cSession.GetStartTimeForDaylight()).TotalSeconds / dataRequest.Resolution.TotalSeconds + 1);
 
 			Indexer.HistoryIndex = 0;
 			Indexer.RealtimeIndex = -1;
