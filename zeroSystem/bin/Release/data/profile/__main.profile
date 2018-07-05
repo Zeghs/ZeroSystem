@@ -1,8 +1,8 @@
 ﻿{
   "IsDock": false,
-  "Height": 637,
-  "Left": 123,
-  "Top": 44,
-  "Width": 812,
+  "Height": 600,
+  "Left": 109,
+  "Top": 76,
+  "Width": 800,
   "WindowState": 0
 }

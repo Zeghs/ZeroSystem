@@ -77,7 +77,17 @@ namespace Zeghs.Forms {
 		private void btnSetting_Click(object sender, EventArgs e) {
 			QuoteServiceInformation cQuoteInfo = dataGrid.SelectedDataRows[0] as QuoteServiceInformation;
 			frmQuoteServiceSettings cQuoteServiceSettings = new frmQuoteServiceSettings(QuoteManager.Manager.GetQuoteService(cQuoteInfo));
+			
 			cQuoteServiceSettings.ShowDialog();
+			if (cQuoteInfo.Enabled) {
+				QuoteManager.Manager.StopQuoteService(cQuoteInfo);
+				
+				btnEnabled.Visible = !cQuoteInfo.Enabled;
+				btnDisabled.Visible = cQuoteInfo.Enabled;
+				btnReLogin.Enabled = cQuoteInfo.Enabled;
+				btnRefreshSymbol.Enabled = cQuoteInfo.Enabled;
+			}
+			source.Refresh();
 		}
 
 		private void btnReLogin_Click(object sender, EventArgs e) {
