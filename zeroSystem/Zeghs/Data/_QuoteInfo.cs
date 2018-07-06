@@ -37,7 +37,11 @@ namespace Zeghs.Data {
 		internal _QuoteInfo(string exchangeName, string dataSource, string symbolId, double price) {
 			AbstractExchange cExchange = ProductManager.Manager.GetExchange(exchangeName);
 			AbstractProductProperty cProperty = cExchange.GetProperty(symbolId, dataSource);
-			IPriceScale cPriceScale = cProperty.PriceScaleRule as IPriceScale;
+			
+			IPriceScale cPriceScale = null;
+			if (cProperty != null) {
+				cPriceScale = cProperty.PriceScaleRule as IPriceScale;
+			}
 			
 			double[] dScales = new double[] { 1, 1 };
 			if(cPriceScale != null) {

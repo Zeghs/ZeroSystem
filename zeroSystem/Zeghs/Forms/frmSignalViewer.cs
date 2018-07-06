@@ -171,7 +171,8 @@ namespace Zeghs.Forms {
 		}
 
 		private void ScrollBottom(SourceGrid.DataGrid grid) {
-			int iValue = grid.VScrollBar.Maximum - __iFixGridBottomCount;
+			int iFixGridBottomCount = grid.ClientSize.Height / 21 - ((grid is Zeghs.Controls.CustomGrid) ? 3 : 2);
+			int iValue = grid.VScrollBar.Maximum - iFixGridBottomCount;
 			if (iValue > 0) {
 				grid.VScrollBar.Value = iValue;  //捲動到最底部
 			}
@@ -231,8 +232,6 @@ namespace Zeghs.Forms {
 		}
 
 		private void frmSignalViewer_Load(object sender, EventArgs e) {
-			__iFixGridBottomCount = this.dataGrid_Trade.ClientSize.Height / 21 - 2;
-
 			CreateChartEngine();
 
 			Task.Factory.StartNew(() => {

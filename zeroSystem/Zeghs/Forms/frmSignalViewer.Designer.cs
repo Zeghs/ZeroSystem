@@ -1,7 +1,5 @@
 ﻿namespace Zeghs.Forms {
 	partial class frmSignalViewer {
-		private static int __iFixGridBottomCount = 0;
-
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
