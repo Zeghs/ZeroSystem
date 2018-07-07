@@ -51,6 +51,7 @@ namespace Zeghs.Services {
 		public event EventHandler<QuoteComplementCompletedEvent> onSubscribeCompleted = null;
 
 		private bool __bDisposed = false;
+		private long __lPacketCount = 0;
 
 		/// <summary>
 		///   [取得/設定] 報價元件名稱
@@ -74,6 +75,16 @@ namespace Zeghs.Services {
 		public bool IsLogin {
 			get;
 			protected set;
+		}
+
+		/// <summary>
+		///   [取得] 接收到的報價資訊封包個數
+		/// </summary>
+		[JsonIgnore]
+		public long PacketCount {
+			get {
+				return __lPacketCount;
+			}
 		}
 
 		/// <summary>
@@ -197,7 +208,6 @@ namespace Zeghs.Services {
 		protected virtual void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
-				
 				if (disposing) {
 					onQuote = null;
 					onReset = null;
@@ -228,6 +238,8 @@ namespace Zeghs.Services {
 		/// </summary>
 		/// <param name="e">QuoteDisconnectEvent類別</param>
 		protected void OnDisconnect(QuoteDisconnectEvent e) {
+			__lPacketCount = 0;
+
 			if (onDisconnected != null) {
 				Task.Factory.StartNew(() => {
 					onDisconnected(this, e);
@@ -251,6 +263,8 @@ namespace Zeghs.Services {
 		/// </summary>
 		/// <param name="e">QuoteNoticeEvent類別</param>
 		protected void OnNotice(QuoteNoticeEvent e) {
+			++__lPacketCount;
+
 			if (onNotice != null) {
 				Task.Factory.StartNew(() => {
 					onNotice(this, e);
@@ -263,6 +277,8 @@ namespace Zeghs.Services {
 		/// </summary>
 		/// <param name="e">QuoteEvent類別</param>
 		protected void OnQuote(QuoteEvent e) {
+			++__lPacketCount;
+
 			if (onQuote != null) {
 				Task.Factory.StartNew(() => {
 					onQuote(this, e);
@@ -275,6 +291,8 @@ namespace Zeghs.Services {
 		/// </summary>
 		/// <param name="e">QuoteResetEvent類別</param>
 		protected void OnReset(QuoteResetEvent e) {
+			__lPacketCount = 0;
+ 
 			if (onReset != null) {
 				Task.Factory.StartNew(() => {
 					onReset(this, e);
@@ -288,6 +306,8 @@ namespace Zeghs.Services {
 		/// <param name="dataSource">即時報價來源名稱</param>
 		/// <param name="quoteDateTime">報價日期時間資訊</param>
 		protected void OnQuoteDateTime(string dataSource, DateTime quoteDateTime) {
+			++__lPacketCount;
+			
 			if (onQuoteDateTime != null) {
 				Task.Factory.StartNew(() => {
 					onQuoteDateTime(this, new QuoteDateTimeEvent(dataSource, quoteDateTime));

@@ -184,7 +184,6 @@ namespace Zeghs.Managers {
 		/// <returns>返回值:true=登入成功, false=登入失敗</returns>
 		public bool StartQuoteService(QuoteServiceInformation quoteServiceInformation, string userId = null, string password = null) {
 			bool bRet = quoteServiceInformation.Enabled;
-
 			if (!bRet) {
 				AbstractQuoteService cQuoteService = GetQuoteService(quoteServiceInformation);
 				if (userId != null && password != null) {

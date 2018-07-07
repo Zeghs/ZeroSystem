@@ -55,7 +55,6 @@
     <Compile Include="Zeghs\Orders\ResponseType.cs" />
     <Compile Include="Zeghs\Orders\TradeList.cs" />
     <Compile Include="Zeghs\Services\AbstractOrderService.cs" />
-    <Compile Include="Zeghs\Utils\TradeReport.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PLTypes\PLTypes.csproj">

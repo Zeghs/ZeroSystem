@@ -45,6 +45,10 @@ namespace Zeghs.Data {
 			}
 		}
 
+		internal T GetItemAt(int index) {
+			return __cSource[index];
+		}
+
 		internal void SetDataSource(List<T> source) {
 			__cSource = source;
 		}

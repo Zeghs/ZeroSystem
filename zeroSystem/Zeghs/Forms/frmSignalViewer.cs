@@ -19,7 +19,7 @@ using Zeghs.Informations;
 namespace Zeghs.Forms {
 	internal partial class frmSignalViewer : DockContent {
 		private static bool __bCustomsLoaded = false;
-		internal static void Create(WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel, ProfileSetting profile) {
+		internal static void Create(DockPanel dockPanel, ProfileSetting profile) {
 			frmSignalViewer frmSignalViewer = new frmSignalViewer();
 			frmSignalViewer.SetProfileSetting(profile);
 
@@ -61,6 +61,12 @@ namespace Zeghs.Forms {
 			InitializeSourceGrid_Trust();
 			InitializeSourceGrid_Trade();
 			InitializeSourceGrid_History();
+		}
+
+		internal void ConnectQuoteServer() {
+			if (__cSignalObject != null) {
+				__cSignalObject.ConnectQuoteServer();
+			}
 		}
 
 		internal void SetProfileSetting(ProfileSetting profile) {

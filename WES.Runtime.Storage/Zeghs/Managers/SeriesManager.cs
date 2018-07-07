@@ -91,6 +91,9 @@ namespace Zeghs.Managers {
 			__cDayBases = new Dictionary<string, DataAdapter>(128);
 			__cStorages = new Dictionary<string, SeriesStorage>(256);
 			__cAsyncArgs = new Dictionary<string, _AsyncEventArgs>(32);
+
+			//附掛開啟或關閉事件(當使用者開啟或關閉即時報價來源時會觸發的事件, 用來偵測是否報價資訊源被關閉)
+			QuoteManager.Manager.onQuoteServiceSwitchChanged += QuoteManager_onQuoteServiceSwitchChanged;
 		}
 
 		/// <summary>
@@ -162,7 +165,7 @@ namespace Zeghs.Managers {
 			}
 
 			if (cStorage != null) {
-				if (cSeries.Id > 0x4000000) {  //Id 編號從 0x40000001 開始編號(如果低於表示使用時間週期總秒數當作 Hash, 使用時間週期總秒數都是 Cache 資料所以不能移除) 
+				if (cSeries.Id > 0x40000000) {  //Id 編號從 0x40000001 開始編號(如果低於表示使用時間週期總秒數當作 Hash, 使用時間週期總秒數都是 Cache 資料所以不能移除) 
 					cStorage.Remove(cSeries.Id);
 				}
 			}
@@ -248,6 +251,7 @@ namespace Zeghs.Managers {
 								if (cQuote.ComplementStatus == ComplementStatus.NotComplement) {
 									cArgs = new _AsyncEventArgs();
 									cArgs.request = request;
+									
 									cWaitHandle = new ManualResetEvent(false);
 									cArgs.handle = cWaitHandle;
 									__cAsyncArgs.Add(sHashKey, cArgs);
@@ -441,5 +445,18 @@ namespace Zeghs.Managers {
 				}
 			}
 		}
+
+		private void QuoteManager_onQuoteServiceSwitchChanged(object sender, QuoteServiceSwitchChangedEvent e) {
+			if (e.IsRunning) {  //如果使用者開啟了即時報價資訊源
+				this.SetQuoteService(e.DataSource);  //設定即時報價資訊源
+			} else {  //如果使用者關閉了即時報價資訊源
+				string sDataSource = e.DataSource;  //取得報價資料來源名稱
+				lock (__cDataSources) {
+					if (__cDataSources.Contains(sDataSource)) {  //如果有報價資料來源
+						__cDataSources.Remove(sDataSource);  //移除報價資料來源名稱
+					}
+				}
+			}
+		}
 	}
-}  //445行
+}  //462行

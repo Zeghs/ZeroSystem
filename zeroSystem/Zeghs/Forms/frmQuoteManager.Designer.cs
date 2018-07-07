@@ -4,7 +4,7 @@
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
-		private Zeghs.Data.SimpleBoundList<Zeghs.Informations.QuoteServiceInformation> source = null;
+		private Zeghs.Data.SimpleBoundList<Zeghs.Data._QuoteServiceInfo> source = null;
 
 		/// <summary>
 		/// Clean up any resources being used.
@@ -18,6 +18,9 @@
 		}
 
 		private void InitializeSourceGrid() {
+			SourceGrid.Cells.Views.IView cTextAlignView = new SourceGrid.Cells.Views.Cell();
+			cTextAlignView.TextAlignment = DevAge.Drawing.ContentAlignment.TopRight;
+
 			this.dataGrid.Rows.RowHeight = 21;  //處理第一列中文字體會被遮住的問題
 			this.dataGrid.Columns.Add("Enabled", "啟用", typeof(bool));
 			this.dataGrid.Columns.Add("Name", "報價元件", typeof(string));
@@ -25,6 +28,8 @@
 			this.dataGrid.Columns.Add("ProductVersion", "元件版本", typeof(string));
 			this.dataGrid.Columns.Add("Company", "開發廠商", typeof(string));
 			this.dataGrid.Columns.Add("DataSource", "資料來源名稱", typeof(string));
+			this.dataGrid.Columns.Add("PacketCount", "封包個數", typeof(string));
+			this.dataGrid.Columns.Add("PacketCountPerSeconds", "傳輸速率", typeof(string));
 			this.dataGrid.Columns[0].Width = 40;
 			this.dataGrid.Columns[0].DataCell.Controller.RemoveController(SourceGrid.Cells.Controllers.CheckBox.Default);  //因為沒有編輯功能(取消對 Checkbox 的 Click 功能)
 			this.dataGrid.Columns[1].Width = 150;
@@ -32,13 +37,17 @@
 			this.dataGrid.Columns[3].Width = 70;
 			this.dataGrid.Columns[4].Width = 200;
 			this.dataGrid.Columns[5].Width = 150;
+			this.dataGrid.Columns[6].Width = 90;
+			this.dataGrid.Columns[6].DataCell.View = cTextAlignView;
+			this.dataGrid.Columns[7].Width = 90;
+			this.dataGrid.Columns[7].DataCell.View = cTextAlignView;
 
 			//修改選擇條的框線寬度與顏色
 			SourceGrid.Selection.SelectionBase cSelectionBase = this.dataGrid.Selection as SourceGrid.Selection.SelectionBase;
 			cSelectionBase.Border = new DevAge.Drawing.RectangleBorder(new DevAge.Drawing.BorderLine(cSelectionBase.BackColor, 1));
 			this.dataGrid.Selection.SelectionChanged += dataGrid_onSelectionChanged;
 
-			source = new Data.SimpleBoundList<Informations.QuoteServiceInformation>(64);
+			source = new Data.SimpleBoundList<Zeghs.Data._QuoteServiceInfo>(64);
 			this.dataGrid.DataSource = source;
 		}
 
@@ -49,6 +58,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			this.components = new System.ComponentModel.Container();
 			this.btnEnabled = new System.Windows.Forms.Button();
 			this.btnDisabled = new System.Windows.Forms.Button();
 			this.btnSetting = new System.Windows.Forms.Button();
@@ -61,6 +71,7 @@
 			this.btnClose = new System.Windows.Forms.Button();
 			this.btnRefreshSymbol = new System.Windows.Forms.Button();
 			this.btnReLogin = new System.Windows.Forms.Button();
+			this.timer = new System.Windows.Forms.Timer(this.components);
 			this.groupGrid.SuspendLayout();
 			this.tabControl.SuspendLayout();
 			this.tabMemo.SuspendLayout();
@@ -191,6 +202,11 @@
 			this.btnReLogin.UseVisualStyleBackColor = true;
 			this.btnReLogin.Click += new System.EventHandler(this.btnReLogin_Click);
 			// 
+			// timer
+			// 
+			this.timer.Interval = 1000;
+			this.timer.Tick += new System.EventHandler(this.timer_Tick);
+			// 
 			// frmQuoteManager
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -234,5 +250,6 @@
 		private System.Windows.Forms.Button btnClose;
 		private System.Windows.Forms.Button btnRefreshSymbol;
 		private System.Windows.Forms.Button btnReLogin;
+		private System.Windows.Forms.Timer timer;
 	}
 }

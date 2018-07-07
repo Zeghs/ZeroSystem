@@ -20,7 +20,7 @@ namespace PowerLanguage {
 		private bool __bDisposed = false;  //Dispose旗標
 		private int __iTickCount = 2;
 		private DataLoader __cDataLoader = null;
-		private HashSet<string> __cDataSources = null;
+		private AbstractQuoteService __cQuoteService = null;
 		private object __oLock = new object();
 
 		/// <summary>
@@ -81,8 +81,6 @@ namespace PowerLanguage {
 		public CStudyControl() {
 			__cDataLoader = new DataLoader();
 			__cDataLoader.onLoadCompleted += DataLoader_onLoadCompleted;
-
-			__cDataSources = new HashSet<string>();
 		}
 
 		/// <summary>
@@ -100,6 +98,21 @@ namespace PowerLanguage {
 		/// <param name="dataRequests">InstrumentDataRequest 列表</param>
 		public void AddDataStreams(List<InstrumentDataRequest> dataRequests) {
 			__cDataLoader.LoadDataRange(dataRequests);
+		}
+
+		/// <summary>
+		///   連結即時報價資訊源
+		/// </summary>
+		public void ConnectQuoteServer() {
+			if (this.Bars != null) {
+				string sDataSource = this.Bars.Request.DataFeed;
+				AbstractQuoteService cService = QuoteManager.Manager.GetQuoteService(sDataSource);
+				if (cService != null && cService != __cQuoteService) {
+					__cQuoteService = cService;
+					__cQuoteService.onQuote += QuoteService_onQuote;
+					__cQuoteService.onQuoteDateTime += QuoteService_onQuoteDateTime;
+				}
+			}
 		}
 
 		/// <summary>
@@ -156,16 +169,9 @@ namespace PowerLanguage {
 		///   啟動腳本
 		/// </summary>
 		internal virtual void Start() {
-			Instrument cInstrument = __cDataLoader.GetInstrument(0);
-			string sDataSource = cInstrument.Request.DataFeed;
-
 			AsyncCalculate();  //啟動的時候先計算一次(因為使用者不一定會使用即時報價來源, 如果不先計算沒有報價源就不會啟動 CalcBar 方法)
-
-			AbstractQuoteService cService = QuoteManager.Manager.GetQuoteService(sDataSource);
-			if (cService != null) {
-				cService.onQuote += QuoteService_onQuote;
-				cService.onQuoteDateTime += QuoteService_onQuoteDateTime;
-			}
+			
+			this.ConnectQuoteServer();  //連結即時報價資訊源
 			if (logger.IsInfoEnabled) logger.Info("[CStudyControl.Start] Script running and calculation...");
 		}
 
@@ -221,18 +227,12 @@ namespace PowerLanguage {
 		}
 
 		private void DisposeResources() {
-			lock (__cDataSources) {
-				foreach (string sDataSource in __cDataSources) {
-					AbstractQuoteService cService = QuoteManager.Manager.GetQuoteService(sDataSource);
-					if (cService != null) {
-						cService.onQuote -= QuoteService_onQuote;
-						cService.onDisconnected -= QuoteService_onDisconnected;
-						cService.onQuoteDateTime -= QuoteService_onQuoteDateTime;
-					}
-				}
-				__cDataSources.Clear();
+			if (__cQuoteService != null) {
+				__cQuoteService.onQuote -= QuoteService_onQuote;
+				__cQuoteService.onDisconnected -= QuoteService_onDisconnected;
+				__cQuoteService.onQuoteDateTime -= QuoteService_onQuoteDateTime;
+				__cQuoteService = null;
 			}
-			
 			__cDataLoader.Dispose();  //釋放資料讀取者資源
 		}
 

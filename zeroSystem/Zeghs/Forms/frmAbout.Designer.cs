@@ -76,10 +76,10 @@
 			// labCompany
 			// 
 			this.labCompany.AutoSize = true;
-			this.labCompany.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-			this.labCompany.Location = new System.Drawing.Point(84, 4);
+			this.labCompany.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+			this.labCompany.Location = new System.Drawing.Point(92, 4);
 			this.labCompany.Name = "labCompany";
-			this.labCompany.Size = new System.Drawing.Size(231, 17);
+			this.labCompany.Size = new System.Drawing.Size(222, 17);
 			this.labCompany.TabIndex = 4;
 			this.labCompany.Text = "Web Electric Services, by ZEGHS Lin.";
 			// 

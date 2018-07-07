@@ -250,6 +250,11 @@
               [取得] 是否登入成功
             </summary>
         </member>
+        <member name="P:Zeghs.Services.AbstractQuoteService.PacketCount">
+            <summary>
+              [取得] 接收到的報價資訊封包個數
+            </summary>
+        </member>
         <member name="P:Zeghs.Services.AbstractQuoteService.Password">
             <summary>
               [取得/設定] 使用者密碼

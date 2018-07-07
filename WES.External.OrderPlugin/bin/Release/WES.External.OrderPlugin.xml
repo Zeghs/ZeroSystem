@@ -51,19 +51,6 @@
               [取得] 下單資訊
             </summary>
         </member>
-        <member name="T:Zeghs.Utils.TradeReport">
-            <summary>
-              產生交易報表類別
-            </summary>
-        </member>
-        <member name="M:Zeghs.Utils.TradeReport.Save(System.String,System.String,PowerLanguage.ISeries{PowerLanguage.IMarketPosition})">
-            <summary>
-              儲存交易報表(CSV格式)
-            </summary>
-            <param name="filename">欲儲存的檔案</param>
-            <param name="symbolId">商品名稱</param>
-            <param name="positions">商品交易的倉位資訊</param>
-        </member>
         <member name="T:Zeghs.Orders.ICommission">
             <summary>
               交易佣金介面

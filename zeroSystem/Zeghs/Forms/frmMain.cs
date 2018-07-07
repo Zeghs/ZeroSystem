@@ -84,6 +84,17 @@ namespace Zeghs.Forms {
 			frmQuoteManager frmQuoteManager = new frmQuoteManager();
 			frmQuoteManager.ShowDialog();
 			frmQuoteManager.Dispose();
+
+			if (frmQuoteManager.SetupChanged) {
+				//處理連接即時報價資訊源(可能使用者中斷了報價資訊源又重新連結, 需要重新連結即時報價資訊源, 因為之前的來源已經被關閉並釋放)
+				int iCount = this.dockPanels.Contents.Count;
+				for (int i = 0; i < iCount; i++) {
+					frmSignalViewer frmSignalViewer = this.dockPanels.Contents[i].DockHandler.Form as frmSignalViewer;
+					if (frmSignalViewer != null) {
+						frmSignalViewer.ConnectQuoteServer();
+					}
+				}
+			}
 		}
 
 		private void SetCustomAction(string action) {

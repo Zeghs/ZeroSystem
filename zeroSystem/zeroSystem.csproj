@@ -87,6 +87,7 @@
     <Compile Include="Zeghs\Data\_ProductInfo.cs" />
     <Compile Include="Zeghs\Data\_QuoteInfo.cs" />
     <Compile Include="Zeghs\Data\_DataStreamInfo.cs" />
+    <Compile Include="Zeghs\Data\_QuoteServiceInfo.cs" />
     <Compile Include="Zeghs\Data\_TradeInfo.cs" />
     <Compile Include="Zeghs\Forms\frmAbout.cs">
       <SubType>Form</SubType>
