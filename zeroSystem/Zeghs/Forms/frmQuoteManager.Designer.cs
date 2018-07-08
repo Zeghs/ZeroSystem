@@ -28,8 +28,8 @@
 			this.dataGrid.Columns.Add("ProductVersion", "元件版本", typeof(string));
 			this.dataGrid.Columns.Add("Company", "開發廠商", typeof(string));
 			this.dataGrid.Columns.Add("DataSource", "資料來源名稱", typeof(string));
-			this.dataGrid.Columns.Add("PacketCount", "封包個數", typeof(string));
 			this.dataGrid.Columns.Add("PacketCountPerSeconds", "傳輸速率", typeof(string));
+			this.dataGrid.Columns.Add("PacketCount", "封包個數", typeof(string));
 			this.dataGrid.Columns[0].Width = 40;
 			this.dataGrid.Columns[0].DataCell.Controller.RemoveController(SourceGrid.Cells.Controllers.CheckBox.Default);  //因為沒有編輯功能(取消對 Checkbox 的 Click 功能)
 			this.dataGrid.Columns[1].Width = 150;

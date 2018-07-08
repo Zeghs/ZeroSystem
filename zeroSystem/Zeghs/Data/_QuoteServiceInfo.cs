@@ -53,13 +53,13 @@ namespace Zeghs.Data {
 
 		public string PacketCount {
 			get {
-				return Format("{0} {1}B", __lPacketCount);
+				return Format("{0}{1}", __lPacketCount);
 			}
 		}
 
 		public string PacketCountPerSeconds {
 			get {
-				return Format("{0} {1}B/s", __lPacketCount - __lPrevPacketCount);
+				return Format("{0}{1}/s", __lPacketCount - __lPrevPacketCount);
 			}
 		}
 

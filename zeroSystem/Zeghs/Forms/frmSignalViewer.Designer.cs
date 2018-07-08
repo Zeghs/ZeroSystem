@@ -143,7 +143,7 @@
 			this.dataGrid_Trust = new SourceGrid.DataGrid();
 			this.dataGrid_History = new Zeghs.Controls.CustomGrid();
 			this.dataGrid_Trade = new SourceGrid.DataGrid();
-			this.tabControl = new Zeghs.Controls.CustomTabControl();
+			this.tabControl = new System.Windows.Forms.TabControl();
 			this.pageItem_Trust = new System.Windows.Forms.TabPage();
 			this.pageItem_Trade = new System.Windows.Forms.TabPage();
 			this.pageItem_History = new System.Windows.Forms.TabPage();
@@ -365,7 +365,7 @@
 		private SourceGrid.DataGrid dataGrid_Trust;
 		private SourceGrid.DataGrid dataGrid_Trade;
 		private Zeghs.Controls.CustomGrid dataGrid_History;
-		private Controls.CustomTabControl tabControl;
+		private System.Windows.Forms.TabControl tabControl;
 		private System.Windows.Forms.TabPage pageItem_Trust;
 		private System.Windows.Forms.TabPage pageItem_Trade;
 		private System.Windows.Forms.TabPage pageItem_History;
