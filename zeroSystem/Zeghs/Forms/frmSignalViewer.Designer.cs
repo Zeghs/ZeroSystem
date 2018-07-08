@@ -212,7 +212,6 @@
 			// 
 			// tabControl
 			// 
-			this.tabControl.Alignment = System.Windows.Forms.TabAlignment.Bottom;
 			this.tabControl.Controls.Add(this.pageItem_Trust);
 			this.tabControl.Controls.Add(this.pageItem_Trade);
 			this.tabControl.Controls.Add(this.pageItem_History);
