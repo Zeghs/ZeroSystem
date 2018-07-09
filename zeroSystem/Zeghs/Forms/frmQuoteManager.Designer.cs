@@ -1,5 +1,8 @@
 ﻿namespace Zeghs.Forms {
 	partial class frmQuoteManager {
+		private static readonly string __sMessageHeader_001 = "停用詢問";
+		private static readonly string __sMessageContent_001 = "您是否確定要停用並中斷此資料來源？\n請注意：停用並中斷資料來源會導致策略模型無法正常運作！";
+
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>

@@ -35,7 +35,7 @@
 			// pictureBox1
 			// 
 			this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-			this.pictureBox1.Location = new System.Drawing.Point(46, 108);
+			this.pictureBox1.Location = new System.Drawing.Point(20, 108);
 			this.pictureBox1.Name = "pictureBox1";
 			this.pictureBox1.Size = new System.Drawing.Size(313, 381);
 			this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -47,7 +47,7 @@
 			this.labProduct.AutoSize = true;
 			this.labProduct.Font = new System.Drawing.Font("Impact", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labProduct.ForeColor = System.Drawing.Color.RoyalBlue;
-			this.labProduct.Location = new System.Drawing.Point(62, 21);
+			this.labProduct.Location = new System.Drawing.Point(36, 21);
 			this.labProduct.Name = "labProduct";
 			this.labProduct.Size = new System.Drawing.Size(282, 60);
 			this.labProduct.TabIndex = 1;
@@ -57,7 +57,7 @@
 			// 
 			this.labCopyright.AutoSize = true;
 			this.labCopyright.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-			this.labCopyright.Location = new System.Drawing.Point(68, 493);
+			this.labCopyright.Location = new System.Drawing.Point(42, 493);
 			this.labCopyright.Name = "labCopyright";
 			this.labCopyright.Size = new System.Drawing.Size(270, 16);
 			this.labCopyright.TabIndex = 2;
@@ -67,7 +67,7 @@
 			// 
 			this.labMemo.AutoSize = true;
 			this.labMemo.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-			this.labMemo.Location = new System.Drawing.Point(54, 85);
+			this.labMemo.Location = new System.Drawing.Point(32, 85);
 			this.labMemo.Name = "labMemo";
 			this.labMemo.Size = new System.Drawing.Size(289, 17);
 			this.labMemo.TabIndex = 3;
@@ -77,7 +77,7 @@
 			// 
 			this.labCompany.AutoSize = true;
 			this.labCompany.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-			this.labCompany.Location = new System.Drawing.Point(92, 4);
+			this.labCompany.Location = new System.Drawing.Point(66, 4);
 			this.labCompany.Name = "labCompany";
 			this.labCompany.Size = new System.Drawing.Size(222, 17);
 			this.labCompany.TabIndex = 4;
@@ -88,7 +88,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.White;
-			this.ClientSize = new System.Drawing.Size(404, 518);
+			this.ClientSize = new System.Drawing.Size(354, 518);
 			this.Controls.Add(this.labCompany);
 			this.Controls.Add(this.labMemo);
 			this.Controls.Add(this.labCopyright);

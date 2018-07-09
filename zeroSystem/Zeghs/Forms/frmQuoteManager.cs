@@ -61,17 +61,20 @@ namespace Zeghs.Forms {
 		}
 
 		private void btnDisabled_Click(object sender, EventArgs e) {
-			_QuoteServiceInfo cQuoteInfo = dataGrid.SelectedDataRows[0] as _QuoteServiceInfo;
-			if (cQuoteInfo.Enabled) {
-				QuoteManager.Manager.StopQuoteService(cQuoteInfo.GetInformation());
-				
-				btnEnabled.Visible = !cQuoteInfo.Enabled;
-				btnDisabled.Visible = cQuoteInfo.Enabled;
-				btnReLogin.Enabled = cQuoteInfo.Enabled;
-				btnRefreshSymbol.Enabled = cQuoteInfo.Enabled;
-				source.Refresh();
+			DialogResult cResult = MessageBox.Show(__sMessageContent_001, __sMessageHeader_001, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			if (cResult == DialogResult.Yes) {
+				_QuoteServiceInfo cQuoteInfo = dataGrid.SelectedDataRows[0] as _QuoteServiceInfo;
+				if (cQuoteInfo.Enabled) {
+					QuoteManager.Manager.StopQuoteService(cQuoteInfo.GetInformation());
 
-				__bSetupChanged = true;
+					btnEnabled.Visible = !cQuoteInfo.Enabled;
+					btnDisabled.Visible = cQuoteInfo.Enabled;
+					btnReLogin.Enabled = cQuoteInfo.Enabled;
+					btnRefreshSymbol.Enabled = cQuoteInfo.Enabled;
+					source.Refresh();
+
+					__bSetupChanged = true;
+				}
 			}
 		}
 

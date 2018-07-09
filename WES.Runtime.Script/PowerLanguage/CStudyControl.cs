@@ -109,6 +109,8 @@ namespace PowerLanguage {
 				AbstractQuoteService cService = QuoteManager.Manager.GetQuoteService(sDataSource);
 				if (cService != null && cService != __cQuoteService) {
 					__cQuoteService = cService;
+					__cQuoteService.AddSubscribe(this.Bars.Request.Symbol);
+
 					__cQuoteService.onQuote += QuoteService_onQuote;
 					__cQuoteService.onQuoteDateTime += QuoteService_onQuoteDateTime;
 				}
@@ -261,7 +263,7 @@ namespace PowerLanguage {
 			string sSymbolId = this.Bars.Request.Symbol;
 			if (sSymbolId.Equals(e.Quote.SymbolId)) {
 				Interlocked.Increment(ref __iTickCount);
-				
+
 				if (!__bBusy) {
 					AsyncCalculate();
 				}
@@ -272,4 +274,4 @@ namespace PowerLanguage {
 			OnQuoteDateTime(e);
 		}
 	}
-}  //275行
+}  //277行

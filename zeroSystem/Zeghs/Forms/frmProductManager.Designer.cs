@@ -14,6 +14,14 @@
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 		private Zeghs.Data.SimpleBoundList<Data._ProductInfo> source = null;
+		private System.Collections.Generic.Dictionary<string, System.Comparison<Data._ProductInfo>> __cComparison = new System.Collections.Generic.Dictionary<string, System.Comparison<Data._ProductInfo>>(8) {
+			{"ProductId_A", (a, b) => { return a.ProductId.CompareTo(b.ProductId); }},	
+			{"ProductId_D", (a, b) => { return b.ProductId.CompareTo(a.ProductId); }},	
+			{"CommodityId_A", (a, b) => { return a.CommodityId.CompareTo(b.CommodityId); }},	
+			{"CommodityId_D", (a, b) => { return b.CommodityId.CompareTo(a.CommodityId); }},	
+			{"ProductName_A", (a, b) => { return a.ProductName.CompareTo(b.ProductName); }},	
+			{"ProductName_D", (a, b) => { return b.ProductName.CompareTo(a.ProductName); }}	
+		};
 
 		/// <summary>
 		/// Clean up any resources being used.
@@ -24,6 +32,8 @@
 				__cAllData.Clear();
 				__cBasicData.Clear();
 				__cCustomData.Clear();
+				__cComparison.Clear();
+				__cDataSources.Clear();
 
 				if (components != null) {
 					components.Dispose();
@@ -50,6 +60,9 @@
 			cSelectionBase.Border = new DevAge.Drawing.RectangleBorder(new DevAge.Drawing.BorderLine(cSelectionBase.BackColor, 1));
 
 			source = new Data.SimpleBoundList<Data._ProductInfo>(__cAllData);
+			source.AllowSort = true;
+			source.SetComparers(__cComparison);
+
 			this.dataGrid.DataSource = source;
 		}
 
@@ -61,7 +74,7 @@
 		/// </summary>
 		private void InitializeComponent() {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("所有交易所");
+			System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("所有交易所");
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmProductManager));
 			this.treeExchanges = new System.Windows.Forms.TreeView();
 			this.imageList = new System.Windows.Forms.ImageList(this.components);
@@ -87,10 +100,10 @@
 			this.treeExchanges.ImageList = this.imageList;
 			this.treeExchanges.Location = new System.Drawing.Point(2, 28);
 			this.treeExchanges.Name = "treeExchanges";
-			treeNode2.Name = "treeItem_Exchanges";
-			treeNode2.Text = "所有交易所";
+			treeNode1.Name = "treeItem_Exchanges";
+			treeNode1.Text = "所有交易所";
 			this.treeExchanges.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2});
+            treeNode1});
 			this.treeExchanges.SelectedImageIndex = 0;
 			this.treeExchanges.Size = new System.Drawing.Size(183, 293);
 			this.treeExchanges.TabIndex = 0;
@@ -118,6 +131,7 @@
 			this.dataGrid.TabIndex = 3;
 			this.dataGrid.TabStop = true;
 			this.dataGrid.ToolTipText = "";
+			this.dataGrid.SortedRangeRows += new SourceGrid.SortRangeRowsEventHandler(this.dataGrid_SortedRangeRows);
 			// 
 			// toolbar
 			// 

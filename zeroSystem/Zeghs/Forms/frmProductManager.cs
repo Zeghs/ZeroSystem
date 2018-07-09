@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using SourceGrid;
 using PowerLanguage;
 using Zeghs.Data;
 using Zeghs.Products;
@@ -28,6 +29,7 @@ namespace Zeghs.Forms {
 		private List<_ProductInfo> __cBasicData = null;
 		private List<_ProductInfo> __cCustomData = null;
 		private ToolStripButton __cPrevFilterButton = null;
+		private SortRangeRowsEventArgs __cSortRangeRowEvent = null;
 
 		internal frmProductManager() {
 			__cDataSources = new List<string>(64);
@@ -95,7 +97,11 @@ namespace Zeghs.Forms {
 					}
 				}
 			}
+
 			source.Refresh();
+			if (__cSortRangeRowEvent != null) {
+				this.dataGrid.SortRangeRows(__cSortRangeRowEvent.Range, __cSortRangeRowEvent.KeyColumn, __cSortRangeRowEvent.Ascending, __cSortRangeRowEvent.CellComparer);
+			}
 		}
 
 		private void SaveSettings() {
@@ -186,6 +192,9 @@ namespace Zeghs.Forms {
 				__cPrevFilterButton = cButton;
 
 				source.Refresh();
+				if (__cSortRangeRowEvent != null) {
+					this.dataGrid.SortRangeRows(__cSortRangeRowEvent.Range, __cSortRangeRowEvent.KeyColumn, __cSortRangeRowEvent.Ascending, __cSortRangeRowEvent.CellComparer);
+				}
 			}
 		}
 
@@ -271,6 +280,10 @@ namespace Zeghs.Forms {
 
 		private void toolItem_Save_Click(object sender, EventArgs e) {
 			SaveSettings();
+		}
+
+		private void dataGrid_SortedRangeRows(object sender, SortRangeRowsEventArgs e) {
+			__cSortRangeRowEvent = e;
 		}
 	}
 }
