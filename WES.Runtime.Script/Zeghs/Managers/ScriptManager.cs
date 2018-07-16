@@ -155,7 +155,11 @@ namespace Zeghs.Managers {
 						if (sComplierFile == null) {
 							if (bExist) {
 								if (File.Exists(sOutput)) {
-									File.Delete(sOutput);
+									try {
+										File.Delete(sOutput);
+									} catch(Exception __errExcep) {
+										if (logger.IsErrorEnabled) logger.ErrorFormat("[ScriptManager.LoadScripts] Error Message:{0}\r\n{1}", __errExcep.Message, __errExcep.StackTrace);
+									}
 								}
 								cOutputs.Remove(sFilename);
 							}
@@ -225,7 +229,7 @@ namespace Zeghs.Managers {
 				try {
 					sComplierFile = CSScript.CompileFile(scriptFile, sFileName, false);
 				} catch (Exception __errExcep) {
-					if (logger.IsErrorEnabled) logger.ErrorFormat("[ScriptManager.Complier] Error Message:\r\n{0}", __errExcep.Message);
+					if (logger.IsErrorEnabled) logger.ErrorFormat("[ScriptManager.Complier] Error Message:{0}\r\n{1}", __errExcep.Message, __errExcep.StackTrace);
 				}
 			}
 			return sComplierFile;
