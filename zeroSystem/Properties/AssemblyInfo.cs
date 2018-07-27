@@ -10,8 +10,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Web Electric Services")]
 [assembly: AssemblyProduct("Zoning and Emotional Range Omitted System")]
-[assembly: AssemblyCopyright("Copyright © Web Electric Services 2004 - 2017")]
-[assembly: AssemblyTrademark("Copyright © Web Electric Services 2004 - 2017")]
+[assembly: AssemblyCopyright("Copyright © Web Electric Services 2004 - 2018")]
+[assembly: AssemblyTrademark("Copyright © Web Electric Services 2004 - 2018")]
 [assembly: AssemblyCulture("")]
 
 // 將 ComVisible 設定為 false 會使得這個組件中的型別
