@@ -270,6 +270,7 @@ namespace Netwings {
 		protected override void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
+				
 				if (disposing) {
 					base.Dispose(disposing);
 
@@ -303,12 +304,16 @@ namespace Netwings {
 				.Append((cancelTicket == null) ? (trust.IsReverse) ? "1" : "0" : cancelTicket);
 
 			string sCommand = cBuilder.ToString();
-			__cPipeStream.Send(__sApiPipe, sCommand);  //發送委託單命令給下單機
+			bool bSuccess = __cPipeStream.Send(__sApiPipe, sCommand);  //發送委託單命令給下單機
 			if (logger.IsInfoEnabled) logger.InfoFormat("[RealOrderService.Send] {0}", sCommand);
 
-			trust.IsSended = true;  //設定已經傳送完畢
-			if (bClose) {  //如果是平倉單
-				__cCloseOrder = trust;  //指定平倉單至變數內(模組會監測平倉單完畢後才會啟動之後的單做下單動作, 避免倉部位錯亂)
+			if (bSuccess) {  //如果傳送成功
+				trust.IsSended = true;  //設定已經傳送完畢
+				if (bClose) {  //如果是平倉單
+					__cCloseOrder = trust;  //指定平倉單至變數內(模組會監測平倉單完畢後才會啟動之後的單做下單動作, 避免倉部位錯亂)
+				}
+			} else {
+				__cEntrusts.Remove(trust.Ticket);  //移除此筆尚未委託的委託單
 			}
 		}
 
@@ -612,4 +617,4 @@ namespace Netwings {
 			}
 		}
 	}
-} //615行
+} //620行

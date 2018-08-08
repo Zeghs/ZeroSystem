@@ -50,9 +50,11 @@ namespace Netwings.Pipes {
 					byte[] cData = Encoding.UTF8.GetBytes(message);
 					pipeStream.Write(cData, 0, cData.Length);
 					pipeStream.Flush();
-				} catch(Exception __errExcep) {
+				} catch (Exception __errExcep) {
 					if (logger.IsErrorEnabled) logger.ErrorFormat("{0}\r\n{1}", __errExcep.Message, __errExcep.StackTrace);
 					bSuccess = false;
+				} finally {
+					pipeStream.Close();
 				}
 			}
 			return bSuccess;
