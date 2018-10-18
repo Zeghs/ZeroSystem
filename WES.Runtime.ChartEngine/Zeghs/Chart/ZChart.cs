@@ -445,7 +445,7 @@ namespace Zeghs.Chart {
 					string sChartTitle = "WES.ChartEngine";
 					using (Font cFont = new Font("Impact", 24, FontStyle.Bold)) {
 						SizeF cSize = g.MeasureString(sChartTitle, cFont);
-						Rectangle cRect = e.ClipRectangle;
+						Rectangle cRect = __cContext.ClientRectangle;
 						g.DrawString(sChartTitle, cFont, cBrush, (cRect.Width - cSize.Width) / 2, (cRect.Height - cSize.Height) / 2);
 					}
 				}

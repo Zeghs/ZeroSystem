@@ -460,7 +460,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_A6077E56193247C451C3759545A86FBD"
+        "OwnerKey" = "8:_06CB66ACC2C14AD8A745FC5F83E4F35B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -472,13 +472,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_03C33A091393459C9C2215282089567D"
+        "OwnerKey" = "8:_9FBBE77DF9BE40DDA7030C711E9CAEB2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_9FBBE77DF9BE40DDA7030C711E9CAEB2"
+        "OwnerKey" = "8:_03C33A091393459C9C2215282089567D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -574,7 +574,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_06CB66ACC2C14AD8A745FC5F83E4F35B"
+        "OwnerKey" = "8:_A6077E56193247C451C3759545A86FBD"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -595,6 +595,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -611,6 +619,27 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -1580,18 +1609,18 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ZeroSystem"
         "ProductCode" = "8:{1277AE0C-3082-4CD3-A727-450FD26A9286}"
-        "PackageCode" = "8:{AAD9E08F-618A-46F1-A7E1-150BC4623A91}"
+        "PackageCode" = "8:{426D62B6-442C-4B26-A837-798B14F96425}"
         "UpgradeCode" = "8:{B16B0871-8071-4CBF-BBC2-F609CF5C0BE8}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.0.0"
         "Manufacturer" = "8:WES"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Zero System"
+        "Title" = "8:ZERO System"
         "Subject" = "8:Zoning and Emotional Range Omitted System"
         "ARPCONTACT" = "8:Zeghs Lin."
         "Keywords" = "8:"
