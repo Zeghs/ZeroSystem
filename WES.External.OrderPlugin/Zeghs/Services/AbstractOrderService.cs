@@ -11,8 +11,6 @@ namespace Zeghs.Services {
 	///   下單服務類別(所有下單模組都必須繼承此服務類別)
 	/// </summary>
 	public abstract class AbstractOrderService : IOrderCreator, IDisposable {
-		private static int __iOrderId = 0;
-
 		/// <summary>
 		///   收到委託或是成交回報時需要觸發的事件
 		/// </summary>
@@ -57,16 +55,19 @@ namespace Zeghs.Services {
 		}
 
 		/// <summary>
+		///   [取得] 預設基礎下單數量規模
+		/// </summary>
+		public Contracts DefaultContracts {
+			get {
+				return __cDefaultContracts;
+			}
+		}
+
+		/// <summary>
 		///   [取得] 留倉部位序列資訊
 		/// </summary>
 		public abstract PositionSeries Positions {
 			get;
-		}
-
-		internal Contracts DefaultContracts {
-			get {
-				return __cDefaultContracts;
-			}
 		}
 
 		/// <summary>
@@ -116,27 +117,21 @@ namespace Zeghs.Services {
 		/// </summary>
 		/// <param name="orderParams">下單參數</param>
 		/// <returns>返回值: IOrderPriced介面</returns>
-		public IOrderPriced Limit(SOrderParameters orderParams) {
-			return new OrderPriced(this, orderParams);
-		}
+		public abstract IOrderPriced Limit(SOrderParameters orderParams);
 
 		/// <summary>
 		///   建立市價買賣模式(在下一根 Bars 建立之後以市價送出委託單)
 		/// </summary>
 		/// <param name="orderParams">下單參數</param>
 		/// <returns>返回值: IOrderMarket介面</returns>
-		public IOrderMarket MarketNextBar(SOrderParameters orderParams) {
-			return new OrderMarket(this, orderParams, true);
-		}
+		public abstract IOrderMarket MarketNextBar(SOrderParameters orderParams);
 
 		/// <summary>
 		///   建立市價買賣模式(立即以市價送出委託單)
 		/// </summary>
 		/// <param name="orderParams">下單參數</param>
 		/// <returns>返回值: IOrderMarket介面</returns>
-		public IOrderMarket MarketThisBar(SOrderParameters orderParams) {
-			return new OrderMarket(this, orderParams, false);
-		}
+		public abstract IOrderMarket MarketThisBar(SOrderParameters orderParams);
 
 		/// <summary>
 		///   設定預設的下單數量規模
@@ -172,22 +167,14 @@ namespace Zeghs.Services {
 		/// </summary>
 		/// <param name="orderParams">下單參數</param>
 		/// <returns>返回值: IOrderPriced介面</returns>
-		public IOrderPriced Stop(SOrderParameters orderParams) {
-			return null;
-		}
+		public abstract IOrderPriced Stop(SOrderParameters orderParams);
 
 		/// <summary>
 		///   建立停損限價單模式(觸發到停損點後，以使用者指定的價格送出委託單)
 		/// </summary>
 		/// <param name="orderParams">下單參數</param>
 		/// <returns>返回值: IOrderStopLimit介面</returns>
-		public IOrderStopLimit StopLimit(SOrderParameters orderParams) {
-			return null;
-		}
-
-		internal int GetOrderID() {
-			return Interlocked.Increment(ref __iOrderId);
-		}
+		public abstract IOrderStopLimit StopLimit(SOrderParameters orderParams);
 
 		/// <summary>
 		///   計算所有傭金規則
@@ -201,6 +188,7 @@ namespace Zeghs.Services {
 				for (int i = 0; i < iCount; i++) {
 					ICommission cCommission = __cCommissions[i];
 					int iIndex = ((int) cCommission.RuleType) - 128;  //佣金起始為 128(減去 128 可得到陣列的索引值)
+					
 					dValues[iIndex] += cCommission.Calculate(order.Price, order.Contracts);
 				}
 			}
@@ -239,4 +227,4 @@ namespace Zeghs.Services {
 			}
 		}
 	}
-}  //242行
+}  //230行

@@ -12,7 +12,6 @@ using Zeghs.Data;
 using Zeghs.Events;
 using Zeghs.Orders;
 using Zeghs.Products;
-using Zeghs.Managers;
 using Zeghs.Services;
 using Netwings.Rules;
 using Netwings.Event;
@@ -20,7 +19,7 @@ using Netwings.Pipes;
 using Netwings.Orders;
 
 namespace Netwings {
-	public class RealOrderService : AbstractOrderService, IOrderSender {
+	public class RealOrderService : AbstractOrderService, ITradeSender, IOrderEntrust {
 		private static readonly ILog logger = LogManager.GetLogger(typeof(RealOrderService));
 		private static int __iDealIndex = 0;
 		private static string __sFullDeal = "完全成交";
@@ -117,6 +116,12 @@ namespace Netwings {
 			set;
 		}
 
+		TradeList<TradeOrder> IOrderEntrust.Entrusts {
+			get {
+				return __cEntrusts;
+			}
+		}
+
 		/// <summary>
 		///   建構子
 		/// </summary>
@@ -174,6 +179,15 @@ namespace Netwings {
 		}
 
 		/// <summary>
+		///   建立限價買賣模式(送出使用者指定的價格的委託單)
+		/// </summary>
+		/// <param name="orderParams">下單參數</param>
+		/// <returns>返回值: IOrderPriced介面</returns>
+		public override IOrderPriced Limit(SOrderParameters orderParams) {
+			return new OrderPriced(this, orderParams);
+		}
+
+		/// <summary>
 		///   讀取下單服務的參數
 		/// </summary>
 		public override void Load() {
@@ -181,6 +195,24 @@ namespace Netwings {
 				Assembly cAssembly = Assembly.GetExecutingAssembly();
 				__cRuleItems = RulePropertyAttribute.GetRules(cAssembly);
 			}
+		}
+
+		/// <summary>
+		///   建立市價買賣模式(在下一根 Bars 建立之後以市價送出委託單)
+		/// </summary>
+		/// <param name="orderParams">下單參數</param>
+		/// <returns>返回值: IOrderMarket介面</returns>
+		public override IOrderMarket MarketNextBar(SOrderParameters orderParams) {
+			return new OrderMarket(this, orderParams, true);
+		}
+
+		/// <summary>
+		///   建立市價買賣模式(立即以市價送出委託單)
+		/// </summary>
+		/// <param name="orderParams">下單參數</param>
+		/// <returns>返回值: IOrderMarket介面</returns>
+		public override IOrderMarket MarketThisBar(SOrderParameters orderParams) {
+			return new OrderMarket(this, orderParams, false);
 		}
 
 		public override void OnWork() {
@@ -252,6 +284,16 @@ namespace Netwings {
 		}
 
 		/// <summary>
+		///   傳送下單命令
+		/// </summary>
+		/// <param name="trust">交易訂單資訊</param>
+		/// <param name="isCancel">是否要取消此交易訂單(成功委託才能取消訂單)</param>
+		/// <returns>返回值: true=成功, false=失敗</returns>
+		bool ITradeSender.Send(TradeOrder trust, bool isCancel) {
+			return this.SendTrust(trust, isCancel);
+		}
+
+		/// <summary>
 		///   設定 Instrument 資訊
 		/// </summary>
 		/// <param name="bars">Instrument 類別</param>
@@ -267,10 +309,27 @@ namespace Netwings {
 			__cCurrentPosition.SetBigPointValue(Bars.Info.BigPointValue);  //設定每一大點的交易金額
 		}
 
+		/// <summary>
+		///   建立停損模式(觸發到停損點後，以市價送出委託單)
+		/// </summary>
+		/// <param name="orderParams">下單參數</param>
+		/// <returns>返回值: IOrderPriced介面</returns>
+		public override IOrderPriced Stop(SOrderParameters orderParams) {
+			return null;
+		}
+
+		/// <summary>
+		///   建立停損限價單模式(觸發到停損點後，以使用者指定的價格送出委託單)
+		/// </summary>
+		/// <param name="orderParams">下單參數</param>
+		/// <returns>返回值: IOrderStopLimit介面</returns>
+		public override IOrderStopLimit StopLimit(SOrderParameters orderParams) {
+			return null;
+		}
+
 		protected override void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
-				
 				if (disposing) {
 					base.Dispose(disposing);
 
@@ -289,7 +348,7 @@ namespace Netwings {
 			}
 		}
 
-		internal void SendTrust(TradeOrder trust, string cancelTicket = null) {
+		internal bool SendTrust(TradeOrder trust, bool isCancel = false) {
 			EOrderAction cAction = trust.Action;
 			bool bClose = cAction == EOrderAction.Sell || cAction == EOrderAction.BuyToCover;
 			StringBuilder cBuilder = new StringBuilder(128);
@@ -299,9 +358,9 @@ namespace Netwings {
 				.Append((cAction == EOrderAction.Buy || cAction == EOrderAction.BuyToCover) ? 'B' : (cAction == EOrderAction.Sell || cAction == EOrderAction.SellShort) ? 'S' : ' ').Append(",")
 				.Append(trust.Contracts).Append(",")
 				.Append(trust.Price).Append(",")
-				.Append((cancelTicket != null) ? -1 : (bClose) ? 0 : 1).Append(",")
-				.Append(Bars.Close[0]).Append(",")
-				.Append((cancelTicket == null) ? (trust.IsReverse) ? "1" : "0" : cancelTicket);
+				.Append((isCancel) ? -1 : (bClose) ? 0 : 1).Append(",")
+				.Append(Bars.Close.Value).Append(",")
+				.Append((isCancel) ? trust.Ticket : (trust.IsReverse) ? "1" : "0");
 
 			string sCommand = cBuilder.ToString();
 			bool bSuccess = __cPipeStream.Send(__sApiPipe, sCommand);  //發送委託單命令給下單機
@@ -315,6 +374,7 @@ namespace Netwings {
 			} else {
 				__cEntrusts.Remove(trust.Ticket);  //移除此筆尚未委託的委託單
 			}
+			return bSuccess;
 		}
 
 		private void AsyncCalculateProfits() {
@@ -329,7 +389,7 @@ namespace Netwings {
 			if (!bBusy) {
 				Task.Factory.StartNew(() => {
 					if (__cCurrentPosition.OpenLots > 0) {  //如果有留倉部位
-						__cCurrentPosition.CalculateProfits(Bars.Close[0]);  //計算目前損益
+						__cCurrentPosition.CalculateProfits(Bars.Close.Value);  //計算目前損益
 					}
 
 					lock (__oLock) {
@@ -377,7 +437,7 @@ namespace Netwings {
 						TradeOrder cTemp = __cEntrusts[i];
 						if (cTemp.IsTrusted && cTemp.Price > 0 && cTemp.Contracts > 0 && cTemp.Action == action) {
 							if (!cTemp.IsCancel) {
-								SendTrust(cTemp, cTemp.Ticket);  //送出取消委託單命令
+								SendTrust(cTemp, true);  //送出取消委託單命令
 								cTemp.IsCancel = true;
 							}
 							bRet = true;
@@ -404,7 +464,7 @@ namespace Netwings {
 						return false;
 					} else {
 						if (cTrust.IsTrusted && !cTrust.IsCancel) {  //如果已經委託完成就取消單號
-							SendTrust(cTrust, cTrust.Ticket);  //向下單機傳送取消委託單的命令
+							SendTrust(cTrust, true);  //向下單機傳送取消委託單的命令
 							cTrust.IsCancel = true;
 						}
 						return false;
@@ -617,4 +677,4 @@ namespace Netwings {
 			}
 		}
 	}
-} //620行
+} //680行

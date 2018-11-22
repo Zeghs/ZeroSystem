@@ -49,8 +49,6 @@
     <Compile Include="Zeghs\Informations\OrderServiceInformation.cs" />
     <Compile Include="Zeghs\Managers\OrderManager.cs" />
     <Compile Include="Zeghs\Orders\ICommission.cs" />
-    <Compile Include="Zeghs\Orders\OrderMarket.cs" />
-    <Compile Include="Zeghs\Orders\OrderPriced.cs" />
     <Compile Include="Zeghs\Orders\PositionSeries.cs" />
     <Compile Include="Zeghs\Orders\ResponseType.cs" />
     <Compile Include="Zeghs\Orders\TradeList.cs" />

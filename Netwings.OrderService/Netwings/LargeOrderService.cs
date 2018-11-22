@@ -80,7 +80,7 @@ namespace Netwings {
 					if (__cCurrent != null && __cCurrent.Contracts > 0) {
 						if (__cCurrent.IsTrusted && !__cCurrent.IsCancel) {
 							__cCurrent.IsCancel = true;
-							SendTrust(__cCurrent, __cCurrent.Ticket);
+							SendTrust(__cCurrent, true);
 						}
 					} else if (__cTemp != null) {
 						this.Send(__cTemp.Action, __cTemp.Category, 0, __cTemp.Contracts, false, 0, __cTemp.Name);

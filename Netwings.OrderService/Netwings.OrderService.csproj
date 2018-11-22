@@ -54,7 +54,11 @@
     <Compile Include="Netwings\Forms\frmCustomBrokerFeeSetting.Designer.cs">
       <DependentUpon>frmCustomBrokerFeeSetting.cs</DependentUpon>
     </Compile>
+    <Compile Include="Netwings\Orders\IOrderEntrust.cs" />
     <Compile Include="Netwings\LargeOrderService.cs" />
+    <Compile Include="Netwings\Orders\ITradeSender.cs" />
+    <Compile Include="Netwings\Orders\OrderMarket.cs" />
+    <Compile Include="Netwings\Orders\OrderPriced.cs" />
     <Compile Include="Netwings\RealOrderService.cs" />
     <Compile Include="Netwings\Orders\MarketPosition.cs" />
     <Compile Include="Netwings\Orders\OrderDeal.cs" />

@@ -5,7 +5,7 @@ namespace Netwings.Orders {
 	/// <summary>
 	///   交易訂單資訊類別
 	/// </summary>
-	internal class TradeOrder : ITradeOrder {
+	internal sealed class TradeOrder : ITradeOrder {
 		/// <summary>
 		///   [取得] 下單進出場動作
 		/// </summary>
