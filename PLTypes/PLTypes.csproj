@@ -74,7 +74,6 @@
     <Compile Include="PowerLanguage\IOrderMarket.cs" />
     <Compile Include="PowerLanguage\IOrderObject.cs" />
     <Compile Include="PowerLanguage\IOrderPriced.cs" />
-    <Compile Include="PowerLanguage\IOrderSender.cs" />
     <Compile Include="PowerLanguage\IOrderStopLimit.cs" />
     <Compile Include="PowerLanguage\IOutput.cs" />
     <Compile Include="PowerLanguage\IRuleSetting.cs" />

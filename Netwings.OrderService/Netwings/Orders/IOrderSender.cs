@@ -1,8 +1,18 @@
-﻿namespace PowerLanguage {
+﻿using PowerLanguage;
+
+namespace Netwings.Orders {
 	/// <summary>
-	///   下單傳送者介面
+	///   交易傳送者介面
 	/// </summary>
-	public interface IOrderSender {
+	internal interface IOrderSender {
+		/// <summary>
+		///   傳送下單命令
+		/// </summary>
+		/// <param name="trust">交易訂單資訊</param>
+		/// <param name="isCancel">是否要取消此交易訂單(成功委託才能取消訂單)</param>
+		/// <returns>返回值: true=成功, false=失敗</returns>
+		bool Send(TradeOrder trust, bool isCancel);
+		
 		/*
 		  isReverse: 是否已反轉倉位 = 假設目前倉位為 Long 下了一口 Sell 單, 會將倉內的全部多單平倉, 並轉成 Short 
 					     如果此變數為 true 會處理其他特殊行為(行為由下單 Plugin 自行決定與實作)

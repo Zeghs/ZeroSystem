@@ -19,7 +19,7 @@ using Netwings.Pipes;
 using Netwings.Orders;
 
 namespace Netwings {
-	public class RealOrderService : AbstractOrderService, ITradeSender, IOrderEntrust {
+	public class RealOrderService : AbstractOrderService, IOrderSender, IOrderEntrust {
 		private static readonly ILog logger = LogManager.GetLogger(typeof(RealOrderService));
 		private static int __iDealIndex = 0;
 		private static string __sFullDeal = "完全成交";
@@ -278,7 +278,72 @@ namespace Netwings {
 		/// <param name="openNextBar">是否開倉在下一根 Bars</param>
 		public virtual bool Send(EOrderAction action, OrderCategory category, double limitPrice, int lots, bool isReverse, double touchPrice = 0, string name = null, bool openNextBar = false) {
 			if (this.Bars.IsLastBars) {
-				return CheckTrust(action, category, (limitPrice > 0) ? Math.Round(limitPrice, __iDecimalPoint) : 0, lots, name, isReverse, openNextBar);
+				//檢查是否下單類型是平倉單(如果是平倉單需要將委託倉內的所有同向平倉單都取消, 全部取消完畢才可以在下平倉單)
+				if (action == EOrderAction.Sell || action == EOrderAction.BuyToCover) {
+					bool bRet = false;
+					int iCount = __cEntrusts.Count;
+					if (iCount > 0) {
+						for (int i = 0; i < iCount; i++) {
+							TradeOrder cTemp = __cEntrusts[i];
+							if (cTemp.IsTrusted && cTemp.Price > 0 && cTemp.Contracts > 0 && cTemp.Action == action) {
+								if (!cTemp.IsCancel) {
+									SendTrust(cTemp, true);  //送出取消委託單命令
+									cTemp.IsCancel = true;
+								}
+								bRet = true;
+							}
+						}
+					}
+
+					if (bRet || __cDeals.Count > 0) {
+						return false;
+					}
+				}
+
+				TradeOrder cTrust = __cEntrusts.GetTradeFromName(name);
+				if (cTrust != null) {
+					if (openNextBar) {
+						if (!cTrust.IsSended) {
+							cTrust.Price = limitPrice;  //支援可以下出 NextBar 的限價單(沒有指定會以 0 送出)
+							__cNextBarRequires.Add(name);  //標記 NextBar 時, 可以下單
+							return true;
+						}
+						return false;
+					} else {
+						if (cTrust.Price == limitPrice) {  //委託價格一樣就忽略
+							return false;
+						} else {
+							if (cTrust.IsTrusted && !cTrust.IsCancel) {  //如果已經委託完成就取消單號
+								SendTrust(cTrust, true);  //向下單機傳送取消委託單的命令
+								cTrust.IsCancel = true;
+							}
+							return false;
+						}
+					}
+				}
+
+				TradeOrder cOrder = new TradeOrder();  //建立預約委託單的資訊
+				cOrder.Action = action;
+				cOrder.BarNumber = Bars.CurrentBar;
+				cOrder.Category = category;
+				cOrder.Contracts = lots;
+				cOrder.Name = name;
+				cOrder.Price = limitPrice;
+				cOrder.IsReverse = isReverse;
+				cOrder.SymbolId = GetOrderSymbol();
+				cOrder.Time = DateTime.Now;
+				cOrder.Ticket = (openNextBar) ? name : GetTrustID();
+				__cEntrusts.Add(cOrder);  //加入至委託列表內
+
+				if (openNextBar) {  //如果需要在下一根 Bars 下單, 就先保留 name 在佇列, 以方便比對委託單
+					__cReserves.Enqueue(name);
+					__cNextBarRequires.Add(name);
+				} else {
+					if (__cCloseOrder == null) {
+						SendTrust(cOrder);  //傳送新委託單給下單機
+					}
+				}
+				return true;
 			}
 			return false;
 		}
@@ -289,7 +354,7 @@ namespace Netwings {
 		/// <param name="trust">交易訂單資訊</param>
 		/// <param name="isCancel">是否要取消此交易訂單(成功委託才能取消訂單)</param>
 		/// <returns>返回值: true=成功, false=失敗</returns>
-		bool ITradeSender.Send(TradeOrder trust, bool isCancel) {
+		bool IOrderSender.Send(TradeOrder trust, bool isCancel) {
 			return this.SendTrust(trust, isCancel);
 		}
 
@@ -330,6 +395,7 @@ namespace Netwings {
 		protected override void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
+				
 				if (disposing) {
 					base.Dispose(disposing);
 
@@ -425,75 +491,6 @@ namespace Netwings {
 			if (__cCurrentPosition.OpenLots > 0) {  //檢查是否有開倉(有開倉就要發送這個更新事件, 這樣損益才會被更新)
 				OnResponse(null, Bars.Request.Symbol, ResponseType.Update);
 			}
-		}
-
-		private bool CheckTrust(EOrderAction action, OrderCategory category, double limitPrice, int lots, string name, bool isReverse, bool openNextBar) {
-			//檢查是否下單類型是平倉單(如果是平倉單需要將委託倉內的所有同向平倉單都取消, 全部取消完畢才可以在下平倉單)
-			if (action == EOrderAction.Sell || action == EOrderAction.BuyToCover) {
-				bool bRet = false;
-				int iCount = __cEntrusts.Count;
-				if (iCount > 0) {
-					for (int i = 0; i < iCount; i++) {
-						TradeOrder cTemp = __cEntrusts[i];
-						if (cTemp.IsTrusted && cTemp.Price > 0 && cTemp.Contracts > 0 && cTemp.Action == action) {
-							if (!cTemp.IsCancel) {
-								SendTrust(cTemp, true);  //送出取消委託單命令
-								cTemp.IsCancel = true;
-							}
-							bRet = true;
-						}
-					}
-				}
-
-				if (bRet || __cDeals.Count > 0) {
-					return false;
-				}
-			}
-
-			TradeOrder cTrust = __cEntrusts.GetTradeFromName(name);
-			if (cTrust != null) {
-				if (openNextBar) {
-					if (!cTrust.IsSended) {
-						cTrust.Price = limitPrice;  //支援可以下出 NextBar 的限價單(沒有指定會以 0 送出)
-						__cNextBarRequires.Add(name);  //標記 NextBar 時, 可以下單
-						return true;
-					}
-					return false;
-				} else {
-					if (cTrust.Price == limitPrice) {  //委託價格一樣就忽略
-						return false;
-					} else {
-						if (cTrust.IsTrusted && !cTrust.IsCancel) {  //如果已經委託完成就取消單號
-							SendTrust(cTrust, true);  //向下單機傳送取消委託單的命令
-							cTrust.IsCancel = true;
-						}
-						return false;
-					}
-				}
-			}
-
-			TradeOrder cOrder = new TradeOrder();  //建立預約委託單的資訊
-			cOrder.Action = action;
-			cOrder.BarNumber = Bars.CurrentBar;
-			cOrder.Category = category;
-			cOrder.Contracts = lots;
-			cOrder.Name = name;
-			cOrder.Price = limitPrice;
-			cOrder.IsReverse = isReverse;
-			cOrder.SymbolId = GetOrderSymbol();
-			cOrder.Time = DateTime.Now;
-			cOrder.Ticket = (openNextBar) ? name : GetTrustID();
-			__cEntrusts.Add(cOrder);  //加入至委託列表內
-
-			if (openNextBar) {  //如果需要在下一根 Bars 下單, 就先保留 name 在佇列, 以方便比對委託單
-				__cReserves.Enqueue(name);
-				__cNextBarRequires.Add(name);
-			} else {
-				if (__cCloseOrder == null) {
-					SendTrust(cOrder);  //傳送新委託單給下單機
-				}
-			}
-			return true;
 		}
 
 		private bool CheckSymbol(string symbol1, string symbol2) {
@@ -677,4 +674,4 @@ namespace Netwings {
 			}
 		}
 	}
-} //680行
+} //677行

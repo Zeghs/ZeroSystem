@@ -4,10 +4,10 @@ using Netwings.Orders;
 
 namespace Zeghs.Orders {
 	/// <summary>
-	///   限價或停損單下單交易員類別
+	///   限價下單交易員類別
 	/// </summary>
 	internal sealed class OrderPriced : IOrderPriced {
-		private ITradeSender __cSender = null;
+		private IOrderSender __cSender = null;
 		private TradeList<TradeOrder> __cEntrusts = null;
 		private ISeries<IMarketPosition> __cPositions = null;
 
@@ -39,7 +39,7 @@ namespace Zeghs.Orders {
 
 			__cEntrusts = (service as IOrderEntrust).Entrusts;
 
-			__cSender = service as ITradeSender;
+			__cSender = service as IOrderSender;
 			__cPositions = service.Positions;
 		}
 

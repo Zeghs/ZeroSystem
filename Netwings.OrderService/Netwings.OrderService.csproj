@@ -56,7 +56,7 @@
     </Compile>
     <Compile Include="Netwings\Orders\IOrderEntrust.cs" />
     <Compile Include="Netwings\LargeOrderService.cs" />
-    <Compile Include="Netwings\Orders\ITradeSender.cs" />
+    <Compile Include="Netwings\Orders\IOrderSender.cs" />
     <Compile Include="Netwings\Orders\OrderMarket.cs" />
     <Compile Include="Netwings\Orders\OrderPriced.cs" />
     <Compile Include="Netwings\RealOrderService.cs" />

@@ -19,7 +19,7 @@ using Netwings.Event;
 using Netwings.Orders;
 
 namespace Netwings {
-	public sealed class SimulateOrderService : AbstractOrderService, ITradeSender, IOrderEntrust {
+	public sealed class SimulateOrderService : AbstractOrderService, IOrderSender, IOrderEntrust {
 		private static readonly ILog logger = LogManager.GetLogger(typeof(SimulateOrderService));
 		private static int __iDealIndex = 0;
 		private static int __iTrustIndex = 0;
@@ -183,7 +183,48 @@ namespace Netwings {
 		/// <param name="name">下單註解</param>
 		/// <param name="openNextBar">是否開倉在下一根 Bars</param>
 		public bool Send(EOrderAction action, OrderCategory category, double limitPrice, int lots, bool isReverse, double touchPrice = 0, string name = null, bool openNextBar = false) {
-			return CheckTrust(action, category, (limitPrice > 0) ? Math.Round(limitPrice, __iDecimalPoint) : 0, lots, name, isReverse, openNextBar);
+			TradeOrder cTrust = __cEntrusts.GetTradeFromName(name);
+			if (cTrust != null) {
+				if (openNextBar) {
+					__cNextBarRequires.Add(name);  //標記 NextBar 時, 可以下單
+					return true;
+				} else {
+					if (cTrust.Price == limitPrice) {  //委託價格一樣就忽略
+						return false;
+					} else {
+						if (cTrust.IsTrusted) {  //如果已經委託完成就取消單號
+							__cEntrusts.Remove(cTrust.Ticket);  //從委託陣列中移除
+						} else {  //如果還沒有委託成功
+							return false;  //直接離開(可能需要等到委託成功之後才能處理)
+						}
+					}
+				}
+			}
+
+			TradeOrder cOrder = new TradeOrder();  //建立預約委託單的資訊
+			cOrder.Action = action;
+			cOrder.BarNumber = Bars.CurrentBar;
+			cOrder.Category = category;
+			cOrder.Contracts = lots;
+			cOrder.Name = name;
+			cOrder.Price = limitPrice;
+			cOrder.IsReverse = isReverse;
+			cOrder.SymbolId = Bars.Request.Symbol;
+			cOrder.Time = Bars.Time.Value;
+			cOrder.Ticket = (openNextBar) ? name : GetTrustID();
+			__cEntrusts.Add(cOrder);  //加入至委託列表內
+
+			if (openNextBar) {  //如果需要在下一根 Bars 下單, 就先保留 name 在佇列, 以方便比對委託單
+				__cReserves.Enqueue(name);
+				__cNextBarRequires.Add(name);
+			} else {
+				if (isReverse) {  //如果有反轉倉單
+					CancelLimit(action);  //取消所有反向之前的限價委託單
+				}
+
+				SendTrust(cOrder);  //傳送新委託單(模擬成交)
+			}
+			return true;
 		}
 
 		/// <summary>
@@ -192,7 +233,7 @@ namespace Netwings {
 		/// <param name="trust">交易訂單資訊</param>
 		/// <param name="isCancel">是否要取消此交易訂單(成功委託才能取消訂單)</param>
 		/// <returns>返回值: true=成功, false=失敗</returns>
-		bool ITradeSender.Send(TradeOrder trust, bool isCancel) {
+		bool IOrderSender.Send(TradeOrder trust, bool isCancel) {
 			this.SendTrust(trust, Bars.Close.Value);
 			return true;
 		}
@@ -328,51 +369,6 @@ namespace Netwings {
 			}
 		}
 
-		private bool CheckTrust(EOrderAction action, OrderCategory category, double limitPrice, int lots, string name, bool isReverse, bool openNextBar) {
-			TradeOrder cTrust = __cEntrusts.GetTradeFromName(name);
-			if (cTrust != null) {
-				if (openNextBar) {
-					__cNextBarRequires.Add(name);  //標記 NextBar 時, 可以下單
-					return true;
-				} else {
-					if (cTrust.Price == limitPrice) {  //委託價格一樣就忽略
-						return false;
-					} else {
-						if (cTrust.IsTrusted) {  //如果已經委託完成就取消單號
-							__cEntrusts.Remove(cTrust.Ticket);  //從委託陣列中移除
-						} else {  //如果還沒有委託成功
-							return false;  //直接離開(可能需要等到委託成功之後才能處理)
-						}
-					}
-				}
-			}
-
-			TradeOrder cOrder = new TradeOrder();  //建立預約委託單的資訊
-			cOrder.Action = action;
-			cOrder.BarNumber = Bars.CurrentBar;
-			cOrder.Category = category;
-			cOrder.Contracts = lots;
-			cOrder.Name = name;
-			cOrder.Price = limitPrice;
-			cOrder.IsReverse = isReverse;
-			cOrder.SymbolId = Bars.Request.Symbol;
-			cOrder.Time = Bars.Time.Value;
-			cOrder.Ticket = (openNextBar) ? name : GetTrustID();
-			__cEntrusts.Add(cOrder);  //加入至委託列表內
-
-			if (openNextBar) {  //如果需要在下一根 Bars 下單, 就先保留 name 在佇列, 以方便比對委託單
-				__cReserves.Enqueue(name);
-				__cNextBarRequires.Add(name);
-			} else {
-				if (isReverse) {  //如果有反轉倉單
-					CancelLimit(action);  //取消所有反向之前的限價委託單
-				}
-				
-				SendTrust(cOrder);  //傳送新委託單(模擬成交)
-			}
-			return true;
-		}
-
 		private string GetDealID() {
 			int iID = Interlocked.Increment(ref __iDealIndex);
 			return iID.ToString();
@@ -463,4 +459,4 @@ namespace Netwings {
 			deal.Tax = cTax.GetTax(dTotals);
 		}
 	}
-} //456行
+} //462行

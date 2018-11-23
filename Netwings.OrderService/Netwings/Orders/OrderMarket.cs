@@ -7,7 +7,7 @@ namespace Zeghs.Orders {
 	///   市場單下單交易員類別
 	/// </summary>
 	internal sealed class OrderMarket : IOrderMarket {
-		private ITradeSender __cSender = null;
+		private IOrderSender __cSender = null;
 		private ISeries<IMarketPosition> __cPositions = null;
 
 		/// <summary>
@@ -37,7 +37,7 @@ namespace Zeghs.Orders {
 			Contracts cContract = args.Lots;
 			this.Info = new Order(args.Name, args.Action, OrderCategory.Market, (cContract.IsDefault) ? service.DefaultContracts : args.Lots, openNextBar, args.ExitTypeInfo);
 
-			__cSender = service as ITradeSender;
+			__cSender = service as IOrderSender;
 			__cPositions = service.Positions;
 		}
 		
