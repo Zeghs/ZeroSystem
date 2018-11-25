@@ -1,4 +1,5 @@
-﻿using PowerLanguage;
+﻿using System.Collections.Generic;
+using PowerLanguage;
 using Zeghs.Services;
 using Netwings.Orders;
 
@@ -33,7 +34,7 @@ namespace Zeghs.Orders {
 		/// <param name="service">AbstractOrderService 下單服務抽象類別</param>
 		/// <param name="args">下單參數</param>
 		internal OrderPriced(AbstractOrderService service, SOrderParameters args) {
-			this.ID = (new System.Guid()).GetHashCode();
+			this.ID = System.Guid.NewGuid().GetHashCode();
 			Contracts cContract = args.Lots;
 			this.Info = new Order(args.Name, args.Action, OrderCategory.Limit, (cContract.IsDefault) ? service.DefaultContracts : args.Lots, false, args.ExitTypeInfo);
 
@@ -41,6 +42,35 @@ namespace Zeghs.Orders {
 
 			__cSender = service as IOrderSender;
 			__cPositions = service.Positions;
+		}
+
+		/// <summary>
+		///   取消委託中訂單
+		/// </summary>
+		/// <param name="name">下單名稱(如果 name 為 null 則取消全部委託中的訂單)</param>
+		/// <returns>回傳值: true=成功, false=失敗</returns>
+		public bool Cancel(string name = null) {
+			bool bRet = false;
+			if (name == null) {
+				List<TradeOrder> cTrades = __cEntrusts.Trades;
+				int iCount = cTrades.Count;
+				for (int i = iCount - 1; i >= 0; i--) {
+					TradeOrder cOrder = cTrades[i];
+					if (cOrder.IsTrusted && cOrder.Action == Info.Action && cOrder.Category == Info.Category) {
+						bRet = __cSender.Send(cOrder, true);
+
+						if(!bRet) {
+							return false;
+						}
+					}
+				}
+			} else {
+				TradeOrder cOrder = __cEntrusts.GetTradeFromName(name);
+				if (cOrder != null) {
+					bRet = __cSender.Send(cOrder, true);
+				}
+			}
+			return bRet;
 		}
 
 		/// <summary>

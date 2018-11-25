@@ -33,7 +33,7 @@ namespace Zeghs.Orders {
 		/// <param name="args">下單參數</param>
 		/// <param name="openNextBar">是否開倉於下一根 Bars</param>
 		internal OrderMarket(AbstractOrderService service, SOrderParameters args, bool openNextBar) {
-			this.ID = (new System.Guid()).GetHashCode();
+			this.ID = System.Guid.NewGuid().GetHashCode();
 			Contracts cContract = args.Lots;
 			this.Info = new Order(args.Name, args.Action, OrderCategory.Market, (cContract.IsDefault) ? service.DefaultContracts : args.Lots, openNextBar, args.ExitTypeInfo);
 

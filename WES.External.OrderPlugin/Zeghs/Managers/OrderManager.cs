@@ -117,7 +117,7 @@ namespace Zeghs.Managers {
 
 		private bool CheckAbstractOrderService(Type baseType) {
 			Type cBase = baseType.BaseType;
-			if (cBase.FullName.Equals("System.Object")) {
+			if (cBase == null || cBase.FullName.Equals("System.Object")) {
 				return false;
 			} else if (cBase.FullName.Equals("Zeghs.Services.AbstractOrderService")) {
 				return true;

@@ -2,7 +2,7 @@
 	/// <summary>
 	///   價格單交易介面
 	/// </summary>
-	public interface IOrderPriced : IOrderObject {
+	public interface IOrderPriced : IOrderCancel, IOrderObject {
 		/// <summary>
 		///   送出下單命令
 		/// </summary>

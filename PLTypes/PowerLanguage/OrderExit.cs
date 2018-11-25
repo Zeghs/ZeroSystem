@@ -2,11 +2,11 @@
 	/// <summary>
 	///   平倉設定類別
 	/// </summary>
-	public class OrderExit {
+	public sealed class OrderExit {
 		/// <summary>
 		///   平倉類型
 		/// </summary>
-		public enum EExitType {
+		private enum EExitType {
 			/// <summary>
 			///   平倉所有單
 			/// </summary>
@@ -23,18 +23,12 @@
 			FromOne = 2
 		}
 
+		private EExitType __eExitType = EExitType.FromOne;
+
 		/// <summary>
 		///   [取得] 條目代號
 		/// </summary>
 		public int EntryID {
-			get;
-			private set;
-		}
-
-		/// <summary>
-		///   [取得] 平倉類型
-		/// </summary>
-		public OrderExit.EExitType ExitType {
 			get;
 			private set;
 		}
@@ -53,7 +47,7 @@
 		/// </summary>
 		public bool IsTotal {
 			get {
-				return this.ExitType == EExitType.Total;
+				return __eExitType == EExitType.Total;
 			}
 		}
 
@@ -67,7 +61,7 @@
 		}
 
 		private OrderExit(EExitType type, int entryId) {
-			this.ExitType = type;
+			__eExitType = type;
 			this.EntryID = entryId;
 		}
 
@@ -77,7 +71,8 @@
 		/// <param name="entry">IOrderObject 介面</param>
 		/// <returns>返回值: OrderExit 類別</returns>
 		public static OrderExit FromEntry(IOrderObject entry) {
-			return entry.Info.OrderExit;
+			OrderExit cOrderExit = entry.Info.OrderExit;
+			return new OrderExit(EExitType.FromOne, entry.ID);
 		}
 	}
 }

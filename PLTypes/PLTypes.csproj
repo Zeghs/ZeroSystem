@@ -42,6 +42,7 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PowerLanguage\IOrderCancel.cs" />
     <Compile Include="PowerLanguage\AxisSetting.cs" />
     <Compile Include="PowerLanguage\ChartPoint.cs" />
     <Compile Include="PowerLanguage\ChartSetting.cs" />

@@ -193,7 +193,7 @@ namespace Netwings {
 						return false;
 					} else {
 						if (cTrust.IsTrusted) {  //如果已經委託完成就取消單號
-							__cEntrusts.Remove(cTrust.Ticket);  //從委託陣列中移除
+							this.SendCancel(cTrust);
 						} else {  //如果還沒有委託成功
 							return false;  //直接離開(可能需要等到委託成功之後才能處理)
 						}
@@ -222,7 +222,7 @@ namespace Netwings {
 					CancelLimit(action);  //取消所有反向之前的限價委託單
 				}
 
-				SendTrust(cOrder);  //傳送新委託單(模擬成交)
+				this.SendTrust(cOrder);  //傳送新委託單(模擬成交)
 			}
 			return true;
 		}
@@ -234,7 +234,11 @@ namespace Netwings {
 		/// <param name="isCancel">是否要取消此交易訂單(成功委託才能取消訂單)</param>
 		/// <returns>返回值: true=成功, false=失敗</returns>
 		bool IOrderSender.Send(TradeOrder trust, bool isCancel) {
-			this.SendTrust(trust, Bars.Close.Value);
+			if (isCancel) {
+				this.SendCancel(trust);
+			} else {
+				this.SendTrust(trust, Bars.Close.Value);
+			}
 			return true;
 		}
 
@@ -332,11 +336,10 @@ namespace Netwings {
 					++__cPositions.Current;  //移動目前留倉部位陣列的目前索引值
 					__cPositions.Value = __cCurrentPosition;  //指定新的留倉部位至留倉陣列
 				}
-
-				Interlocked.Exchange(ref __iUsedClosedTempLots, 0);
 				OnResponse(cDeal, cDeal.SymbolId, ResponseType.Deal, (bClosed) ? null : __cCurrentPosition, (bClosed) ? __cPositions[1].ClosedTrades : __cCurrentPosition.ClosedTrades);
 			}
 
+			Interlocked.Exchange(ref __iUsedClosedTempLots, 0);  //處理成交單完畢之後將暫存平倉量歸0(這樣平倉單才能在下單, [開倉量 - 暫存平倉量 >= 下單平倉量] 此單才會被接受並成交)
 			if (__cCurrentPosition.OpenLots > 0) {  //檢查是否有開倉(有開倉就要發送這個更新事件, 這樣損益才會被更新)
 				OnResponse(null, Bars.Request.Symbol, ResponseType.Update);
 			}
@@ -360,8 +363,7 @@ namespace Netwings {
 							EOrderAction cAction = cTrust.Action;
 							
 							if (cAction == cAction1 || cAction == cAction2) {
-								__cEntrusts.Remove(cTrust.Ticket);
-								OnResponse(cTrust, cTrust.SymbolId, ResponseType.Cancel);
+								this.SendCancel(cTrust);
 							}
 						}
 					}
@@ -384,10 +386,10 @@ namespace Netwings {
 			if (cAction == EOrderAction.Sell || cAction == EOrderAction.BuyToCover) {
 				int iLots = __cCurrentPosition.OpenLots - __iUsedClosedTempLots;  //檢查平倉數量是否足夠
 				if (trust.Contracts > iLots) {  //平倉數量不足(不下單)
-					__cEntrusts.Remove(trust.Ticket);  //移除委託單
+					this.SendCancel(trust);  //取消此張平倉單
 					return;
 				} else {
-					Interlocked.Increment(ref __iUsedClosedTempLots);
+					Interlocked.Add(ref __iUsedClosedTempLots, trust.Contracts);  //將此平倉量累加至暫存平倉量變數
 				}
 			}
 
@@ -408,6 +410,13 @@ namespace Netwings {
 			OnResponse(trust, trust.SymbolId, ResponseType.Trust);
 		}
 
+		private void SendCancel(TradeOrder trust) {
+			if (trust.IsTrusted) {  //有委託狀態才可以取消訂單
+				__cEntrusts.Remove(trust.Ticket);
+				OnResponse(trust, trust.SymbolId, ResponseType.Cancel);
+			}
+		}
+
 		private void SendNextBars(int previousBar) {
 			while (__cReserves.Count > 0) {
 				string sTicket = __cReserves.Peek();  //取出以 name 當作 ticket 的委託單字串(NextBars 都先以 name 當作委託單的 ticket 號碼)
@@ -425,7 +434,6 @@ namespace Netwings {
 						if (cTrust.IsReverse) {  //如果有反轉倉單
 							CancelLimit(cTrust.Action);  //取消所有反向之前的限價委託單
 						}
-						
 						this.SendTrust(cTrust, Bars.Open.Value);  //發送委託單
 					}
 				}
@@ -459,4 +467,4 @@ namespace Netwings {
 			deal.Tax = cTax.GetTax(dTotals);
 		}
 	}
-} //462行
+} //470行

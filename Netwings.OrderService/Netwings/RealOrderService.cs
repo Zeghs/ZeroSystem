@@ -522,7 +522,8 @@ namespace Netwings {
 		}
 
 		private string GetTrustID() {
-			int iID = __iMaxTrustIndex++;
+			int iID = __iMaxTrustIndex;
+			Interlocked.Increment(ref __iMaxTrustIndex);
 			return iID.ToString();
 		}
 
@@ -674,4 +675,4 @@ namespace Netwings {
 			}
 		}
 	}
-} //677行
+} //678行
