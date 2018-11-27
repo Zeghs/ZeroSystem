@@ -38,7 +38,7 @@ namespace Netwings {
 		private HashSet<string> __cNextBarRequires = null;  //存放 NextBar 下單的判斷依據(當要下 NextBar 時會將 name 存入此結構內, 如果還沒到下一根 Bars 就會清除, 並等待下一次又觸發條件時再存入)
 		private HashSet<string> __cPNextBarRequires = null; //存放上一個 __cNextBarRequires 的變化, 因為 NextBar 是在下一根下單, 所以要提供的是上一根的最後狀態(提供給下 NextBars 的方法一個是否要下單的依據)
 		private AbstractProductProperty __cProperty = null;
-		private object __oLock = new object();      //lock 專用的變數
+		private object __oLock = new object();  //lock 專用的變數
 
 		/// <summary>
 		///   [取得] 目前留倉部位
@@ -153,7 +153,7 @@ namespace Netwings {
 				List<TradeOrder> cTrades = __cEntrusts.Trades;
 				
 				int iCount = cTrades.Count;
-				for (int i = 0; i < iCount; i++) {
+				for (int i = iCount - 1; i >= 0; i--) {
 					TradeOrder cTrust = cTrades[i];
 					if (!cTrust.IsDealed && cTrust.Price > 0) {  //市價單 = 0(只有限價單有價格)
 						SendLimit(cTrust);
@@ -183,6 +183,7 @@ namespace Netwings {
 		/// <param name="name">下單註解</param>
 		/// <param name="openNextBar">是否開倉在下一根 Bars</param>
 		public bool Send(EOrderAction action, OrderCategory category, double limitPrice, int lots, bool isReverse, double touchPrice = 0, string name = null, bool openNextBar = false) {
+			limitPrice = Math.Round(limitPrice, __iDecimalPoint);
 			TradeOrder cTrust = __cEntrusts.GetTradeFromName(name);
 			if (cTrust != null) {
 				if (openNextBar) {
@@ -221,7 +222,7 @@ namespace Netwings {
 				if (isReverse) {  //如果有反轉倉單
 					CancelLimit(action);  //取消所有反向之前的限價委託單
 				}
-
+				
 				this.SendTrust(cOrder);  //傳送新委託單(模擬成交)
 			}
 			return true;
@@ -281,7 +282,6 @@ namespace Netwings {
 		protected override void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
-				
 				if (disposing) {
 					base.Dispose(disposing);
 
@@ -321,10 +321,6 @@ namespace Netwings {
 					cDeal = __cDeals.Dequeue();
 				}
 
-				if (cDeal.IsDealed) {  //檢查是否戳合完成
-					__cEntrusts.Remove(cDeal.Ticket);
-				}
-
 				cDeal.Ticket = GetDealID();  //填入成交單號(自動編號)
 				if (logger.IsInfoEnabled) logger.InfoFormat("[Deal] #{0} {1} {2} {3} at {4} {5} @{6}", cDeal.Ticket, cDeal.SymbolId, cDeal.Action, cDeal.Contracts, cDeal.Price, cDeal.Name, cDeal.Time.ToString("yyyy-MM-dd HH:mm:ss"));
 
@@ -335,6 +331,10 @@ namespace Netwings {
 
 					++__cPositions.Current;  //移動目前留倉部位陣列的目前索引值
 					__cPositions.Value = __cCurrentPosition;  //指定新的留倉部位至留倉陣列
+				}
+				
+				if (cDeal.IsDealed) {  //檢查是否戳合完成
+					__cEntrusts.Remove(cDeal.Ticket);
 				}
 				OnResponse(cDeal, cDeal.SymbolId, ResponseType.Deal, (bClosed) ? null : __cCurrentPosition, (bClosed) ? __cPositions[1].ClosedTrades : __cCurrentPosition.ClosedTrades);
 			}
@@ -385,7 +385,7 @@ namespace Netwings {
 			EOrderAction cAction = trust.Action;
 			if (cAction == EOrderAction.Sell || cAction == EOrderAction.BuyToCover) {
 				int iLots = __cCurrentPosition.OpenLots - __iUsedClosedTempLots;  //檢查平倉數量是否足夠
-				if (trust.Contracts > iLots) {  //平倉數量不足(不下單)
+				if (trust.Contracts > iLots) {   //平倉數量不足(不下單)
 					this.SendCancel(trust);  //取消此張平倉單
 					return;
 				} else {
@@ -393,21 +393,25 @@ namespace Netwings {
 				}
 			}
 
-			trust.IsDealed = true;
+			if (!trust.IsDealed) {
+				trust.IsDealed = true;
 
-			TradeOrder cDeal = trust.Clone();
-			cDeal.Price = (dealPrice == 0) ? Bars.Close.Value : dealPrice;
-			cDeal.Time = Bars.Time.Value;
-			SetTax(cDeal);
-			
-			double[] dValues = CalculateCommissions(cDeal);  //計算交易佣金與手續費用(由策略使用者自行決定的佣金與手續費設定所計算出來的價格)
-			cDeal.OtherFees = dValues[0];
-			cDeal.Fee = dValues[1];
+				TradeOrder cDeal = trust.Clone();
+				cDeal.Price = Math.Round((dealPrice == 0) ? Bars.Close.Value : dealPrice, __iDecimalPoint);
+				cDeal.Time = Bars.Time.Value;
+				SetTax(cDeal);
 
-			__cDeals.Enqueue(cDeal);
+				double[] dValues = CalculateCommissions(cDeal);  //計算交易佣金與手續費用(由策略使用者自行決定的佣金與手續費設定所計算出來的價格)
+				cDeal.OtherFees = dValues[0];
+				cDeal.Fee = dValues[1];
 
-			trust.Contracts = 0;
-			OnResponse(trust, trust.SymbolId, ResponseType.Trust);
+				lock (__cDeals) {
+					__cDeals.Enqueue(cDeal);
+				}
+
+				trust.Contracts = 0;
+				OnResponse(trust, trust.SymbolId, ResponseType.Trust);
+			}
 		}
 
 		private void SendCancel(TradeOrder trust) {
@@ -434,6 +438,7 @@ namespace Netwings {
 						if (cTrust.IsReverse) {  //如果有反轉倉單
 							CancelLimit(cTrust.Action);  //取消所有反向之前的限價委託單
 						}
+						
 						this.SendTrust(cTrust, Bars.Open.Value);  //發送委託單
 					}
 				}
@@ -453,7 +458,7 @@ namespace Netwings {
 		private void SendTrust(TradeOrder trust, double dealPrice = 0) {
 			trust.IsTrusted = true;
 			if (logger.IsInfoEnabled) logger.InfoFormat("[Trust] #{0} {1} {2} {3} at {4} {5} @{6}", trust.Ticket, trust.SymbolId, trust.Action, trust.Contracts, trust.Price, trust.Name, trust.Time.ToString("yyyy-MM-dd HH:mm:ss"));
-			
+
 			if (trust.Price == 0) {  //市價成交
 				OrderDeal(trust, dealPrice);
 			} else {
@@ -467,4 +472,4 @@ namespace Netwings {
 			deal.Tax = cTax.GetTax(dTotals);
 		}
 	}
-} //470行
+} //475行

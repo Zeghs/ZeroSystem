@@ -287,8 +287,7 @@ namespace Netwings {
 							TradeOrder cTemp = __cEntrusts[i];
 							if (cTemp.IsTrusted && cTemp.Price > 0 && cTemp.Contracts > 0 && cTemp.Action == action) {
 								if (!cTemp.IsCancel) {
-									SendTrust(cTemp, true);  //送出取消委託單命令
-									cTemp.IsCancel = true;
+									cTemp.IsCancel = SendTrust(cTemp, true);  //送出取消委託單命令
 								}
 								bRet = true;
 							}
@@ -300,6 +299,7 @@ namespace Netwings {
 					}
 				}
 
+				limitPrice = Math.Round(limitPrice, __iDecimalPoint);
 				TradeOrder cTrust = __cEntrusts.GetTradeFromName(name);
 				if (cTrust != null) {
 					if (openNextBar) {
@@ -314,8 +314,7 @@ namespace Netwings {
 							return false;
 						} else {
 							if (cTrust.IsTrusted && !cTrust.IsCancel) {  //如果已經委託完成就取消單號
-								SendTrust(cTrust, true);  //向下單機傳送取消委託單的命令
-								cTrust.IsCancel = true;
+								cTrust.IsCancel = SendTrust(cTrust, true);  //向下單機傳送取消委託單的命令
 							}
 							return false;
 						}
@@ -425,7 +424,7 @@ namespace Netwings {
 				.Append(trust.Contracts).Append(",")
 				.Append(trust.Price).Append(",")
 				.Append((isCancel) ? -1 : (bClose) ? 0 : 1).Append(",")
-				.Append(Bars.Close.Value).Append(",")
+				.Append(Math.Round(Bars.Close.Value, __iDecimalPoint)).Append(",")
 				.Append((isCancel) ? trust.Ticket : (trust.IsReverse) ? "1" : "0");
 
 			string sCommand = cBuilder.ToString();
@@ -675,4 +674,4 @@ namespace Netwings {
 			}
 		}
 	}
-} //678行
+} //677行

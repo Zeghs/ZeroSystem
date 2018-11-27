@@ -7,7 +7,7 @@
 		///   取消委託中訂單
 		/// </summary>
 		/// <param name="name">下單名稱(如果 name 為 null 則取消全部委託中的訂單)</param>
-		/// <returns>回傳值: true=成功, false=失敗</returns>
-		bool Cancel(string name = null);
+		/// <returns>回傳值: 取消委託中訂單的總口數</returns>
+		int Cancel(string name = null);
 	}
 }
