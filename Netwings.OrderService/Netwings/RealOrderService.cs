@@ -602,9 +602,9 @@ namespace Netwings {
 											cTrustOrder.Name = sTrustId;
 											cTrustOrder.Ticket = sTrustId;
 											cTrustOrder.SymbolId = sSymbolId;
-											cTrustOrder.Price = cTrustOrder.Price;
 											cTrustOrder.Contracts = iTrustCount;
 											cTrustOrder.Time = cTrust.委託時間;
+											cTrustOrder.Price = Math.Round(cTrust.委託價格, __iDecimalPoint);
 											cTrustOrder.Category = (cTrustOrder.Price == 0) ? OrderCategory.Market : OrderCategory.Limit;
 											
 											if (cTrust.倉別.Equals(__sClosedString)) {
@@ -654,11 +654,11 @@ namespace Netwings {
 							TradeOrder cDealOrder = cTempTrust.Clone();
 							cDealOrder.IsCancel = false;
 							cDealOrder.IsDealed = bDealed;
-							cDealOrder.Contracts = iDealLots;
-							cDealOrder.Price = cDeal.成交價格;
+							cDealOrder.Time = cDeal.成交時間;
 							cDealOrder.Fee = cDeal.手續費;
 							cDealOrder.Tax = cDeal.交易稅;
-							cDealOrder.Time = cDeal.成交時間;
+							cDealOrder.Contracts = iDealLots;
+							cDealOrder.Price = Math.Round(cDeal.成交價格, __iDecimalPoint);
 							
 							double[] dValues = CalculateCommissions(cDealOrder);  //計算其他佣金與手續費(通常真實交易會回報交易稅與眷商手續費, 這裡還可以計算其他的附加費用或是附加的手續費)
 							cDealOrder.OtherFees = dValues[0];
