@@ -40,8 +40,6 @@ namespace Zeghs.Forms {
 					return;
 				} else {
 					cQuoteInfo = new _QuoteInfo(exchangeName, dataSource, sSymbolId, dPrice);
-					cQuoteInfo.SymbolName = quote.SymbolName;
-
 					source.Add(cQuoteInfo);
 				}
 			} else {
@@ -56,7 +54,7 @@ namespace Zeghs.Forms {
 		private void RefreshGrid() {
 			if (!this.IsDisposed) {
 				if (this.dataGrid.InvokeRequired) {
-					this.dataGrid.Invoke((MethodInvoker) delegate {
+					this.dataGrid.BeginInvoke((MethodInvoker) delegate {
 						source.Refresh();
 					});
 				} else {
@@ -84,6 +82,14 @@ namespace Zeghs.Forms {
 		private void frmQuoteViewer_Resize(object sender, EventArgs e) {
 			this.dataGrid.Top = 21;
 			this.dataGrid.Height = this.ClientSize.Height - this.dataGrid.Top - 1;
+		}
+
+		private void dataGrid_DoubleClick(object sender, EventArgs e) {
+			_QuoteInfo cQuoteInfo = dataGrid.SelectedDataRows[0] as _QuoteInfo;
+			if (cQuoteInfo != null) {
+				frmTrustViewer frmTrustViewer = new frmTrustViewer(cQuoteInfo.DataSource, cQuoteInfo.SymbolId, cQuoteInfo.DecimalPoint);
+				frmTrustViewer.Show();
+			}
 		}
 
 		private void QuoteManager_onQuoteServiceSwitchChanged(object sender, QuoteServiceSwitchChangedEvent e) {

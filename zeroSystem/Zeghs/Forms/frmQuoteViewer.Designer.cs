@@ -30,7 +30,7 @@
 			cTextAlignView.TextAlignment = DevAge.Drawing.ContentAlignment.TopRight;
 
 			this.dataGrid.Rows.RowHeight = 21;  //處理第一列中文字體會被遮住的問題
-			this.dataGrid.Columns.Add("SymbolName", "名稱", typeof(string));
+			this.dataGrid.Columns.Add("SymbolId", "代號", typeof(string));
 			this.dataGrid.Columns.Add("Time", "時間", typeof(System.TimeSpan));
 			this.dataGrid.Columns.Add("Price", "成交", typeof(double));
 			this.dataGrid.Columns.Add("Volume", "總量", typeof(double));
@@ -45,7 +45,7 @@
 
 			source = new Data.PrimaryBoundList<string, Data._QuoteInfo>(256);
 			source.SetFunctionForGetPrimary((quote) => {
-				return quote.SymbolName;
+				return quote.SymbolId;
 			});
 			this.dataGrid.DataSource = source;
 		}
@@ -74,6 +74,7 @@
 			this.dataGrid.TabIndex = 1;
 			this.dataGrid.TabStop = true;
 			this.dataGrid.ToolTipText = "";
+			this.dataGrid.DoubleClick += new System.EventHandler(this.dataGrid_DoubleClick);
 			// 
 			// frmQuoteViewer
 			// 

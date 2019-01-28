@@ -33,7 +33,7 @@ namespace Zeghs.Forms {
 		private void LogService_onLogEvent(object sender, EventArgs e) {
 			if (!this.IsDisposed) {
 				if (this.dataGrid_Log.InvokeRequired) {
-					this.dataGrid_Log.Invoke((MethodInvoker) delegate {
+					this.dataGrid_Log.BeginInvoke((MethodInvoker) delegate {
 						__cLogService.Logs.Refresh();
 						ScrollBottom();
 					});

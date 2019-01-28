@@ -9,6 +9,8 @@ namespace Zeghs.Events {
 	/// </summary>
 	public sealed class ResponseEvent : EventArgs {
 		private string __sSymbolId = null;
+		private int __iLatestHistoryCount = 0;
+		private int __iLatestHistoryIndex = 0;
 		private ITradeOrder __cTradeOrder = null;
 		private List<ITrade> __cCloseTrades = null;
 		private TradeList<ITrade> __cOpenTrades = null;
@@ -20,6 +22,24 @@ namespace Zeghs.Events {
 		public List<ITrade> CloseTrades {
 			get {
 				return __cCloseTrades;
+			}
+		}
+
+		/// <summary>
+		///   [取得] 最近新增的歷史交易明細個數
+		/// </summary>
+		public int LatestHistoryCount {
+			get {
+				return __iLatestHistoryCount;
+			}
+		}
+
+		/// <summary>
+		///   [取得] 最近新增的歷史交易明細的起始索引(-1=沒有最新的平倉歷史明細資料)
+		/// </summary>
+		public int LatestHistoryIndex {
+			get {
+				return __iLatestHistoryIndex;
 			}
 		}
 
@@ -67,12 +87,16 @@ namespace Zeghs.Events {
 		/// <param name="type">回報類型</param>
 		/// <param name="openTrades">開倉交易單列表</param>
 		/// <param name="closeTrades">已平倉交易單列表</param>
-		public ResponseEvent(ITradeOrder tradeOrder, string symbolId, ResponseType type, TradeList<ITrade> openTrades, List<ITrade> closeTrades) {
+		/// <param name="latestHistoryCount">最近新增的歷史交易紀錄個數</param>
+		public ResponseEvent(ITradeOrder tradeOrder, string symbolId, ResponseType type, TradeList<ITrade> openTrades, List<ITrade> closeTrades, int latestHistoryCount) {
 			__cTradeOrder = tradeOrder;
 			__sSymbolId = symbolId;
 			__cType = type;
 			__cOpenTrades = openTrades;
 			__cCloseTrades = closeTrades;
+
+			__iLatestHistoryCount = latestHistoryCount;
+			__iLatestHistoryIndex = (__iLatestHistoryCount == 0) ? -1 : closeTrades.Count - latestHistoryCount;
 		}
 	}
 }

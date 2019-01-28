@@ -59,7 +59,7 @@ namespace LiveUpdate {
 
 				__bCompleted = true;  //完成更新
 
-				labText.Invoke((MethodInvoker) delegate {
+				labText.BeginInvoke((MethodInvoker) delegate {
 					labText.Text = "Update completed";
 				});
 
@@ -123,11 +123,11 @@ namespace LiveUpdate {
 		}
 
 		private void Compression_onExtractProgress(object sender, ProgressEvent e) {
-			labText.Invoke((MethodInvoker) delegate {
+			labText.BeginInvoke((MethodInvoker) delegate {
 				labText.Text = string.Format("Update files: {0} ({1} / {2})", e.FileName, e.Current.ToString("N"), e.Totals.ToString("N"));
 			});
 
-			progressBar.Invoke((MethodInvoker) delegate {
+			progressBar.BeginInvoke((MethodInvoker) delegate {
 				progressBar.Value = e.Current;
 				progressBar.Maximum = e.Totals;
 			});

@@ -179,6 +179,8 @@ namespace Zeghs.Forms {
 		}
 
 		private void menuItem_ExportProfile_Click(object sender, EventArgs e) {
+			saveDialog.DefaultExt = "profile";
+			saveDialog.Filter = "User Profile|*.profile";
 			DialogResult cResult = saveDialog.ShowDialog();
 			if (cResult == DialogResult.OK) {
 				string sFilename = saveDialog.FileName;
@@ -191,6 +193,8 @@ namespace Zeghs.Forms {
 		}
 
 		private void menuItem_ImportProfile_Click(object sender, EventArgs e) {
+			openDialog.DefaultExt = "profile";
+			openDialog.Filter = "User Profile|*.profile";
 			DialogResult cResult = openDialog.ShowDialog();
 			if (cResult == DialogResult.OK) {
 				string sFilename = openDialog.FileName;
@@ -200,6 +204,23 @@ namespace Zeghs.Forms {
 				CreateScriptFromProfile(cProfiles);
 
 				MessageBox.Show(__sMessageContent_001, __sMessageHeader_001, MessageBoxButtons.OK, MessageBoxIcon.Information);
+			}
+		}
+
+		private void menuItem_CsvReport_Click(object sender, EventArgs e) {
+			saveDialog.DefaultExt = "csv";
+			saveDialog.Filter = "CSV Trade Report|*.csv";
+			DialogResult cResult = saveDialog.ShowDialog();
+			if (cResult == DialogResult.OK) {
+				string sFilename = saveDialog.FileName;
+				saveDialog.FileName = string.Empty;
+
+				Loading.Create(() => {
+					frmSignalViewer frmSignalViewer = __cActivateForm as frmSignalViewer;
+					if (frmSignalViewer != null) {
+						frmSignalViewer.SaveCSV(sFilename);
+					}
+				});
 			}
 		}
 

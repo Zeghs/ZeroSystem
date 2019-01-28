@@ -16,6 +16,7 @@ namespace Zeghs.Forms {
 
 		private bool __bEdit = true;
 		private bool __bNewSetting = false;  //是否為新建立的設定
+		private bool __bUseDataSource = false;  //使否使用報價資訊來源
 		private ChartSetting __cChartSetting = null;
 		private RequestSetting __cRequestSetting = null;
 		private SortRangeRowsEventArgs __cSortRangeRowEvent = null;
@@ -143,11 +144,11 @@ namespace Zeghs.Forms {
 
 		private bool GetRequestSetting() {
 			string sDataSources = comboDataSources.Text;
-			if (sDataSources.Length == 0) {
+			if (__bUseDataSource && sDataSources.Length == 0) {
 				MessageBox.Show(__sMessageContent_001, __sMessageHeader_001, MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return false;
 			}
-
+			
 			string sSymbolId = comboProduct.Text;
 			if (sSymbolId.Length == 0) {
 				MessageBox.Show(__sMessageContent_002, __sMessageHeader_001, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -398,9 +399,18 @@ namespace Zeghs.Forms {
 				//加入所有已經啟動的報價資料來源名稱
 				List<AbstractQuoteService> cServices = QuoteManager.Manager.QuoteServices;
 				int iCount = cServices.Count;
-				for (int i = 0; i < iCount; i++) {
-					AbstractQuoteService cService = cServices[i];
-					comboDataSources.Items.Add(cService.DataSource);
+				if (iCount > 0) {
+					for (int i = 0; i < iCount; i++) {
+						AbstractQuoteService cService = cServices[i];
+						comboDataSources.Items.Add(cService.DataSource);
+					}
+					
+					comboDataSources.SelectedIndex = 0;
+					__bUseDataSource = true;
+				} else {
+					//讀取商品列表並載入
+					LoadProducts(string.Empty);
+					RefreshGrid();  //更新商品列表 DataGrid
 				}
 
 				//加入使用者之前所選過的商品名稱
@@ -414,7 +424,6 @@ namespace Zeghs.Forms {
 				//設定 ComboBox & listBox 索引值
 				comboLayer.Items.Add("New");
 				comboLayer.SelectedIndex = 0;
-				comboDataSources.SelectedIndex = 0;
 				comboResolution.SelectedIndex = 0;
 				comboRequestMode.SelectedIndex = 0;
 				listSubChart.SelectedIndex = 0;

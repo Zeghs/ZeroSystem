@@ -21,7 +21,7 @@ namespace Zeghs.Forms {
 			System.Timers.Timer cTimer = sender as System.Timers.Timer;
 			cTimer.Dispose();
 
-			this.Invoke((MethodInvoker) delegate {
+			this.BeginInvoke((MethodInvoker) delegate {
 				this.DialogResult = DialogResult.OK;
 			});
 		}

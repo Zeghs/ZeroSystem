@@ -66,7 +66,7 @@ namespace Zeghs.Orders {
 				}
 			} else {
 				TradeOrder cOrder = __cEntrusts.GetTradeFromName(name);
-				if (cOrder != null) {
+				if (cOrder != null && cOrder.IsTrusted && cOrder.Action == Info.Action && cOrder.Category == Info.Category) {
 					iCancelLots += cOrder.Contracts;
 
 					if (!cOrder.IsCancel) {

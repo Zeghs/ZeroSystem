@@ -234,10 +234,11 @@
               交易稅率規則介面
             </summary>
         </member>
-        <member name="M:Zeghs.Rules.ITax.GetTax(System.Double)">
+        <member name="M:Zeghs.Rules.ITax.GetTax(PowerLanguage.EOrderAction,System.Double)">
             <summary>
               取得交易稅金額
             </summary>
+            <param name="action">下單進出場動作列舉</param>
             <param name="tradeTotals">交易總金額</param>
             <returns>返回值:交易稅金</returns>
         </member>

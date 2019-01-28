@@ -35,7 +35,7 @@ namespace Zeghs.Forms {
 		private void OutputWriter_onOutputData(object sender, OutputDataEvent e) {
 			if (!this.IsDisposed) {
 				if (txtOutput.InvokeRequired) {
-					txtOutput.Invoke((MethodInvoker) delegate {
+					txtOutput.BeginInvoke((MethodInvoker) delegate {
 						WriteText(e.Data, e.IsNewLine);
 					});
 				} else {

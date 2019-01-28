@@ -18,8 +18,9 @@ namespace Taiwan.Rules.Taxs {
 			__dTaxRate = args["TaxRate"].Value<double>();
 		}
 
-		public double GetTax(double tradeTotals) {
-			return tradeTotals * __dTaxRate;
+		public double GetTax(EOrderAction action, double tradeTotals) {
+			//股票交易稅金只有在賣出或回補的時候要計算(買進或放空不需要交易稅)
+			return (action == EOrderAction.Sell || action == EOrderAction.BuyToCover) ? tradeTotals * __dTaxRate : 0;
 		}
 
 		public int ShowSetting() {

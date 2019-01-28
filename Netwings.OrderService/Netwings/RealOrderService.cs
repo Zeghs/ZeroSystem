@@ -394,7 +394,6 @@ namespace Netwings {
 		protected override void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
-				
 				if (disposing) {
 					base.Dispose(disposing);
 
@@ -471,12 +470,10 @@ namespace Netwings {
 					cDeal = __cDeals.Dequeue();
 				}
 
-				if (cDeal.IsDealed) {
-					__cEntrusts.Remove(cDeal.Ticket);
-				}
-
+				string sTicketID = cDeal.Ticket;
 				cDeal.Ticket = GetDealID();  //填入成交單號(自動編號)
 				bool bClosed = __cCurrentPosition.CheckPosition(cDeal);  //檢查是否已經平倉完畢
+				int iLatestHistoryCount = __cCurrentPosition.LatestHistoryCount;  //取得最新新增的平倉歷史明細個數
 				if (bClosed) {  //如果已經平倉完畢
 					__cCurrentPosition = new MarketPosition(16);  //重新建立新的留倉部位
 					__cCurrentPosition.SetBigPointValue(Bars.Info.BigPointValue);  //設定每一大點的交易金額
@@ -484,7 +481,11 @@ namespace Netwings {
 					++__cPositions.Current;  //移動目前留倉部位陣列的目前索引值
 					__cPositions.Value = __cCurrentPosition;  //指定新的留倉部位至留倉陣列
 				}
-				OnResponse(cDeal, cDeal.SymbolId, ResponseType.Deal, (bClosed) ? null : __cCurrentPosition, (bClosed) ? __cPositions[1].ClosedTrades : __cCurrentPosition.ClosedTrades);
+
+				if (cDeal.IsDealed) {  //最後一張成交單成交完畢則表示委託單的下單數量已經全部成交完畢(最後一張成交單成交完畢後委託單數量會為 0 且最後一張成交單的 IsDealed 為真)
+					__cEntrusts.Remove(sTicketID);  //當完全成交完畢後就移除委託單
+				}
+				OnResponse(cDeal, cDeal.SymbolId, ResponseType.Deal, (bClosed) ? null : __cCurrentPosition, (bClosed) ? __cPositions[1].ClosedTrades : __cCurrentPosition.ClosedTrades, iLatestHistoryCount);
 			}
 
 			if (__cCurrentPosition.OpenLots > 0) {  //檢查是否有開倉(有開倉就要發送這個更新事件, 這樣損益才會被更新)
@@ -652,7 +653,7 @@ namespace Netwings {
 
 							TradeOrder cDealOrder = cTempTrust.Clone();
 							cDealOrder.IsCancel = false;
-							cDealOrder.IsDealed = cTempTrust.Contracts == 0;
+							cDealOrder.IsDealed = bDealed;
 							cDealOrder.Contracts = iDealLots;
 							cDealOrder.Price = cDeal.成交價格;
 							cDealOrder.Fee = cDeal.手續費;
@@ -674,4 +675,4 @@ namespace Netwings {
 			}
 		}
 	}
-} //677行
+} //678行

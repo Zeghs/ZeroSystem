@@ -202,7 +202,6 @@ namespace Zeghs.Services {
 		protected virtual void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
-
 				if (disposing) {
 					onResponse = null;
 
@@ -221,9 +220,10 @@ namespace Zeghs.Services {
 		/// <param name="type">回報類型</param>
 		/// <param name="openTrades">開倉交易單列表</param>
 		/// <param name="closeTrades">已平倉交易單列表</param>
-		protected void OnResponse(ITradeOrder order, string symbolId, ResponseType type, TradeList<ITrade> openTrades = null, List<ITrade> closeTrades = null) {
+		/// <param name="latestHistoryCount">最近新增的歷史交易紀錄個數</param>
+		protected void OnResponse(ITradeOrder order, string symbolId, ResponseType type, TradeList<ITrade> openTrades = null, List<ITrade> closeTrades = null, int latestHistoryCount = 0) {
 			if (onResponse != null) {
-				onResponse(this, new ResponseEvent(order, symbolId, type, openTrades, closeTrades));
+				onResponse(this, new ResponseEvent(order, symbolId, type, openTrades, closeTrades, latestHistoryCount));
 			}
 		}
 	}

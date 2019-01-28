@@ -9,6 +9,7 @@ namespace Netwings.Orders {
 	/// </summary>
 	internal sealed class MarketPosition : TradeList<ITrade>, IMarketPosition {
 		private int __iHistoryLots = 0;
+		private int __iLatestHistoryCount = 0;
 		private double __dBigPointValue = 1;
 		private double __dHistoryProfit = 0;
 		private List<ITrade> __cHistorys = null;
@@ -99,6 +100,12 @@ namespace Netwings.Orders {
 			}
 		}
 
+		internal int LatestHistoryCount {
+			get {
+				return __iLatestHistoryCount;
+			}
+		}
+
 		/// <summary>
 		///   建構子
 		/// </summary>
@@ -145,7 +152,10 @@ namespace Netwings.Orders {
 					__cPositions.TryGetValue(iBSFlag, out cQueue);
 				}
 
+				int iPrevCount = __cHistorys.Count;  //保存目前歷史明細個數
 				CalculatePosition(cQueue, cTrade);
+				__iLatestHistoryCount = __cHistorys.Count - iPrevCount;  //計算出新增的歷史明細個數
+
 				if (this.OpenLots == 0) {
 					bClosed = true;
 				}
@@ -213,6 +223,7 @@ namespace Netwings.Orders {
 
 						SetParameters(cTrade);
 						queue.Dequeue();
+						
 						this.Remove(cTradeOrder.Ticket);
 					}
 				}
@@ -224,6 +235,7 @@ namespace Netwings.Orders {
 				foreach (Queue<Trade> cQueue in __cPositions.Values) {
 					cQueue.Clear();
 				}
+				
 				__cPositions.Clear();
 			}
 		}
@@ -255,6 +267,7 @@ namespace Netwings.Orders {
 				source.Fee -= cTradeOrder.Fee;
 				source.Tax -= cTradeOrder.Tax;
 			}
+			
 			source.Contracts -= splitContracts;
 			return cTradeOrder;
 		}

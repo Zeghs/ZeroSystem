@@ -12,7 +12,6 @@ namespace Zeghs.Services {
 
 		private bool __bBusy = false;
 		private bool __bDisposed = false;
-		private int __iCloseTradesIndex = 0;
 		private Timer __cTimer = null;
 		private TradeBoundList __cOpens = null;
 		private TradeBoundList __cTrusts = null;
@@ -55,6 +54,7 @@ namespace Zeghs.Services {
 			lock (__cQueue) {
 				__cQueue.Enqueue(response);
 			}
+			
 			__cTimer.Start();
 		}
 
@@ -129,10 +129,11 @@ namespace Zeghs.Services {
 								}
 							} else {
 								List<ITrade> cCloseTrades = cResponse.CloseTrades;
-								int iCount = cCloseTrades.Count;
-								if (iCount > 0) {
-									for (int i = __iCloseTradesIndex; i < iCount; i++) {
-										ITrade cTrade = cCloseTrades[i];
+								int iHistoryCount = cResponse.LatestHistoryCount;
+								if (iHistoryCount > 0) {
+									int iHistoryIndex = cResponse.LatestHistoryIndex;
+									for (int i = 0; i < iHistoryCount; i++) {
+										ITrade cTrade = cCloseTrades[iHistoryIndex + i];
 										ITradeOrder cExitOrder = cTrade.ExitOrder;
 
 										__cCloses.Add(new _TradeInfo(cTrade.EntryOrder, sSymbolId, 0));
@@ -142,7 +143,6 @@ namespace Zeghs.Services {
 											__cOpens.Remove(cTrade.Ticket);
 										}
 									}
-									__iCloseTradesIndex = (cResponse.OpenTrades == null) ? 0 : iCount;
 								}
 							}
 							break;

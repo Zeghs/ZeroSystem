@@ -69,6 +69,10 @@ namespace Zeghs.Forms {
 			}
 		}
 
+		internal void SaveCSV(string file) {
+			CsvReport.Save(__cTradeService.Opens, __cTradeService.Closes, file);
+		}
+
 		internal void SetProfileSetting(ProfileSetting profile) {
 			__cProfile = profile;
 		}
@@ -105,7 +109,7 @@ namespace Zeghs.Forms {
 			if (__cSignalObject != null) {
 				string sTitle = string.Format("{0}", __cSignalObject.About.Comment);
 				if (this.InvokeRequired) {
-					this.Invoke((MethodInvoker) delegate {
+					this.BeginInvoke((MethodInvoker) delegate {
 						this.Text = sTitle;
 						this.Invalidate(false);
 					});
@@ -131,7 +135,7 @@ namespace Zeghs.Forms {
 			if (!this.IsDisposed) {
 				if (grid.Visible) {
 					if (grid.InvokeRequired) {
-						grid.Invoke((MethodInvoker) delegate {
+						grid.BeginInvoke((MethodInvoker) delegate {
 							source.Refresh();
 						});
 					} else {
@@ -340,7 +344,7 @@ namespace Zeghs.Forms {
 		private void OutputWriter_onOutputData(object sender, OutputDataEvent e) {
 			if (!this.IsDisposed) {
 				if (txtOutput.InvokeRequired) {
-					txtOutput.Invoke((MethodInvoker) delegate {
+					txtOutput.BeginInvoke((MethodInvoker) delegate {
 						WriteText(e.Data, e.IsNewLine);
 					});
 				} else {

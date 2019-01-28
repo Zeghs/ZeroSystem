@@ -188,7 +188,7 @@
             </summary>
             <param name="disposing">是否處理受託管的資源</param>
         </member>
-        <member name="M:Zeghs.Services.AbstractOrderService.OnResponse(PowerLanguage.ITradeOrder,System.String,Zeghs.Orders.ResponseType,Zeghs.Orders.TradeList{PowerLanguage.ITrade},System.Collections.Generic.List{PowerLanguage.ITrade})">
+        <member name="M:Zeghs.Services.AbstractOrderService.OnResponse(PowerLanguage.ITradeOrder,System.String,Zeghs.Orders.ResponseType,Zeghs.Orders.TradeList{PowerLanguage.ITrade},System.Collections.Generic.List{PowerLanguage.ITrade},System.Int32)">
             <summary>
               發送回報事件
             </summary>
@@ -197,6 +197,7 @@
             <param name="type">回報類型</param>
             <param name="openTrades">開倉交易單列表</param>
             <param name="closeTrades">已平倉交易單列表</param>
+            <param name="latestHistoryCount">最近新增的歷史交易紀錄個數</param>
         </member>
         <member name="E:Zeghs.Services.AbstractOrderService.onResponse">
             <summary>
@@ -339,7 +340,7 @@
               回報事件類別
             </summary>
         </member>
-        <member name="M:Zeghs.Events.ResponseEvent.#ctor(PowerLanguage.ITradeOrder,System.String,Zeghs.Orders.ResponseType,Zeghs.Orders.TradeList{PowerLanguage.ITrade},System.Collections.Generic.List{PowerLanguage.ITrade})">
+        <member name="M:Zeghs.Events.ResponseEvent.#ctor(PowerLanguage.ITradeOrder,System.String,Zeghs.Orders.ResponseType,Zeghs.Orders.TradeList{PowerLanguage.ITrade},System.Collections.Generic.List{PowerLanguage.ITrade},System.Int32)">
             <summary>
               建構子
             </summary>
@@ -348,10 +349,21 @@
             <param name="type">回報類型</param>
             <param name="openTrades">開倉交易單列表</param>
             <param name="closeTrades">已平倉交易單列表</param>
+            <param name="latestHistoryCount">最近新增的歷史交易紀錄個數</param>
         </member>
         <member name="P:Zeghs.Events.ResponseEvent.CloseTrades">
             <summary>
               [取得] 已平倉交易單列表
+            </summary>
+        </member>
+        <member name="P:Zeghs.Events.ResponseEvent.LatestHistoryCount">
+            <summary>
+              [取得] 最近新增的歷史交易明細個數
+            </summary>
+        </member>
+        <member name="P:Zeghs.Events.ResponseEvent.LatestHistoryIndex">
+            <summary>
+              [取得] 最近新增的歷史交易明細的起始索引(-1=沒有最新的平倉歷史明細資料)
             </summary>
         </member>
         <member name="P:Zeghs.Events.ResponseEvent.OpenTrades">

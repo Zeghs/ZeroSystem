@@ -86,6 +86,7 @@
     <Compile Include="Zeghs\Data\_DataStreamInfo.cs" />
     <Compile Include="Zeghs\Data\_QuoteServiceInfo.cs" />
     <Compile Include="Zeghs\Data\_TradeInfo.cs" />
+    <Compile Include="Zeghs\Data\_DOMInfo.cs" />
     <Compile Include="Zeghs\Forms\frmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -97,6 +98,12 @@
     </Compile>
     <Compile Include="Zeghs\Forms\frmCommissionRuleSettings.Designer.cs">
       <DependentUpon>frmCommissionRuleSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Zeghs\Forms\Loading.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Zeghs\Forms\Loading.Designer.cs">
+      <DependentUpon>Loading.cs</DependentUpon>
     </Compile>
     <Compile Include="Zeghs\Forms\frmLogViewer.cs">
       <SubType>Form</SubType>
@@ -200,6 +207,12 @@
     <Compile Include="Zeghs\Forms\frmSignalViewer.Designer.cs">
       <DependentUpon>frmSignalViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Zeghs\Forms\frmTrustViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Zeghs\Forms\frmTrustViewer.Designer.cs">
+      <DependentUpon>frmTrustViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Zeghs\Forms\frmWelcome.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -216,6 +229,7 @@
     <Compile Include="Zeghs\Settings\ScriptSetting.cs" />
     <Compile Include="Zeghs\Settings\SignalSetting.cs" />
     <Compile Include="Zeghs\Settings\WindowStatus.cs" />
+    <Compile Include="Zeghs\Utils\CsvReport.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -234,6 +248,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Zeghs\Forms\frmConsoleViewer.resx">
       <DependentUpon>frmConsoleViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Zeghs\Forms\Loading.resx">
+      <DependentUpon>Loading.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Zeghs\Forms\frmLogViewer.resx">
       <DependentUpon>frmLogViewer.cs</DependentUpon>
@@ -282,6 +299,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Zeghs\Forms\frmSignalViewer.resx">
       <DependentUpon>frmSignalViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Zeghs\Forms\frmTrustViewer.resx">
+      <DependentUpon>frmTrustViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Zeghs\Forms\frmWelcome.resx">
       <DependentUpon>frmWelcome.cs</DependentUpon>
@@ -386,6 +406,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\loading.gif" />
+    <None Include="Resources\frmMain_menubar_menuItem_exportCSV.png" />
+    <None Include="Resources\frmMain_menubar_menuItem_exportReport.png" />
     <None Include="Resources\frmScriptParameters_toolbar_toolItem_Delete.png" />
     <None Include="Resources\frmScriptParameters_toolbar_toolItem_Create.png" />
     <None Include="Resources\frmMain_menubar_menuItem_exportProfile.png" />

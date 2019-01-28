@@ -109,9 +109,23 @@ namespace ZeroSystem.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap frmMain_menubar_menuItem_exportCSV {
+            get {
+                object obj = ResourceManager.GetObject("frmMain_menubar_menuItem_exportCSV", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap frmMain_menubar_menuItem_exportProfile {
             get {
                 object obj = ResourceManager.GetObject("frmMain_menubar_menuItem_exportProfile", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap frmMain_menubar_menuItem_exportReport {
+            get {
+                object obj = ResourceManager.GetObject("frmMain_menubar_menuItem_exportReport", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -245,6 +259,13 @@ namespace ZeroSystem.Properties {
         internal static System.Drawing.Bitmap frmWelcome_background {
             get {
                 object obj = ResourceManager.GetObject("frmWelcome_background", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap loading {
+            get {
+                object obj = ResourceManager.GetObject("loading", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

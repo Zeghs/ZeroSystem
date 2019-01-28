@@ -11,13 +11,18 @@ namespace Zeghs.Data {
 		private double __dVolume = 0;
 		private TimeSpan __cTime = TimeSpan.Zero;
 
+		public string DataSource {
+			get;
+			internal set;
+		}
+
 		public double Price {
 			get {
 				return Math.Round(__dPrice, __iDecimals);
 			}
 		}
 
-		public string SymbolName {
+		public string SymbolId {
 			get;
 			internal set;
 		}
@@ -34,7 +39,16 @@ namespace Zeghs.Data {
 			}
 		}
 
+		internal int DecimalPoint {
+			get {
+				return __iDecimals;
+			}
+		}
+
 		internal _QuoteInfo(string exchangeName, string dataSource, string symbolId, double price) {
+			this.SymbolId = symbolId;
+			this.DataSource = dataSource;
+
 			AbstractExchange cExchange = ProductManager.Manager.GetExchange(exchangeName);
 			AbstractProductProperty cProperty = cExchange.GetProperty(symbolId, dataSource);
 			

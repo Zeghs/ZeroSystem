@@ -18,7 +18,7 @@ namespace Taiwan.Rules.Taxs {
 			__dTaxRate = args["TaxRate"].Value<double>();
 		}
 
-		public double GetTax(double tradeTotals) {
+		public double GetTax(EOrderAction action, double tradeTotals) {
 			return tradeTotals * __dTaxRate;
 		}
 
