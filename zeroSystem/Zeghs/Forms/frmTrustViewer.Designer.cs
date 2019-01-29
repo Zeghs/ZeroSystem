@@ -86,9 +86,9 @@
 			this.ClientSize = new System.Drawing.Size(259, 126);
 			this.Controls.Add(this.dataGrid);
 			this.MaximizeBox = false;
-			this.MinimizeBox = false;
 			this.Name = "frmTrustViewer";
 			this.Text = "委託價量表";
+			this.TopMost = true;
 			this.Load += new System.EventHandler(this.frmTrustViewer_Load);
 			this.Shown += new System.EventHandler(this.frmTrustViewer_Shown);
 			this.ResumeLayout(false);

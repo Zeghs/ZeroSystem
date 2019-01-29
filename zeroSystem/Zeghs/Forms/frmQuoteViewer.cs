@@ -29,13 +29,12 @@ namespace Zeghs.Forms {
 		}
 
 		private void QuoteUpdate(string exchangeName, string dataSource, IQuote quote) {
-			string sSymbolName = quote.SymbolName;
-			int iIndex = source.IndexOf(sSymbolName);
+			string sSymbolId = quote.SymbolId;
+			int iIndex = source.IndexOf(sSymbolId);
 
 			_QuoteInfo cQuoteInfo = null;
 			double dPrice = quote.RealTick.Price;
 			if (iIndex == -1) {
-				string sSymbolId = quote.SymbolId;
 				if (sSymbolId.Length == 0) {
 					return;
 				} else {
