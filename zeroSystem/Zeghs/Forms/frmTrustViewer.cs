@@ -12,7 +12,7 @@ namespace Zeghs.Forms {
 		private int __iDecimalPoint = 0;
 		private string __sSymbolId = null;
 		private string __sDataSource = null;
-		private IQuote __cQuote = null;
+		private IQuoteStorage __cStorage = null;
 		private System.Timers.Timer __cTimer = null;
 
 		private object __oLock = new object();
@@ -39,8 +39,10 @@ namespace Zeghs.Forms {
 		}
 
 		private void TrustUpdate() {
-			DOMPrice[] cAsks = __cQuote.DOM.Ask;
-			DOMPrice[] cBids = __cQuote.DOM.Bid;
+			IQuote cQuote = __cStorage.GetQuote(__sSymbolId);
+			
+			DOMPrice[] cAsks = cQuote.DOM.Ask;
+			DOMPrice[] cBids = cQuote.DOM.Bid;
 
 			int iLength = cAsks.Length;
 			for (int i = 0; i < iLength; i++) {
@@ -63,8 +65,10 @@ namespace Zeghs.Forms {
 		private void frmTrustViewer_Shown(object sender, System.EventArgs e) {
 			AbstractQuoteService cService = QuoteManager.Manager.GetQuoteService(__sDataSource);
 			if (cService != null) {
-				__cQuote = cService.Storage.GetQuote(__sSymbolId);
-				if (__cQuote != null) {
+				__cStorage = cService.Storage;
+
+				IQuote cQuote = cService.Storage.GetQuote(__sSymbolId);
+				if (cQuote != null) {
 					__cTimer = new System.Timers.Timer(100);
 					__cTimer.AutoReset = false;
 					__cTimer.Elapsed += Timer_onElapsed;
