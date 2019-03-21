@@ -591,6 +591,11 @@
               [取得] 委託價量資訊
             </summary>
         </member>
+        <member name="P:Zeghs.Data.SeriesSymbolDataRand.Quotes">
+            <summary>
+              [取得] 即時報價資訊
+            </summary>
+        </member>
         <member name="P:Zeghs.Data.SeriesSymbolDataRand.Source">
             <summary>
               [取得] 來源 SeriesSymbolData 資料(此來源資料為)
@@ -824,6 +829,11 @@
         <member name="P:Zeghs.Data.Instrument.Open">
             <summary>
               [取得] 開盤價陣列資訊
+            </summary>
+        </member>
+        <member name="P:Zeghs.Data.Instrument.Quotes">
+            <summary>
+              [取得] 即時報價資訊
             </summary>
         </member>
         <member name="P:Zeghs.Data.Instrument.Request">

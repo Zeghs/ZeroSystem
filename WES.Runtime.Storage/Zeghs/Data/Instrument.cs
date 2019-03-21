@@ -138,6 +138,15 @@ namespace Zeghs.Data {
 		}
 
 		/// <summary>
+		///   [取得] 即時報價資訊
+		/// </summary>
+		public IQuote Quotes {
+			get {
+				return __cFullSymbolData.Quotes;
+			}
+		}
+
+		/// <summary>
 		///   [取得] 資料請求資訊
 		/// </summary>
 		public InstrumentDataRequest Request {
@@ -238,6 +247,7 @@ namespace Zeghs.Data {
 					}
 				}
 			}
+			
 			return this.Next(DateTime.MinValue);
 		}
 
@@ -301,4 +311,4 @@ namespace Zeghs.Data {
 			}
 		}
 	}
-}  //304行
+}  //314行

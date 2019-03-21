@@ -148,6 +148,22 @@ namespace Zeghs.Data {
 		}
 
 		/// <summary>
+		///   [取得] 即時報價資訊
+		/// </summary>
+		internal IQuote Quotes {
+			get {
+				if (__cQuoteStorage != null) {
+					string sSymbolId = __cSource.DataRequest.Symbol;
+					IQuote cQuote = __cQuoteStorage.GetQuote(sSymbolId);
+					if (cQuote != null) {
+						return cQuote;
+					}
+				}
+				return null;
+			}
+		}
+
+		/// <summary>
 		///   [取得] 來源 SeriesSymbolData 資料(此來源資料為)
 		/// </summary>
 		internal SeriesSymbolData Source {
@@ -227,4 +243,4 @@ namespace Zeghs.Data {
 			this.Current = __iCurrentBar;  //如果沒有使用此事件通知, 則需要有新的即時資訊進來才會重新修正 Current , 這樣在 Chart 上會看到資料並沒有到最新的 Bars 上
 		}
 	}
-}  //230行
+}  //246行
