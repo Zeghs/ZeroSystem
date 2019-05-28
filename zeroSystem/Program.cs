@@ -31,7 +31,6 @@ namespace zeroSystem {
 
 			SeriesManager.LoadSettings();
 			ScriptManager.LoadSettings();
-			ScriptManager.Manager.LoadScripts();
 
 			OrderManager.Manager.Refresh("plugins\\orders");
 			QuoteManager.Manager.Refresh("plugins\\quotes");

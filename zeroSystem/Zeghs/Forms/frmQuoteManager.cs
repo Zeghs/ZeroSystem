@@ -96,8 +96,8 @@ namespace Zeghs.Forms {
 			_QuoteServiceInfo cQuoteInfo = dataGrid.SelectedDataRows[0] as _QuoteServiceInfo;
 			frmQuoteServiceSettings cQuoteServiceSettings = new frmQuoteServiceSettings(QuoteManager.Manager.GetQuoteService(cQuoteInfo.GetInformation()));
 			
-			cQuoteServiceSettings.ShowDialog();
-			if (cQuoteInfo.Enabled) {
+			DialogResult cResult = cQuoteServiceSettings.ShowDialog();
+			if (cResult == DialogResult.OK && cQuoteInfo.Enabled) {
 				QuoteManager.Manager.StopQuoteService(cQuoteInfo.GetInformation());
 				
 				btnEnabled.Visible = !cQuoteInfo.Enabled;
@@ -106,8 +106,9 @@ namespace Zeghs.Forms {
 				btnRefreshSymbol.Enabled = cQuoteInfo.Enabled;
 
 				__bSetupChanged = true;
+
+				source.Refresh();
 			}
-			source.Refresh();
 		}
 
 		private void btnReLogin_Click(object sender, EventArgs e) {

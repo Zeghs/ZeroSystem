@@ -7,6 +7,7 @@ using log4net;
 using CSScriptLibrary;
 using Newtonsoft.Json;
 using PowerLanguage;
+using Zeghs.Events;
 using Zeghs.Scripts;
 using Zeghs.Services;
 using Zeghs.Informations;
@@ -63,6 +64,16 @@ namespace Zeghs.Managers {
 			File.WriteAllText(sFileName, sSettings, Encoding.UTF8);
 		}
 
+		/// <summary>
+		///   當讀取或新增腳本時會觸發此事件
+		/// </summary>
+		public event EventHandler<AddationScriptEvent> onAdditionScript = null;
+
+		/// <summary>
+		///   讀取所有腳本完成後會觸發此事件
+		/// </summary>
+		public event EventHandler onLoadScriptCompleted = null;
+		
 		private Dictionary<string, int> __cKeys = null;
 		private List<ScriptInformation> __cScripts = null;
 
@@ -139,6 +150,7 @@ namespace Zeghs.Managers {
 						FileInfo cOFileInfo = new FileInfo(sOutput);
 						DateTime cInputTime = cIFileInfo.LastAccessTime;
 						DateTime cOutputTime = cOFileInfo.LastAccessTime;
+						
 						if (cInputTime < cOutputTime) {
 							bComplier = false;
 						}
@@ -171,8 +183,14 @@ namespace Zeghs.Managers {
 					}
 				}
 
-				foreach (string sOutput in cOutputs.Values) {
-					this.AddScript(sOutput);  //載入腳本
+				if (cOutputs.Count > 0) {
+					foreach (string sOutput in cOutputs.Values) {
+						this.AddScript(sOutput);  //載入腳本
+					}
+
+					if (onLoadScriptCompleted != null) {
+						onLoadScriptCompleted(this, EventArgs.Empty);
+					}
 				}
 			}
 		}
@@ -208,6 +226,10 @@ namespace Zeghs.Managers {
 							__cScripts.Add(cScriptInfo);
 							__cKeys.Add(sFullAssembly, iIndex);
 						}
+					}
+
+					if (onAdditionScript != null) {
+						onAdditionScript(this, new AddationScriptEvent(assembly, cScriptInfo));
 					}
 				}
 			}

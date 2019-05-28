@@ -54,6 +54,7 @@
     <Compile Include="PowerLanguage\FunctionObject.cs" />
     <Compile Include="PowerLanguage\SignalObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Zeghs\Events\AddationScriptEvent.cs" />
     <Compile Include="Zeghs\Events\OutputDataEvent.cs" />
     <Compile Include="Zeghs\Events\ScriptParametersEvent.cs" />
     <Compile Include="Zeghs\Informations\ScriptInformation.cs" />

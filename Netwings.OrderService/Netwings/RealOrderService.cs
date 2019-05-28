@@ -285,7 +285,7 @@ namespace Netwings {
 					if (iCount > 0) {
 						for (int i = 0; i < iCount; i++) {
 							TradeOrder cTemp = __cEntrusts[i];
-							if (cTemp.IsTrusted && cTemp.Price > 0 && cTemp.Contracts > 0 && cTemp.Action == action) {
+							if (cTemp.IsTrusted && cTemp.Price > 0 && cTemp.Contracts > 0 && cTemp.Action == action && !cTemp.Name.Equals(name)) {
 								if (!cTemp.IsCancel) {
 									cTemp.IsCancel = SendTrust(cTemp, true);  //送出取消委託單命令
 								}

@@ -10,8 +10,13 @@
 		/// </summary>
 		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing) {
-			if (disposing && (components != null)) {
-				components.Dispose();
+			if (disposing) {
+				Zeghs.Managers.ScriptManager.Manager.onAdditionScript -= ScriptManager_onAdditionScript;
+				Zeghs.Managers.ScriptManager.Manager.onLoadScriptCompleted -= ScriptManager_onLoadScriptCompleted;
+
+				if (components != null) {
+					components.Dispose();
+				}
 			}
 			base.Dispose(disposing);
 		}
@@ -27,6 +32,7 @@
 			this.labMemo = new System.Windows.Forms.Label();
 			this.labCopyright = new System.Windows.Forms.Label();
 			this.labVersion = new System.Windows.Forms.Label();
+			this.labMessage = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// labTitle
@@ -73,6 +79,17 @@
 			this.labVersion.Size = new System.Drawing.Size(0, 16);
 			this.labVersion.TabIndex = 3;
 			// 
+			// labMessage
+			// 
+			this.labMessage.BackColor = System.Drawing.Color.Black;
+			this.labMessage.Font = new System.Drawing.Font("微軟正黑體", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+			this.labMessage.ForeColor = System.Drawing.Color.White;
+			this.labMessage.Location = new System.Drawing.Point(12, 261);
+			this.labMessage.Name = "labMessage";
+			this.labMessage.Size = new System.Drawing.Size(376, 16);
+			this.labMessage.TabIndex = 4;
+			this.labMessage.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
 			// frmWelcome
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -82,6 +99,7 @@
 			this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.ClientSize = new System.Drawing.Size(400, 300);
 			this.ControlBox = false;
+			this.Controls.Add(this.labMessage);
 			this.Controls.Add(this.labVersion);
 			this.Controls.Add(this.labCopyright);
 			this.Controls.Add(this.labMemo);
@@ -92,6 +110,7 @@
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Load += new System.EventHandler(this.frmWelcome_Load);
+			this.Shown += new System.EventHandler(this.frmWelcome_Shown);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -103,5 +122,6 @@
 		private System.Windows.Forms.Label labMemo;
 		private System.Windows.Forms.Label labCopyright;
 		private System.Windows.Forms.Label labVersion;
+		private System.Windows.Forms.Label labMessage;
 	}
 }

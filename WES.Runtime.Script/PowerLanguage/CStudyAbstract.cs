@@ -201,7 +201,12 @@ namespace PowerLanguage {
 					});
 				}
 			}
-			CalcBar();
+
+			try {
+				this.CalcBar();
+			} catch(Exception __errExcep) {
+				if (logger.IsErrorEnabled) logger.ErrorFormat("{0}\r\n{1}", __errExcep.Message, __errExcep.StackTrace);
+			}
 		}
 
 		internal void OnScriptParameters(ScriptParametersEvent e) {
@@ -219,10 +224,19 @@ namespace PowerLanguage {
 
 			//腳本初始化工作
 			CStudyInitialize();
-			Create();
+
+			try {
+				this.Create();
+			} catch (Exception __errExcep1) {
+				if (logger.IsErrorEnabled) logger.ErrorFormat("{0}\r\n{1}", __errExcep1.Message, __errExcep1.StackTrace);
+			}
 			
 			if (!__bDisposed) {  //檢查是否呼叫了 Dispose 方法(在呼叫 Create 方法內, 可能會因為某些資訊不正確而需要停止腳本運作的情況下, 會在呼叫 Dispose 後, 便停止後續的策略執行)
-				StartCalc();
+				try {
+					this.StartCalc();
+				} catch(Exception __errExcep2) {
+					if (logger.IsErrorEnabled) logger.ErrorFormat("{0}\r\n{1}", __errExcep2.Message, __errExcep2.StackTrace);
+				}
 				base.Start();  //呼叫父類別作啟動工作
 			}
 		}
@@ -253,4 +267,4 @@ namespace PowerLanguage {
 			}
 		}
 	}
-}  //256行
+}  //270行

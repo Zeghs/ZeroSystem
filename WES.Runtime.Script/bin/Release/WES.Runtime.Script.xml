@@ -67,6 +67,16 @@
               [取得] ScriptManager類別
             </summary>
         </member>
+        <member name="E:Zeghs.Managers.ScriptManager.onAdditionScript">
+            <summary>
+              當讀取或新增腳本時會觸發此事件
+            </summary>
+        </member>
+        <member name="E:Zeghs.Managers.ScriptManager.onLoadScriptCompleted">
+            <summary>
+              讀取所有腳本完成後會觸發此事件
+            </summary>
+        </member>
         <member name="P:Zeghs.Managers.ScriptManager.Scripts">
             <summary>
               [取得] 所有腳本資訊
@@ -802,6 +812,21 @@
         <member name="P:Zeghs.Utils.OutputWriter.Encoding">
             <summary>
               [取得] 字串編碼規則(Default)
+            </summary>
+        </member>
+        <member name="T:Zeghs.Events.AddationScriptEvent">
+            <summary>
+              新增腳本事件類別
+            </summary>
+        </member>
+        <member name="P:Zeghs.Events.AddationScriptEvent.Assembly">
+            <summary>
+              [取得] 腳本組件
+            </summary>
+        </member>
+        <member name="P:Zeghs.Events.AddationScriptEvent.ScriptInformation">
+            <summary>
+              [取得] 腳本資訊類別
             </summary>
         </member>
     </members>
