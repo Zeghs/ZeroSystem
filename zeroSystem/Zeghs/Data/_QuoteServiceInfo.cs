@@ -45,6 +45,11 @@ namespace Zeghs.Data {
 			}
 		}
 
+		public string LogonId {
+			get;
+			internal set;
+		}
+
 		public string Name {
 			get {
 				return __cQuoteServiceInfo.Name;

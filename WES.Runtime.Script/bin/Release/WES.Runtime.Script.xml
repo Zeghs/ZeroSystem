@@ -398,6 +398,21 @@
               [取得/設定] 主要資料串流編號
             </summary>
         </member>
+        <member name="T:Zeghs.Events.AddationScriptEvent">
+            <summary>
+              新增腳本事件類別
+            </summary>
+        </member>
+        <member name="P:Zeghs.Events.AddationScriptEvent.Assembly">
+            <summary>
+              [取得] 腳本組件
+            </summary>
+        </member>
+        <member name="P:Zeghs.Events.AddationScriptEvent.ScriptInformation">
+            <summary>
+              [取得] 腳本資訊類別
+            </summary>
+        </member>
         <member name="T:Zeghs.Scripts.ScriptPropertyAttribute">
             <summary>
               腳本屬性類別
@@ -812,21 +827,6 @@
         <member name="P:Zeghs.Utils.OutputWriter.Encoding">
             <summary>
               [取得] 字串編碼規則(Default)
-            </summary>
-        </member>
-        <member name="T:Zeghs.Events.AddationScriptEvent">
-            <summary>
-              新增腳本事件類別
-            </summary>
-        </member>
-        <member name="P:Zeghs.Events.AddationScriptEvent.Assembly">
-            <summary>
-              [取得] 腳本組件
-            </summary>
-        </member>
-        <member name="P:Zeghs.Events.AddationScriptEvent.ScriptInformation">
-            <summary>
-              [取得] 腳本資訊類別
             </summary>
         </member>
     </members>

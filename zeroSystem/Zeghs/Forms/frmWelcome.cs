@@ -20,7 +20,7 @@ namespace Zeghs.Forms {
 			ScriptManager.Manager.onAdditionScript += ScriptManager_onAdditionScript;
 			ScriptManager.Manager.onLoadScriptCompleted += ScriptManager_onLoadScriptCompleted;
 
-			labMessage.Text = "Complier script...";
+			labMessage.Text = "Loading script assembly...";
 
 			Task.Factory.StartNew(() => {
 				ScriptManager.Manager.LoadScripts();
@@ -37,17 +37,17 @@ namespace Zeghs.Forms {
 		}
 
 		private void ScriptManager_onAdditionScript(object sender, AddationScriptEvent e) {
-			labMessage.BeginInvoke((MethodInvoker) delegate {
-				labMessage.Text = string.Format("Loading  {0}...", e.ScriptInformation.Name);
+			labMessage.Invoke((MethodInvoker) delegate {
+				labMessage.Text = string.Format("Loading... {0} [{1}]", e.ScriptInformation.Name, e.ScriptInformation.Property.Version);
 			});
 		}
 
 		private void ScriptManager_onLoadScriptCompleted(object sender, EventArgs e) {
-			labMessage.BeginInvoke((MethodInvoker) delegate {
-				labMessage.Text = "Completed";
+			labMessage.Invoke((MethodInvoker) delegate {
+				labMessage.Text = "Starting...";
 			});
 
-			System.Timers.Timer cTimer = new System.Timers.Timer(3000);
+			System.Timers.Timer cTimer = new System.Timers.Timer(2000);
 			cTimer.AutoReset = false;
 			cTimer.Elapsed += Timer_onElapsed;
 			cTimer.Start();

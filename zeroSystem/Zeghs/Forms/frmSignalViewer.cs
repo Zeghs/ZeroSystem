@@ -73,6 +73,10 @@ namespace Zeghs.Forms {
 			CsvReport.Save(__cTradeService.Opens, __cTradeService.Closes, file);
 		}
 
+		internal void SaveJSON(string file) {
+			JsonReport.Save(__cTradeService.Opens, __cTradeService.Closes, file);
+		}
+
 		internal void SetProfileSetting(ProfileSetting profile) {
 			__cProfile = profile;
 		}

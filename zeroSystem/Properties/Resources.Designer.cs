@@ -116,6 +116,13 @@ namespace ZeroSystem.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap frmMain_menubar_menuItem_exportJSON {
+            get {
+                object obj = ResourceManager.GetObject("frmMain_menubar_menuItem_exportJSON", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap frmMain_menubar_menuItem_exportProfile {
             get {
                 object obj = ResourceManager.GetObject("frmMain_menubar_menuItem_exportProfile", resourceCulture);

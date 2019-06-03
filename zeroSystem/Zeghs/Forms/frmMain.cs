@@ -224,6 +224,23 @@ namespace Zeghs.Forms {
 			}
 		}
 
+		private void menuItem_JsonReport_Click(object sender, EventArgs e) {
+			saveDialog.DefaultExt = "json";
+			saveDialog.Filter = "JSON Trade Report|*.json";
+			DialogResult cResult = saveDialog.ShowDialog();
+			if (cResult == DialogResult.OK) {
+				string sFilename = saveDialog.FileName;
+				saveDialog.FileName = string.Empty;
+
+				Loading.Create(() => {
+					frmSignalViewer frmSignalViewer = __cActivateForm as frmSignalViewer;
+					if (frmSignalViewer != null) {
+						frmSignalViewer.SaveJSON(sFilename);
+					}
+				});
+			}
+		}
+
 		private void toolItem_productManager_Click(object sender, EventArgs e) {
 			frmProductManager frmProductManager = new frmProductManager();
 			frmProductManager.ShowDialog();

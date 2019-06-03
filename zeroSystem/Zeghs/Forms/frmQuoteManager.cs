@@ -21,10 +21,13 @@ namespace Zeghs.Forms {
 			InitializeSourceGrid();
 		}
 
-		private void frmQuoteManager_Load(object sender, EventArgs e) {
-			RefreshQuotePlugin();
-
-			timer.Enabled = true;
+		private void CheckAndUpdateAccount(_QuoteServiceInfo info) {
+			if (info.Enabled) {
+				AbstractQuoteService cService = QuoteManager.Manager.GetQuoteService(info.DataSource);
+				info.LogonId = cService.UserId;
+			} else {
+				info.LogonId = string.Empty;
+			}
 		}
 
 		private void RefreshQuotePlugin() {
@@ -33,11 +36,20 @@ namespace Zeghs.Forms {
 			QuoteManager.Manager.Refresh("plugins\\quotes");
 			QuoteServiceInformation[] cQuoteInfos = QuoteManager.Manager.GetQuoteServiceInformations();
 			foreach (QuoteServiceInformation cQuoteInfo in cQuoteInfos) {
-				source.Add(new _QuoteServiceInfo(cQuoteInfo));
+				_QuoteServiceInfo cData = new _QuoteServiceInfo(cQuoteInfo);
+				CheckAndUpdateAccount(cData);
+
+				source.Add(cData);
 			}
 
 			this.dataGrid.Selection.SelectRow(1, true);
 			source.Refresh();
+		}
+
+		private void frmQuoteManager_Load(object sender, EventArgs e) {
+			RefreshQuotePlugin();
+
+			timer.Enabled = true;
 		}
 
 		private void btnClose_Click(object sender, EventArgs e) {
@@ -53,6 +65,8 @@ namespace Zeghs.Forms {
 					btnDisabled.Visible = cQuoteInfo.Enabled;
 					btnReLogin.Enabled = cQuoteInfo.Enabled;
 					btnRefreshSymbol.Enabled = cQuoteInfo.Enabled;
+					
+					CheckAndUpdateAccount(cQuoteInfo);
 					source.Refresh();
 				
 					__bSetupChanged = true;
@@ -71,6 +85,8 @@ namespace Zeghs.Forms {
 					btnDisabled.Visible = cQuoteInfo.Enabled;
 					btnReLogin.Enabled = cQuoteInfo.Enabled;
 					btnRefreshSymbol.Enabled = cQuoteInfo.Enabled;
+
+					CheckAndUpdateAccount(cQuoteInfo);
 					source.Refresh();
 
 					__bSetupChanged = true;
@@ -107,6 +123,7 @@ namespace Zeghs.Forms {
 
 				__bSetupChanged = true;
 
+				CheckAndUpdateAccount(cQuoteInfo);
 				source.Refresh();
 			}
 		}

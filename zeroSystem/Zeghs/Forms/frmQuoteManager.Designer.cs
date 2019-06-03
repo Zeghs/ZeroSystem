@@ -31,6 +31,7 @@
 			this.dataGrid.Columns.Add("ProductVersion", "元件版本", typeof(string));
 			this.dataGrid.Columns.Add("Company", "開發廠商", typeof(string));
 			this.dataGrid.Columns.Add("DataSource", "資料來源名稱", typeof(string));
+			this.dataGrid.Columns.Add("LogonId", "登入帳號", typeof(string));
 			this.dataGrid.Columns.Add("PacketCountPerSeconds", "傳輸速率", typeof(string));
 			this.dataGrid.Columns.Add("PacketCount", "封包個數", typeof(string));
 			this.dataGrid.Columns[0].Width = 40;
@@ -40,10 +41,11 @@
 			this.dataGrid.Columns[3].Width = 70;
 			this.dataGrid.Columns[4].Width = 200;
 			this.dataGrid.Columns[5].Width = 150;
-			this.dataGrid.Columns[6].Width = 90;
-			this.dataGrid.Columns[6].DataCell.View = cTextAlignView;
+			this.dataGrid.Columns[6].Width = 100;
 			this.dataGrid.Columns[7].Width = 90;
 			this.dataGrid.Columns[7].DataCell.View = cTextAlignView;
+			this.dataGrid.Columns[8].Width = 90;
+			this.dataGrid.Columns[8].DataCell.View = cTextAlignView;
 
 			//修改選擇條的框線寬度與顏色
 			SourceGrid.Selection.SelectionBase cSelectionBase = this.dataGrid.Selection as SourceGrid.Selection.SelectionBase;

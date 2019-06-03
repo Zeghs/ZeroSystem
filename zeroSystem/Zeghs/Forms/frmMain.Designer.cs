@@ -33,26 +33,27 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
 			this.menubar = new System.Windows.Forms.MenuStrip();
 			this.menuItem_File = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuItem_ImportProfile = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuItem_ExportProfile = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItem_line01 = new System.Windows.Forms.ToolStripSeparator();
-			this.menuItem_ExportReport = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuItem_CsvReport = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItem_About = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolbar = new System.Windows.Forms.ToolStrip();
-			this.toolItem_quoteManager = new System.Windows.Forms.ToolStripButton();
-			this.toolItem_productManager = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolItem_cursor = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolItem_quote = new System.Windows.Forms.ToolStripButton();
-			this.toolItem_script = new System.Windows.Forms.ToolStripButton();
-			this.toolItem_logger = new System.Windows.Forms.ToolStripButton();
-			this.toolItem_console = new System.Windows.Forms.ToolStripButton();
 			this.statusbar = new System.Windows.Forms.StatusStrip();
 			this.dockPanels = new WeifenLuo.WinFormsUI.Docking.DockPanel();
 			this.openDialog = new System.Windows.Forms.OpenFileDialog();
 			this.saveDialog = new System.Windows.Forms.SaveFileDialog();
+			this.toolItem_quoteManager = new System.Windows.Forms.ToolStripButton();
+			this.toolItem_productManager = new System.Windows.Forms.ToolStripButton();
+			this.toolItem_cursor = new System.Windows.Forms.ToolStripButton();
+			this.toolItem_quote = new System.Windows.Forms.ToolStripButton();
+			this.toolItem_script = new System.Windows.Forms.ToolStripButton();
+			this.toolItem_logger = new System.Windows.Forms.ToolStripButton();
+			this.toolItem_console = new System.Windows.Forms.ToolStripButton();
+			this.menuItem_ImportProfile = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItem_ExportProfile = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItem_ExportReport = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItem_CsvReport = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItem_JsonReport = new System.Windows.Forms.ToolStripMenuItem();
 			this.menubar.SuspendLayout();
 			this.toolbar.SuspendLayout();
 			this.SuspendLayout();
@@ -81,43 +82,10 @@
 			this.menuItem_File.Size = new System.Drawing.Size(55, 20);
 			this.menuItem_File.Text = "檔案(F)";
 			// 
-			// menuItem_ImportProfile
-			// 
-			this.menuItem_ImportProfile.Image = global::ZeroSystem.Properties.Resources.frmMain_menubar_menuItem_importProfile;
-			this.menuItem_ImportProfile.Name = "menuItem_ImportProfile";
-			this.menuItem_ImportProfile.Size = new System.Drawing.Size(166, 22);
-			this.menuItem_ImportProfile.Text = "匯入使用者設定檔";
-			this.menuItem_ImportProfile.Click += new System.EventHandler(this.menuItem_ImportProfile_Click);
-			// 
-			// menuItem_ExportProfile
-			// 
-			this.menuItem_ExportProfile.Image = global::ZeroSystem.Properties.Resources.frmMain_menubar_menuItem_exportProfile;
-			this.menuItem_ExportProfile.Name = "menuItem_ExportProfile";
-			this.menuItem_ExportProfile.Size = new System.Drawing.Size(166, 22);
-			this.menuItem_ExportProfile.Text = "匯出使用者設定檔";
-			this.menuItem_ExportProfile.Click += new System.EventHandler(this.menuItem_ExportProfile_Click);
-			// 
 			// menuItem_line01
 			// 
 			this.menuItem_line01.Name = "menuItem_line01";
 			this.menuItem_line01.Size = new System.Drawing.Size(163, 6);
-			// 
-			// menuItem_ExportReport
-			// 
-			this.menuItem_ExportReport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuItem_CsvReport});
-			this.menuItem_ExportReport.Image = global::ZeroSystem.Properties.Resources.frmMain_menubar_menuItem_exportReport;
-			this.menuItem_ExportReport.Name = "menuItem_ExportReport";
-			this.menuItem_ExportReport.Size = new System.Drawing.Size(166, 22);
-			this.menuItem_ExportReport.Text = "匯出交易報表";
-			// 
-			// menuItem_CsvReport
-			// 
-			this.menuItem_CsvReport.Image = global::ZeroSystem.Properties.Resources.frmMain_menubar_menuItem_exportCSV;
-			this.menuItem_CsvReport.Name = "menuItem_CsvReport";
-			this.menuItem_CsvReport.Size = new System.Drawing.Size(116, 22);
-			this.menuItem_CsvReport.Text = "CSV格式";
-			this.menuItem_CsvReport.Click += new System.EventHandler(this.menuItem_CsvReport_Click);
 			// 
 			// menuItem_About
 			// 
@@ -145,6 +113,46 @@
 			this.toolbar.TabIndex = 2;
 			this.toolbar.Text = "toolStrip1";
 			// 
+			// toolStripSeparator1
+			// 
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+			// 
+			// statusbar
+			// 
+			this.statusbar.Location = new System.Drawing.Point(0, 544);
+			this.statusbar.Name = "statusbar";
+			this.statusbar.Size = new System.Drawing.Size(792, 22);
+			this.statusbar.TabIndex = 3;
+			this.statusbar.Text = "statusStrip1";
+			// 
+			// dockPanels
+			// 
+			this.dockPanels.AllowDrop = true;
+			this.dockPanels.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.dockPanels.DockBackColor = System.Drawing.SystemColors.AppWorkspace;
+			this.dockPanels.Location = new System.Drawing.Point(0, 49);
+			this.dockPanels.Name = "dockPanels";
+			this.dockPanels.Size = new System.Drawing.Size(792, 495);
+			this.dockPanels.TabIndex = 6;
+			this.dockPanels.ContentRemoved += new System.EventHandler<WeifenLuo.WinFormsUI.Docking.DockContentEventArgs>(this.dockPanels_ContentRemoved);
+			this.dockPanels.ActiveContentChanged += new System.EventHandler(this.dockPanels_ActiveDocumentChanged);
+			this.dockPanels.DragDrop += new System.Windows.Forms.DragEventHandler(this.dockPanels_DragDrop);
+			this.dockPanels.DragEnter += new System.Windows.Forms.DragEventHandler(this.dockPanels_DragEnter);
+			// 
+			// openDialog
+			// 
+			this.openDialog.RestoreDirectory = true;
+			// 
+			// saveDialog
+			// 
+			this.saveDialog.RestoreDirectory = true;
+			// 
 			// toolItem_quoteManager
 			// 
 			this.toolItem_quoteManager.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -165,11 +173,6 @@
 			this.toolItem_productManager.ToolTipText = "啟動商品資訊管理員";
 			this.toolItem_productManager.Click += new System.EventHandler(this.toolItem_productManager_Click);
 			// 
-			// toolStripSeparator1
-			// 
-			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-			// 
 			// toolItem_cursor
 			// 
 			this.toolItem_cursor.Checked = true;
@@ -183,11 +186,6 @@
 			this.toolItem_cursor.Text = "Cursor";
 			this.toolItem_cursor.ToolTipText = "Cursor";
 			this.toolItem_cursor.Click += new System.EventHandler(this.toolItem_CustomSelected_Click);
-			// 
-			// toolStripSeparator2
-			// 
-			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
 			// 
 			// toolItem_quote
 			// 
@@ -233,35 +231,47 @@
 			this.toolItem_console.ToolTipText = "輸出視窗";
 			this.toolItem_console.Click += new System.EventHandler(this.toolItem_DockViewer_Click);
 			// 
-			// statusbar
+			// menuItem_ImportProfile
 			// 
-			this.statusbar.Location = new System.Drawing.Point(0, 544);
-			this.statusbar.Name = "statusbar";
-			this.statusbar.Size = new System.Drawing.Size(792, 22);
-			this.statusbar.TabIndex = 3;
-			this.statusbar.Text = "statusStrip1";
+			this.menuItem_ImportProfile.Image = global::ZeroSystem.Properties.Resources.frmMain_menubar_menuItem_importProfile;
+			this.menuItem_ImportProfile.Name = "menuItem_ImportProfile";
+			this.menuItem_ImportProfile.Size = new System.Drawing.Size(166, 22);
+			this.menuItem_ImportProfile.Text = "匯入使用者設定檔";
+			this.menuItem_ImportProfile.Click += new System.EventHandler(this.menuItem_ImportProfile_Click);
 			// 
-			// dockPanels
+			// menuItem_ExportProfile
 			// 
-			this.dockPanels.AllowDrop = true;
-			this.dockPanels.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.dockPanels.DockBackColor = System.Drawing.SystemColors.AppWorkspace;
-			this.dockPanels.Location = new System.Drawing.Point(0, 49);
-			this.dockPanels.Name = "dockPanels";
-			this.dockPanels.Size = new System.Drawing.Size(792, 495);
-			this.dockPanels.TabIndex = 6;
-			this.dockPanels.ContentRemoved += new System.EventHandler<WeifenLuo.WinFormsUI.Docking.DockContentEventArgs>(this.dockPanels_ContentRemoved);
-			this.dockPanels.ActiveContentChanged += new System.EventHandler(this.dockPanels_ActiveDocumentChanged);
-			this.dockPanels.DragDrop += new System.Windows.Forms.DragEventHandler(this.dockPanels_DragDrop);
-			this.dockPanels.DragEnter += new System.Windows.Forms.DragEventHandler(this.dockPanels_DragEnter);
+			this.menuItem_ExportProfile.Image = global::ZeroSystem.Properties.Resources.frmMain_menubar_menuItem_exportProfile;
+			this.menuItem_ExportProfile.Name = "menuItem_ExportProfile";
+			this.menuItem_ExportProfile.Size = new System.Drawing.Size(166, 22);
+			this.menuItem_ExportProfile.Text = "匯出使用者設定檔";
+			this.menuItem_ExportProfile.Click += new System.EventHandler(this.menuItem_ExportProfile_Click);
 			// 
-			// openDialog
+			// menuItem_ExportReport
 			// 
-			this.openDialog.RestoreDirectory = true;
+			this.menuItem_ExportReport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItem_CsvReport,
+            this.menuItem_JsonReport});
+			this.menuItem_ExportReport.Image = global::ZeroSystem.Properties.Resources.frmMain_menubar_menuItem_exportReport;
+			this.menuItem_ExportReport.Name = "menuItem_ExportReport";
+			this.menuItem_ExportReport.Size = new System.Drawing.Size(166, 22);
+			this.menuItem_ExportReport.Text = "匯出交易報表";
 			// 
-			// saveDialog
+			// menuItem_CsvReport
 			// 
-			this.saveDialog.RestoreDirectory = true;
+			this.menuItem_CsvReport.Image = global::ZeroSystem.Properties.Resources.frmMain_menubar_menuItem_exportCSV;
+			this.menuItem_CsvReport.Name = "menuItem_CsvReport";
+			this.menuItem_CsvReport.Size = new System.Drawing.Size(152, 22);
+			this.menuItem_CsvReport.Text = "CSV格式";
+			this.menuItem_CsvReport.Click += new System.EventHandler(this.menuItem_CsvReport_Click);
+			// 
+			// menuItem_JsonReport
+			// 
+			this.menuItem_JsonReport.Image = global::ZeroSystem.Properties.Resources.frmMain_menubar_menuItem_exportJSON;
+			this.menuItem_JsonReport.Name = "menuItem_JsonReport";
+			this.menuItem_JsonReport.Size = new System.Drawing.Size(152, 22);
+			this.menuItem_JsonReport.Text = "JSON格式";
+			this.menuItem_JsonReport.Click += new System.EventHandler(this.menuItem_JsonReport_Click);
 			// 
 			// frmMain
 			// 
@@ -316,5 +326,6 @@
 		private System.Windows.Forms.ToolStripSeparator menuItem_line01;
 		private System.Windows.Forms.ToolStripMenuItem menuItem_ExportReport;
 		private System.Windows.Forms.ToolStripMenuItem menuItem_CsvReport;
+		private System.Windows.Forms.ToolStripMenuItem menuItem_JsonReport;
 	}
 }

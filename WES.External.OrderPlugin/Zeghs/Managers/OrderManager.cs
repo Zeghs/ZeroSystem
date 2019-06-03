@@ -38,14 +38,14 @@ namespace Zeghs.Managers {
 
 			if (orderSource != null) {
 				string[] sOrderParams = orderSource.Split(';');  //格式:元件模組名稱;下單服務名稱
-
 				OrderServiceInformation cOrderInfo = null;
 				lock (__cOrderServiceInfos) {
 					__cOrderServiceInfos.TryGetValue(sOrderParams[0], out cOrderInfo);
 				}
 
 				if (cOrderInfo != null) {
-					Assembly cAssembly = Assembly.LoadFile(Path.GetFullPath(cOrderInfo.Location));
+					string sPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+					Assembly cAssembly = Assembly.LoadFile(Path.GetFullPath(sPath + "\\" + cOrderInfo.Location));
 					Type cType = cAssembly.GetType(sOrderParams[1]);
 
 					cOrderService = Activator.CreateInstance(cType) as AbstractOrderService;

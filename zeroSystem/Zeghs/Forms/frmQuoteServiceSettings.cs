@@ -22,9 +22,10 @@ namespace Zeghs.Forms {
 		}
 
 		private void btnCancel_Click(object sender, EventArgs e) {
-			__cQuoteService.Dispose();
-			__cQuoteService = null;
-
+			if (!__cQuoteService.IsLogin) {
+				__cQuoteService.Dispose();
+				__cQuoteService = null;
+			}
 			this.DialogResult = DialogResult.Cancel;
 		}
 
