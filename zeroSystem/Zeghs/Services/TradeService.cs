@@ -132,15 +132,17 @@ namespace Zeghs.Services {
 								int iHistoryCount = cResponse.LatestHistoryCount;
 								if (iHistoryCount > 0) {
 									int iHistoryIndex = cResponse.LatestHistoryIndex;
-									for (int i = 0; i < iHistoryCount; i++) {
-										ITrade cTrade = cCloseTrades[iHistoryIndex + i];
-										ITradeOrder cExitOrder = cTrade.ExitOrder;
+									if (iHistoryIndex > -1) {
+										for (int i = 0; i < iHistoryCount; i++) {
+											ITrade cTrade = cCloseTrades[iHistoryIndex + i];
+											ITradeOrder cExitOrder = cTrade.ExitOrder;
 
-										__cCloses.Add(new _TradeInfo(cTrade.EntryOrder, sSymbolId, 0));
-										__cCloses.Add(new _TradeInfo(cExitOrder, sSymbolId, cTrade.Profit));
+											__cCloses.Add(new _TradeInfo(cTrade.EntryOrder, sSymbolId, 0));
+											__cCloses.Add(new _TradeInfo(cExitOrder, sSymbolId, cTrade.Profit));
 
-										if (cOrder != cExitOrder) {  //如果參考不同(表示經過 Clone 後, 修正下單數量並平倉, 所以需要移除目前開倉資訊)
-											__cOpens.Remove(cTrade.Ticket);
+											if (cOrder != cExitOrder) {  //如果參考不同(表示經過 Clone 後, 修正下單數量並平倉, 所以需要移除目前開倉資訊)
+												__cOpens.Remove(cTrade.Ticket);
+											}
 										}
 									}
 								}
