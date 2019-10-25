@@ -94,7 +94,7 @@ namespace Zeghs.Forms {
 			__cChartSetting.IsShowNewPrice = checkShowNewPrice.Checked;
 
 			//座標資訊設定
-			AxisSetting cAxisSetting = new AxisSetting();
+			AxisSetting cAxisSetting = (__cChartSetting.Axis == null) ? new AxisSetting() : __cChartSetting.Axis;
 			int iAxisIndex = listAxisRange.SelectedIndex;
 			switch (iAxisIndex) {
 				case 0:  //目前區間

@@ -40,12 +40,15 @@ namespace Zeghs.Actions {
 					List<Layer> cLayers = cChart.Layers;
 					Layer cLayer = cLayers[__iLayerIndex];
 
-					double dScale = (__dLayerHeight + iOffset) / cChart.ChartRectangle.Height;
-					cLayers[__iLayerIndex + 1].HeightScale += cLayer.HeightScale - dScale;
-					cLayer.HeightScale = dScale;
+					//如果 Layers 只有一個就不需要計算鄰近的 Layer 的相對高度
+					if (cLayers.Count > 1) {
+						double dScale = (__dLayerHeight + iOffset) / cChart.ChartRectangle.Height;
+						cLayers[__iLayerIndex + 1].HeightScale += cLayer.HeightScale - dScale;
+						cLayer.HeightScale = dScale;
 
-					cChart.Resize();
-					cChart.Refresh();
+						cChart.Resize();
+						cChart.Refresh();
+					}
 				} else {
 					ZChart cChart = parameter.Chart;
 					List<Layer> cLayers = cChart.Layers;
