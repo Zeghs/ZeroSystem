@@ -44,17 +44,19 @@ namespace Zeghs.Forms {
 			DOMPrice[] cAsks = cQuote.DOM.Ask;
 			DOMPrice[] cBids = cQuote.DOM.Bid;
 
-			int iLength = cAsks.Length;
-			for (int i = 0; i < iLength; i++) {
-				_DOMInfo cDOM = null;
-				if (i < source.Count) {
-					cDOM = source.GetItemAt(i);
-				} else {
-					cDOM = new _DOMInfo(__iDecimalPoint);
-					source.Add(cDOM);
+			if (cAsks != null && cBids != null) {
+				int iLength = cAsks.Length;
+				for (int i = 0; i < iLength; i++) {
+					_DOMInfo cDOM = null;
+					if (i < source.Count) {
+						cDOM = source.GetItemAt(i);
+					} else {
+						cDOM = new _DOMInfo(__iDecimalPoint);
+						source.Add(cDOM);
+					}
+
+					cDOM.SetDOM(cAsks[i], cBids[i]);
 				}
-				
-				cDOM.SetDOM(cAsks[i], cBids[i]);
 			}
 		}
 
