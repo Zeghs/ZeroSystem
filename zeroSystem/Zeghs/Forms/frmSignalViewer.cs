@@ -382,8 +382,12 @@ namespace Zeghs.Forms {
 			if (sArgs == null) {
 				ShowScriptParameters();
 			} else {
-				for (int i = 0; i < iCount; i++) {
-					__cParameters[i].SetValue(sArgs[i]);
+				try {
+					for (int i = 0; i < iCount; i++) {
+						__cParameters[i].SetValue(sArgs[i]);
+					}
+				} catch {
+					ShowScriptParameters();
 				}
 			}
 		}

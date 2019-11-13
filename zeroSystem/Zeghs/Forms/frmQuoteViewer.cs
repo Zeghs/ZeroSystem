@@ -84,10 +84,12 @@ namespace Zeghs.Forms {
 		}
 
 		private void dataGrid_DoubleClick(object sender, EventArgs e) {
-			_QuoteInfo cQuoteInfo = dataGrid.SelectedDataRows[0] as _QuoteInfo;
-			if (cQuoteInfo != null) {
-				frmTrustViewer frmTrustViewer = new frmTrustViewer(cQuoteInfo.DataSource, cQuoteInfo.SymbolId, cQuoteInfo.DecimalPoint);
-				frmTrustViewer.Show();
+			if (dataGrid.SelectedDataRows.Length > 0) {
+				_QuoteInfo cQuoteInfo = dataGrid.SelectedDataRows[0] as _QuoteInfo;
+				if (cQuoteInfo != null) {
+					frmTrustViewer frmTrustViewer = new frmTrustViewer(cQuoteInfo.DataSource, cQuoteInfo.SymbolId, cQuoteInfo.DecimalPoint);
+					frmTrustViewer.Show();
+				}
 			}
 		}
 

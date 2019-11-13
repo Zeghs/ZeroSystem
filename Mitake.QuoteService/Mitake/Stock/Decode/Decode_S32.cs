@@ -88,7 +88,9 @@ namespace Mitake.Stock.Decode {
 		internal static void CalculatePrice(MitakeIndex index, DateTime time, double price) {
 			if (price > 0) {
 				if (index.Open == 0) {
-					index.Open = price;
+					if (Time.ConvertForTotalSeconds(time) == 32405) {  //9:00:05 才是真的開盤價格
+						index.Open = price;
+					}
 				}
 				
 				index.High = ((index.High == 0) ? price : ((price > index.High) ? price : index.High));
