@@ -10,9 +10,11 @@ namespace Zeghs.Services {
 	internal sealed class TradeService : IDisposable {
 		internal event EventHandler onUpdate = null;
 
-		private bool __bBusy = false;
 		private bool __bDisposed = false;
-		private Timer __cTimer = null;
+		private bool __bTradeBusy = false;
+		private bool __bUpdateBusy = false;
+		private Timer __cTradeTimer = null;
+		private Timer __cUpdateTimer = null;
 		private TradeBoundList __cOpens = null;
 		private TradeBoundList __cTrusts = null;
 		private Queue<ResponseEvent> __cQueue = null;
@@ -41,13 +43,18 @@ namespace Zeghs.Services {
 		internal TradeService() {
 			__cQueue = new Queue<ResponseEvent>(64);
 			__cCloses = new HistoryBoundList(512);
-			__cOpens = new TradeBoundList(64);
+			__cOpens = new TradeBoundList(64, true);
 			__cTrusts = new TradeBoundList(32);
 
-			__cTimer = new Timer();
-			__cTimer.Elapsed += Timer_onElapsed;
-			__cTimer.AutoReset = false;
-			__cTimer.Interval = 500;
+			__cTradeTimer = new Timer();
+			__cTradeTimer.Elapsed += TradeTimer_onElapsed;
+			__cTradeTimer.AutoReset = false;
+			__cTradeTimer.Interval = 500;
+			
+			__cUpdateTimer = new Timer();
+			__cUpdateTimer.Elapsed += UpdateTimer_onElapsed;
+			__cUpdateTimer.AutoReset = false;
+			__cUpdateTimer.Interval = 500;
 		}
 
 		internal void AddResponse(ResponseEvent response) {
@@ -55,7 +62,7 @@ namespace Zeghs.Services {
 				__cQueue.Enqueue(response);
 			}
 			
-			__cTimer.Start();
+			__cTradeTimer.Start();
 		}
 
 		public void Dispose() {
@@ -69,7 +76,8 @@ namespace Zeghs.Services {
 				if (disposing) {
 					onUpdate = null;
 
-					__cTimer.Dispose();
+					__cTradeTimer.Dispose();
+					__cUpdateTimer.Dispose();
 
 					__cQueue.Clear();
 					__cOpens.Clear();
@@ -79,12 +87,12 @@ namespace Zeghs.Services {
 			}
 		}
 		
-		private void Timer_onElapsed(object sender, ElapsedEventArgs e) {
+		private void TradeTimer_onElapsed(object sender, ElapsedEventArgs e) {
 			bool bBusy = false;
 			lock (__oLock) {
-				bBusy = __bBusy;
+				bBusy = __bTradeBusy;
 				if (!bBusy) {
-					__bBusy = true;
+					__bTradeBusy = true;
 				}
 			}
 
@@ -152,11 +160,31 @@ namespace Zeghs.Services {
 				}
 
 				if (bUpdate) {
+					__cUpdateTimer.Start();
 					onUpdate(this, EventArgs.Empty);
 				}
 
 				lock (__oLock) {
-					__bBusy = false;
+					__bTradeBusy = false;
+				}
+			}
+		}
+		
+		private void UpdateTimer_onElapsed(object sender, ElapsedEventArgs e) {
+			bool bBusy = false;
+			lock (__oLock) {
+				bBusy = __bUpdateBusy;
+				if (!bBusy) {
+					__bUpdateBusy = true;
+				}
+			}
+
+			if (!bBusy) {
+				__cOpens.SubTotal();
+				onUpdate(this, EventArgs.Empty);
+
+				lock (__oLock) {
+					__bUpdateBusy = false;
 				}
 			}
 		}

@@ -31,7 +31,7 @@ namespace Zeghs.Utils {
 		}
 
 		private static string ProcessOpenTrades(TradeBoundList trades) {
-			int iCount = trades.Count;
+			int iCount = trades.Count - 1;  //開倉資料用來小計總合放在最後一筆
 			if (iCount > 0) {
 				_TradeInfo[] cItems = new _TradeInfo[iCount];
 				for (int i = 0; i < iCount; i++) {

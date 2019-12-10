@@ -2,8 +2,10 @@
 	partial class frmMain {
 		private static readonly string __sMessageHeader_001 = "匯入成功";
 		private static readonly string __sMessageHeader_002 = "匯出成功";
+		private static readonly string __sMessageHeader_003 = "是否離開?";
 		private static readonly string __sMessageContent_001 = "使用者設定檔匯入成功並已加入目前使用者設定。";
 		private static readonly string __sMessageContent_002 = "使用者設定檔已轉出並匯出設定至檔案完成。";
+		private static readonly string __sMessageContent_003 = "是否要停止交易並離開 ZERO System？";
 
 		/// <summary>
 		/// Required designer variable.

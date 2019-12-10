@@ -105,11 +105,16 @@ namespace Zeghs.Forms {
 		}
 
 		private void frmMain_FormClosing(object sender, FormClosingEventArgs e) {
-			ProfileManager.Manager.onLoadProfile -= ProfileManager_onLoadProfile;
-			ProfileManager.Manager.Save("default");
+			DialogResult cResult = MessageBox.Show(__sMessageContent_003, __sMessageHeader_003, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			if (cResult == DialogResult.Yes) {
+				ProfileManager.Manager.onLoadProfile -= ProfileManager_onLoadProfile;
+				ProfileManager.Manager.Save("default");
 
-			this.dockPanels.SaveAsXml(string.Format("{0}__main.xml", GlobalSettings.Paths.ProfilePath));
-			__cCommons.Clear();
+				this.dockPanels.SaveAsXml(string.Format("{0}__main.xml", GlobalSettings.Paths.ProfilePath));
+				__cCommons.Clear();
+			} else {
+				e.Cancel = true;
+			}
 		}
 
 		private void frmMain_Load(object sender, EventArgs e) {

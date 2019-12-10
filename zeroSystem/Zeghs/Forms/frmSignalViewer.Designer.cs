@@ -85,6 +85,9 @@
 			this.dataGrid_Trade.Columns[9].Width = 110;
 			this.dataGrid_Trade.Columns[10].Width = 200;
 
+			//設定總計欄位合併(沒有使用的欄位直接合併, 有使用的欄位不需合併)
+			this.dataGrid_Trade.Summation(4, 1, 1, 1, 1, 1, 2);
+
 			//修改選擇條的框線寬度與顏色
 			SourceGrid.Selection.SelectionBase cSelectionBase = this.dataGrid_Trade.Selection as SourceGrid.Selection.SelectionBase;
 			cSelectionBase.Border = new DevAge.Drawing.RectangleBorder(new DevAge.Drawing.BorderLine(cSelectionBase.BackColor, 1));
@@ -142,7 +145,7 @@
 			this.components = new System.ComponentModel.Container();
 			this.dataGrid_Trust = new SourceGrid.DataGrid();
 			this.dataGrid_History = new Zeghs.Controls.CustomGrid();
-			this.dataGrid_Trade = new SourceGrid.DataGrid();
+			this.dataGrid_Trade = new Zeghs.Controls.CustomGrid();
 			this.tabControl = new System.Windows.Forms.TabControl();
 			this.pageItem_Trust = new System.Windows.Forms.TabPage();
 			this.pageItem_Trade = new System.Windows.Forms.TabPage();
@@ -362,7 +365,7 @@
 		#endregion
 
 		private SourceGrid.DataGrid dataGrid_Trust;
-		private SourceGrid.DataGrid dataGrid_Trade;
+		private Zeghs.Controls.CustomGrid dataGrid_Trade;
 		private Zeghs.Controls.CustomGrid dataGrid_History;
 		private System.Windows.Forms.TabControl tabControl;
 		private System.Windows.Forms.TabPage pageItem_Trust;

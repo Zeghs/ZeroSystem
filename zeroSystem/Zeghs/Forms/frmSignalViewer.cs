@@ -195,7 +195,10 @@ namespace Zeghs.Forms {
 		private void ShowScriptParameters() {
 			frmScriptParameters frmScriptParameters = new frmScriptParameters();
 			frmScriptParameters.SetParameters(__cOrderService, __cParameters);
-			frmScriptParameters.ShowDialog();
+			DialogResult cResult = frmScriptParameters.ShowDialog();
+			if (cResult == DialogResult.OK) {
+				__cSignalObject.UpdateParameters();
+			}
 
 			if (__cParameters != null) {
 				int iCount = __cParameters.Count;
@@ -379,13 +382,15 @@ namespace Zeghs.Forms {
 
 			int iCount = __cParameters.Count;
 			List<string> sArgs = __cProfile.Parameters;
-			if (sArgs == null) {
+			if (sArgs == null && iCount > 0) {
 				ShowScriptParameters();
 			} else {
 				try {
 					for (int i = 0; i < iCount; i++) {
 						__cParameters[i].SetValue(sArgs[i]);
 					}
+
+					__cSignalObject.UpdateParameters();
 				} catch {
 					ShowScriptParameters();
 				}
