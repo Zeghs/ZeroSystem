@@ -14,7 +14,7 @@ namespace Mitake.Stock.Decode {
         ///   大盤即時封包
         /// </summary>
         internal sealed class Decode_S32 {
-                internal static void Decode(MitakeIndex index, Mitake.Sockets.Data.PacketBuffer Buffer) {
+		internal static void Decode(MitakeIndex index, Mitake.Sockets.Data.PacketBuffer Buffer) {
 			float fIndex = 0;
                         byte bMode = 0, bIType = 0, bFlag = 0;
 			MitakeIndexTick cTick = null;

@@ -112,16 +112,16 @@ namespace Mitake.Stock.Decode {
 				cTick.買賣盤 = b買賣盤;
 				cTick.價格類型 = b價格類型;
 				cTick.Time = cTime;
-				cTick.Price = dPrice;
 				cTick.Single = dSingle;
+				cTick.Price = (dPrice == 0 && cPrevTick != null) ? cPrevTick.Price : dPrice;
 				cTick.Volume = (dVolume == 0 && cPrevTick != null) ? cPrevTick.Volume : dVolume;
 				cTick.Ask = (dAskP == 0 && dAskV == 0 && cPrevTick != null) ? cPrevTick.Ask : new DOMPrice(dAskP, dAskV);
 				cTick.Bid = (dBidP == 0 && dBidV == 0 && cPrevTick != null) ? cPrevTick.Bid : new DOMPrice(dBidP, dBidV);
 
 				if (dPrice > 0 && dVolume > 0) {  //如果有價量才計算成交金額與更換最新的即時資訊訊息
-					stock.今日總成交額 += cTick.Price * cTick.Single;
+					stock.今日總成交額 += cTick.Price * (cTick.Volume - ((cPrevTick == null) ? 0d : cPrevTick.Volume));
 					if (iSerial > stock.即時資訊.Serial) {
-						stock.今日總成交量 = cTick.Volume;
+						stock.今日總成交量 = dVolume;
 						stock.即時資訊 = cTick;
 					}
 				}

@@ -30,6 +30,7 @@ namespace Mitake.Stock.Util {
 			iMonth = (iMonth < 1) ? 1 : (iMonth > 12) ? 12 : iMonth;
 			int iMaxDay = DateTime.DaysInMonth(iYear, iMonth);
 			iDay = (iDay < 1) ? 1 : (iDay > iMaxDay) ? iMaxDay : iDay;
+			
 			return new DateTime(iYear, iMonth, iDay);
 		}
 
@@ -100,6 +101,10 @@ namespace Mitake.Stock.Util {
 			int iYear = BitConvert.GetValue(TimeByte, 9, 7) + 1990;
 			int iMonth = BitConvert.GetValue(TimeByte, 5, 4);
 			int iDay = BitConvert.GetValue(TimeByte, 0, 5);
+			
+			iMonth = (iMonth < 1) ? 1 : (iMonth > 12) ? 12 : iMonth;
+			int iMaxDay = DateTime.DaysInMonth(iYear, iMonth);
+			iDay = (iDay < 1) ? 1 : (iDay > iMaxDay) ? iMaxDay : iDay;
 			buffer.Position += 2;
 
 			return new DateTime(iYear, iMonth, iDay, iHour, iMinute, iSecond);

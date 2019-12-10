@@ -427,7 +427,7 @@
         </member>
         <member name="P:Zeghs.Products.InstrumentSettings.Expiration">
             <summary>
-              [取得] 到期日(如果是期貨與選擇權為到期日, 如果是股票則是交割時間截止日期)
+              [取得] 到期日(如果是期貨與選擇權為到期日, 如果是股票則無到期日)
             </summary>
         </member>
         <member name="P:Zeghs.Products.InstrumentSettings.Margin">

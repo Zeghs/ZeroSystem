@@ -74,14 +74,13 @@ namespace Mitake.Stock.Decode {
                                 //取得委賣價
 				cTick.Ask = new DOMPrice(cTick.Price + EntrustPrice(BitConvert.GetValue(bFlag, 0, 1), buffer), cTick.Ask.Size);
 
-                                if (!isHave) {
+				//修正總成交量(伺服器會傳輸回補修正封包, 需要重新修正總成交量)
+				MitakeQuoteTick cPrevTick = stock.GetPreviousTick(iSerial);
+				cTick.Volume = ((cPrevTick == null) ? 0d : cPrevTick.Volume) + cTick.Single;
+				
+				if (!isHave) {
                                         stock.今日總成交額 += cTick.Price * cTick.Single;
                                 }
-
-                                if (iSerial > stock.即時資訊.Serial) {
-                                        Decode_S31.CalculateEntrust(stock, cTick); //計算第一檔委買賣
-                                }
-
                                 ++iSerial;
                         } while (buffer.Position < iSize);//End While
 		}

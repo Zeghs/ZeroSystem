@@ -62,18 +62,18 @@ namespace PowerLanguage {
 		/// <param name="time">time 結構</param>
 		/// <returns>返回值: true=須建立新的 Bars 周期, false=尚在 Bars 週期範圍內</returns>
 		public static bool GetNearestPeriod(Queue<DateTime> periods, ref DateTime time) {
-			int iCount = 0;
 			bool bRet = false;
+			DateTime cPeriod = time;
 			while (periods.Count > 0) {
-				DateTime cPeriod = periods.Peek();
-				if (time >= cPeriod) {
-					periods.Dequeue();
-					bRet = ++iCount > 1 || periods.Count > 0;
-				} else {
-					time = cPeriod;
+				cPeriod = periods.Peek();
+				if (time < cPeriod) {
 					break;
+				} else {
+					periods.Dequeue();
+					bRet = true;
 				}
 			}
+			time = cPeriod;
 			return bRet;
 		}
 

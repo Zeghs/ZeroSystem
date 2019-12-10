@@ -13,6 +13,8 @@ namespace Mitake.Stock.Decode {
         ///   大盤委託資訊
         /// </summary>
         internal sealed class Decode_S34 {
+		private static TimeSpan __c忽略報價時間 = new TimeSpan(13, 45, 0);
+
                 internal static void Decode(MitakeIndex index, Mitake.Sockets.Data.PacketBuffer Buffer) {
 			int iSize = 0;
                         byte bMode = 0, bType = 0, bFlag = 0;
@@ -22,6 +24,10 @@ namespace Mitake.Stock.Decode {
                         Buffer.Position = 7;         //移動至資料結構(時間欄位)
 
 			DateTime cTime = Time.GetTime(Buffer); //取得時間
+			if (cTime.TimeOfDay == __c忽略報價時間) {  //這個時間點可以直接忽略
+				return;
+			}
+
 			bool bHave = index.GetMitakeTick(cTime, ref cTick);
 			cTick.SetFlag(4);
 

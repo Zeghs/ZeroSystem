@@ -273,15 +273,17 @@ namespace Zeghs.Data {
 			double dVolume = tick.Volume;
 			if (dVolume > __dOVolume) {
 				double dPrice = tick.Price;
-				DateTime cBaseTime = tick.Time;
 				double dSingle = dVolume - __dOVolume;  //重新計算準確的單量(即時系統送來的單量並不準確, 所以以總量為標準依據)
-				if (__cTimeQueue != null) {
-					bool bNewBars = Resolution.GetNearestPeriod(__cTimeQueue, ref cBaseTime);
-					MergeSeries(this, cBaseTime, dPrice, dPrice, dPrice, dPrice, dSingle, bNewBars, true);
-				} else {
-					MergeSeries(this, cBaseTime, dPrice, dPrice, dPrice, dPrice, dSingle, false, true);
+				if (dPrice > 0 && dSingle > 0) {
+					DateTime cBaseTime = tick.Time;
+					if (__cTimeQueue != null) {
+						bool bNewBars = Resolution.GetNearestPeriod(__cTimeQueue, ref cBaseTime);
+						MergeSeries(this, cBaseTime, dPrice, dPrice, dPrice, dPrice, dSingle, bNewBars, true);
+					} else {
+						MergeSeries(this, cBaseTime, dPrice, dPrice, dPrice, dPrice, dSingle, false, true);
+					}
 				}
-				
+
 				__dOVolume = dVolume;
 				__cUpdateTime = tick.Time;
 			}
@@ -427,4 +429,4 @@ namespace Zeghs.Data {
 			}
 		}
 	}
-}  //430行
+}  //432行

@@ -107,6 +107,12 @@ namespace PowerLanguage {
 		}
 
 		/// <summary>
+		///   更新腳本使用者自訂參數
+		/// </summary>
+		public virtual void UpdateParameters() {
+		}
+
+		/// <summary>
 		///   計算 Bars 時所呼叫的方法
 		/// </summary>
 		protected abstract void CalcBar();
@@ -209,6 +215,10 @@ namespace PowerLanguage {
 			}
 		}
 
+		/// <summary>
+		///   載入腳本後觸發腳本使用者自訂參數事件(將腳本參數利用此事件傳遞到外部)
+		/// </summary>
+		/// <param name="e">腳本初始化事件</param>
 		internal void OnScriptParameters(ScriptParametersEvent e) {
 			if (onScriptParameters != null) {
 				onScriptParameters(this, e);
@@ -267,4 +277,4 @@ namespace PowerLanguage {
 			}
 		}
 	}
-}  //270行
+}  //280行

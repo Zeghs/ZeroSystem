@@ -96,17 +96,18 @@ namespace Zeghs {
 		}
 
 		static void cService_onSubscribeCompleted(object sender, Events.QuoteComplementCompletedEvent e) {
-			cService.onSubscribeCompleted -= cService_onSubscribeCompleted;
+			//cService.onSubscribeCompleted -= cService_onSubscribeCompleted;
 			System.Console.WriteLine("s " + e.SymbolId);
 			IQuote cQuote = cService.Storage.GetQuote(e.SymbolId);
 			System.Console.WriteLine(cQuote);
 		}
 
 		static void cService_onComplementCompleted(object sender, Events.QuoteComplementCompletedEvent e) {
-			cService.onComplementCompleted -= cService_onComplementCompleted;
+			//cService.onComplementCompleted -= cService_onComplementCompleted;
 			System.Console.WriteLine("c " + e.SymbolId);
 			IQuote cQuote = cService.Storage.GetQuote(e.SymbolId);
 			System.Console.WriteLine(cQuote);
+
 			double dVolume = 0;
 			int iCount = cQuote.TickCount;
 			for (int i = iCount - 1; i >= 0; i--) {
@@ -119,19 +120,20 @@ namespace Zeghs {
 					dVolume = cTick.Volume;
 				}
 			}
+			System.Console.WriteLine(cQuote);
 		}
 
 		static void cService_onLoginCompleted(object sender, EventArgs e) {
 			cService.onLoginCompleted -= cService_onLoginCompleted;
 
-			System.Console.WriteLine("訂閱......");
+			//System.Console.WriteLine("訂閱......");
 			//cService.AddSubscribe("TWI.tw");
-			//cService.Complement("TWI.tw");
+			cService.Complement("TWI.tw");
 			//cService.Complement("TXW0C9250.tw");
 			//cService.AddSubscribe("OTC.tw");
 			//cService.Complement("OTC.tw");
-			cService.AddSubscribe("TXF0.tw");
-			cService.Complement("TXF0.tw");
+			//cService.AddSubscribe("TXF0.tw");
+			//cService.Complement("TXF0.tw");
 			//cService.AddSubscribe("2330.tw");
 			//cService.Complement("2330.tw");
 		}

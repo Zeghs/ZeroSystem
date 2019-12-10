@@ -391,9 +391,8 @@ namespace Zeghs.Managers {
 		}
 
 		private void QuoteService_onComplementCompleted(object sender, QuoteComplementCompletedEvent e) {
-			AbstractQuoteService cService = sender as AbstractQuoteService;
 			string sHashKey = string.Format("{0}_{1}", e.DataSource, e.SymbolId);
-			
+
 			_AsyncEventArgs cArgs = null;
 			lock (__cAsyncArgs) {
 				if (__cAsyncArgs.TryGetValue(sHashKey, out cArgs)) {
@@ -433,7 +432,6 @@ namespace Zeghs.Managers {
 			lock (__cQueue) {
 				__cQueue.Enqueue(e);
 			}
-			
 			AsyncMergeTick();
 		}
 
@@ -459,4 +457,4 @@ namespace Zeghs.Managers {
 			}
 		}
 	}
-}  //462行
+}  //460行

@@ -21,7 +21,7 @@ namespace Zeghs.Products {
 		private string __sDataSource = null;
 		private AbstractProductProperty __cProperty = null;
 		private OptionType __cOptionType = OptionType.None;
-		private DateTime __cExpiration = DateTime.MinValue;
+		private DateTime __cExpiration = DateTime.MaxValue;
 
 		/// <summary>
 		///   [取得] 商品資訊(為了相容 PowerLanguage 但內部結構並不相同)
@@ -87,7 +87,7 @@ namespace Zeghs.Products {
 		}
 
 		/// <summary>
-		///   [取得] 到期日(如果是期貨與選擇權為到期日, 如果是股票則是交割時間截止日期)
+		///   [取得] 到期日(如果是期貨與選擇權為到期日, 如果是股票則無到期日)
 		/// </summary>
 		public DateTime Expiration {
 			get {

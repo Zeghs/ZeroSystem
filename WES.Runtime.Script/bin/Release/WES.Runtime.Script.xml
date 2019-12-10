@@ -207,6 +207,11 @@
             <param name="data_stream">資料串流編號(1 為起始編號)</param>
             <returns>返回值: IInstrument 介面</returns>
         </member>
+        <member name="M:PowerLanguage.CStudyAbstract.UpdateParameters">
+            <summary>
+              更新腳本使用者自訂參數
+            </summary>
+        </member>
         <member name="M:PowerLanguage.CStudyAbstract.CalcBar">
             <summary>
               計算 Bars 時所呼叫的方法
@@ -252,6 +257,12 @@
             <summary>
               計算使用者設計的邏輯方法 CalcBar
             </summary>
+        </member>
+        <member name="M:PowerLanguage.CStudyAbstract.OnScriptParameters(Zeghs.Events.ScriptParametersEvent)">
+            <summary>
+              載入腳本後觸發腳本使用者自訂參數事件(將腳本參數利用此事件傳遞到外部)
+            </summary>
+            <param name="e">腳本初始化事件</param>
         </member>
         <member name="M:PowerLanguage.CStudyAbstract.Start">
             <summary>
