@@ -19,6 +19,12 @@ namespace Zeghs.Data {
 			}
 		}
 
+		internal List<T> Source {
+			get {
+				return __cSource;
+			}
+		}
+
 		internal SimpleBoundList(int capacity) {
 			__cSource = new List<T>(capacity);
 		}

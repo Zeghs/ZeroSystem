@@ -85,5 +85,9 @@ namespace Zeghs.Data {
 			__sSymbolId = symbolId;
 			__dProfit = Math.Round(profit, 2);
 		}
+
+		internal DateTime GetTime() {
+			return __cOrder.Time;
+		}
 	}
 }

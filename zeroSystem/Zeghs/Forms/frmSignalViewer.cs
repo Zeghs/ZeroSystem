@@ -156,6 +156,7 @@ namespace Zeghs.Forms {
 			chart.Focus();
 
 			if (__bShowTradeView) {
+				tabControl.Height = this.ClientSize.Height / 2;
 				tabControl.Top = this.ClientSize.Height - tabControl.Height - 1;
 				tabControl.Width = this.ClientSize.Width - 1;
 
@@ -255,6 +256,8 @@ namespace Zeghs.Forms {
 				CreateSignalObject();
 			});
 
+			comboMode.SelectedIndex = 0;
+
 			__bLoaded = true;
 		}
 
@@ -341,6 +344,46 @@ namespace Zeghs.Forms {
 				tabControl.Top = this.ClientSize.Height - tabControl.Height - 1;
 			} else {
 				tabControl.Dock = DockStyle.Fill;
+			}
+		}
+
+		private void comboMode_SelectedIndexChanged(object sender, EventArgs e) {
+			int iIndex = comboMode.SelectedIndex;
+			switch (iIndex) {
+				case 0:
+				case 1:
+					labChar.Visible = false;
+					datePickerStart.Visible = false;
+					datePickerStop.Visible = false;
+					btnQuery.Left = comboMode.Left + comboMode.Width + 3;
+					break;
+				case 2:
+					labChar.Visible = true;
+					datePickerStart.Visible = true;
+					datePickerStop.Visible = true;
+					btnQuery.Left = datePickerStop.Left + datePickerStop.Width + 3;
+					break;
+			}
+		}
+
+		private void btnQuery_Click(object sender, EventArgs e) {
+			HistoryBoundList cHistoryList = __cTradeService.Closes;
+
+			int iIndex = comboMode.SelectedIndex;
+			switch (iIndex) {
+				case 0:
+					cHistoryList.Filter(txtSymbol.Text, DateTime.MinValue, DateTime.MaxValue);
+					break;
+				case 1:
+					DateTime cStart = DateTime.Today;
+					DateTime cStop = cStart.AddSeconds(86399);
+					datePickerStart.Value = cStart;
+					datePickerStop.Value = cStart;
+					cHistoryList.Filter(txtSymbol.Text, cStart, cStop);
+					break;
+				case 2:
+					cHistoryList.Filter(txtSymbol.Text, datePickerStart.Value, datePickerStop.Value.AddSeconds(86399));
+					break;
 			}
 		}
 

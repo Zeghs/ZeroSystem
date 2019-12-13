@@ -144,12 +144,21 @@
 		private void InitializeComponent() {
 			this.components = new System.ComponentModel.Container();
 			this.dataGrid_Trust = new SourceGrid.DataGrid();
-			this.dataGrid_History = new Zeghs.Controls.CustomGrid();
 			this.dataGrid_Trade = new Zeghs.Controls.CustomGrid();
+			this.dataGrid_History = new Zeghs.Controls.CustomGrid();
 			this.tabControl = new System.Windows.Forms.TabControl();
 			this.pageItem_Trust = new System.Windows.Forms.TabPage();
 			this.pageItem_Trade = new System.Windows.Forms.TabPage();
 			this.pageItem_History = new System.Windows.Forms.TabPage();
+			this.panelQuery = new System.Windows.Forms.Panel();
+			this.labChar = new System.Windows.Forms.Label();
+			this.datePickerStop = new System.Windows.Forms.DateTimePicker();
+			this.btnQuery = new System.Windows.Forms.Button();
+			this.datePickerStart = new System.Windows.Forms.DateTimePicker();
+			this.comboMode = new System.Windows.Forms.ComboBox();
+			this.labDate = new System.Windows.Forms.Label();
+			this.txtSymbol = new System.Windows.Forms.TextBox();
+			this.labSymbol = new System.Windows.Forms.Label();
 			this.pageItem_Output = new System.Windows.Forms.TabPage();
 			this.txtOutput = new System.Windows.Forms.TextBox();
 			this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -163,6 +172,7 @@
 			this.pageItem_Trust.SuspendLayout();
 			this.pageItem_Trade.SuspendLayout();
 			this.pageItem_History.SuspendLayout();
+			this.panelQuery.SuspendLayout();
 			this.pageItem_Output.SuspendLayout();
 			this.contextMenu.SuspendLayout();
 			this.SuspendLayout();
@@ -177,26 +187,11 @@
 			this.dataGrid_Trust.Location = new System.Drawing.Point(0, 0);
 			this.dataGrid_Trust.Name = "dataGrid_Trust";
 			this.dataGrid_Trust.SelectionMode = SourceGrid.GridSelectionMode.Row;
-			this.dataGrid_Trust.Size = new System.Drawing.Size(393, 129);
+			this.dataGrid_Trust.Size = new System.Drawing.Size(386, 118);
 			this.dataGrid_Trust.TabIndex = 1;
 			this.dataGrid_Trust.TabStop = true;
 			this.dataGrid_Trust.ToolTipText = "";
 			this.dataGrid_Trust.VisibleChanged += new System.EventHandler(this.dataGrid_Trust_VisibleChanged);
-			// 
-			// dataGrid_History
-			// 
-			this.dataGrid_History.DeleteQuestionMessage = "您確定要刪除此筆資訊?";
-			this.dataGrid_History.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.dataGrid_History.EnableSort = false;
-			this.dataGrid_History.FixedRows = 1;
-			this.dataGrid_History.Location = new System.Drawing.Point(0, 0);
-			this.dataGrid_History.Name = "dataGrid_History";
-			this.dataGrid_History.SelectionMode = SourceGrid.GridSelectionMode.Row;
-			this.dataGrid_History.Size = new System.Drawing.Size(393, 129);
-			this.dataGrid_History.TabIndex = 1;
-			this.dataGrid_History.TabStop = true;
-			this.dataGrid_History.ToolTipText = "";
-			this.dataGrid_History.VisibleChanged += new System.EventHandler(this.dataGrid_History_VisibleChanged);
 			// 
 			// dataGrid_Trade
 			// 
@@ -207,11 +202,26 @@
 			this.dataGrid_Trade.Location = new System.Drawing.Point(0, 0);
 			this.dataGrid_Trade.Name = "dataGrid_Trade";
 			this.dataGrid_Trade.SelectionMode = SourceGrid.GridSelectionMode.Row;
-			this.dataGrid_Trade.Size = new System.Drawing.Size(393, 129);
-			this.dataGrid_Trade.TabIndex = 1;
+			this.dataGrid_Trade.Size = new System.Drawing.Size(386, 118);
+			this.dataGrid_Trade.TabIndex = 0;
 			this.dataGrid_Trade.TabStop = true;
 			this.dataGrid_Trade.ToolTipText = "";
 			this.dataGrid_Trade.VisibleChanged += new System.EventHandler(this.dataGrid_Trade_VisibleChanged);
+			// 
+			// dataGrid_History
+			// 
+			this.dataGrid_History.DeleteQuestionMessage = "您確定要刪除此筆資訊?";
+			this.dataGrid_History.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.dataGrid_History.EnableSort = false;
+			this.dataGrid_History.FixedRows = 1;
+			this.dataGrid_History.Location = new System.Drawing.Point(0, 30);
+			this.dataGrid_History.Name = "dataGrid_History";
+			this.dataGrid_History.SelectionMode = SourceGrid.GridSelectionMode.Row;
+			this.dataGrid_History.Size = new System.Drawing.Size(386, 88);
+			this.dataGrid_History.TabIndex = 3;
+			this.dataGrid_History.TabStop = true;
+			this.dataGrid_History.ToolTipText = "";
+			this.dataGrid_History.VisibleChanged += new System.EventHandler(this.dataGrid_History_VisibleChanged);
 			// 
 			// tabControl
 			// 
@@ -219,20 +229,20 @@
 			this.tabControl.Controls.Add(this.pageItem_Trade);
 			this.tabControl.Controls.Add(this.pageItem_History);
 			this.tabControl.Controls.Add(this.pageItem_Output);
-			this.tabControl.Location = new System.Drawing.Point(0, 145);
+			this.tabControl.Location = new System.Drawing.Point(0, 152);
 			this.tabControl.Name = "tabControl";
 			this.tabControl.SelectedIndex = 0;
-			this.tabControl.Size = new System.Drawing.Size(395, 150);
+			this.tabControl.Size = new System.Drawing.Size(394, 143);
 			this.tabControl.TabIndex = 0;
 			this.tabControl.DoubleClick += new System.EventHandler(this.tabControl_DoubleClick);
 			// 
 			// pageItem_Trust
 			// 
 			this.pageItem_Trust.Controls.Add(this.dataGrid_Trust);
-			this.pageItem_Trust.Location = new System.Drawing.Point(1, 1);
+			this.pageItem_Trust.Location = new System.Drawing.Point(4, 21);
 			this.pageItem_Trust.Margin = new System.Windows.Forms.Padding(0);
 			this.pageItem_Trust.Name = "pageItem_Trust";
-			this.pageItem_Trust.Size = new System.Drawing.Size(393, 129);
+			this.pageItem_Trust.Size = new System.Drawing.Size(386, 118);
 			this.pageItem_Trust.TabIndex = 0;
 			this.pageItem_Trust.Text = "委託";
 			this.pageItem_Trust.UseVisualStyleBackColor = true;
@@ -240,10 +250,10 @@
 			// pageItem_Trade
 			// 
 			this.pageItem_Trade.Controls.Add(this.dataGrid_Trade);
-			this.pageItem_Trade.Location = new System.Drawing.Point(1, 1);
+			this.pageItem_Trade.Location = new System.Drawing.Point(4, 21);
 			this.pageItem_Trade.Margin = new System.Windows.Forms.Padding(0);
 			this.pageItem_Trade.Name = "pageItem_Trade";
-			this.pageItem_Trade.Size = new System.Drawing.Size(393, 129);
+			this.pageItem_Trade.Size = new System.Drawing.Size(386, 118);
 			this.pageItem_Trade.TabIndex = 1;
 			this.pageItem_Trade.Text = "交易";
 			this.pageItem_Trade.UseVisualStyleBackColor = true;
@@ -251,21 +261,111 @@
 			// pageItem_History
 			// 
 			this.pageItem_History.Controls.Add(this.dataGrid_History);
-			this.pageItem_History.Location = new System.Drawing.Point(1, 1);
+			this.pageItem_History.Controls.Add(this.panelQuery);
+			this.pageItem_History.Location = new System.Drawing.Point(4, 21);
 			this.pageItem_History.Margin = new System.Windows.Forms.Padding(0);
 			this.pageItem_History.Name = "pageItem_History";
-			this.pageItem_History.Size = new System.Drawing.Size(393, 129);
+			this.pageItem_History.Size = new System.Drawing.Size(386, 118);
 			this.pageItem_History.TabIndex = 2;
 			this.pageItem_History.Text = "歷史";
 			this.pageItem_History.UseVisualStyleBackColor = true;
 			// 
+			// panelQuery
+			// 
+			this.panelQuery.Controls.Add(this.labChar);
+			this.panelQuery.Controls.Add(this.datePickerStop);
+			this.panelQuery.Controls.Add(this.btnQuery);
+			this.panelQuery.Controls.Add(this.datePickerStart);
+			this.panelQuery.Controls.Add(this.comboMode);
+			this.panelQuery.Controls.Add(this.labDate);
+			this.panelQuery.Controls.Add(this.txtSymbol);
+			this.panelQuery.Controls.Add(this.labSymbol);
+			this.panelQuery.Dock = System.Windows.Forms.DockStyle.Top;
+			this.panelQuery.Location = new System.Drawing.Point(0, 0);
+			this.panelQuery.Name = "panelQuery";
+			this.panelQuery.Size = new System.Drawing.Size(386, 30);
+			this.panelQuery.TabIndex = 2;
+			// 
+			// labChar
+			// 
+			this.labChar.AutoSize = true;
+			this.labChar.Location = new System.Drawing.Point(279, 9);
+			this.labChar.Name = "labChar";
+			this.labChar.Size = new System.Drawing.Size(11, 12);
+			this.labChar.TabIndex = 16;
+			this.labChar.Text = "~";
+			// 
+			// datePickerStop
+			// 
+			this.datePickerStop.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+			this.datePickerStop.Location = new System.Drawing.Point(294, 4);
+			this.datePickerStop.Name = "datePickerStop";
+			this.datePickerStop.Size = new System.Drawing.Size(82, 22);
+			this.datePickerStop.TabIndex = 15;
+			// 
+			// btnQuery
+			// 
+			this.btnQuery.Location = new System.Drawing.Point(377, 3);
+			this.btnQuery.Name = "btnQuery";
+			this.btnQuery.Size = new System.Drawing.Size(41, 23);
+			this.btnQuery.TabIndex = 12;
+			this.btnQuery.Text = "查詢";
+			this.btnQuery.UseVisualStyleBackColor = true;
+			this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
+			// 
+			// datePickerStart
+			// 
+			this.datePickerStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+			this.datePickerStart.Location = new System.Drawing.Point(193, 4);
+			this.datePickerStart.Name = "datePickerStart";
+			this.datePickerStart.Size = new System.Drawing.Size(82, 22);
+			this.datePickerStart.TabIndex = 14;
+			// 
+			// comboMode
+			// 
+			this.comboMode.FormattingEnabled = true;
+			this.comboMode.Items.AddRange(new object[] {
+            "全部",
+            "今日",
+            "區間"});
+			this.comboMode.Location = new System.Drawing.Point(137, 4);
+			this.comboMode.Name = "comboMode";
+			this.comboMode.Size = new System.Drawing.Size(54, 20);
+			this.comboMode.TabIndex = 13;
+			this.comboMode.SelectedIndexChanged += new System.EventHandler(this.comboMode_SelectedIndexChanged);
+			// 
+			// labDate
+			// 
+			this.labDate.AutoSize = true;
+			this.labDate.Location = new System.Drawing.Point(104, 6);
+			this.labDate.Name = "labDate";
+			this.labDate.Size = new System.Drawing.Size(29, 12);
+			this.labDate.TabIndex = 11;
+			this.labDate.Text = "日期";
+			// 
+			// txtSymbol
+			// 
+			this.txtSymbol.Location = new System.Drawing.Point(40, 3);
+			this.txtSymbol.Name = "txtSymbol";
+			this.txtSymbol.Size = new System.Drawing.Size(57, 22);
+			this.txtSymbol.TabIndex = 10;
+			// 
+			// labSymbol
+			// 
+			this.labSymbol.AutoSize = true;
+			this.labSymbol.Location = new System.Drawing.Point(6, 6);
+			this.labSymbol.Name = "labSymbol";
+			this.labSymbol.Size = new System.Drawing.Size(29, 12);
+			this.labSymbol.TabIndex = 9;
+			this.labSymbol.Text = "商品";
+			// 
 			// pageItem_Output
 			// 
 			this.pageItem_Output.Controls.Add(this.txtOutput);
-			this.pageItem_Output.Location = new System.Drawing.Point(1, 1);
+			this.pageItem_Output.Location = new System.Drawing.Point(4, 21);
 			this.pageItem_Output.Name = "pageItem_Output";
 			this.pageItem_Output.Padding = new System.Windows.Forms.Padding(3);
-			this.pageItem_Output.Size = new System.Drawing.Size(393, 129);
+			this.pageItem_Output.Size = new System.Drawing.Size(386, 118);
 			this.pageItem_Output.TabIndex = 3;
 			this.pageItem_Output.Text = "輸出";
 			this.pageItem_Output.UseVisualStyleBackColor = true;
@@ -277,7 +377,7 @@
 			this.txtOutput.Multiline = true;
 			this.txtOutput.Name = "txtOutput";
 			this.txtOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.txtOutput.Size = new System.Drawing.Size(387, 123);
+			this.txtOutput.Size = new System.Drawing.Size(380, 112);
 			this.txtOutput.TabIndex = 0;
 			this.txtOutput.VisibleChanged += new System.EventHandler(this.txtOutput_VisibleChanged);
 			// 
@@ -331,7 +431,7 @@
 			// 
 			this.chart.Location = new System.Drawing.Point(0, 0);
 			this.chart.Name = "chart";
-			this.chart.Size = new System.Drawing.Size(395, 145);
+			this.chart.Size = new System.Drawing.Size(394, 150);
 			this.chart.TabIndex = 1;
 			this.chart.MouseClick += new System.Windows.Forms.MouseEventHandler(this.chart_onMouseUp);
 			// 
@@ -355,6 +455,8 @@
 			this.pageItem_Trust.ResumeLayout(false);
 			this.pageItem_Trade.ResumeLayout(false);
 			this.pageItem_History.ResumeLayout(false);
+			this.panelQuery.ResumeLayout(false);
+			this.panelQuery.PerformLayout();
 			this.pageItem_Output.ResumeLayout(false);
 			this.pageItem_Output.PerformLayout();
 			this.contextMenu.ResumeLayout(false);
@@ -380,5 +482,14 @@
 		private System.Windows.Forms.Control chart;
 		private System.Windows.Forms.ToolStripMenuItem menuItemTradeDetails;
 		private System.Windows.Forms.ToolStripMenuItem menuItemDataSource;
+		private System.Windows.Forms.Panel panelQuery;
+		private System.Windows.Forms.Label labChar;
+		private System.Windows.Forms.DateTimePicker datePickerStop;
+		private System.Windows.Forms.Button btnQuery;
+		private System.Windows.Forms.DateTimePicker datePickerStart;
+		private System.Windows.Forms.ComboBox comboMode;
+		private System.Windows.Forms.Label labDate;
+		private System.Windows.Forms.TextBox txtSymbol;
+		private System.Windows.Forms.Label labSymbol;
 	}
 }

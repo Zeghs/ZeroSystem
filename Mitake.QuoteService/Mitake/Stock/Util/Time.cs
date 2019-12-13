@@ -44,7 +44,8 @@ namespace Mitake.Stock.Util {
                         ushort TimeByte = (ushort)((buffer[0] << 8) + buffer[1]);
 
                         hh = (BitConvert.GetValue(TimeByte, 12, 3) + 9);
-                        mm = BitConvert.GetValue(TimeByte, 6, 6);
+			hh = (hh < 0 || hh > 23) ? 0 : hh;
+			mm = BitConvert.GetValue(TimeByte, 6, 6);
 			mm = (mm < 0 || mm > 59) ? 0 : mm;
                         ss = BitConvert.GetValue(TimeByte, 0, 6);
 			ss = (ss < 0 || ss > 59) ? 0 : ss;
@@ -69,7 +70,8 @@ namespace Mitake.Stock.Util {
                                 hh += 17;
                         }
 
-                        mm = BitConvert.GetValue(TimeByte, 6, 6);
+			hh = (hh < 0 || hh > 23) ? 0 : hh;
+			mm = BitConvert.GetValue(TimeByte, 6, 6);
 			mm = (mm < 0 || mm > 59) ? 0 : mm;
 			ss = BitConvert.GetValue(TimeByte, 0, 6);
 			ss = (ss < 0 || ss > 59) ? 0 : ss;
@@ -91,7 +93,8 @@ namespace Mitake.Stock.Util {
 
 			ushort TimeByte = (ushort) ((buffer[0] << 8) + buffer[1]);
                         iHour += BitConvert.GetValue(TimeByte, 12, 4);
-                        int iMinute = BitConvert.GetValue(TimeByte, 6, 6);
+			iHour = (iHour < 0 || iHour > 23) ? 0 : iHour;
+			int iMinute = BitConvert.GetValue(TimeByte, 6, 6);
 			iMinute = (iMinute < 0 || iMinute > 59) ? 0 : iMinute;
 			int iSecond = BitConvert.GetValue(TimeByte, 0, 6);
 			iSecond = (iSecond < 0 || iSecond > 59) ? 0 : iSecond;
