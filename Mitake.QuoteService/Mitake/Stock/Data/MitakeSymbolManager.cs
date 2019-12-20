@@ -223,7 +223,12 @@ namespace Mitake.Stock.Data {
 			AbstractProductProperty cProperty = cExchange.GetProperty(commodityId, DataSource);
 			if (cProperty != null) {
 				int iYear = __cToday.Year;
-				iYear = (iYear - (iYear % 10)) + year;
+				int iMod = iYear % 10;
+				if (iMod == 9 && year == 0) {
+					++iYear;
+				} else {
+					iYear = (iYear - iMod) + year;
+				}
 				int iDay = __cToday.Day;
 				int iDays = DateTime.DaysInMonth(iYear, month);  //取得該月份的最大天數
 			
@@ -247,4 +252,4 @@ namespace Mitake.Stock.Data {
 			return iRet;
 		}
 	}
-}  //250行
+}  //255行

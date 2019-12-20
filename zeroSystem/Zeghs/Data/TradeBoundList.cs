@@ -145,10 +145,12 @@ namespace Zeghs.Data {
 				int iCount = __cSource.Count;
 				for (int i = iCount - 2; i >= 0; i--) {
 					_TradeInfo cTrade = __cSource[i];
-					dContracts += cTrade.Contracts;
-					dProfits += cTrade.Profit;
-					dFees += cTrade.Fee;
-					dTaxes += cTrade.Tax;
+					if (cTrade != null) {
+						dContracts += cTrade.Contracts;
+						dProfits += cTrade.Profit;
+						dFees += cTrade.Fee;
+						dTaxes += cTrade.Tax;
+					}
 				}
 
 				__cTotals[0] = dContracts;

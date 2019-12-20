@@ -128,7 +128,7 @@ namespace Zeghs {
 
 			//System.Console.WriteLine("訂閱......");
 			//cService.AddSubscribe("TWI.tw");
-			cService.Complement("TWI.tw");
+			//cService.Complement("TWI.tw");
 			//cService.Complement("TXW0C9250.tw");
 			//cService.AddSubscribe("OTC.tw");
 			//cService.Complement("OTC.tw");
@@ -136,6 +136,7 @@ namespace Zeghs {
 			//cService.Complement("TXF0.tw");
 			//cService.AddSubscribe("2330.tw");
 			//cService.Complement("2330.tw");
+			cService.Complement("3234.tw");
 		}
 	}
 }
