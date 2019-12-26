@@ -9,12 +9,11 @@
               交易佣金介面
             </summary>
         </member>
-        <member name="M:Zeghs.Orders.ICommission.Calculate(System.Double,System.Int32)">
+        <member name="M:Zeghs.Orders.ICommission.Calculate(PowerLanguage.ITradeOrder)">
             <summary>
               計算佣金
             </summary>
-            <param name="price">成交價格</param>
-            <param name="volume">成交數量</param>
+            <param name="order">交易訂單</param>
             <returns>返回值: 佣金</returns>
         </member>
         <member name="P:Zeghs.Orders.ICommission.RuleType">

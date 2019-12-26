@@ -189,7 +189,7 @@ namespace Zeghs.Services {
 					ICommission cCommission = __cCommissions[i];
 					int iIndex = ((int) cCommission.RuleType) - 128;  //佣金起始為 128(減去 128 可得到陣列的索引值)
 					
-					dValues[iIndex] += cCommission.Calculate(order.Price, order.Contracts);
+					dValues[iIndex] += cCommission.Calculate(order);
 				}
 			}
 			return dValues;

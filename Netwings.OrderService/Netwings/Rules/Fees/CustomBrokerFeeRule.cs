@@ -39,10 +39,9 @@ namespace Netwings.Rules.Fees {
 		/// <summary>
 		///   計算佣金
 		/// </summary>
-		/// <param name="price">成交價格</param>
-		/// <param name="volume">成交數量</param>
+		/// <param name="order">交易訂單</param>
 		/// <returns>返回值: 佣金</returns>
-		public double Calculate(double price, int volume) {
+		public double Calculate(ITradeOrder order) {
 			return __dFee;
 		}
 

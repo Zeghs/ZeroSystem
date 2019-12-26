@@ -15,9 +15,8 @@ namespace Zeghs.Orders {
 		/// <summary>
 		///   計算佣金
 		/// </summary>
-		/// <param name="price">成交價格</param>
-		/// <param name="volume">成交數量</param>
+		/// <param name="order">交易訂單</param>
 		/// <returns>返回值: 佣金</returns>
-		double Calculate(double price, int volume);
+		double Calculate(ITradeOrder order);
 	}
 }
