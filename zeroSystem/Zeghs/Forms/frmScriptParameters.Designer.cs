@@ -43,7 +43,7 @@
 
 			//建立必要的 Editor 控制項
 			__cTextBox = this.dataGrid.Columns[1].DataCell.Editor;  //保存原始 Editor 控制像
-			__cTextBox.AllowNull = false;
+			__cTextBox.NullString = null;
 			__cComboBox = new SourceGrid.Cells.Editors.ComboBox(typeof(string), new string[] { "True", "False" }, true);
 			__cComboBox.AllowNull = false;
 

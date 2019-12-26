@@ -81,29 +81,49 @@ namespace PowerLanguage {
 
 			Type cType = __cPropertyInfo.PropertyType;
 			if (cType == typeof(int)) {
-				oValue = int.Parse(value);
+				int iValue = 0;
+				int.TryParse(value, out iValue);
+				oValue = iValue;
 			} else if (cType == typeof(double)) {
-				oValue = double.Parse(value);
+				double dValue = 0;
+				double.TryParse(value, out dValue);
+				oValue = dValue;
 			} else if (cType == typeof(string)) {
 				oValue = value;
 			} else if (cType == typeof(float)) {
-				oValue = float.Parse(value);
+				float fValue = 0;
+				float.TryParse(value, out fValue);
+				oValue = fValue;
 			} else if (cType == typeof(long)) {
-				oValue = long.Parse(value);
+				long lValue = 0;
+				long.TryParse(value, out lValue);
+				oValue = lValue;
 			} else if (cType == typeof(uint)) {
-				oValue = uint.Parse(value);
+				uint uValue = 0;
+				uint.TryParse(value, out uValue);
+				oValue = uValue;
 			} else if (cType == typeof(ulong)) {
-				oValue = ulong.Parse(value);
+				ulong ulValue = 0;
+				ulong.TryParse(value, out ulValue);
+				oValue = ulValue;
 			} else if (cType == typeof(byte)) {
-				oValue = byte.Parse(value);
+				byte bValue = 0;
+				byte.TryParse(value, out bValue);
+				oValue = bValue;
 			} else if (cType == typeof(char)) {
-				oValue = char.Parse(value);
+				char chValue = (char) 0;
+				char.TryParse(value, out chValue);
+				oValue = chValue;
 			} else if (cType == typeof(bool)) {
 				oValue = bool.Parse(value);
 			} else if (cType == typeof(short)) {
-				oValue = short.Parse(value);
+				short shValue = 0;
+				short.TryParse(value, out shValue);
+				oValue = shValue;
 			} else if (cType == typeof(ushort)) {
-				oValue = ushort.Parse(value);
+				ushort usValue = 0;
+				ushort.TryParse(value, out usValue);
+				oValue = usValue;
 			} else if (cType.IsEnum) {
 				oValue = Enum.Parse(cType, value);
 			}
