@@ -953,11 +953,12 @@
             <param name="time">time 結構</param>
             <returns>返回值: true=須建立新的周期, false=尚在週期範圍內</returns>
         </member>
-        <member name="M:PowerLanguage.Resolution.GetNearestPeriod(System.Collections.Generic.Queue{System.DateTime},System.DateTime@)">
+        <member name="M:PowerLanguage.Resolution.GetNearestPeriod(System.Collections.Generic.Queue{System.DateTime},System.DateTime,System.DateTime@)">
             <summary>
               取得最接近 time 的週期
             </summary>
             <param name="periods">週期佇列</param>
+            <param name="lastBarTime">最後一根 Bars 的時間</param>
             <param name="time">time 結構</param>
             <returns>返回值: true=須建立新的 Bars 周期, false=尚在 Bars 週期範圍內</returns>
         </member>

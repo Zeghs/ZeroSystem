@@ -59,20 +59,23 @@ namespace PowerLanguage {
 		///   取得最接近 time 的週期
 		/// </summary>
 		/// <param name="periods">週期佇列</param>
+		/// <param name="lastBarTime">最後一根 Bars 的時間</param>
 		/// <param name="time">time 結構</param>
 		/// <returns>返回值: true=須建立新的 Bars 周期, false=尚在 Bars 週期範圍內</returns>
-		public static bool GetNearestPeriod(Queue<DateTime> periods, ref DateTime time) {
+		public static bool GetNearestPeriod(Queue<DateTime> periods, DateTime lastBarTime, ref DateTime time) {
 			bool bRet = false;
 			DateTime cPeriod = time;
 			while (periods.Count > 0) {
 				cPeriod = periods.Peek();
+				bRet = lastBarTime < cPeriod;
+
 				if (time < cPeriod) {
 					break;
 				} else {
 					periods.Dequeue();
-					bRet = true;
 				}
 			}
+			
 			time = cPeriod;
 			return bRet;
 		}
@@ -180,6 +183,7 @@ namespace PowerLanguage {
 				int iTotalSeconds = (int) (endTime - startTime).TotalSeconds;
 				int iBaseUnit = iTotalSeconds / Resolution.MIN_BASE_TOTALSECONDS;
 				__dUnit = iTotalSeconds / __iTotalSeconds;
+				
 				if (iTotalSeconds % __iTotalSeconds > 0) {
 					++__dUnit;
 					__bModulo = true;
@@ -262,6 +266,7 @@ namespace PowerLanguage {
 							continue;
 						}
 					}
+					
 					cResult.Add(_from);
 				}
 			}
@@ -277,4 +282,4 @@ namespace PowerLanguage {
 			return (int) (_days * __dUnit) + 1;
 		}
 	}
-}  //280行
+}  //285行

@@ -117,7 +117,8 @@ namespace Zeghs.Data {
 
 		internal DateTime LastBarTime {
 			get {
-				return __cTimes[Indexer.RealtimeIndex];
+				int iIndex = Indexer.RealtimeIndex;
+				return __cTimes[(iIndex < 0) ? 0 : iIndex];
 			}
 		}
 
@@ -255,18 +256,8 @@ namespace Zeghs.Data {
 			}
 
 			if (iTargetCount == 0) {
-				target.__cDataRequest.Range.To = __cDataRequest.Range.To;
-				Queue<DateTime> cQueue = target.CreateRealtimePeriods();
-				for (int i = __cDataRequest.Range.Count; i <= Indexer.RealtimeIndex; i++) {
-					DateTime cBaseTime = __cTimes[i];
-					bool bCreate = Resolution.GetNearestPeriod(cQueue, ref cBaseTime);
-					MergeSeries(target, cBaseTime, __cOpens[i], __cHighs[i], __cLows[i], __cCloses[i], __cVolumes[i], bCreate, true);
-				}
+				target.MergeTicks();
 			}
-
-			target.__dOVolume = __dOVolume;        //更新最後參考總量(只要低於最後總量的 tick 都不會再被合併進去 Bars)
-			target.__cUpdateTime = __cUpdateTime;  //更新目標資訊的最後更新時間(最後更新時間會牽涉到 Bars 的狀態 Close or Inside)
-			target.Initialized = true;
 		}
 
 		internal void Merge(ITick tick) {
@@ -277,7 +268,7 @@ namespace Zeghs.Data {
 				if (dPrice > 0 && dSingle > 0) {
 					DateTime cBaseTime = tick.Time;
 					if (__cTimeQueue != null) {
-						bool bNewBars = Resolution.GetNearestPeriod(__cTimeQueue, ref cBaseTime);
+						bool bNewBars = Resolution.GetNearestPeriod(__cTimeQueue, this.LastBarTime, ref cBaseTime);
 						MergeSeries(this, cBaseTime, dPrice, dPrice, dPrice, dPrice, dSingle, bNewBars, true);
 					} else {
 						MergeSeries(this, cBaseTime, dPrice, dPrice, dPrice, dPrice, dSingle, false, true);
@@ -374,6 +365,13 @@ namespace Zeghs.Data {
 
 		private Queue<DateTime> CreateRealtimePeriods() {
 			DateTime cToday = DateTime.UtcNow.AddHours(__cSettings.TimeZone);
+			
+			string sDataSource = __cDataRequest.DataFeed;
+			AbstractQuoteService cService = QuoteManager.Manager.GetQuoteService(sDataSource);
+			if (cService != null) {
+				cToday = cService.TradeDate;
+			}
+			
 			__cTimeQueue = __cDataRequest.Resolution.CalculateRealtimePeriods(this.LastBarTime, cToday, __cSettings.Expiration);
 			return __cTimeQueue;
 		}
@@ -429,4 +427,4 @@ namespace Zeghs.Data {
 			}
 		}
 	}
-}  //432行
+}  //430行

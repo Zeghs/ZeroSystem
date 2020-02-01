@@ -56,6 +56,16 @@ namespace Zeghs.Forms {
 			return new string[] { sData[0], sRanges[1], cDate.ToString("yyyy/MM/dd") };
 		}
 
+		private static void ModifyDataStreamInfo(_DataStreamInfo info, ChartSetting chart, RequestSetting request) {
+			string[] sRanges = GetRequestRanges(request.Range);
+
+			info.SymbolId = request.SymbolId;
+			info.Range = string.Format("{0} {1}", sRanges[1], (sRanges[0][0] == 'f') ? string.Empty : sRanges[0]);
+			info.LastDate = sRanges[2];
+			info.Period = request.DataPeriod;
+			info.SubChart = (chart.IsSubChart) ? string.Format("SubChart #{0}", chart.LayerIndex + 1) : "Hide";
+		}
+
 		private int __iMaxLayerIndex = -1;
 		private int __iPrevDataRequestCount = 0;
 		private bool __bModifyDataRequest = false;
@@ -198,7 +208,8 @@ namespace Zeghs.Forms {
 					frmCreateScriptSetting.Dispose();
 					if (cResult == DialogResult.OK) {
 						ChartSetting cChartSetting = frmCreateScriptSetting.ChartSetting;
-						cInfo.SubChart = (cChartSetting.IsSubChart) ? string.Format("SubChart #{0}", cChartSetting.LayerIndex + 1) : "Hide";
+						RequestSetting cRequestSetting = frmCreateScriptSetting.RequestSetting;
+						ModifyDataStreamInfo(cInfo, cChartSetting, cRequestSetting);
 
 						source.Refresh();
 					}

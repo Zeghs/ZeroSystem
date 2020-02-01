@@ -291,22 +291,22 @@ namespace Zeghs.Managers {
 			int iTotalSeconds = dataRequest.Resolution.TotalSeconds;
 			if (useCache) {  //是否使用快取
 				lock (cStorage) {  //需要 lock 這個區塊(避免非同步讀取資料時發生問題)
+					int iBaseSeconds = (iTotalSeconds < Resolution.MAX_BASE_TOTALSECONDS) ? Resolution.MIN_BASE_TOTALSECONDS : Resolution.MAX_BASE_TOTALSECONDS;
 					SeriesSymbolData cSeries = cStorage.GetSeries(iTotalSeconds);
 					if (cSeries == null) {
-						int iBaseSeconds = (iTotalSeconds < Resolution.MAX_BASE_TOTALSECONDS) ? Resolution.MIN_BASE_TOTALSECONDS : Resolution.MAX_BASE_TOTALSECONDS;
 						cSeries = cStorage.GetSeries(iBaseSeconds);
 						if (cSeries == null) {
 							DataAdapter cAdapter = LoadAdapter(ref dataRequest);
 							cSeries = cAdapter.Series;
 							cStorage.Add(cSeries);
 						}
+					}
 
-						if (iBaseSeconds == iTotalSeconds) {
-							goto exit;
-						} else {
-							cSeries = cSeries.CreateSeries(dataRequest); //利用基礎周期建立其他的資料周期
-							cStorage.Add(cSeries);  //加入至 SeriesStorage
-						}
+					if (iBaseSeconds == iTotalSeconds) {
+						goto exit;
+					} else {
+						cSeries = cSeries.CreateSeries(dataRequest); //利用基礎周期建立其他的資料周期
+						cStorage.Add(cSeries);  //加入至 SeriesStorage
 					}
 
 					dataRequest.Resolution = cSeries.DataRequest.Resolution;  //將目標的週期結構更新至傳入的 InstrumentDataRequest 週期結構

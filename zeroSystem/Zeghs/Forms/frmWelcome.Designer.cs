@@ -67,7 +67,7 @@
 			this.labCopyright.Name = "labCopyright";
 			this.labCopyright.Size = new System.Drawing.Size(270, 16);
 			this.labCopyright.TabIndex = 2;
-			this.labCopyright.Text = "Copyright © Web Electric Services 2004 - 2019";
+			this.labCopyright.Text = "Copyright © Web Electric Services 2004 - 2020";
 			// 
 			// labVersion
 			// 

@@ -168,7 +168,6 @@ namespace Zeghs.Data {
 							int iRequestCount = iTotals - cBaseSeries.DataRequest.Range.Count;  //計算後的資料總個數 - 基礎週期目前已下載後的資料個數 = 欲請求的的個數
 							cRequestEvent = new DataRequestEvent(iRequestCount, iTotals, cBaseSeries.DataRequest.Resolution.Rate);
 						}
-						
 						cBaseSeries.OnRequest(cRequestEvent);  //回補歷史資訊
 					}
 
@@ -185,15 +184,17 @@ namespace Zeghs.Data {
 				}
 
 				lock (__oLock) {  //須鎖定資源(將基礎序列資料合併至目標序列時需要鎖定, 避免合併的時候多執行緒導致合併資料產生問題)
+					int iTargetCount = cTargetSeries.Indexer.Count;
 					int iAllocSize = e.Count - cTargetSeries.DataRequest.Range.Count;
-					if (iAllocSize > 0) {
-						++iAllocSize;  //多預留一個空間(避免陣列空間不足)
-						
-						cTargetSeries.AdjustSize(iAllocSize, true);
+					if (iTargetCount == 0 || iAllocSize > 0) {
+						if (iAllocSize > 0) {
+							++iAllocSize;  //多預留一個空間(避免陣列空間不足)
+							cTargetSeries.AdjustSize(iAllocSize, true);
+						}
 						cBaseSeries.Merge(cTargetSeries);  //合併資料
 					}
 				}
 			}
 		}
 	}
-}  //199行
+}  //200行
