@@ -7,7 +7,7 @@ namespace Zeghs.Orders {
 	/// <summary>
 	///   限價下單交易員類別
 	/// </summary>
-	internal sealed class OrderPriced : IOrderPriced {
+	internal class OrderPriced : IOrderPriced {
 		private IOrderSender __cSender = null;
 		private TradeList<TradeOrder> __cEntrusts = null;
 		private ISeries<IMarketPosition> __cPositions = null;
@@ -56,20 +56,20 @@ namespace Zeghs.Orders {
 				int iCount = cTrades.Count;
 				for (int i = iCount - 1; i >= 0; i--) {  //由最後一筆往前移動索引值(避免因為移除委託單導致索引指向錯誤)
 					TradeOrder cOrder = cTrades[i];
-					if (cOrder.IsTrusted && cOrder.Action == Info.Action && cOrder.Category == Info.Category) {
+					if ((cOrder.IsSended || cOrder.IsTrusted) && cOrder.Action == Info.Action && cOrder.Category == Info.Category) {
 						iCancelLots += cOrder.Contracts;
 
-						if (!cOrder.IsCancel) {
+						if (cOrder.IsTrusted && !cOrder.IsCancel) {
 							cOrder.IsCancel = __cSender.Send(cOrder, true);
 						}
 					}
 				}
 			} else {
 				TradeOrder cOrder = __cEntrusts.GetTradeFromName(name);
-				if (cOrder != null && cOrder.IsTrusted && cOrder.Action == Info.Action && cOrder.Category == Info.Category) {
+				if (cOrder != null && (cOrder.IsSended || cOrder.IsTrusted) && cOrder.Action == Info.Action && cOrder.Category == Info.Category) {
 					iCancelLots += cOrder.Contracts;
 
-					if (!cOrder.IsCancel) {
+					if (cOrder.IsTrusted && !cOrder.IsCancel) {
 						cOrder.IsCancel = __cSender.Send(cOrder, true);
 					}
 				}

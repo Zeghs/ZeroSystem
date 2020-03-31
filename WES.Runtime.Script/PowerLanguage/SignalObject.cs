@@ -128,7 +128,9 @@ namespace PowerLanguage {
 
 			lock (__cTradeServices) {
 				foreach (var cTradeService in __cTradeServices.Values) {
-					cTradeService.OnWork();    //處理下單服務必要的工作
+					if (cTradeService.AutoExecuteOnWork) {
+						cTradeService.OnWork();    //處理下單服務必要的工作
+					}
 				}
 			}
 			base.OnUpdate();     //發送更新事件
@@ -150,7 +152,8 @@ namespace PowerLanguage {
 		/// <param name="instrument">商品資訊介面</param>
 		/// <param name="args">交易服務組件設定參數</param>
 		/// <param name="orderSource">交易服務來源名稱[預設:null](format: 交易組件名稱;交易服務類別名稱, null=使用預設交易服務來源類別名稱)</param>
-		protected void CreateTrader(IInstrument instrument, object args, string orderSource = null) {
+		/// <param name="autoExecuteOnWork">是否由系統自動執行 OnWork 方法(預設=true, 如果為 false 則須由使用者自行呼叫 OnWork 方法)</param>
+		protected void CreateTrader(IInstrument instrument, object args, string orderSource = null, bool autoExecuteOnWork = true) {
 			bool bExist = false;
 			string sSymbolId = instrument.Request.Symbol;
 			lock (__cTradeServices) {
@@ -172,6 +175,7 @@ namespace PowerLanguage {
 			cOrderService.onResponse += OrderService_onResponse;
 			cOrderService.SetInstrument(instrument as Instrument, iDataStream);
 			cOrderService.SetDefaultContracts(__cProperty.DefaultContracts);
+			cOrderService.AutoExecuteOnWork = autoExecuteOnWork;
 
 			if (args != null) {
 				var cParameters = InputAttribute.GetParameters(cOrderService);
@@ -232,6 +236,7 @@ namespace PowerLanguage {
 				AbstractOrderService cService = null;
 				if (__cTradeServices.TryGetValue(symbolId, out cService)) {
 					__cOrderService = cService;
+					
 					this.OrderCreator = __cOrderService as IOrderCreator;
 					if (log.IsInfoEnabled) log.InfoFormat("[SignalObject.SelectTrader] Select trade services and OrderCreator...  symbolId={0}", symbolId);
 				}
@@ -242,4 +247,4 @@ namespace PowerLanguage {
 			OnTradeResponse(e);
 		}
 	}
-}  //245行
+}  //250行

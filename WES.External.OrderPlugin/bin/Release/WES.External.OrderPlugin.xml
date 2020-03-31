@@ -203,6 +203,11 @@
               收到委託或是成交回報時需要觸發的事件
             </summary>
         </member>
+        <member name="P:Zeghs.Services.AbstractOrderService.AutoExecuteOnWork">
+            <summary>
+              [取得/設定] 是否自動執行 OnWork 方法
+            </summary>
+        </member>
         <member name="P:Zeghs.Services.AbstractOrderService.Bars">
             <summary>
               [取得] 主要的 Bars 物件

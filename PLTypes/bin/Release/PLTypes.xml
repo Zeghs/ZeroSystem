@@ -1330,6 +1330,11 @@
               [取得/設定] 參數說明
             </summary>
         </member>
+        <member name="P:PowerLanguage.InputAttribute.IsEnum">
+            <summary>
+              [取得] 是否為列舉型別
+            </summary>
+        </member>
         <member name="P:PowerLanguage.InputAttribute.Name">
             <summary>
               [取得] 參數名稱

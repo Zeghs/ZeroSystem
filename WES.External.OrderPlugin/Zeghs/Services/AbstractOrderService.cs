@@ -22,6 +22,14 @@ namespace Zeghs.Services {
 		private Contracts __cDefaultContracts = Contracts.Default; //預設的下單數量
 
 		/// <summary>
+		///   [取得/設定] 是否自動執行 OnWork 方法
+		/// </summary>
+		public bool AutoExecuteOnWork {
+			get;
+			set;
+		}
+
+		/// <summary>
 		///   [取得] 主要的 Bars 物件
 		/// </summary>
 		public Instrument Bars {
@@ -227,4 +235,4 @@ namespace Zeghs.Services {
 			}
 		}
 	}
-}  //230行
+}  //238行

@@ -112,10 +112,7 @@ namespace Zeghs {
 			int iCount = cQuote.TickCount;
 			for (int i = iCount - 1; i >= 0; i--) {
 				ITick cTick =  cQuote.GetTick(i);
-				if (cTick.Price == 0 || cTick.Volume == 0) {
-					System.Console.WriteLine();
-				}
-				System.Console.WriteLine("{0} {1,8:0.00} {2,10} {3, 10} {4, 10}", cTick.Time.ToString("HHmmss"), cTick.Price, cTick.Single, cTick.Volume, cTick.Volume - dVolume);
+				System.Console.WriteLine("{0} {1,8:0.00} {2,8:0.00} {3,8:0.00} {4,10} {5, 10} {6, 10}", cTick.Time.ToString("HHmmss"), cTick.Bid.Price, cTick.Ask.Price, cTick.Price, cTick.Single, cTick.Volume, cTick.Volume - dVolume);
 				if (cTick.Volume > dVolume) {
 					dVolume = cTick.Volume;
 				}
@@ -135,7 +132,7 @@ namespace Zeghs {
 			//cService.AddSubscribe("TXF0.tw");
 			//cService.Complement("TXF0.tw");
 			//cService.AddSubscribe("2330.tw");
-			//cService.Complement("2330.tw");
+			cService.Complement("2371.tw");
 		}
 	}
 }

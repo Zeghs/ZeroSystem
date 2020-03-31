@@ -24,6 +24,7 @@ namespace Netwings {
 		private static int __iDealIndex = 0;
 		private static string __sFullDeal = "完全成交";
 		private static string __sClosedString = "平倉";
+		private static string __sErrorString = "*ERROR*";
 		private static Dictionary<ERuleType, List<RulePropertyAttribute>> __cRuleItems = null;
 
 		private static DateTime GetExpiration(Instrument bars) {
@@ -116,6 +117,14 @@ namespace Netwings {
 			set;
 		}
 
+		/// <summary>
+		///   [取得/設定] 使用平倉保護模式[預設:true] (當有平倉單時, 優先處理完平倉單之後才繼續處理新倉單)
+		/// </summary>
+		protected bool useCloseProtect {
+			get;
+			set;
+		}
+
 		TradeList<TradeOrder> IOrderEntrust.Entrusts {
 			get {
 				return __cEntrusts;
@@ -128,6 +137,7 @@ namespace Netwings {
 		public RealOrderService() {
 			this.ApiNumber = 1;  //預設通道編號
 			this.PipeNumber = 1;  //預設通道編號
+			this.useCloseProtect = true;
 
 			__cDeals = new Queue<TradeOrder>(16);
 			__cReserves = new Queue<string>(16);
@@ -283,7 +293,7 @@ namespace Netwings {
 					bool bRet = false;
 					int iCount = __cEntrusts.Count;
 					if (iCount > 0) {
-						for (int i = 0; i < iCount; i++) {
+						for (int i = iCount - 1; i >= 0; i--) {
 							TradeOrder cTemp = __cEntrusts[i];
 							if (cTemp.IsTrusted && cTemp.Price > 0 && cTemp.Contracts > 0 && cTemp.Action == action && !cTemp.Name.Equals(name)) {
 								if (!cTemp.IsCancel) {
@@ -394,6 +404,7 @@ namespace Netwings {
 		protected override void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
+				
 				if (disposing) {
 					base.Dispose(disposing);
 
@@ -418,7 +429,7 @@ namespace Netwings {
 			StringBuilder cBuilder = new StringBuilder(128);
 			cBuilder.Append(__sLocalPipe).Append(",")
 				.Append(trust.SymbolId).Append(",")
-				.Append(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")).Append(",")
+				.Append(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")).Append(",")
 				.Append((cAction == EOrderAction.Buy || cAction == EOrderAction.BuyToCover) ? 'B' : (cAction == EOrderAction.Sell || cAction == EOrderAction.SellShort) ? 'S' : ' ').Append(",")
 				.Append(trust.Contracts).Append(",")
 				.Append(trust.Price).Append(",")
@@ -432,8 +443,10 @@ namespace Netwings {
 
 			if (bSuccess) {  //如果傳送成功
 				trust.IsSended = true;  //設定已經傳送完畢
-				if (bClose) {  //如果是平倉單
-					__cCloseOrder = trust;  //指定平倉單至變數內(模組會監測平倉單完畢後才會啟動之後的單做下單動作, 避免倉部位錯亂)
+				if (this.useCloseProtect) {  //
+					if (bClose) {  //如果是平倉單
+						__cCloseOrder = trust;  //指定平倉單至變數內(模組會監測平倉單完畢後才會啟動之後的單做下單動作, 避免倉部位錯亂)
+					}
 				}
 			} else {
 				__cEntrusts.Remove(trust.Ticket);  //移除此筆尚未委託的委託單
@@ -578,7 +591,6 @@ namespace Netwings {
 						if (logger.IsInfoEnabled) logger.InfoFormat("[Report] #{0} Order data response completed...", this.Bars.Request.Symbol);
 						break;
 					case 1: //委託回報
-						string sOrderSymbolId = null;
 						OrderTrust[] cTrusts = cToken["Report"].ToObject<OrderTrust[]>();
 						foreach (OrderTrust cTrust in cTrusts) {
 							string sTrustId =  cTrust.委託書號;
@@ -591,10 +603,7 @@ namespace Netwings {
 								cTrustOrder = GetWaiting(sSymbolId, cTrust.委託價格);  //取得等待委託回報的委託單(這些委託單都要等待委託單號)
 								if (cTrustOrder == null) {
 									if (__iMaxTrustIndex == __iTrustIndex) {  //相等表示沒有下出任何的委託單, 可能是留在下單機內的委託單
-										if (sOrderSymbolId == null) {
-											sOrderSymbolId = GetOrderSymbol();
-										}
-
+										string sOrderSymbolId = GetOrderSymbol();
 										if (CheckSymbol(sSymbolId, sOrderSymbolId)) {  //比對兩個商品代號是否相同, 相同才會被加入委託倉內
 											cTrustOrder = new TradeOrder();
 											cTrustOrder.IsSended = true;
@@ -621,7 +630,10 @@ namespace Netwings {
 									cTrustOrder.IsTrusted = true;   //true=委託成功
 									cTrustOrder.Ticket = sTrustId;  //填入回報來的委託單號
 									cTrustOrder.Time = cTrust.委託時間;
-									
+
+									if (cTrust.備註.Equals(__sErrorString)) {  //如果下單機回報備註為 *ERROR* (表示下單出現例外, 可能是無融券或是餘額不足也可能是其他狀況) 
+										cTrustOrder.Contracts = -1;
+									}
 									__cEntrusts.Add(cTrustOrder);   //儲存至委託陣列內
 								}
 							}
@@ -675,4 +687,4 @@ namespace Netwings {
 			}
 		}
 	}
-} //678行
+} //690行

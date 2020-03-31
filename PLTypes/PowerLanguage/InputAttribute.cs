@@ -41,6 +41,15 @@ namespace PowerLanguage {
 		}
 
 		/// <summary>
+		///   [取得] 是否為列舉型別
+		/// </summary>
+		public bool IsEnum {
+			get {
+				return __cPropertyInfo.PropertyType.IsEnum;
+			}
+		}
+
+		/// <summary>
 		///   [取得] 參數名稱
 		/// </summary>
 		public string Name {
@@ -127,7 +136,6 @@ namespace PowerLanguage {
 			} else if (cType.IsEnum) {
 				oValue = Enum.Parse(cType, value);
 			}
-
 			this.SetValue(oValue);
 		}
 

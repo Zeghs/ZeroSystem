@@ -5,6 +5,11 @@
 			set;
 		}
 
+		public string[] Items {
+			get;
+			set;
+		}
+
 		public string Value {
 			get;
 			set;

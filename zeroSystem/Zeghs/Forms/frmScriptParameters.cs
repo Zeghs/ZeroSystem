@@ -38,10 +38,14 @@ namespace Zeghs.Forms {
 					_ParameterInfo cParameter = new _ParameterInfo();
 					cParameter.Comment = (cInput.Comment == null) ? cInput.Name : cInput.Comment;
 					cParameter.Value = cInput.Value.ToString();
-
+					if (cInput.IsEnum) {
+						cParameter.Items = Enum.GetNames(cInput.Value.GetType());
+					} else if(cParameter.Value.StartsWith("True") || cParameter.Value.StartsWith("False")) {
+						cParameter.Items = __sBooleans;
+					}
+					
 					source.Add(cParameter);
 				}
-				this.dataGrid.GetCell(1, 1).Editor = new SourceGrid.Cells.Editors.ComboBox(typeof(string), new string[] {"true", "false"}, false);
 			}
 		}
 
@@ -74,10 +78,11 @@ namespace Zeghs.Forms {
 			if (cPosition != SourceGrid.Position.Empty) {
 				_ParameterInfo cParam = source[cPosition.Row - 1] as _ParameterInfo;
 				string sValue = cParam.Value;
-				if(sValue.StartsWith("True") || sValue.StartsWith("False")) {
-					this.dataGrid.Columns[1].DataCell.Editor = __cComboBox;
-				} else {
+				if(cParam.Items == null) {
 					this.dataGrid.Columns[1].DataCell.Editor = __cTextBox;
+				} else {
+					__cComboBox.StandardValues = cParam.Items;
+					this.dataGrid.Columns[1].DataCell.Editor = __cComboBox;
 				}
 			}
 		}

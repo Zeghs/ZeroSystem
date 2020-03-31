@@ -34,6 +34,7 @@ namespace Zeghs.Orders {
 		/// </summary>
 		public T this[int index] {
 			get {
+				index = (index < 0) ? 0 : (index < __cTrades.Count) ? index : 0;
 				return __cTrades[index];
 			}
 		}
@@ -120,7 +121,6 @@ namespace Zeghs.Orders {
 			lock (__cIndexs) {
 				if (__cIndexs.TryGetValue(ticket, out iIndex)) {
 					T cTrade = __cTrades[iIndex];
-
 					int iLast = __cTrades.Count - 1;
 					if (iLast > 0 && iLast > iIndex) {
 						T cLast = __cTrades[iLast];

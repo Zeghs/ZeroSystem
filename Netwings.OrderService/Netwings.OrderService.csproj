@@ -54,6 +54,7 @@
     <Compile Include="Netwings\Forms\frmCustomBrokerFeeSetting.Designer.cs">
       <DependentUpon>frmCustomBrokerFeeSetting.cs</DependentUpon>
     </Compile>
+    <Compile Include="Netwings\GridOrderService.cs" />
     <Compile Include="Netwings\Orders\IOrderEntrust.cs" />
     <Compile Include="Netwings\LargeOrderService.cs" />
     <Compile Include="Netwings\Orders\IOrderSender.cs" />
@@ -79,6 +80,10 @@
     <ProjectReference Include="..\WES.External.OrderPlugin\WES.External.OrderPlugin.csproj">
       <Project>{952B0965-F7B9-4762-9B4C-F063372CCF31}</Project>
       <Name>WES.External.OrderPlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WES.External.QuotePlugin\WES.External.QuotePlugin.csproj">
+      <Project>{DE017AC1-D250-445C-9776-92632E032758}</Project>
+      <Name>WES.External.QuotePlugin</Name>
     </ProjectReference>
     <ProjectReference Include="..\WES.Runtime.Product\WES.Runtime.Product.csproj">
       <Project>{7C5601E7-7118-477B-A4AC-C2E0DE9999DB}</Project>
