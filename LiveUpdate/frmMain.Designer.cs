@@ -99,13 +99,13 @@
 			// labCopyright
 			// 
 			this.labCopyright.AutoSize = true;
-			this.labCopyright.Font = new System.Drawing.Font("Impact", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labCopyright.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labCopyright.ForeColor = System.Drawing.Color.White;
-			this.labCopyright.Location = new System.Drawing.Point(166, 96);
+			this.labCopyright.Location = new System.Drawing.Point(205, 96);
 			this.labCopyright.Name = "labCopyright";
-			this.labCopyright.Size = new System.Drawing.Size(230, 16);
+			this.labCopyright.Size = new System.Drawing.Size(190, 14);
 			this.labCopyright.TabIndex = 11;
-			this.labCopyright.Text = "Copyright © Web Electric Services 2004 - 2017";
+			this.labCopyright.Text = "Copyright © Web Electric Services.";
 			// 
 			// frmMain
 			// 
