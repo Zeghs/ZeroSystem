@@ -439,7 +439,7 @@ namespace Zeghs.Chart {
 				Graphics g = e.Graphics;
 				g.Clear(__cProperty.BackgroundColor);
 				using (SolidBrush cBrush = new SolidBrush(__cProperty.ForeColor)) {
-					g.DrawString("WES.Runtime.ChartEngine, Copyright © Web Electric Services 2017", __cContext.Font, cBrush, 0, 0);
+					g.DrawString("WES.Runtime.ChartEngine, Copyright © Web Electric Services. All rights reserved", __cContext.Font, cBrush, 0, 0);
 					g.DrawString("Loading data is in progress, Please wait...", __cContext.Font, cBrush, 0, 15);
 
 					string sChartTitle = "WES.ChartEngine";

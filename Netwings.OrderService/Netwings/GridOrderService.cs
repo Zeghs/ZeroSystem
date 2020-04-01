@@ -8,7 +8,7 @@ using Netwings.Orders;
 
 namespace Netwings {
 	public sealed class GridOrderService : RealOrderService, IOrderSender {
-		private const double 漲跌幅交易限制 = 0.099d;
+		private const double 漲跌幅交易限制 = 0.098d;
 
 		private sealed class _Truster {
 			private int __iDealCount = 0;
@@ -101,31 +101,35 @@ namespace Netwings {
 
 					int iTotals = (int) Math.Ceiling((double) this.Contracts / stepLots);
 					int iCount = (iTotals < count) ? iTotals : count;
-
-					__cTrustOrder.Price = price;
 					__cTrustOrder.BarNumber = barNumber;
 
 					EOrderAction cAction = __cTrustOrder.Action;
 					double dScale = (cAction == EOrderAction.Buy || cAction == EOrderAction.BuyToCover) ? -priceScale : priceScale;
 
-					HashSet<double> cTPrices = new HashSet<double>();
-					cResult = new List<TradeOrder>(count);
 					int iTotalV = 0;
+					bool bLimit = false;
+					cResult = new List<TradeOrder>(count);
+					HashSet<double> cTPrices = new HashSet<double>();
 					for (int i = 0; i < iCount; i++) {
 						int iLots = this.Contracts - iTotalV;
 						double dPrice = Math.Round(price + dScale * i, 2);
-						if ((dScale < 0 && dPrice < limitPrice) || (dScale > 0 && dPrice > limitPrice)) {
-							break;  //如果低於跌停價格或高於漲停價格就離開
+						if ((dScale < 0 && dPrice <= limitPrice) || (dScale > 0 && dPrice >= limitPrice)) {
+							bLimit = true;  //如果價格觸碰到漲跌停價格(設定價格極限旗標)
+							dPrice = limitPrice;  //將價格修改為極限價格(因為漲跌停無法在往上或往下掛價)
 						}
 
 						TradeOrder cTrust = null;
 						if (__cGridPrices.TryGetValue(dPrice, out cTrust)) {
 							if (cTrust.IsTrusted && !cTrust.IsCancel) {
-								iTotalV += cTrust.Contracts;
-								cTPrices.Add(dPrice);
+								if (bLimit) {  //如果是漲跌停價格的委託單(直接離開)
+									break;
+								} else {
+									iTotalV += cTrust.Contracts;
+									cTPrices.Add(dPrice);
+								}
 							}
 						} else {
-							int iContracts = (iLots < stepLots) ? iLots : stepLots;
+							int iContracts = (bLimit) ? iLots : (iLots < stepLots) ? iLots : stepLots;
 							iTotalV += iContracts;
 
 							string sName = string.Format("{0}|{1}", __cTrustOrder.Name, dPrice);
@@ -138,13 +142,14 @@ namespace Netwings {
 								Price = dPrice,
 								IsReverse = false
 							};
+							
 							cResult.Add(cOrder);
-
 							cTPrices.Add(dPrice);
 							__cGridPrices.Add(dPrice, cOrder);
 						}
 					}
 
+					//計算欲取消的委託單
 					foreach (double dPrice in __cGridPrices.Keys) {
 						if (!cTPrices.Contains(dPrice)) {
 							TradeOrder cTrust = __cGridPrices[dPrice];
@@ -412,4 +417,4 @@ namespace Netwings {
 			}
 		}
 	}
-} //415行
+} //420行

@@ -63,11 +63,11 @@
 			this.labCopyright.BackColor = System.Drawing.Color.Black;
 			this.labCopyright.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labCopyright.ForeColor = System.Drawing.Color.White;
-			this.labCopyright.Location = new System.Drawing.Point(64, 279);
+			this.labCopyright.Location = new System.Drawing.Point(48, 279);
 			this.labCopyright.Name = "labCopyright";
-			this.labCopyright.Size = new System.Drawing.Size(270, 16);
+			this.labCopyright.Size = new System.Drawing.Size(305, 16);
 			this.labCopyright.TabIndex = 2;
-			this.labCopyright.Text = "Copyright © Web Electric Services 2004 - 2020";
+			this.labCopyright.Text = "Copyright © Web Electric Services. All rights reserved";
 			// 
 			// labVersion
 			// 

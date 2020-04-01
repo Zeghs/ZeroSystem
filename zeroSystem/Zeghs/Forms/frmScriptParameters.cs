@@ -54,15 +54,17 @@ namespace Zeghs.Forms {
 		}
 
 		private void btnOK_Click(object sender, EventArgs e) {
-			int iCount = __cParameters.Count;
-			for (int i = 0; i < iCount; i++) {
-				InputAttribute cInput = __cParameters[i];
-				_ParameterInfo cParameter = source[i] as _ParameterInfo;
+			if (__cParameters != null) {
+				int iCount = __cParameters.Count;
+				for (int i = 0; i < iCount; i++) {
+					InputAttribute cInput = __cParameters[i];
+					_ParameterInfo cParameter = source[i] as _ParameterInfo;
 
-				cInput.SetValue(cParameter.Value);
+					cInput.SetValue(cParameter.Value);
+				}
+
+				this.DialogResult = DialogResult.OK;
 			}
-
-			this.DialogResult = DialogResult.OK;
 		}
 
 		private void toolItem_Create_Click(object sender, EventArgs e) {
