@@ -27,8 +27,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WES.Runtime.ChartEngine", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveUpdate", "LiveUpdate\LiveUpdate.csproj", "{F1CDB402-FDA0-4F13-A5C6-5041EC90D35D}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "zeroSystem_Setup", "zeroSystem_Setup\zeroSystem_Setup.vdproj", "{70E2457E-C9D7-4EE1-BF4A-D4280A41C089}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -199,14 +197,6 @@ Global
 		{F1CDB402-FDA0-4F13-A5C6-5041EC90D35D}.Release|x64.ActiveCfg = Release|x86
 		{F1CDB402-FDA0-4F13-A5C6-5041EC90D35D}.Release|x86.ActiveCfg = Release|x86
 		{F1CDB402-FDA0-4F13-A5C6-5041EC90D35D}.Release|x86.Build.0 = Release|x86
-		{70E2457E-C9D7-4EE1-BF4A-D4280A41C089}.Debug|Any CPU.ActiveCfg = Debug
-		{70E2457E-C9D7-4EE1-BF4A-D4280A41C089}.Debug|Mixed Platforms.ActiveCfg = Debug
-		{70E2457E-C9D7-4EE1-BF4A-D4280A41C089}.Debug|x64.ActiveCfg = Debug
-		{70E2457E-C9D7-4EE1-BF4A-D4280A41C089}.Debug|x86.ActiveCfg = Debug
-		{70E2457E-C9D7-4EE1-BF4A-D4280A41C089}.Release|Any CPU.ActiveCfg = Release
-		{70E2457E-C9D7-4EE1-BF4A-D4280A41C089}.Release|Mixed Platforms.ActiveCfg = Release
-		{70E2457E-C9D7-4EE1-BF4A-D4280A41C089}.Release|x64.ActiveCfg = Release
-		{70E2457E-C9D7-4EE1-BF4A-D4280A41C089}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

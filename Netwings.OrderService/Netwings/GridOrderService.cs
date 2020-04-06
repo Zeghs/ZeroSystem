@@ -14,7 +14,7 @@ namespace Netwings {
 			private int __iDealCount = 0;
 			private bool __bCanceled = false;
 			private TradeOrder __cTrustOrder = null;
-			private Dictionary<double, TradeOrder> __cGridPrices = null;
+			private Dictionary<string, TradeOrder> __cGridPrices = null;
 
 			internal EOrderAction Action {
 				get {
@@ -48,7 +48,7 @@ namespace Netwings {
 
 			internal _Truster(TradeOrder order) {
 				__cTrustOrder = order;
-				__cGridPrices = new Dictionary<double, TradeOrder>(16);
+				__cGridPrices = new Dictionary<string, TradeOrder>(16);
 			}
 
 			internal void Cancel() {
@@ -57,8 +57,9 @@ namespace Netwings {
 
 			internal void CheckCancel(TradeOrder order) {
 				lock (__cGridPrices) {
-					if (__cGridPrices.ContainsKey(order.Price)) {
-						__cGridPrices.Remove(order.Price);
+					string sName = order.Name;
+					if (__cGridPrices.ContainsKey(sName)) {
+						__cGridPrices.Remove(sName);
 					}
 				}
 			}
@@ -66,9 +67,10 @@ namespace Netwings {
 			internal void CheckTrust(TradeOrder order) {
 				TradeOrder cOrder = null;
 				lock (__cGridPrices) {
-					if (__cGridPrices.TryGetValue(order.Price, out cOrder)) {
+					string sName = order.Name;
+					if (__cGridPrices.TryGetValue(sName, out cOrder)) {
 						if (cOrder.Ticket == null) {
-							__cGridPrices[order.Price] = order;
+							__cGridPrices[sName] = order;
 						}
 					}
 				}
@@ -78,15 +80,16 @@ namespace Netwings {
 				lock (__cGridPrices) {
 					Interlocked.Add(ref __iDealCount, order.Contracts);
 
-					if (__cGridPrices.ContainsKey(order.Price)) {
+					string sName = order.Name;
+					if (__cGridPrices.ContainsKey(sName)) {
 						if (order.IsDealed) {
-							__cGridPrices.Remove(order.Price);
+							__cGridPrices.Remove(sName);
 						}
 					}
 				}
 			}
 
-			internal List<TradeOrder> CreateTrusts(int barNumber, double price, int count, int stepLots, double limitPrice, double priceScale) {
+			internal List<TradeOrder> CreateTrusts(int barNumber, double price, int count, int stepLots, double lowest, double highest, double priceScale) {
 				if (__bCanceled) {  //如果取消旗標 = true(使用者取消) 表示此筆委託單不再建立鋪單委託
 					return null;
 				}
@@ -109,30 +112,29 @@ namespace Netwings {
 					int iTotalV = 0;
 					bool bLimit = false;
 					cResult = new List<TradeOrder>(count);
-					HashSet<double> cTPrices = new HashSet<double>();
+					HashSet<string> cTPrices = new HashSet<string>();
 					for (int i = 0; i < iCount; i++) {
 						int iLots = this.Contracts - iTotalV;
 						double dPrice = Math.Round(price + dScale * i, 2);
-						if ((dScale < 0 && dPrice <= limitPrice) || (dScale > 0 && dPrice >= limitPrice)) {
+						if (dPrice <= lowest || dPrice >= highest) {
 							bLimit = true;  //如果價格觸碰到漲跌停價格(設定價格極限旗標)
-							dPrice = limitPrice;  //將價格修改為極限價格(因為漲跌停無法在往上或往下掛價)
 						}
 
 						TradeOrder cTrust = null;
-						if (__cGridPrices.TryGetValue(dPrice, out cTrust)) {
+						string sName = string.Format("{0}|{1}", __cTrustOrder.Name, dPrice);
+						if (__cGridPrices.TryGetValue(sName, out cTrust)) {
 							if (cTrust.IsTrusted && !cTrust.IsCancel) {
 								if (bLimit) {  //如果是漲跌停價格的委託單(直接離開)
 									break;
 								} else {
 									iTotalV += cTrust.Contracts;
-									cTPrices.Add(dPrice);
+									cTPrices.Add(sName);
 								}
 							}
 						} else {
 							int iContracts = (bLimit) ? iLots : (iLots < stepLots) ? iLots : stepLots;
 							iTotalV += iContracts;
 
-							string sName = string.Format("{0}|{1}", __cTrustOrder.Name, dPrice);
 							TradeOrder cOrder = new TradeOrder() {
 								Action = __cTrustOrder.Action,
 								BarNumber = __cTrustOrder.BarNumber,
@@ -144,15 +146,15 @@ namespace Netwings {
 							};
 							
 							cResult.Add(cOrder);
-							cTPrices.Add(dPrice);
-							__cGridPrices.Add(dPrice, cOrder);
+							cTPrices.Add(sName);
+							__cGridPrices.Add(sName, cOrder);
 						}
 					}
 
 					//計算欲取消的委託單
-					foreach (double dPrice in __cGridPrices.Keys) {
-						if (!cTPrices.Contains(dPrice)) {
-							TradeOrder cTrust = __cGridPrices[dPrice];
+					foreach (string sName in __cGridPrices.Keys) {
+						if (!cTPrices.Contains(sName)) {
+							TradeOrder cTrust = __cGridPrices[sName];
 							if (cTrust.IsTrusted && !cTrust.IsCancel) {
 								cResult.Add(cTrust);
 							}
@@ -176,9 +178,9 @@ namespace Netwings {
 
 			internal void SendCompleted(TradeOrder order, bool success) {
 				lock (__cGridPrices) {
-					if (__cGridPrices.ContainsKey(order.Price)) {
+					if (__cGridPrices.ContainsKey(order.Name)) {
 						if (!success) {
-							__cGridPrices.Remove(order.Price);
+							__cGridPrices.Remove(order.Name);
 						}
 					}
 				}
@@ -341,22 +343,20 @@ namespace Netwings {
 			}
 		}
 
-		private double GetLimitPrice(EOrderAction action, double priceScale) {
+		private double[] GetLimitPrice(double priceScale) {
 			double dReferPrice = (this.Bars.Quotes == null) ? this.Bars.Close.Value : this.Bars.Quotes.ReferPrice;
-			if (action == EOrderAction.Buy || action == EOrderAction.BuyToCover) {
-				double dPrice = dReferPrice * (1 - 漲跌幅交易限制);
-				return (Math.Floor(dPrice / priceScale) + 1) * priceScale;
-			} else {
-				double dPrice = dReferPrice * (1 + 漲跌幅交易限制);
-				return Math.Floor(dPrice / priceScale) * priceScale;
-			}
+			double dPrice1 = dReferPrice * (1 - 漲跌幅交易限制);
+			double dPrice2 = dReferPrice * (1 + 漲跌幅交易限制);
+			return new double[] { (Math.Floor(dPrice1 / priceScale) + 1) * priceScale, Math.Floor(dPrice2 / priceScale) * priceScale };
 		}
 
 		private bool SendTrust(_Truster truster, double price) {
 			bool bRet = false;
 			lock (__oLock) {
 				double dPriceScale = this.Bars.Info.PriceScale;
-				List<TradeOrder> cOrders = truster.CreateTrusts(Bars.CurrentBar, price, this.TrustCount, this.LotsPerTrust, GetLimitPrice(truster.Action, dPriceScale), dPriceScale);
+				double[] dLimitPrices = GetLimitPrice(dPriceScale);
+				
+				List<TradeOrder> cOrders = truster.CreateTrusts(Bars.CurrentBar, price, this.TrustCount, this.LotsPerTrust, dLimitPrices[0], dLimitPrices[1], dPriceScale);
 				if (cOrders != null) {
 					foreach (TradeOrder cOrder in cOrders) {
 						if (!cOrder.IsCancel) {
