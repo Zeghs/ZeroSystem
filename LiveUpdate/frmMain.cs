@@ -31,14 +31,12 @@ namespace LiveUpdate {
 
 		internal bool CheckUpdate(string url) {
 			bool bRet = false;
-			HttpWebResponse cResponse = null;
+			WebResponse cResponse = null;
 			HttpWebRequest cRequest = WebRequest.Create(url) as HttpWebRequest;
 			cRequest.Method = "HEAD";
 
-
 			try {
-				cResponse = cRequest.GetResponse() as HttpWebResponse;
-
+				cResponse = cRequest.GetResponse();
 				__sUpdateURL = url;
 				bRet = true;
 			} catch {
@@ -113,6 +111,7 @@ namespace LiveUpdate {
 					return;
 				}
 			}
+			
 			this.Close();
 		}
 

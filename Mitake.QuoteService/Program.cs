@@ -132,7 +132,7 @@ namespace Zeghs {
 			//cService.AddSubscribe("TXF0.tw");
 			//cService.Complement("TXF0.tw");
 			//cService.AddSubscribe("2330.tw");
-			cService.Complement("2371.tw");
+			//cService.Complement("2371.tw");
 		}
 	}
 }

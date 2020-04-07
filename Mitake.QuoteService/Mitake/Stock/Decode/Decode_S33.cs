@@ -59,7 +59,7 @@ namespace Mitake.Stock.Decode {
 		}
 
 		//計算單量
-		internal static void CalculateSingle(MitakeIndexTick current, MitakeIndexTick previous) {
+		private static void CalculateSingle(MitakeIndexTick current, MitakeIndexTick previous) {
 			if (previous == null) {
 				current.Single = current.Volume;
 				current.成交張數單量 = current.成交張數;

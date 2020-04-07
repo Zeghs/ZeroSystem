@@ -59,12 +59,13 @@ namespace Mitake.Stock.Decode {
                                                         if (fIndex > 0) {
 								cTick.Ask = new DOMPrice(fIndex, cTick.Ask.Size);
 								cTick.Bid = new DOMPrice(fIndex, cTick.Bid.Size);
+								CalculatePrice(index, cTime, fIndex);
 
 								if (cTime >= index.即時資訊.Time) {
+									index.Close = fIndex;
 									index.加權指數價差 = fIndex - index.ReferPrices[0];
-									CalculatePrice(index, cTime, fIndex);
 								}
-                                                        }
+							}
                                                         break;
                                                 case 9: //不含金融
                                                         if (fIndex > 0) {
@@ -85,7 +86,7 @@ namespace Mitake.Stock.Decode {
                 }
 		
 		//計算個股(開盤價 最高價 最低價)
-		internal static void CalculatePrice(MitakeIndex index, DateTime time, double price) {
+		private static void CalculatePrice(MitakeIndex index, DateTime time, double price) {
 			if (price > 0) {
 				if (index.Open == 0) {
 					if (Time.ConvertForTotalSeconds(time) == 32405) {  //9:00:05 才是真的開盤價格
@@ -95,7 +96,6 @@ namespace Mitake.Stock.Decode {
 				
 				index.High = ((index.High == 0) ? price : ((price > index.High) ? price : index.High));
 				index.Low = ((index.Low == 0) ? price : ((price < index.Low) ? price : index.Low));
-				index.Close = price;
 			}
 		}
 	}
