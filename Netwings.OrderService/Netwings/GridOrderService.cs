@@ -104,6 +104,7 @@ namespace Netwings {
 
 					int iTotals = (int) Math.Ceiling((double) this.Contracts / stepLots);
 					int iCount = (iTotals < count) ? iTotals : count;
+					
 					__cTrustOrder.BarNumber = barNumber;
 
 					EOrderAction cAction = __cTrustOrder.Action;
@@ -115,6 +116,10 @@ namespace Netwings {
 					HashSet<string> cTPrices = new HashSet<string>();
 					for (int i = 0; i < iCount; i++) {
 						int iLots = this.Contracts - iTotalV;
+						if (iLots <= 0) {
+							break;
+						}
+
 						double dPrice = Math.Round(price + dScale * i, 2);
 						if (dPrice <= lowest || dPrice >= highest) {
 							bLimit = true;  //如果價格觸碰到漲跌停價格(設定價格極限旗標)
@@ -417,4 +422,4 @@ namespace Netwings {
 			}
 		}
 	}
-} //420行
+} //425行

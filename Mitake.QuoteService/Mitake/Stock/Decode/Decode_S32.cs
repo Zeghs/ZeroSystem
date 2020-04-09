@@ -33,51 +33,53 @@ namespace Mitake.Stock.Decode {
 				}
 			}
 
-                        do {
-                                //取得價量旗標
-                                bFlag = Buffer[0];
-                                ++Buffer.Position;
+			do {
+				//取得價量旗標
+				bFlag = Buffer[0];
+				++Buffer.Position;
 
-                                //取得指數大小(1~4 Byte 不固定)
-                                bMode = BitConvert.GetValue(bFlag, 6, 2);
+				//取得指數大小(1~4 Byte 不固定)
+				bMode = BitConvert.GetValue(bFlag, 6, 2);
 
-                                //取得指數代號(有加權指數，不含金融 等......)
-                                bIType = BitConvert.GetValue(bFlag, 0, 6);
-                                fIndex = (float)(Volumn.GetVolumn(bMode, Buffer) * 0.01);
+				//取得指數代號(有加權指數，不含金融 等......)
+				bIType = BitConvert.GetValue(bFlag, 0, 6);
+				fIndex = (float) (Volumn.GetVolumn(bMode, Buffer) * 0.01);
 
 				if (Time.ConvertForTotalSeconds(cTime) == 32400) { //09:00 開盤會送出昨日收盤價
-                                        index.ReferPrices[bIType] = fIndex;  //昨天收盤指數
-                                }
-
-				if (fIndex > 0) {
-					cTick.Classifys[bIType].IndexValue = fIndex;
-				}
-
-                                if (index.Serial == 9999) {
-                                        switch (bIType) {
-                                                case 0: //加權指數
-                                                        if (fIndex > 0) {
+					index.ReferPrices[bIType] = fIndex;  //昨天收盤指數
+				} else {
+					if (fIndex > 0) {
+						cTick.Classifys[bIType].IndexValue = fIndex;
+						
+						switch (bIType) {
+							case 0: //加權指數
 								cTick.Ask = new DOMPrice(fIndex, cTick.Ask.Size);
 								cTick.Bid = new DOMPrice(fIndex, cTick.Bid.Size);
 								CalculatePrice(index, cTime, fIndex);
 
 								if (cTime >= index.即時資訊.Time) {
 									index.Close = fIndex;
-									index.加權指數價差 = fIndex - index.ReferPrices[0];
+
+									if (index.Serial == 9999) {
+										index.加權指數價差 = fIndex - index.ReferPrices[0];
+									} else if (index.Serial == 9998) {
+										index.OTC指數價差 = fIndex - index.ReferPrices[0];
+									}
 								}
-							}
-                                                        break;
-                                                case 9: //不含金融
-                                                        if (fIndex > 0) {
-                                                                if (cTime >= index.即時資訊.Time)
-                                                                        index.不含金融價差 = fIndex - index.ReferPrices[9];
-                                                        }
-                                                        break;
-                                                default:
-                                                        break;
-                                        }
-                                }
-                        } while (Buffer.Position < iSize);//End While
+								break;
+							case 9: //不含金融
+								if (index.Serial == 9999) {
+									if (cTime >= index.即時資訊.Time) {
+										index.不含金融價差 = fIndex - index.ReferPrices[9];
+									}
+								}
+								break;
+							default:
+								break;
+						}
+					}
+				}
+			} while (Buffer.Position < iSize);//End While
 
 			if (cTime > index.即時資訊.Time) {
 			        index.即時資訊 = cTick;

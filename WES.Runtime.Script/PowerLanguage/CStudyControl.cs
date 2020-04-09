@@ -18,7 +18,7 @@ namespace PowerLanguage {
 
 		private bool __bBusy = false;      //忙碌旗標
 		private bool __bDisposed = false;  //Dispose旗標
-		private int __iTickCount = 2;
+		private int __iTickCount = 1;
 		private DataLoader __cDataLoader = null;
 		private AbstractQuoteService __cQuoteService = null;
 		private object __oLock = new object();
@@ -171,6 +171,7 @@ namespace PowerLanguage {
 		///   啟動腳本
 		/// </summary>
 		internal virtual void Start() {
+			RunMoveBarsAndUpdate(this.Bars.Time.Value);  //先觸發一次 CalcBar 方法(因為 Bars.CurrentBar 從 1 開始, 如果直接執行 AsyncCalculate 方法, 會直接從第 2 根 Bars 開始進入 CalcBar 方法, 少算了第 1 根 Bars)
 			AsyncCalculate();  //啟動的時候先計算一次(因為使用者不一定會使用即時報價來源, 如果不先計算沒有報價源就不會啟動 CalcBar 方法)
 			
 			this.ConnectQuoteServer();  //連結即時報價資訊源
@@ -198,25 +199,15 @@ namespace PowerLanguage {
 
 			if (!bBusy) {
 				Task.Factory.StartNew(() => {
-					Instrument cBaseInstrument = __cDataLoader.GetInstrument(0);
+					Instrument cBaseInstrument = __cDataLoader.GetInstrument(0);  //取得第一個 Instrument(之後的 Instrument 資料都會跟隨這個同步移動 Bars)
 					if (cBaseInstrument != null) {
 						while (__iTickCount > 0) {
-							Interlocked.Decrement(ref __iTickCount);
+							Interlocked.Decrement(ref __iTickCount);  //每次遞減一次(當 TickCount 遞減完畢則表示已經計算完所有的 Tick)
 
 							bool bNext = true;
 							while (bNext) {
-								bNext = cBaseInstrument.Next();
-								DateTime cTime = cBaseInstrument.Time.Value;
-								int iCount = __cDataLoader.MaxInstrumentCount;
-								Parallel.For(1, iCount, (i) => {
-									Instrument cInstrument = __cDataLoader.GetInstrument(i);
-
-									if (cInstrument != null) {
-										cInstrument.MoveBars(cTime);
-									}
-								});
-								
-								OnUpdate();
+								bNext = cBaseInstrument.Next();  //往下一根 Bars 移動
+								RunMoveBarsAndUpdate(cBaseInstrument.Time.Value);  //讀取移動後的 Bars 時間
 							}
 						}
 					}
@@ -236,6 +227,18 @@ namespace PowerLanguage {
 				__cQuoteService = null;
 			}
 			__cDataLoader.Dispose();  //釋放資料讀取者資源
+		}
+
+		private void RunMoveBarsAndUpdate(DateTime time) {
+			int iCount = __cDataLoader.MaxInstrumentCount;  //取得目前資料讀取者的所有 Instrument 個數
+			Parallel.For(1, iCount, (i) => {
+				Instrument cInstrument = __cDataLoader.GetInstrument(i);
+
+				if (cInstrument != null) {
+					cInstrument.MoveBars(time);  //開始同步 Instrument 的時間週期(會將 Instrument 的 Bars 移動到與參數 time 時間最接近的那一根 Bars 上)
+				}
+			});
+			OnUpdate();  //觸發更新事件(如果是繼承 CStudyAbstract 的物件則會觸發 CalcBar 方法)
 		}
 
 		private void DataLoader_onLoadCompleted(object sender, EventArgs e) {
@@ -274,4 +277,4 @@ namespace PowerLanguage {
 			OnQuoteDateTime(e);
 		}
 	}
-}  //277行
+}  //280行

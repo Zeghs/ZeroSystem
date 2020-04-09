@@ -231,18 +231,11 @@ namespace Mitake.Stock.Decode {
                         }
 
                         switch (Module) {
-                                case 0:
-                                        break;
                                 case 1:
                                         index.加權指數漲跌幅 = fValue;
                                         break;
-                                case 2:
-                                        break;
                                 case 3:
                                         index.不含金融漲跌幅 = fValue;
-                                        break;
-                                case 4:
-                                        index.OTC指數價差 = fValue;
                                         break;
                                 case 5:
                                         index.OTC指數漲跌幅 = fValue;
