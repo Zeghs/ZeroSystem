@@ -129,7 +129,10 @@ namespace Netwings {
 						string sName = string.Format("{0}|{1}", __cTrustOrder.Name, dPrice);
 						if (__cGridPrices.TryGetValue(sName, out cTrust)) {
 							if (cTrust.IsTrusted && !cTrust.IsCancel) {
-								if (bLimit) {  //如果是漲跌停價格的委託單(直接離開)
+								if (bLimit) {  //如果是漲跌停價格的委託單(數量相同就保留, 數量不同直接離開)
+									if (cTrust.Contracts == iLots) {
+										cTPrices.Add(sName);
+									}
 									break;
 								} else {
 									iTotalV += cTrust.Contracts;
@@ -400,9 +403,6 @@ namespace Netwings {
 							cTruster.CheckCancel(cOrder);
 						} else {
 							cTruster.CheckDeal(cOrder);
-							if (cOrder.IsDealed) {  //如果此檔委託單已經完全成交, 就再次建立鋪單委託(增加成交機率)
-								this.SendTrust(cTruster, cOrder.Price);
-							}
 						}
 
 						if (cTruster.IsEmpty) { //如果已經交易完畢
