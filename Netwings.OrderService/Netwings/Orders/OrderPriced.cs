@@ -50,31 +50,37 @@ namespace Zeghs.Orders {
 		/// <param name="name">下單名稱(如果 name 為 null 則取消全部委託中的訂單)</param>
 		/// <returns>回傳值: 取消委託中訂單的總口數</returns>
 		public int Cancel(string name = null) {
-			int iCancelLots = 0;
+			int iCancelLots = 0, iDealCount = 0;
 			if (name == null) {
 				List<TradeOrder> cTrades = __cEntrusts.Trades;
 				int iCount = cTrades.Count;
 				for (int i = iCount - 1; i >= 0; i--) {  //由最後一筆往前移動索引值(避免因為移除委託單導致索引指向錯誤)
 					TradeOrder cOrder = cTrades[i];
 					if ((cOrder.IsSended || cOrder.IsTrusted) && cOrder.Action == Info.Action && cOrder.Category == Info.Category) {
-						iCancelLots += cOrder.Contracts;
-
-						if (cOrder.IsTrusted && !cOrder.IsCancel) {
-							cOrder.IsCancel = __cSender.Send(cOrder, true);
+						if (cOrder.Contracts == 0) {
+							++iDealCount;  //當已經完成成交後, 已經沒有合約量, 但是因為還沒有經過倉部位計算, 所以還不會移除此筆委託單, 所以還是要認定此筆委託單尚未取消
+						} else {
+							iCancelLots += cOrder.Contracts;
+							if (cOrder.IsTrusted && !cOrder.IsCancel) {
+								cOrder.IsCancel = __cSender.Send(cOrder, true);
+							}
 						}
 					}
 				}
 			} else {
 				TradeOrder cOrder = __cEntrusts.GetTradeFromName(name);
 				if (cOrder != null && (cOrder.IsSended || cOrder.IsTrusted) && cOrder.Action == Info.Action && cOrder.Category == Info.Category) {
-					iCancelLots += cOrder.Contracts;
-
-					if (cOrder.IsTrusted && !cOrder.IsCancel) {
-						cOrder.IsCancel = __cSender.Send(cOrder, true);
+					if (cOrder.Contracts == 0) {
+						++iDealCount;  //當已經完成成交後, 已經沒有合約量, 但是因為還沒有經過倉部位計算, 所以還不會移除此筆委託單, 所以還是要認定此筆委託單尚未取消
+					} else {
+						iCancelLots += cOrder.Contracts;
+						if (cOrder.IsTrusted && !cOrder.IsCancel) {
+							cOrder.IsCancel = __cSender.Send(cOrder, true);
+						}
 					}
 				}
 			}
-			return iCancelLots;
+			return (iCancelLots == 0) ? iDealCount : iCancelLots;
 		}
 
 		/// <summary>
