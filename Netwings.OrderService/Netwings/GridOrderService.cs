@@ -2,13 +2,14 @@
 using System.Threading;
 using System.Collections.Generic;
 using PowerLanguage;
+using Zeghs.Data;
 using Zeghs.Events;
 using Zeghs.Orders;
 using Netwings.Orders;
 
 namespace Netwings {
 	public sealed class GridOrderService : RealOrderService, IOrderSender {
-		private const double 漲跌幅交易限制 = 0.098d;
+		private const double 漲跌幅交易限制 = 0.097d;
 
 		private sealed class _Truster {
 			private int __iDealCount = 0;
@@ -332,7 +333,6 @@ namespace Netwings {
 						__cTrusts.Add(name, cTruster);
 					}
 				}
-
 				SendTrust(cTruster, dPrice);
 				return true;
 			}
@@ -342,7 +342,6 @@ namespace Netwings {
 		protected override void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
-
 				if (disposing) {
 					base.Dispose(disposing);
 
@@ -352,10 +351,11 @@ namespace Netwings {
 		}
 
 		private double[] GetLimitPrice(double priceScale) {
-			double dReferPrice = (this.Bars.Quotes == null) ? this.Bars.Close.Value : this.Bars.Quotes.ReferPrice;
+			IQuote cQuote = this.Bars.Quotes;
+			double dReferPrice = (cQuote == null) ? this.Bars.Close.Value : cQuote.ReferPrice;
 			double dPrice1 = dReferPrice * (1 - 漲跌幅交易限制);
 			double dPrice2 = dReferPrice * (1 + 漲跌幅交易限制);
-			return new double[] { (Math.Floor(dPrice1 / priceScale) + 1) * priceScale, Math.Floor(dPrice2 / priceScale) * priceScale };
+			return new double[] { Math.Round((Math.Floor(dPrice1 / priceScale) + 1) * priceScale, 2), Math.Round(Math.Floor(dPrice2 / priceScale) * priceScale, 2) };
 		}
 
 		private bool SendTrust(_Truster truster, double price) {
