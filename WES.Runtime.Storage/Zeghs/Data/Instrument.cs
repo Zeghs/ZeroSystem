@@ -94,8 +94,8 @@ namespace Zeghs.Data {
 		public IInstrumentSettings Info {
 			get {
 				InstrumentSettings cSettings =  __cFullSymbolData.Source.Settings;
-				cSettings.SetExpirationFromTime(__cFullSymbolData.Time[0]);
-				cSettings.SetPriceScaleFromClosePrice(__cFullSymbolData.Close[0]);
+				cSettings.SetExpirationFromTime((__cFullSymbolData.BarsCount > 0) ? __cFullSymbolData.Time.Value : __cFullSymbolData.Source.UpdateTime);
+				cSettings.SetPriceScaleFromClosePrice((__cFullSymbolData.BarsCount > 0) ? __cFullSymbolData.Close.Value : __cFullSymbolData.Quotes.ReferPrice);
 				
 				return cSettings;
 			}
