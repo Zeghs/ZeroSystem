@@ -56,7 +56,6 @@ namespace Netwings {
 			if (iOutWeek > 5) {
 				iOutWeek = 1;
 			}
-
 			string ReWeek = (iOutWeek == 3) ? "O" : iOutWeek.ToString();
 			return "TX" + ReWeek;
 		}
@@ -344,15 +343,18 @@ namespace Netwings {
 				cOrder.Ticket = (openNextBar) ? name : GetTrustID();
 				__cEntrusts.Add(cOrder);  //加入至委託列表內
 
+				bool bReturn = true;
 				if (openNextBar) {  //如果需要在下一根 Bars 下單, 就先保留 name 在佇列, 以方便比對委託單
 					__cReserves.Enqueue(name);
 					__cNextBarRequires.Add(name);
 				} else {
 					if (__cCloseOrder == null) {
-						SendTrust(cOrder);  //傳送新委託單給下單機
+						bReturn = SendTrust(cOrder);  //傳送新委託單給下單機
+					} else {
+						bReturn = false;
 					}
 				}
-				return true;
+				return bReturn;
 			}
 			return false;
 		}
@@ -404,7 +406,6 @@ namespace Netwings {
 		protected override void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
-				
 				if (disposing) {
 					base.Dispose(disposing);
 
@@ -599,7 +600,6 @@ namespace Netwings {
 							TradeOrder cTrustOrder = __cEntrusts.GetTrade(sTrustId);  //取得委託單
 							if (cTrustOrder == null && iTrustCount > 0) {  //委託未成交數量大於0才處理
 								string sSymbolId = cTrust.商品代號;
-								
 								cTrustOrder = GetWaiting(sSymbolId, cTrust.委託價格);  //取得等待委託回報的委託單(這些委託單都要等待委託單號)
 								if (cTrustOrder == null) {
 									if (__iMaxTrustIndex == __iTrustIndex) {  //相等表示沒有下出任何的委託單, 可能是留在下單機內的委託單

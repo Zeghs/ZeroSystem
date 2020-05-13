@@ -87,8 +87,9 @@ namespace Zeghs.Orders {
 		///   送出下單命令
 		/// </summary>
 		/// <param name="price">指定價格</param>
-		public void Send(double price) {
-			Send(Info.Name, price, 0);
+		/// <returns>返回值: true=傳輸成功, false=傳輸失敗</returns>
+		public bool Send(double price) {
+			return Send(Info.Name, price, 0);
 		}
 
 		/// <summary>
@@ -96,8 +97,9 @@ namespace Zeghs.Orders {
 		/// </summary>
 		/// <param name="price">指定價格</param>
 		/// <param name="numLots">下單數量</param>
-		public void Send(double price, int numLots) {
-			Send(Info.Name, price, numLots);
+		/// <returns>返回值: true=傳輸成功, false=傳輸失敗</returns>
+		public bool Send(double price, int numLots) {
+			return Send(Info.Name, price, numLots);
 		}
 
 		/// <summary>
@@ -105,8 +107,9 @@ namespace Zeghs.Orders {
 		/// </summary>
 		/// <param name="new_name">新的下單名稱</param>
 		/// <param name="price">指定價格</param>
-		public void Send(string new_name, double price) {
-			Send(new_name, price, 0);
+		/// <returns>返回值: true=傳輸成功, false=傳輸失敗</returns>
+		public bool Send(string new_name, double price) {
+			return Send(new_name, price, 0);
 		}
 
 		/// <summary>
@@ -115,7 +118,8 @@ namespace Zeghs.Orders {
 		/// <param name="new_name">新的下單名稱</param>
 		/// <param name="price">指定價格</param>
 		/// <param name="numLots">下單數量</param>
-		public void Send(string new_name, double price, int numLots) {
+		/// <returns>返回值: true=傳輸成功, false=傳輸失敗</returns>
+		public bool Send(string new_name, double price, int numLots) {
 			int iPositionLots = GetPositionCount();
 			numLots = (Info.Contracts.IsUserSpecified) ? numLots : Info.Contracts.Contract;
 			numLots = (Info.IsExit && (!Info.OrderExit.IsTotal || numLots > iPositionLots)) ? iPositionLots : numLots;
@@ -129,8 +133,9 @@ namespace Zeghs.Orders {
 			}
 
 			if (bRet && numLots > 0) {
-				__cSender.Send(Info.Action, Info.Category, price, numLots, iNumLots > 0, 0, new_name);
+				bRet = __cSender.Send(Info.Action, Info.Category, price, numLots, iNumLots > 0, 0, new_name);
 			}
+			return bRet;
 		}
 
 		private int GetPositionCount() {

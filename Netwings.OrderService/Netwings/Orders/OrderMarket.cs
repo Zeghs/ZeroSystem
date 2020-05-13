@@ -44,24 +44,27 @@ namespace Zeghs.Orders {
 		/// <summary>
 		///   送出下單命令
 		/// </summary>
-		public void Send() {
-			Send(Info.Name, 0);
+		/// <returns>返回值: true=傳輸成功, false=傳輸失敗</returns>
+		public bool Send() {
+			return Send(Info.Name, 0);
 		}
 
 		/// <summary>
 		///   送出下單命令
 		/// </summary>
 		/// <param name="numLots">下單數量</param>
-		public void Send(int numLots) {
-			Send(Info.Name, numLots);
+		/// <returns>返回值: true=傳輸成功, false=傳輸失敗</returns>
+		public bool Send(int numLots) {
+			return Send(Info.Name, numLots);
 		}
 
 		/// <summary>
 		///   送出下單命令
 		/// </summary>
 		/// <param name="new_name">新的下單名稱</param>
-		public void Send(string new_name) {
-			Send(new_name, 0);
+		/// <returns>返回值: true=傳輸成功, false=傳輸失敗</returns>
+		public bool Send(string new_name) {
+			return Send(new_name, 0);
 		}
 
 		/// <summary>
@@ -69,7 +72,8 @@ namespace Zeghs.Orders {
 		/// </summary>
 		/// <param name="new_name">新的下單名稱</param>
 		/// <param name="numLots">下單數量</param>
-		public void Send(string new_name, int numLots) {
+		/// <returns>返回值: true=傳輸成功, false=傳輸失敗</returns>
+		public bool Send(string new_name, int numLots) {
 			int iPositionLots = GetPositionCount();
 			numLots = (Info.Contracts.IsUserSpecified) ? numLots : Info.Contracts.Contract;
 			numLots = (Info.IsExit && (!Info.OrderExit.IsTotal || numLots > iPositionLots)) ? iPositionLots : numLots;
@@ -83,8 +87,9 @@ namespace Zeghs.Orders {
 			}
 
 			if (bRet && numLots > 0) {
-				__cSender.Send(Info.Action, Info.Category, 0, numLots, iNumLots > 0, 0, new_name, Info.OnClose);
+				bRet = __cSender.Send(Info.Action, Info.Category, 0, numLots, iNumLots > 0, 0, new_name, Info.OnClose);
 			}
+			return bRet;
 		}
 
 		private int GetPositionCount() {
