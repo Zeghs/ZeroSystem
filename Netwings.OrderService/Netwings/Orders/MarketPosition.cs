@@ -197,34 +197,34 @@ namespace Netwings.Orders {
 		/// <param name="trade">交易資訊</param>
 		private void CalculatePosition(Queue<Trade> queue, Trade trade) {
 			lock (queue) {
-				TradeOrder cTargetOrder = trade._EntryOrder.Clone();
+				TradeOrder cTargetOrder = trade._EntryOrder;
 				while (queue.Count > 0 && cTargetOrder.Contracts > 0) {
 					Trade cTrade = queue.Peek();
 					TradeOrder cTradeOrder = cTrade._EntryOrder;
 
-					if (cTradeOrder.Contracts > cTargetOrder.Contracts) {
-						trade._EntryOrder = SplitOrder(cTradeOrder, cTargetOrder.Contracts);
-						trade._ExitOrder = cTargetOrder;
-						trade.CalculateProfit(__dBigPointValue);
+					if (cTradeOrder.Contracts > cTargetOrder.Contracts) {  //如果留倉單數量大於平倉單成交數量
+						trade._ExitOrder = cTargetOrder;  //將平倉單直接放入 _ExitOrder
+						trade._EntryOrder = SplitOrder(cTradeOrder, cTargetOrder.Contracts);  //從留倉單 Clone 後拆出與平倉單相同的數量, 放入 _EntryOrder
+						trade.CalculateProfit(__dBigPointValue);  //計算利潤
 
 						lock (__cHistorys) {
-							__cHistorys.Add(trade);
+							__cHistorys.Add(trade);  //寫入歷史資訊列表
 						}
 
-						SetParameters(trade);
-						break;
-					} else {
-						cTrade._ExitOrder = SplitOrder(cTargetOrder, cTradeOrder.Contracts);
-						cTrade.CalculateProfit(__dBigPointValue);
+						SetParameters(trade);  //計算內部其他參數
+						break;  //直接離開(因為已經從倉部位扣掉平倉數量, 所以直接離開)
+					} else {  //如果留倉單數量小於或等於平倉單數量
+						cTrade._ExitOrder = SplitOrder(cTargetOrder, cTradeOrder.Contracts);  //將平倉單 Clone 後拆出與留倉單相同數量, 放入 _ExitOrder
+						cTrade.CalculateProfit(__dBigPointValue);  //計算利潤
 
 						lock (__cHistorys) {
-							__cHistorys.Add(cTrade);
+							__cHistorys.Add(cTrade);  //寫入歷史資訊列表
 						}
 
-						SetParameters(cTrade);
-						queue.Dequeue();
+						SetParameters(cTrade);  //計算內部其他參數
+						queue.Dequeue();  //將此筆留倉單從 queue 內移除(表示此筆留倉單已經被沖銷)
 						
-						this.Remove(cTradeOrder.Ticket);
+						this.Remove(cTradeOrder.Ticket);  //被沖銷的留倉單就從倉部位內移除掉
 					}
 				}
 			}
@@ -257,8 +257,8 @@ namespace Netwings.Orders {
 		}
 
 		private TradeOrder SplitOrder(TradeOrder source, int splitContracts) {
-			TradeOrder cTradeOrder = source.Clone();
-			cTradeOrder.Contracts = splitContracts;
+			TradeOrder cTradeOrder = source.Clone();  //將原始下單資訊 Clone 一份
+			cTradeOrder.Contracts = splitContracts;  //修改成要分拆的數量
 
 			int iContracts = source.Contracts;
 			if (iContracts > 1) {  //如果原始的量超過 1 就計算手續費跟交易稅的平均值(有可能成交數量 > 1, 手續費與交易稅會合併計算)
@@ -268,8 +268,8 @@ namespace Netwings.Orders {
 				source.Tax -= cTradeOrder.Tax;
 			}
 			
-			source.Contracts -= splitContracts;
-			return cTradeOrder;
+			source.Contracts -= splitContracts;  //分拆後的數量要從原始的下單資訊內扣除
+			return cTradeOrder;  //回傳分拆後的下單資訊
 		}
 	}
 }
