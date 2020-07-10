@@ -177,6 +177,12 @@ namespace PowerLanguage {
 			cOrderService.SetDefaultContracts(__cProperty.DefaultContracts);
 			cOrderService.AutoExecuteOnWork = autoExecuteOnWork;
 
+			//設定傭金或手續費
+			AbstractOrderService cBaseService = null;
+			if (__cTradeServices.TryGetValue(this.Bars.Request.Symbol, out cBaseService)) {
+				cOrderService.SetCommissions(cBaseService.Commissions);
+			}
+
 			if (args != null) {
 				var cParameters = InputAttribute.GetParameters(cOrderService);
 				if (cParameters.Count > 0) {
@@ -247,4 +253,4 @@ namespace PowerLanguage {
 			OnTradeResponse(e);
 		}
 	}
-}  //250行
+}  //256行

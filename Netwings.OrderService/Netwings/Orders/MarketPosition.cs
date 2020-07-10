@@ -144,7 +144,7 @@ namespace Netwings.Orders {
 			int iBSFlag = (cAction == EOrderAction.Buy || cAction == EOrderAction.BuyToCover) ? -1 : 1;
 
 			Trade cTrade = new Trade();
-			cTrade._EntryOrder = deal;
+			cTrade._EntryOrder = deal.Clone();
 
 			if (iSide == iBSFlag) {
 				Queue<Trade> cQueue = null;
@@ -214,6 +214,7 @@ namespace Netwings.Orders {
 						SetParameters(trade);  //計算內部其他參數
 						break;  //直接離開(因為已經從倉部位扣掉平倉數量, 所以直接離開)
 					} else {  //如果留倉單數量小於或等於平倉單數量
+						cTrade.IsTradeClosed = true;
 						cTrade._ExitOrder = SplitOrder(cTargetOrder, cTradeOrder.Contracts);  //將平倉單 Clone 後拆出與留倉單相同數量, 放入 _ExitOrder
 						cTrade.CalculateProfit(__dBigPointValue);  //計算利潤
 
@@ -223,7 +224,6 @@ namespace Netwings.Orders {
 
 						SetParameters(cTrade);  //計算內部其他參數
 						queue.Dequeue();  //將此筆留倉單從 queue 內移除(表示此筆留倉單已經被沖銷)
-						
 						this.Remove(cTradeOrder.Ticket);  //被沖銷的留倉單就從倉部位內移除掉
 					}
 				}

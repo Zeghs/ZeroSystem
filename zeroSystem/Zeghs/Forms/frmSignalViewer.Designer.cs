@@ -1,5 +1,8 @@
 ﻿namespace Zeghs.Forms {
 	partial class frmSignalViewer {
+		private static readonly string __sMessageHeader_001 = "是否移除";
+		private static readonly string __sMessageContent_001 = "是否移除並終止此交易信號?";
+
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>

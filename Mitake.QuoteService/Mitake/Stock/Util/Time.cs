@@ -30,7 +30,6 @@ namespace Mitake.Stock.Util {
 			iMonth = (iMonth < 1) ? 1 : (iMonth > 12) ? 12 : iMonth;
 			int iMaxDay = DateTime.DaysInMonth(iYear, iMonth);
 			iDay = (iDay < 1) ? 1 : (iDay > iMaxDay) ? iMaxDay : iDay;
-			
 			return new DateTime(iYear, iMonth, iDay);
 		}
 
@@ -60,7 +59,7 @@ namespace Mitake.Stock.Util {
                 /// <param name="buffer">ZBuffer類別</param>
                 /// <returns>返回值:時間數值(將所有時間都轉換成秒數)</returns>
 		internal static DateTime GetOther(PacketBuffer buffer) {
-                        int hh = 0, mm = 0, ss = 0, value = 0;
+                        int hh = 0, mm = 0, ss = 0;
                         ushort TimeByte = (ushort)((buffer[0] << 8) + buffer[1]);
 
                         hh = BitConvert.GetValue(TimeByte, 12, 3);
@@ -76,9 +75,7 @@ namespace Mitake.Stock.Util {
 			ss = BitConvert.GetValue(TimeByte, 0, 6);
 			ss = (ss < 0 || ss > 59) ? 0 : ss;
 
-                        value = (hh * 3600) + (mm * 60) + ss;
-
-                        buffer.Position += 2;
+			buffer.Position += 2;
                         return new DateTime(__cToday.Year, __cToday.Month, __cToday.Day, hh, mm, ss);
                 }
 

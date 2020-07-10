@@ -83,11 +83,11 @@ namespace Zeghs.Orders {
 			if (iNumLots > 0) {
 				string sName = string.Format("Close_{0}", ID);
 				EOrderAction cAction = (Info.Action == EOrderAction.Buy) ? EOrderAction.BuyToCover : (Info.Action == EOrderAction.SellShort) ? EOrderAction.Sell : Info.Action;
-				bRet = __cSender.Send(cAction, Info.Category, 0, iNumLots, false, 0, sName, Info.OnClose);
+				bRet = __cSender.Send(cAction, Info.Category, 0, iNumLots, true, 0, sName, Info.OnClose);
 			}
 
-			if (bRet && numLots > 0) {
-				bRet = __cSender.Send(Info.Action, Info.Category, 0, numLots, iNumLots > 0, 0, new_name, Info.OnClose);
+			if (bRet && numLots > 0 && iNumLots == 0) {
+				bRet = __cSender.Send(Info.Action, Info.Category, 0, numLots, false, 0, new_name, Info.OnClose);
 			}
 			return bRet;
 		}

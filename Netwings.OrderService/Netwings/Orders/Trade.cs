@@ -56,6 +56,14 @@ namespace Netwings.Orders {
 		}
 
 		/// <summary>
+		///   [取得] 是否已經交易結束(表示此開倉訂單已全部平倉完畢)
+		/// </summary>
+		public bool IsTradeClosed {
+			get;
+			internal set;
+		}
+
+		/// <summary>
 		///   [取得] 下單名稱
 		/// </summary>
 		public string Name {

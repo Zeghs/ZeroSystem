@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Timers;
-using System.Threading;
 using System.Collections.Generic;
 using log4net;
 using PowerLanguage;
@@ -10,29 +9,30 @@ using Netwings.Orders;
 
 namespace Netwings {
 	public sealed class LargeOrderService : RealOrderService {
-		private const int TIMER_INTERVAL = 100;  //計時器基本觸發周期
+		private const int TIMER_INTERVAL = 1000;  //計時器基本觸發周期
 
 		private int __iTimeCount = 0;
-		private bool __bReverse = false;
 		private bool __bDisposed = false;
-		private TradeOrder __cTemp = null;
-		private TradeOrder __cCurrent = null;
 		private System.Timers.Timer __cTimer = null;
+		private Dictionary<string, TradeOrder> __cTrades = null;
 
 		private object __oLock = new object();
+		private object __oTimerLock = new object();
 
 		/// <summary>
-		///   [取得/設定] 重新送出限價單的時間間隔(單位:毫秒)
+		///   [取得/設定] 重新送出交易單的時間間隔(單位:毫秒)
 		/// </summary>
-		[Input("重新送出限價單的時間間隔(單位:毫秒)")]
-		private double RequestLimitInterval {
+		[Input("重新送出交易單的時間間隔(單位:毫秒)")]
+		private double RequestOrderInterval {
 			get;
 			set;
 		}
 
 		public LargeOrderService() {
-			this.RequestLimitInterval = 5000;
+			this.RequestOrderInterval = 5000;
 			this.onResponse += LargeOrderService_onResponse;
+			
+			__cTrades = new Dictionary<string, TradeOrder>(64);
 
 			__cTimer = new System.Timers.Timer();
 			__cTimer.AutoReset = false;
@@ -42,14 +42,12 @@ namespace Netwings {
 		}
 
 		public override bool Send(EOrderAction action, OrderCategory category, double limitPrice, int lots, bool isReverse, double touchPrice = 0, string name = null, bool openNextBar = false) {
-			__bReverse = isReverse;  //取得反轉旗標
-
-			bool bRet = base.Send(action, category, (category == OrderCategory.Market) ? AdjustPrice(action) : limitPrice, lots, isReverse, touchPrice, name, openNextBar);
-			if (bRet) {
-				lock (__oLock) {
-					__iTimeCount = 0;  //如果送單成功就歸 0 重新計時(當達到設定值才需要重新處理取消與發送單, 尚未達到就讓委託單在市場上可以多成交幾張)
-				}
+			bool bRet = false;
+			lock (__oLock) {
+				bRet = base.Send(action, category, (category == OrderCategory.Market) ? AdjustPrice(action) : limitPrice, lots, isReverse, touchPrice, name, openNextBar);
 			}
+			
+			__iTimeCount = 0;
 			return bRet;
 		}
 
@@ -60,7 +58,9 @@ namespace Netwings {
 				if (disposing) {
 					base.Dispose(disposing);
 
-					__cTimer.Dispose();
+					lock (__oTimerLock) {
+						__cTimer.Dispose();
+					}
 				}
 			}
 		}
@@ -74,54 +74,67 @@ namespace Netwings {
 		}
 
 		private void Timer_onElapsed(object sender, ElapsedEventArgs e) {
-			lock (__oLock) {
-				__iTimeCount += TIMER_INTERVAL;  //累加時間個數(如果達到 RequestLimitInterval 設定的值才處理)
-				if (__iTimeCount >= this.RequestLimitInterval) {
-					if (__cCurrent != null && __cCurrent.Contracts > 0) {
-						if (__cCurrent.IsTrusted && !__cCurrent.IsCancel) {
-							__cCurrent.IsCancel = true;
-							SendTrust(__cCurrent, true);
+			__iTimeCount += TIMER_INTERVAL;  //累加時間個數(如果達到 RequestOrderInterval 設定的值才處理)
+			if (__iTimeCount >= this.RequestOrderInterval) {
+				if (__cTrades.Count > 0) {
+					lock (__cTrades) {
+						foreach (TradeOrder cOrder in __cTrades.Values) {
+							if (cOrder.IsTrusted && !cOrder.IsCancel && cOrder.BarNumber > 0) {
+								this.Send(cOrder.Action, cOrder.Category, cOrder.Price, cOrder.Contracts, cOrder.IsReverse, 0, cOrder.Name);
+								if (cOrder.IsCancel) {  //如果是取消單, 就設定 BarNumber = -1 表示是大單模組這裡定時器下單的(會在取消事件接收那裏再補下)
+									cOrder.BarNumber = -1;
+								}
+							}
 						}
-					} else if (__cTemp != null) {
-						this.Send(__cTemp.Action, __cTemp.Category, 0, __cTemp.Contracts, false, 0, __cTemp.Name);
 					}
-
-					__iTimeCount -= TIMER_INTERVAL;  //當達到設定值就不需要再重新累積(加快處理重新送單與取消單, 直到又再次成功送單在歸 0 重新計時)
 				}
+
+				__iTimeCount = 0;
 			}
-			__cTimer.Start();
+
+			lock (__oTimerLock) {
+				__cTimer.Start();
+			}
 		}
 
 		private void LargeOrderService_onResponse(object sender, ResponseEvent e) {
 			switch (e.ResponseType) {
 				case ResponseType.Cancel:
-					lock (__oLock) {
-						if (__cCurrent != null) {
-							EOrderAction cAction = __cCurrent.Action;
-
-							//如果有反轉信號單且取消的單是平倉單就不用再把單放到 __cTemp 內(因為父類別 RealOrderService 在平倉單取消之後, 後面尚未傳送的單都會全部取消掉)
-							__cTemp = (__bReverse && (cAction == EOrderAction.Sell || cAction == EOrderAction.BuyToCover)) ? null : __cCurrent;
+					TradeOrder cCancel = e.TradeOrder as TradeOrder;
+					lock (__cTrades) {
+						string sName = cCancel.Name;
+						if (__cTrades.ContainsKey(sName)) {
+							__cTrades.Remove(sName);
 						}
-						__cCurrent = null;
+					}
+
+					if (cCancel.BarNumber < 0 && cCancel.Contracts > 0) {
+						this.Send(cCancel.Action, cCancel.Category, (cCancel.Category == OrderCategory.Market) ? AdjustPrice(cCancel.Action) : cCancel.Price, cCancel.Contracts, cCancel.IsReverse, 0, cCancel.Name);
 					}
 					break;
 				case ResponseType.Deal:
-					lock (__oLock) {
-					        if (__cCurrent != null && __cCurrent.Contracts == 0) {
-							__cTemp = null;
-							__cCurrent = null;
-					        }
+					TradeOrder cDeal = e.TradeOrder as TradeOrder;
+					lock (__cTrades) {
+						TradeOrder cOrder = null;
+						string sName = cDeal.Name;
+						if (__cTrades.TryGetValue(sName, out cOrder)) {
+							if (cOrder.Contracts == 0) {
+								__cTrades.Remove(sName);
+							}
+						}
 					}
 					break;
 				case ResponseType.Trust:
-					lock (__oLock) {
-						if (__cCurrent == null) {
-							__cTemp = null;
-							__cCurrent = e.TradeOrder as TradeOrder;
+					TradeOrder cTrust = e.TradeOrder as TradeOrder;
+					lock (__cTrades) {
+						string sName = cTrust.Name;
+						if (__cTrades.ContainsKey(sName)) {
+							__cTrades.Remove(sName);
 						}
+						__cTrades.Add(sName, cTrust);
 					}
 					break;
 			}
 		}
 	}
-}  //127行
+}  //140行

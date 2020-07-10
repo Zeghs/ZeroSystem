@@ -222,7 +222,6 @@ namespace Netwings {
 		public GridOrderService() {
 			this.TrustCount = 3;
 			this.LotsPerTrust = 1;
-			this.useCloseProtect = false;
 			this.onResponse += GridOrderService_onResponse;
 
 			__cTrusts = new Dictionary<string, _Truster>(16);
@@ -333,8 +332,7 @@ namespace Netwings {
 						__cTrusts.Add(name, cTruster);
 					}
 				}
-				SendTrust(cTruster, dPrice);
-				return true;
+				return SendTrust(cTruster, dPrice);
 			}
 			return false;
 		}
@@ -342,6 +340,7 @@ namespace Netwings {
 		protected override void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
+				
 				if (disposing) {
 					base.Dispose(disposing);
 
@@ -359,18 +358,22 @@ namespace Netwings {
 		}
 
 		private bool SendTrust(_Truster truster, double price) {
-			bool bRet = false;
+			bool bRet = true;
 			lock (__oLock) {
 				double dPriceScale = this.Bars.Info.PriceScale;
 				double[] dLimitPrices = GetLimitPrice(dPriceScale);
 				
 				List<TradeOrder> cOrders = truster.CreateTrusts(Bars.CurrentBar, price, this.TrustCount, this.LotsPerTrust, dLimitPrices[0], dLimitPrices[1], dPriceScale);
-				if (cOrders != null) {
+				if (cOrders == null) {
+					bRet = false;
+				} else {
 					foreach (TradeOrder cOrder in cOrders) {
 						if (!cOrder.IsCancel) {
 							if (cOrder.Ticket == null) {
-								bRet = base.Send(cOrder.Action, cOrder.Category, cOrder.Price, cOrder.Contracts, cOrder.IsReverse, 0, cOrder.Name, false);
-								truster.SendCompleted(cOrder, bRet);
+								if (bRet) {
+									bRet = base.Send(cOrder.Action, cOrder.Category, cOrder.Price, cOrder.Contracts, cOrder.IsReverse, 0, cOrder.Name, false);
+									truster.SendCompleted(cOrder, bRet);
+								}
 							} else {
 								cOrder.IsCancel = this.SendTrust(cOrder, true);
 								truster.SendCompleted(cOrder, cOrder.IsCancel);
@@ -422,4 +425,4 @@ namespace Netwings {
 			}
 		}
 	}
-} //425行
+} //428行

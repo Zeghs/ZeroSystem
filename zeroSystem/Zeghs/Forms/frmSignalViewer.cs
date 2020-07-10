@@ -313,7 +313,10 @@ namespace Zeghs.Forms {
 		}
 
 		private void menuItemRemove_Click(object sender, EventArgs e) {
-			this.Close();
+			DialogResult cResult = MessageBox.Show(__sMessageContent_001, __sMessageHeader_001, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			if (cResult == DialogResult.Yes) {
+				this.Close();
+			}
 		}
 
 		private void menuItemTradeDetails_Click(object sender, EventArgs e) {
