@@ -372,8 +372,8 @@ namespace Netwings {
 							if (cOrder.Ticket == null) {
 								if (bRet) {
 									bRet = base.Send(cOrder.Action, cOrder.Category, cOrder.Price, cOrder.Contracts, cOrder.IsReverse, 0, cOrder.Name, false);
-									truster.SendCompleted(cOrder, bRet);
 								}
+								truster.SendCompleted(cOrder, bRet);
 							} else {
 								cOrder.IsCancel = this.SendTrust(cOrder, true);
 								truster.SendCompleted(cOrder, cOrder.IsCancel);

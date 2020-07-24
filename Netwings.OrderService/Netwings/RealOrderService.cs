@@ -476,12 +476,6 @@ namespace Netwings {
 			}
 		}
 
-		private bool CheckSymbol(string symbol1, string symbol2) {
-			symbol1 = symbol1.Split('_')[0];
-			symbol2 = symbol2.Split('_')[0];
-			return symbol1.Equals(symbol2);
-		}
-
 		private string GetDealID() {
 			int iID = Interlocked.Increment(ref __iDealIndex);
 			return iID.ToString();
@@ -511,10 +505,11 @@ namespace Netwings {
 		}
 
 		private TradeOrder GetWaiting(string symbolId, double price) {
-		again:	TradeOrder cTrust = null;
-			if (__iMaxTrustIndex > __iTrustIndex) {
+			TradeOrder cTrust = null;
+		again:  if (__iMaxTrustIndex > __iTrustIndex) {
 				string sTrustTicket = __iTrustIndex.ToString();
 				cTrust = __cEntrusts.GetTrade(sTrustTicket);
+				
 				if (cTrust == null) {
 					Interlocked.Increment(ref __iTrustIndex);
 					goto again;
@@ -574,7 +569,7 @@ namespace Netwings {
 								if (cTrustOrder == null) {
 									if (__iMaxTrustIndex == __iTrustIndex) {  //相等表示沒有下出任何的委託單, 可能是留在下單機內的委託單
 										string sOrderSymbolId = GetOrderSymbol();
-										if (CheckSymbol(sSymbolId, sOrderSymbolId)) {  //比對兩個商品代號是否相同, 相同才會被加入委託倉內
+										if (sSymbolId.Equals(sOrderSymbolId)) {  //比對兩個商品代號是否相同, 相同才會被加入委託倉內
 											cTrustOrder = new TradeOrder();
 											cTrustOrder.IsSended = true;
 											cTrustOrder.IsTrusted = true;
@@ -657,4 +652,4 @@ namespace Netwings {
 			}
 		}
 	}
-} //660行
+} //655行
