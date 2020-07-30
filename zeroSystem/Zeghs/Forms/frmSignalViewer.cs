@@ -189,7 +189,14 @@ namespace Zeghs.Forms {
 			int iFixGridBottomCount = grid.ClientSize.Height / 21 - ((grid is Zeghs.Controls.CustomGrid) ? 3 : 2);
 			int iValue = grid.VScrollBar.Maximum - iFixGridBottomCount;
 			if (iValue > 0) {
-				grid.VScrollBar.Value = iValue;  //捲動到最底部
+				//捲動到最底部
+				if (grid.VScrollBar.InvokeRequired) {
+					grid.VScrollBar.BeginInvoke((MethodInvoker) delegate {
+						grid.VScrollBar.Value = iValue;
+					});
+				} else {
+					grid.VScrollBar.Value = iValue;
+				}
 			}
 		}
 
@@ -445,6 +452,31 @@ namespace Zeghs.Forms {
 		
 		private void SignalObject_onTradeResponse(object sender, ResponseEvent e) {
 			__cTradeService.AddResponse(e);
+
+			if (__bShowTradeView) {
+				if (GlobalSettings.Testing.AutoSwitchTradePage) {
+					ITradeOrder cOrder = e.TradeOrder;
+					switch (e.ResponseType) {
+						case Zeghs.Orders.ResponseType.Trust:  //委託回報
+							tabControl.BeginInvoke((MethodInvoker) delegate {
+								tabControl.SelectedIndex = 0;
+							});
+							break;
+						case Zeghs.Orders.ResponseType.Deal:  //成交回報
+							EOrderAction cAction = cOrder.Action;
+							if (cAction == EOrderAction.Buy || cAction == EOrderAction.SellShort) {
+								tabControl.BeginInvoke((MethodInvoker) delegate {
+									tabControl.SelectedIndex = 1;
+								});
+							} else {
+								tabControl.BeginInvoke((MethodInvoker) delegate {
+									tabControl.SelectedIndex = 2;
+								});
+							}
+							break;
+					}
+				}
+			}
 		}
 
 		private void TradeService_onUpdate(object sender, EventArgs e) {

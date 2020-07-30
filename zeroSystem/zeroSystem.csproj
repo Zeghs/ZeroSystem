@@ -228,6 +228,7 @@
     <Compile Include="Zeghs\Settings\RequestSetting.cs" />
     <Compile Include="Zeghs\Settings\ScriptSetting.cs" />
     <Compile Include="Zeghs\Settings\SignalSetting.cs" />
+    <Compile Include="Zeghs\Settings\TestSetting.cs" />
     <Compile Include="Zeghs\Settings\WindowStatus.cs" />
     <Compile Include="Zeghs\Utils\CsvReport.cs" />
     <Compile Include="Zeghs\Utils\JsonReport.cs" />

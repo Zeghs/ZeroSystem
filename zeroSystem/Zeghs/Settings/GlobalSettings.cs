@@ -10,6 +10,7 @@ namespace Zeghs.Settings {
 	/// </summary>
 	public sealed class GlobalSettings {
 		private static PathSetting __cPaths = null;
+		private static TestSetting __cTesting = null;
 		private static ChartProfile __cChartProfile = null;
 
 		/// <summary>
@@ -31,6 +32,15 @@ namespace Zeghs.Settings {
 		}
 
 		/// <summary>
+		///   [取得] 測試性質功能設定值
+		/// </summary>
+		public static TestSetting Testing {
+			get {
+				return __cTesting;
+			}
+		}
+
+		/// <summary>
 		///   讀取全域設定
 		/// </summary>
 		/// <param name="filename">設定檔名稱</param>
@@ -39,6 +49,7 @@ namespace Zeghs.Settings {
 				string[] sDatas = File.ReadAllLines(filename, Encoding.UTF8);
 				__cChartProfile = JsonConvert.DeserializeObject<ChartProfile>(sDatas[0]);
 				__cPaths = JsonConvert.DeserializeObject<PathSetting>(sDatas[1]);
+				__cTesting = JsonConvert.DeserializeObject<TestSetting>(sDatas[2]);
 			}
 		}
 
@@ -50,6 +61,7 @@ namespace Zeghs.Settings {
 			StringBuilder cBuilder = new StringBuilder(32 * 1024);
 			cBuilder.AppendLine(JsonConvert.SerializeObject(__cChartProfile));
 			cBuilder.AppendLine(JsonConvert.SerializeObject(__cPaths));
+			cBuilder.AppendLine(JsonConvert.SerializeObject(__cTesting));
 
 			File.WriteAllText(filename, cBuilder.ToString(), Encoding.UTF8);
 		}

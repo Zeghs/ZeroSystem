@@ -97,8 +97,12 @@ namespace PowerLanguage {
 		/// <returns>返回值: 陣列內的資料</returns>
 		protected T GetValue(int index) {
 			int iCount = __cSeries.Count - 1;
-			index = ((index < 0) ? 0 : (index > iCount) ? iCount : index);
-			return __cSeries[index];
+			if (iCount < 0) {
+				return default(T);
+			} else {
+				index = ((index < 0) ? 0 : (index > iCount) ? iCount : index);
+				return __cSeries[index];
+			}
 		}
 
 		/// <summary>
