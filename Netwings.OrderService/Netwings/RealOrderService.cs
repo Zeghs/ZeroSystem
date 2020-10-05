@@ -33,7 +33,7 @@ namespace Netwings {
 			return cSettings.Expiration;
 		}
 		
-		private static string ChangeWeekOptionsSymbolId(int year, int month, int day) {
+		private static string ChangeWeekSymbolId(string symbolId, int year, int month, int day) {
 			DateTime cInDT = new DateTime(year, month, day);
 			int iFirstWeek = (int) new DateTime(year, month, 1).DayOfWeek;
 			int iTotalDay = DateTime.DaysInMonth(year, month);
@@ -48,16 +48,12 @@ namespace Netwings {
 					iOutWeek = iOutWeek + 1;
 				}
 			}
-			
-			if (iOutWeek > 4 && (iFirstWed + 28) > iTotalDay) {
+
+			if ((iOutWeek > 4 && (iFirstWed + 28) > iTotalDay) || iOutWeek > 5) {
 				iOutWeek = 1;
 			}
-			
-			if (iOutWeek > 5) {
-				iOutWeek = 1;
-			}
-			string ReWeek = (iOutWeek == 3) ? "O" : iOutWeek.ToString();
-			return "TX" + ReWeek;
+			string ReWeek = (iOutWeek == 3) ? ((symbolId.Length == 7) ? "F" : "O") : iOutWeek.ToString();
+			return symbolId.Substring(0, 2) + ReWeek;
 		}
 
 		private int __iPrevious = 0;
@@ -379,7 +375,6 @@ namespace Netwings {
 		protected override void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
-				
 				if (disposing) {
 					base.Dispose(disposing);
 
@@ -488,11 +483,11 @@ namespace Netwings {
 				case ESymbolCategory.IndexOption:
 					DateTime cIOExpiration = GetExpiration(Bars);
 					int iIndex = sSymbolId.LastIndexOf(".");
-					sSymbolId = string.Format("{0}_{1}{2}{3}", (sSymbolId[2] == 'W') ? ChangeWeekOptionsSymbolId(cIOExpiration.Year, cIOExpiration.Month, cIOExpiration.Day) : sSymbolId.Substring(0, 3), cIOExpiration.Year, cIOExpiration.Month.ToString("00"), sSymbolId.Substring(4, iIndex - 4));
+					sSymbolId = string.Format("{0}_{1}{2}{3}", (sSymbolId[2] == 'W') ? ChangeWeekSymbolId(sSymbolId, cIOExpiration.Year, cIOExpiration.Month, cIOExpiration.Day) : sSymbolId.Substring(0, 3), cIOExpiration.Year, cIOExpiration.Month.ToString("00"), sSymbolId.Substring(4, iIndex - 4));
 					break;
 				case ESymbolCategory.Future:
 					DateTime cFExpiration = GetExpiration(Bars);
-					sSymbolId = string.Format("{0}_{1}{2}", sSymbolId.Substring(0, 3), cFExpiration.Year, cFExpiration.Month.ToString("00"));
+					sSymbolId = string.Format("{0}_{1}{2}", (sSymbolId[2] == 'W') ? ChangeWeekSymbolId(sSymbolId, cFExpiration.Year, cFExpiration.Month, cFExpiration.Day) : sSymbolId.Substring(0, 3), cFExpiration.Year, cFExpiration.Month.ToString("00"));
 					break;
 			}
 			return sSymbolId;
@@ -652,4 +647,4 @@ namespace Netwings {
 			}
 		}
 	}
-} //655行
+} //650行

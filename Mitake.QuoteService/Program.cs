@@ -122,6 +122,7 @@ namespace Zeghs {
 
 		static void cService_onLoginCompleted(object sender, EventArgs e) {
 			cService.onLoginCompleted -= cService_onLoginCompleted;
+			cService.SymbolUpdate();
 
 			//System.Console.WriteLine("訂閱......");
 			//cService.AddSubscribe("TWI.tw");

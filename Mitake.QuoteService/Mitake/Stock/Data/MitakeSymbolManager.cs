@@ -85,15 +85,17 @@ namespace Mitake.Stock.Data {
 				case 1:  //期貨
 				case 3:  //期貨股票
 					if (iLength == 5) {
+						int iFWeek = 0;
 						int iFYear = (symbolId[4] - '0');
 						int iFMonth = (symbolId[3] - 'A') + 1;
 						if (char.IsDigit(symbolId, 2)) {  //判斷是否為週期貨(周期貨都以數字表示第幾周)
+							iFWeek = symbolId[2] - '0';
 							sCommodityId = symbolId.Substring(0, 2) + "W";  //將週期貨統一更名 例: MX1 => MXW
 						} else {
 							sCommodityId = symbolId.Substring(0, 3);
 						}
 						
-						iContractIndex = GetContractTimeIndex((marketType == 3) ? "STOCK_FUTURE" : sCommodityId, iFYear, iFMonth);
+						iContractIndex = GetContractTimeIndex((marketType == 3) ? "STOCK_FUTURE" : sCommodityId, iFYear, iFMonth, iFWeek);
 						if (iContractIndex > -1) {
 							if (stockId[0] == '7' && stockId[1] == '6') {  //檢查是否為夜台或夜小台
 								sSymbolId = string.Format("{0}N{1}.tw", sCommodityId, iContractIndex);
@@ -122,7 +124,6 @@ namespace Mitake.Stock.Data {
 							if (__cMitakeOptionDecimalPoints.TryGetValue(sCommodityId, out dDecimalPoint)) {
 								dValue *= dDecimalPoint;  //如果有小數點就調整履約價格數值(三竹資料的履約價格沒有小數點總共五位數字, 需要自己轉換小數位)
 							}
-							
 							sSymbolId = string.Format("{0}{1}{2}{3}.tw", sCommodityId, iContractIndex, chCallOrPut, dValue);
 						}
 					}
@@ -252,4 +253,4 @@ namespace Mitake.Stock.Data {
 			return iRet;
 		}
 	}
-}  //255行
+}  //256行
