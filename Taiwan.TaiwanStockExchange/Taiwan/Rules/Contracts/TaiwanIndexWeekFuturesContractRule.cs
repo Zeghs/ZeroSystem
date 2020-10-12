@@ -57,7 +57,7 @@ namespace Taiwan.Rules.Contracts {
 			for (int i = index; i < iCount; i++) {
 				ContractTime cContractTemp = __cContractTimes[i];
 				double dTotals = (cContractTemp.MaturityDate - date).TotalSeconds;
-				if (dTotals >= 0 && dTotals <= 604800) {
+				if (dTotals >= 0 && dTotals <= 518400) {
 					cContractTime = cContractTemp;
 					break;
 				}

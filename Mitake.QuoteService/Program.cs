@@ -124,9 +124,9 @@ namespace Zeghs {
 			cService.onLoginCompleted -= cService_onLoginCompleted;
 			cService.SymbolUpdate();
 
-			//System.Console.WriteLine("訂閱......");
-			//cService.AddSubscribe("TWI.tw");
-			//cService.Complement("TWI.tw");
+			System.Console.WriteLine("訂閱......");
+			cService.AddSubscribe("MXW0.tw");
+			cService.Complement("MXW0.tw");
 			//cService.Complement("TXW0C9250.tw");
 			//cService.AddSubscribe("OTC.tw");
 			//cService.Complement("OTC.tw");
