@@ -82,59 +82,56 @@ namespace Mitake.Stock.Decode {
 
 			if (sSymbolId.Length > 0) {
 				//轉換為標準台股商品代號格式
-				string sProductId = MitakeSymbolManager.Convert(cSymbolInfo.SymbolId, sSymbolId, (cSymbolInfo.市場別 == 2) ? cSymbolInfo.市場分類 : 0);
-				if (sProductId != null) {
-					cSymbolInfo.SymbolId = sProductId;
+				string[] sSymbolIds = MitakeSymbolManager.Convert(cSymbolInfo.SymbolId, sSymbolId, (cSymbolInfo.市場別 == 2) ? cSymbolInfo.市場分類 : 0);
+				if (sSymbolIds != null) {
+					cSymbolInfo.SymbolId = sSymbolIds[0];
 
-					if (!MitakeSymbolManager.IsExist(sProductId)) {
-						AddProductToExchange(cSymbolInfo);  //將股票代號更新至交易所內
+					if (!MitakeSymbolManager.IsExist(sSymbolIds[0])) {
+						AddProductToExchange(cSymbolInfo, sSymbolIds[1]);  //將股票代號更新至交易所內
 					}
 					MitakeSymbolManager.AddQuoteSymbolInformation(serial, cSymbolInfo);  //將基本資訊加入代號管理員內
 				}
 			}
                 }
-		
-		private static void AddProductToExchange(MitakeSymbolInformation symbolInformation) {
-			string sCommodityId = "UNKNOWN";
+
+		private static void AddProductToExchange(MitakeSymbolInformation symbolInformation, string commodityId) {
 			ESymbolCategory cCategory = ESymbolCategory.Stock;
 			switch (symbolInformation.市場別) {
 				case 0:  //集中市場
 				case 1:  //上櫃市場
 					string sType = ((symbolInformation.市場別 == 0) ? "TSE" : "OTC");
-					sCommodityId = string.Format("{0}_STOCK", sType);
+					commodityId = string.Format("{0}_STOCK", sType);
 
 					switch (symbolInformation.市場分類) {
 						case 3:  //基金
 							cCategory = ESymbolCategory.Spread;
-							sCommodityId = string.Format("{0}_{1}", sType, "SPREAD");
+							commodityId = string.Format("{0}_{1}", sType, "SPREAD");
 							break;
 						case 4:  //認股權證
 							cCategory = ESymbolCategory.Warrant;
-							sCommodityId = string.Format("{0}_{1}", sType, "WARRANT");
+							commodityId = string.Format("{0}_{1}", sType, "WARRANT");
 							break;
 						case 9:  //中央政府公債
 							cCategory = ESymbolCategory.Bond;
-							sCommodityId = string.Format("{0}_{1}", sType, "BOND");
+							commodityId = string.Format("{0}_{1}", sType, "BOND");
 							break;
 						case 10:  //富時指數(TW50)
 							cCategory = ESymbolCategory.Index;
-							sCommodityId = "INDEX";
+							commodityId = "INDEX";
 							break;
 					}
 					break;
 				case 2:  //期貨市場
-					sCommodityId = symbolInformation.SymbolId.Substring(0, 3);
-
 					switch (symbolInformation.市場分類) {
 						case 1: //一般期貨
 						case 3: //期貨股票
 							cCategory = ESymbolCategory.Future;
 							if (symbolInformation.市場分類 == 3) {
-								sCommodityId = "STOCK_FUTURE";
+								commodityId = "STOCK_FUTURE";
 							}
 							break;
 						case 2:  //選擇權
-							if (MitakeSymbolManager.IsIndexOption(sCommodityId)) {
+							if (MitakeSymbolManager.IsIndexOption(commodityId)) {
 								cCategory = ESymbolCategory.IndexOption;
 							} else {
 								cCategory = ESymbolCategory.StockOption;
@@ -144,10 +141,14 @@ namespace Mitake.Stock.Decode {
 					break;
 			}
 
+			if (commodityId == null) {
+				commodityId = "UNKNOWN";
+			}
+
 			string sExchangeName = MitakeSymbolManager.ExchangeName;
 			AbstractExchange cExchange = ProductManager.Manager.GetExchange(sExchangeName);
 			cExchange.AddProduct(new Product() {
-				CommodityId = sCommodityId,
+				CommodityId = commodityId,
 				Category = cCategory,
 				SymbolId = symbolInformation.SymbolId,
 				SymbolName = symbolInformation.SymbolName

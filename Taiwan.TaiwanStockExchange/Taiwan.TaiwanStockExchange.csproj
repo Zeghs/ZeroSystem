@@ -66,6 +66,7 @@
     </Compile>
     <Compile Include="Taiwan\Products\TaiwanProductProperty.cs" />
     <Compile Include="Taiwan\Rules\Contracts\MaturityDateUtil.cs" />
+    <Compile Include="Taiwan\Rules\Contracts\TaiwanIndexNightFuturesContractRule.cs" />
     <Compile Include="Taiwan\Rules\Contracts\TaiwanIndexWeekFuturesContractRule.cs" />
     <Compile Include="Taiwan\Rules\Contracts\TaiwanIndexWeekOptionContractRule.cs" />
     <Compile Include="Taiwan\Rules\Contracts\IContractParameters.cs" />

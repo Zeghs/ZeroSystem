@@ -20,7 +20,8 @@ namespace Mitake.Stock.Decode {
                                         Decode_S30.Decode(MitakeStorage.Storage.GetQuote(item.Serial), item.Source);
                                         break;
                                 case 0x31:
-                                case 0xb1:
+				case 0x41:
+				case 0xb1:
                                 case 0x3e:
                                 case 0xbe:
                                         Decode_S31.Decode(MitakeStorage.Storage.GetQuote(item.Serial), item.Source);
@@ -47,7 +48,8 @@ namespace Mitake.Stock.Decode {
 					Decode_S38.Decode(item.Serial, item.Source);
                                         break;
                                 case 0x3b:
-                                case 0xbb:
+				case 0x42:
+				case 0xbb:
                                 case 0x3f:
                                 case 0xbf:
                                         Decode_S3B.Decode(MitakeStorage.Storage.GetQuote(item.Serial), item.Source);

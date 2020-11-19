@@ -23,7 +23,7 @@ namespace Netwings {
 		///   [取得/設定] 重新送出交易單的時間間隔(單位:毫秒)
 		/// </summary>
 		[Input("重新送出交易單的時間間隔(單位:毫秒)")]
-		private double RequestOrderInterval {
+		private int RequestOrderInterval {
 			get;
 			set;
 		}
@@ -47,7 +47,6 @@ namespace Netwings {
 				bRet = base.Send(action, category, (category == OrderCategory.Market) ? AdjustPrice(action) : limitPrice, lots, isReverse, touchPrice, name, openNextBar);
 			}
 			
-			__iTimeCount = 0;
 			return bRet;
 		}
 
@@ -81,6 +80,7 @@ namespace Netwings {
 						foreach (TradeOrder cOrder in __cTrades.Values) {
 							if (cOrder.IsTrusted && !cOrder.IsCancel && cOrder.BarNumber > 0) {
 								this.Send(cOrder.Action, cOrder.Category, cOrder.Price, cOrder.Contracts, cOrder.IsReverse, 0, cOrder.Name);
+								
 								if (cOrder.IsCancel) {  //如果是取消單, 就設定 BarNumber = -1 表示是大單模組這裡定時器下單的(會在取消事件接收那裏再補下)
 									cOrder.BarNumber = -1;
 								}
@@ -101,15 +101,17 @@ namespace Netwings {
 			switch (e.ResponseType) {
 				case ResponseType.Cancel:
 					TradeOrder cCancel = e.TradeOrder as TradeOrder;
-					lock (__cTrades) {
-						string sName = cCancel.Name;
-						if (__cTrades.ContainsKey(sName)) {
-							__cTrades.Remove(sName);
+					lock (__oLock) {
+						lock (__cTrades) {
+							string sName = cCancel.Name;
+							if (__cTrades.ContainsKey(sName)) {
+								__cTrades.Remove(sName);
+							}
 						}
-					}
 
-					if (cCancel.BarNumber < 0 && cCancel.Contracts > 0) {
-						this.Send(cCancel.Action, cCancel.Category, (cCancel.Category == OrderCategory.Market) ? AdjustPrice(cCancel.Action) : cCancel.Price, cCancel.Contracts, cCancel.IsReverse, 0, cCancel.Name);
+						if (cCancel.BarNumber < 0 && cCancel.Contracts > 0) {
+							base.Send(cCancel.Action, cCancel.Category, (cCancel.Category == OrderCategory.Market) ? AdjustPrice(cCancel.Action) : cCancel.Price, cCancel.Contracts, cCancel.IsReverse, 0, cCancel.Name);
+						}
 					}
 					break;
 				case ResponseType.Deal:

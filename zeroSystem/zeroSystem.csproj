@@ -221,6 +221,7 @@
     </Compile>
     <Compile Include="Zeghs\Services\LogService.cs" />
     <Compile Include="Zeghs\Services\TradeService.cs" />
+    <Compile Include="Zeghs\Settings\BaseSetting.cs" />
     <Compile Include="Zeghs\Settings\GlobalSettings.cs" />
     <Compile Include="Zeghs\Settings\PathSetting.cs" />
     <Compile Include="Zeghs\Settings\ProfileManager.cs" />

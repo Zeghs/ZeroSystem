@@ -37,7 +37,24 @@
                         return ((byte)Value);
                 }
 
-                /// <summary>
+		/// <summary>
+		///    取得資料內某依區段位元資料
+		/// </summary>
+		/// <param name="Value">來源資料</param>
+		/// <param name="StartIndex">起始位元索引(0=最右邊起始位元 依序向左遞增)</param>
+		/// <param name="Length">位元長度</param>
+		/// <returns>返回值：取得的位元值</returns>
+		internal static byte GetValue(int Value, int StartIndex, byte Length) {
+			int iMask = 0xffffff;
+
+			iMask >>= (24 - Length);
+			Value >>= StartIndex;
+			Value &= iMask;
+
+			return ((byte) Value);
+		}
+		
+		/// <summary>
                 ///    設定位元
                 /// </summary>
                 /// <param name="Src">來源資料</param>
@@ -64,5 +81,20 @@
                         
                         return Src;
                 }
-        }
+		
+		/// <summary>
+		///    設定位元
+		/// </summary>
+		/// <param name="Src">來源資料</param>
+		/// <param name="StartIndex">起始位元索引(0=最右邊起始位元 依序向左遞增)</param>
+		/// <param name="Value">設定值</param>
+		/// <returns>返回值：重設後的數值</returns>
+		internal static int SetValue(int Src, int StartIndex, ushort Value) {
+			int iValue = Value;
+			iValue <<= StartIndex;
+			Src |= iValue;
+
+			return Src;
+		}
+	}
 }

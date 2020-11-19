@@ -204,13 +204,13 @@ namespace PowerLanguage {
 		/// <returns>返回值: 時間週期 Queue</returns>
 		public Queue<DateTime> CalculateRealtimePeriods(DateTime lastBarsDate, DateTime today, DateTime expiration) {
 			DateTime cFrom = (__iTotalSeconds < MAX_BASE_TOTALSECONDS) ? today : lastBarsDate;
-			DateTime cTo = new DateTime(today.Year, today.Month, today.Day, __cEndTime.Hours, __cEndTime.Minutes, __cEndTime.Seconds);
+			DateTime cTo = today.AddSeconds(__cEndTime.TotalSeconds);
 			if (__cType == EResolution.Month) {  //如果以月為周期就在多加上一天(不然會被修正為1號, 計算出來的結果會失真)
 				cFrom = lastBarsDate.AddSeconds(MAX_BASE_TOTALSECONDS);
 			}
 			
 			if (today.Date == expiration.Date) {  //檢查是否今天為到期日(如果是到期日就重新設定收盤時間為到期日的收盤時間)
-				cTo = new DateTime(today.Year, today.Month, today.Day, expiration.Hour, expiration.Minute, expiration.Second);
+				cTo = expiration;
 			}
 			return new Queue<DateTime>(CalculatePeriods(cFrom, cTo));
 		}
@@ -223,13 +223,14 @@ namespace PowerLanguage {
 		/// <returns>返回值: 時間週期列表</returns>
 		public List<DateTime> CalculatePeriods(DateTime _from, DateTime _to) {
 			bool bMonth = false;
+			DateTime cEndTime = DateTime.MaxValue;
 			switch (__cType) {
 				case EResolution.Week:
 					int iWeek = (int) _from.DayOfWeek;
 					if (iWeek > 1) {
 						_from = _from.AddDays(-7 + (__iSessionCount - iWeek));
 					}
-					_from = new DateTime(_from.Year, _from.Month, _from.Day, __cEndTime.Hours, __cEndTime.Minutes, __cEndTime.Seconds);
+					_from = _from.AddSeconds(__cEndTime.TotalSeconds);
 					break;
 				case EResolution.Month:
 					bMonth = true;
@@ -237,9 +238,11 @@ namespace PowerLanguage {
 					break;
 				default:
 					if (__iTotalSeconds < MAX_BASE_TOTALSECONDS) {
-						_from = new DateTime(_from.Year, _from.Month, _from.Day, __cStartTime.Hours, __cStartTime.Minutes, __cStartTime.Seconds);
+						DateTime cFromDate = _from.Date;
+						_from = cFromDate.AddSeconds(__cStartTime.TotalSeconds);
+						cEndTime = cFromDate.AddSeconds(__cEndTime.TotalSeconds);
 					} else {
-						_from = new DateTime(_from.Year, _from.Month, _from.Day, __cEndTime.Hours, __cEndTime.Minutes, __cEndTime.Seconds);
+						_from = _from.Date.AddSeconds(__cEndTime.TotalSeconds);
 					}
 					break;
 			}
@@ -254,19 +257,19 @@ namespace PowerLanguage {
 				} else {
 					_from = _from.AddSeconds(__iTotalSeconds);
 					if (__iTotalSeconds < MAX_BASE_TOTALSECONDS) {
-						if (_from.TimeOfDay >= __cEndTime) {
+						if (_from >= cEndTime) {
 							if (__bModulo) {
-								double dModulo = (_from.TimeOfDay - __cEndTime).TotalSeconds;
-								_from = _from.AddSeconds(-dModulo);
+								_from = _from.Date.AddSeconds(__cEndTime.TotalSeconds);
 							}
 							cResult.Add(_from);
 
 							_from = _from.AddSeconds(MAX_BASE_TOTALSECONDS);
-							_from = new DateTime(_from.Year, _from.Month, _from.Day, __cStartTime.Hours, __cStartTime.Minutes, __cStartTime.Seconds);
+							DateTime cFromDate = _from.Date;
+							_from = cFromDate.AddSeconds(__cStartTime.TotalSeconds);
+							cEndTime = cFromDate.AddSeconds(__cEndTime.TotalSeconds);
 							continue;
 						}
 					}
-					
 					cResult.Add(_from);
 				}
 			}
@@ -282,4 +285,4 @@ namespace PowerLanguage {
 			return (int) (_days * __dUnit) + 1;
 		}
 	}
-}  //285行
+}  //288行

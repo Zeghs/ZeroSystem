@@ -28,7 +28,6 @@ namespace Zeghs {
 			cService.onSubscribeCompleted += new EventHandler<Events.QuoteComplementCompletedEvent>(cService_onSubscribeCompleted);
 			cService.onComplementCompleted += new EventHandler<Events.QuoteComplementCompletedEvent>(cService_onComplementCompleted);
 			cService.Load();
-
 			cService.Login();
 
 			//*/
@@ -122,14 +121,14 @@ namespace Zeghs {
 
 		static void cService_onLoginCompleted(object sender, EventArgs e) {
 			cService.onLoginCompleted -= cService_onLoginCompleted;
-			cService.SymbolUpdate();
+			//cService.SymbolUpdate();
 
 			System.Console.WriteLine("訂閱......");
 			cService.AddSubscribe("MXW0.tw");
-			cService.Complement("MXW0.tw");
+			//cService.Complement("TXFN0.tw");
 			//cService.Complement("TXW0C9250.tw");
 			//cService.AddSubscribe("OTC.tw");
-			//cService.Complement("OTC.tw");
+			//cService.Complement("EXF0.tw");
 			//cService.AddSubscribe("TXF0.tw");
 			//cService.Complement("TXF0.tw");
 			//cService.AddSubscribe("2330.tw");

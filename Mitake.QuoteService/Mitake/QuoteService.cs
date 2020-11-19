@@ -43,7 +43,8 @@ namespace Mitake {
 		private ZSocket __cSession = null;     //股票Session資料源
 		private Timer __cTimer = null;         //偵測斷線計時器 
 		private Timer __cReLoginTimer = null;  //斷線重連計時器
-		private Subscribe __cSubscribe = null; //訂閱資訊
+		private Subscribe __cSubscribe = null; //訂閱資訊(上傳伺服器的訂閱資訊 bit Array)
+		private HashSet<string> __cSymbolIds = null;  //訂閱的股票代號雜湊
 		private DateTime __cTradeDate = DateTime.UtcNow; //最後交易日期
 
 		private object __oLock = new object();
@@ -95,6 +96,7 @@ namespace Mitake {
 
 			__cSubscribe = new Subscribe();
 			__cSubscribe.Add(0);  //清盤狀態(如果不訂閱不會清盤)
+			__cSymbolIds = new HashSet<string>();
 
                         __cTimer = new Timer(10000);
                         __cTimer.AutoReset = false;
@@ -113,6 +115,8 @@ namespace Mitake {
 			int iSerial = MitakeSymbolManager.ConvertToSerial(symbolId);
 			if (iSerial > 0) {
 				__cSubscribe.Add(iSerial);
+				__cSymbolIds.Add(symbolId);
+				
 				this.SendSubscribe();
 			}
 		}
@@ -264,7 +268,7 @@ namespace Mitake {
 				MitakeSymbolManager.ExchangeName = this.ExchangeName;
 				StockDecoder.TimerProc += GetTradeDateFromLogin;  //先取得最後交易日期之後再處理股票代號表之類的運作
 
-				this.SendSubscribe();  //登入成功後就送出訂閱資訊
+				this.SendSubscribe();
 			}
 			return true;
 		}
@@ -284,7 +288,6 @@ namespace Mitake {
 					if (__cSession.Connected) {
 						__cSession.Send(MitakePacket.ToBuffer(new Logout())); //送出登出訊息
 					}
-					
 					__cSession.Close();
 				}
 			} catch (Exception __errExcep1) {
@@ -301,7 +304,6 @@ namespace Mitake {
 					if (__cSocket.Connected) {
                                                 __cSocket.Send(MitakePacket.ToBuffer(new Logout())); //送出登出訊息
                                         }
-                                      
 					__cSocket.Close();
                                 }
                         } catch (Exception __errExcep2) {
@@ -337,6 +339,7 @@ namespace Mitake {
 			int iSerial = MitakeSymbolManager.ConvertToSerial(symbolId);
 			if (iSerial > 0) {
 				__cSubscribe.Remove(iSerial);
+				__cSymbolIds.Add(symbolId);
 				this.SendSubscribe();
 			}
 		}
@@ -382,6 +385,7 @@ namespace Mitake {
 		protected override void Dispose(bool disposing) {
 			if (!__bDisposed) {
 				__bDisposed = true;
+				
 				if (disposing) {
 					this.Logout();  //登出
 
@@ -396,6 +400,7 @@ namespace Mitake {
 					}
 				}
 			}
+			
 			base.Dispose(disposing);
 		} 
 		
@@ -450,25 +455,25 @@ namespace Mitake {
 				__cTradeDate = e.TradeDate;
 				Mitake.Stock.Util.Time.SetToday(__cTradeDate);
 
-				Task.Factory.StartNew(() => {
-					if (__bReset) {
-						if (!__bReseted) {  //如果還沒有清盤完畢, 就執行清盤動作
+				if (__bReset) {
+					if (!__bReseted) {  //如果還沒有清盤完畢, 就執行清盤動作
+						Task.Factory.StartNew(() => {
 							OnReset(new QuoteResetEvent(this.DataSource));
 							if (logger.IsInfoEnabled) logger.InfoFormat("[QuoteService.Reset] Service \"{0}\" data reset success...", this.DataSource);
+						});
 
-							__bReseted = true;  //設定已經清盤完畢的旗標
-						}
-					} else {
-						StockDecoder.TimerProc -= GetTradeDateFromLogin;
-
-						if (this.IsUpdate) {
-							SymbolUpdate();  //回補股票代號(每天只回補一次股票代號)
-						} else {
-							this.IsLogin = true;
-							OnLoginCompleted();
-						}
+						__bReseted = true;  //設定已經清盤完畢的旗標
 					}
-				});
+				} else {
+					StockDecoder.TimerProc -= GetTradeDateFromLogin;
+
+					if (this.IsUpdate) {
+						SymbolUpdate();  //回補股票代號(每天只回補一次股票代號)
+					} else {
+						this.IsLogin = true;
+						OnLoginCompleted();
+					}
+				}
 			}
 		}
 		
@@ -548,6 +553,11 @@ namespace Mitake {
 								cExchange.Save();  //如果要更新則儲存更新後的結果
 							}
 							
+							//重新訂閱股票(因為有回補新的股票代號, 所以要全部重新訂閱)
+							__cSubscribe = new Subscribe();  //重新建立新的訂閱陣列(登入的時候會重新傳入訂閱的股票代號, 避免期貨或選擇權換月後訂閱到舊的資訊而沒有報價)
+							__cSubscribe.Add(0);  //先訂閱清盤資訊
+							AddSubscribe(new List<string>(__cSymbolIds));
+							
 							if (logger.IsInfoEnabled) logger.Info("[QuoteService.Login] Login service success...");
 							OnLoginCompleted();
 							break;
@@ -565,6 +575,7 @@ namespace Mitake {
 						case 0xb1:  //即時成交資訊
 						case 0x3e:  //即時成交資訊
 						case 0xbe:  //即時成交資訊
+						case 0x41:  //即時成交資訊
 							if (sender == __cSocket) { //比較是否為即時Socket送來的資訊
 								IQuote cQuote = MitakeStorage.Storage.GetQuote(e.Serial);
 								if (cQuote != null) {
@@ -610,7 +621,6 @@ namespace Mitake {
 			if (__cSession == e.ActiveSocket) {
                                 __iNoPacketCount2 = 0;
                         }
-                      
 			StockDecoder.Decode(e.ActiveSocket, e.Token, this.IsDecode);
                 }
 
@@ -652,4 +662,4 @@ namespace Mitake {
 			}
 		}
 	}
-} //655行
+} //665行

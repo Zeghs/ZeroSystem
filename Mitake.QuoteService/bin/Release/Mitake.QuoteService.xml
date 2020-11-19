@@ -920,6 +920,15 @@
             <param name="Length">位元長度</param>
             <returns>返回值：取得的位元值</returns>
         </member>
+        <member name="M:Mitake.Stock.Util.BitConvert.GetValue(System.Int32,System.Int32,System.Byte)">
+            <summary>
+               取得資料內某依區段位元資料
+            </summary>
+            <param name="Value">來源資料</param>
+            <param name="StartIndex">起始位元索引(0=最右邊起始位元 依序向左遞增)</param>
+            <param name="Length">位元長度</param>
+            <returns>返回值：取得的位元值</returns>
+        </member>
         <member name="M:Mitake.Stock.Util.BitConvert.SetValue(System.Byte,System.Int32,System.Byte)">
             <summary>
                設定位元
@@ -930,6 +939,15 @@
             <returns>返回值：重設後的數值</returns>
         </member>
         <member name="M:Mitake.Stock.Util.BitConvert.SetValue(System.UInt16,System.Int32,System.UInt16)">
+            <summary>
+               設定位元
+            </summary>
+            <param name="Src">來源資料</param>
+            <param name="StartIndex">起始位元索引(0=最右邊起始位元 依序向左遞增)</param>
+            <param name="Value">設定值</param>
+            <returns>返回值：重設後的數值</returns>
+        </member>
+        <member name="M:Mitake.Stock.Util.BitConvert.SetValue(System.Int32,System.Int32,System.UInt16)">
             <summary>
                設定位元
             </summary>
@@ -1378,33 +1396,47 @@
             <param name="time">DateTime 結構</param>
             <returns>返回值: 總秒數</returns>
         </member>
+        <member name="M:Mitake.Stock.Util.Time.ConvertForDateTime(System.Int32)">
+            <summary>
+              轉換總秒數為 DateTime 結構
+            </summary>
+            <param name="time">總秒數</param>
+            <returns>返回值: DateTime 結構</returns>
+        </member>
         <member name="M:Mitake.Stock.Util.Time.GetDate(Mitake.Sockets.Data.PacketBuffer)">
             <summary>
               時間封包解碼(解碼交易日期)
             </summary>
             <param name="buffer">ZBuffer類別</param>
-            <returns>返回值:最後交易日期(format:yyyyMMdd)</returns>
+            <returns>返回值: DateTime結構</returns>
         </member>
         <member name="M:Mitake.Stock.Util.Time.GetTime(Mitake.Sockets.Data.PacketBuffer)">
             <summary>
               股票即時資訊時間解碼
             </summary>
             <param name="buffer">ZBuffer類別</param>
-            <returns>返回值:時間數值(將所有時間都轉換成秒數)</returns>
+            <returns>返回值: DateTime結構</returns>
         </member>
         <member name="M:Mitake.Stock.Util.Time.GetOther(Mitake.Sockets.Data.PacketBuffer)">
             <summary>
               股票即時資訊時間解碼(解碼開盤其他時間 9:00:00 ~ 16:59:59 以外的時間)
             </summary>
             <param name="buffer">ZBuffer類別</param>
-            <returns>返回值:時間數值(將所有時間都轉換成秒數)</returns>
+            <returns>返回值: DateTime結構</returns>
+        </member>
+        <member name="M:Mitake.Stock.Util.Time.GetSpecial(Mitake.Sockets.Data.PacketBuffer)">
+            <summary>
+              股票即時資訊時間解碼(解碼時間 00:00:00 ~ 23:59:59)
+            </summary>
+            <param name="buffer">ZBuffer類別</param>
+            <returns>返回值: DateTime結構</returns>
         </member>
         <member name="M:Mitake.Stock.Util.Time.GetDateTime(Mitake.Sockets.Data.PacketBuffer)">
             <summary>
               時間封包解碼(解碼時間)
             </summary>
             <param name="buffer">ZBuffer類別</param>
-            <returns>返回值:DateTime結構</returns>
+            <returns>返回值: DateTime結構</returns>
         </member>
         <member name="M:Mitake.Stock.Util.Time.SetTime(Mitake.Sockets.Data.PacketBuffer,System.Int32,System.Boolean)">
             <summary>

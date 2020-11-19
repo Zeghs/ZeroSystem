@@ -14,12 +14,21 @@ namespace Mitake.Stock.Util {
 		internal static int ConvertForTotalSeconds(DateTime time) {
 			return time.Hour * 3600 + time.Minute * 60 + time.Second;
 		}
-		
+
+		/// <summary>
+		///   轉換總秒數為 DateTime 結構
+		/// </summary>
+		/// <param name="time">總秒數</param>
+		/// <returns>返回值: DateTime 結構</returns>
+		internal static DateTime ConvertForDateTime(int totalSeconds) {
+			return __cToday.AddSeconds(totalSeconds);
+		}
+
 		/// <summary>
 		///   時間封包解碼(解碼交易日期)
 		/// </summary>
 		/// <param name="buffer">ZBuffer類別</param>
-		/// <returns>返回值:最後交易日期(format:yyyyMMdd)</returns>
+		/// <returns>返回值: DateTime結構</returns>
 		internal static DateTime GetDate(PacketBuffer buffer) {
 			ushort TimeByte = (ushort) ((buffer[0] << 8) + buffer[1]);
 			int iYear = BitConvert.GetValue(TimeByte, 9, 7) + 1990;
@@ -37,7 +46,7 @@ namespace Mitake.Stock.Util {
                 ///   股票即時資訊時間解碼
                 /// </summary>
                 /// <param name="buffer">ZBuffer類別</param>
-                /// <returns>返回值:時間數值(將所有時間都轉換成秒數)</returns>
+		/// <returns>返回值: DateTime結構</returns>
 		internal static DateTime GetTime(PacketBuffer buffer) {
                         int hh = 0, mm = 0, ss = 0;
                         ushort TimeByte = (ushort)((buffer[0] << 8) + buffer[1]);
@@ -50,14 +59,14 @@ namespace Mitake.Stock.Util {
 			ss = (ss < 0 || ss > 59) ? 0 : ss;
 			buffer.Position += 2;
 
-			return new DateTime(__cToday.Year, __cToday.Month, __cToday.Day, hh, mm, ss);
+			return __cToday.AddSeconds(hh * 3600 + mm * 60 + ss);
                 }
 
                 /// <summary>
                 ///   股票即時資訊時間解碼(解碼開盤其他時間 9:00:00 ~ 16:59:59 以外的時間)
                 /// </summary>
                 /// <param name="buffer">ZBuffer類別</param>
-                /// <returns>返回值:時間數值(將所有時間都轉換成秒數)</returns>
+		/// <returns>返回值: DateTime結構</returns>
 		internal static DateTime GetOther(PacketBuffer buffer) {
                         int hh = 0, mm = 0, ss = 0;
                         ushort TimeByte = (ushort)((buffer[0] << 8) + buffer[1]);
@@ -76,14 +85,35 @@ namespace Mitake.Stock.Util {
 			ss = (ss < 0 || ss > 59) ? 0 : ss;
 
 			buffer.Position += 2;
-                        return new DateTime(__cToday.Year, __cToday.Month, __cToday.Day, hh, mm, ss);
+			return __cToday.AddSeconds(hh * 3600 + mm * 60 + ss);
                 }
+
+		/// <summary>
+		///   股票即時資訊時間解碼(解碼時間 00:00:00 ~ 23:59:59)
+		/// </summary>
+		/// <param name="buffer">ZBuffer類別</param>
+		/// <returns>返回值: DateTime結構</returns>
+		internal static DateTime GetSpecial(PacketBuffer buffer) {
+			int hh = 0, mm = 0, ss = 0;
+			int TimeByte = (buffer[0] << 16) + (buffer[1] << 8) + buffer[2];
+
+			hh = BitConvert.GetValue(TimeByte, 19, 5);
+			hh = (hh < 0 || hh > 23) ? 0 : hh;
+			hh = (hh < 15) ? 24 + hh : hh;
+			mm = BitConvert.GetValue(TimeByte, 13, 6);
+			mm = (mm < 0 || mm > 59) ? 0 : mm;
+			ss = BitConvert.GetValue(TimeByte, 7, 6);
+			ss = (ss < 0 || ss > 59) ? 0 : ss;
+			buffer.Position += 3;
+
+			return __cToday.AddSeconds(hh * 3600 + mm * 60 + ss);
+		}
 
 		/// <summary>
 		///   時間封包解碼(解碼時間)
 		/// </summary>
 		/// <param name="buffer">ZBuffer類別</param>
-		/// <returns>返回值:DateTime結構</returns>
+		/// <returns>返回值: DateTime結構</returns>
 		internal static DateTime GetDateTime(PacketBuffer buffer) {
 			int iHour = ((buffer[1] == 35) ? 0 : 12);
 			buffer.Position += 4;
@@ -125,7 +155,7 @@ namespace Mitake.Stock.Util {
                         bSecond = (byte)(time % 60);
 
                         if (!isReal) {
-                                usTime = BitConvert.SetValue(usTime, 15, 1);
+				usTime = BitConvert.SetValue(usTime, 15, 1);
                         }
 
                         usTime = BitConvert.SetValue(usTime, 12, bHour);
@@ -158,7 +188,7 @@ namespace Mitake.Stock.Util {
                         bSecond = (byte)(time % 60);
 
                         if (!isReal) {
-                                usTime = BitConvert.SetValue(usTime, 15, 1);
+				usTime = BitConvert.SetValue(usTime, 15, 1);
                         }
 
                         usTime = BitConvert.SetValue(usTime, 12, bHour);

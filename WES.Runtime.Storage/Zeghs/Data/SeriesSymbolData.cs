@@ -365,13 +365,18 @@ namespace Zeghs.Data {
 
 		private Queue<DateTime> CreateRealtimePeriods() {
 			DateTime cToday = DateTime.UtcNow.AddHours(__cSettings.TimeZone);
-			
 			string sDataSource = __cDataRequest.DataFeed;
 			AbstractQuoteService cService = QuoteManager.Manager.GetQuoteService(sDataSource);
 			if (cService != null) {
 				cToday = cService.TradeDate;
 			}
-			
+
+			//從新計算今日的起始時間與結束時間的周期(有些商品不是每天的開收盤都一樣)
+			SessionObject cSession = __cSettings.GetSessionFromToday();
+			__cDataRequest.Resolution.CalculateRate(cSession.GetStartTimeForDaylight(), cSession.GetCloseTimeForDaylight(), __cSettings.Sessions.Count);
+
+			//從新計算結算日期
+			__cSettings.SetExpirationFromTime(cToday);
 			__cTimeQueue = __cDataRequest.Resolution.CalculateRealtimePeriods(this.LastBarTime, cToday, __cSettings.Expiration);
 			return __cTimeQueue;
 		}
@@ -421,10 +426,10 @@ namespace Zeghs.Data {
 		private void Series_onRequest(object sender, SeriesRequestEvent e) {  //此方法由 Open, Close, Time... 這些序列資料類別作綁定, 當使用者需要往前請求歷史資料時會觸發這個事件方法
 			int iRequestCount = ~e.Position + 1;  //e.Position為負值(往前100根 Bar = -100), 使用補數運算變成 100 作為請求 Bars 資料個數
 			int iTotals = iRequestCount + __cDataRequest.Range.Count;  //資料總個數(欲請求個數 + 目前已下載完後的資料個數)
-
+			
 			lock (__oLockRequest) {  //鎖定資源(請求序列資料時讓請求執行緒同步處理)
 				OnRequest(new DataRequestEvent(iRequestCount, iTotals, __cDataRequest.Resolution.Rate));  //呼叫請求方法
 			}
 		}
 	}
-}  //430行
+}  //435行

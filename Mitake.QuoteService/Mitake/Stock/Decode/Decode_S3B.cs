@@ -37,15 +37,20 @@ namespace Mitake.Stock.Decode {
                         }
 
                         do {
-                                //取得類型
-                                bType = BitConvert.GetValue(buffer[0], 7, 1);
+				if (bSType == 0x42) {
+					bType = 1;
+					cTime = Time.GetSpecial(buffer);
+				} else {
+					//取得類型
+					bType = BitConvert.GetValue(buffer[0], 7, 1);
 
-                                //取得時間
-                                if ((bSType & 0x80) == 0) {
-                                        cTime = Time.GetTime(buffer);
-                                } else {
-                                        cTime = Time.GetOther(buffer);
-                                }
+					//取得時間
+					if ((bSType & 0x80) == 0) {
+						cTime = Time.GetTime(buffer);
+					} else {
+						cTime = Time.GetOther(buffer);
+					}
+				}
 
                                 isHave = stock.GetMitakeTick(iSerial, ref cTick);
                                 cTick.Time = cTime;

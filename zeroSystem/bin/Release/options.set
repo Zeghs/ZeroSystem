@@ -1,3 +1,4 @@
 ﻿{"ChartEngineIndex":0,"DefaultProperty":{"AxisColor":"Yellow","AxisFont":"新細明體, 8pt","BackgroundColor":"Black","ChartSettings":[{"Axis":{"AxisScope":3,"IsCreateInstance":false,"MarginBottom":1.0,"MarginTop":1.0,"ScaleMode":0,"ScaleValue":0.0},"ChartType":5,"IsShowNewPrice":true,"IsSubChart":true,"LayerIndex":0,"LegendColor":"Yellow","PenStyles":[{"Color":"Red","Pattern":-1,"Width":1},{"Color":"LimeGreen","Pattern":-1,"Width":1},{"Color":"Gray","Pattern":-1,"Width":1}]}],"DrawAideLineColor":"LightSkyBlue","DrawingSource":1,"ForeColor":"White","GridColor":"48, 48, 48","IsShowGrid":true,"LegendFont":"新細明體, 8pt","TextFont":"新細明體, 8pt","TitleFont":"新細明體, 8pt","TradeLineColor":"GreenYellow","TradeSymbolColor":"DodgerBlue"}}
 {"CachePath":"data\\cache\\","DatabasePath":"data\\database\\","LogPath":"log\\","ProfilePath":"data\\profile\\","TrackerPath":"data\\tracker\\"}
+{"Title":"zeroSystem - Zoning and Emotional Range Omitted System"}
 {"AutoSwitchTradePage":false}

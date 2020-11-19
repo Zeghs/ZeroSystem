@@ -23,7 +23,8 @@ namespace Mitake.Stock.Decode {
                         
                         Buffer.Position = 15; //移動至資料結構
 
-			quote.即時資訊.Time = Time.GetTime(Buffer);
+			quote.即時資訊.Time = Time.ConvertForDateTime((Buffer[0] << 16) + (Buffer[1] << 8) + Buffer[2]);
+			Buffer.Position += 3;
 
                         bFlag = Buffer.Data[iFormatIndex++];
                         quote.ReferPrice = Price.GetPrice(BitConvert.GetValue(bFlag, 6, 2), Buffer, ref fReferPrice);

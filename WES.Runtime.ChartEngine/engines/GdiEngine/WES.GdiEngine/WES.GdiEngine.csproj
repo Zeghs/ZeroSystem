@@ -49,6 +49,10 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="WES.External.QuotePlugin, Version=1.0.20.401, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\WES.External.QuotePlugin\bin\Release\WES.External.QuotePlugin.dll</HintPath>
+    </Reference>
     <Reference Include="WES.Runtime.ChartEngine">
       <HintPath>..\..\..\bin\Release\WES.Runtime.ChartEngine.dll</HintPath>
     </Reference>

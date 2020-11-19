@@ -27,22 +27,27 @@ namespace Mitake.Stock.Decode {
 			Buffer.Position = 7;
 
 			//取得序號
-			if ((bSType & 0xf) == 1) {
+			if ((bSType & 0x31) == 0x31) {  //0x31 0xb1 與不等於 0x41 (夜盤) 序號都兩個位元組
 				iSerial = (Buffer[0] << 8) + Buffer[1];
 				Buffer.Position = 9;
-			} else {
+			} else {  //其他類型序號都是三個位元組
 				iSerial = (Buffer[0] << 16) + (Buffer[1] << 8) + Buffer[2];
 				Buffer.Position = 10;
 			}
 
-			//取得類型
-			bType = BitConvert.GetValue(Buffer[0], 7, 1);
-
-			//取得時間
-			if ((bSType & 0x80) == 0) {
-				cTime = Time.GetTime(Buffer);
+			if (bSType == 0x41) {  //夜盤代號 0x41 (時間格式不同)
+				bType = 0;
+				cTime = Time.GetSpecial(Buffer);
 			} else {
-				cTime = Time.GetOther(Buffer);
+				//取得類型
+				bType = BitConvert.GetValue(Buffer[0], 7, 1);
+
+				//取得時間
+				if ((bSType & 0x80) == 0) {
+					cTime = Time.GetTime(Buffer);
+				} else {
+					cTime = Time.GetOther(Buffer);
+				}
 			}
 
 			do {

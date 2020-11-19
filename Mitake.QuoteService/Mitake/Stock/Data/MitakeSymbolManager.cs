@@ -76,7 +76,7 @@ namespace Mitake.Stock.Data {
 		/// <param name="symbolId">商品代號</param>
 		/// <param name="marketType">市場別  1=期貨, 2=選擇權, 3=期貨股票</param>
 		/// <returns>返回值:轉換後的商品代號</returns>
-		internal static string Convert(string stockId, string symbolId, int marketType) {
+		internal static string[] Convert(string stockId, string symbolId, int marketType) {
 			int iContractIndex = 0;
 			string sSymbolId = null, sCommodityId = null;
 
@@ -84,24 +84,20 @@ namespace Mitake.Stock.Data {
 			switch (marketType) {
 				case 1:  //期貨
 				case 3:  //期貨股票
-					if (iLength == 5) {
+					if (iLength == 5 || iLength == 6) { //Length(5=期貨, 6=夜間期貨)
 						int iFWeek = 0;
 						int iFYear = (symbolId[4] - '0');
 						int iFMonth = (symbolId[3] - 'A') + 1;
 						if (char.IsDigit(symbolId, 2)) {  //判斷是否為週期貨(周期貨都以數字表示第幾周)
 							iFWeek = symbolId[2] - '0';
-							sCommodityId = symbolId.Substring(0, 2) + "W";  //將週期貨統一更名 例: MX1 => MXW
+							sCommodityId = string.Format("{0}W{1}", symbolId.Substring(0, 2), ((iLength == 6 && symbolId[5] == 'N') ? "N" : string.Empty));  //將週期貨統一更名 例: MX1 => MXW
 						} else {
-							sCommodityId = symbolId.Substring(0, 3);
+							sCommodityId = symbolId.Substring(0, 3) + ((iLength == 6 && symbolId[5] == 'N') ? "N" : string.Empty);  //如果是夜間期貨後面加上 "N"
 						}
-						
+
 						iContractIndex = GetContractTimeIndex((marketType == 3) ? "STOCK_FUTURE" : sCommodityId, iFYear, iFMonth, iFWeek);
 						if (iContractIndex > -1) {
-							if (stockId[0] == '7' && stockId[1] == '6') {  //檢查是否為夜台或夜小台
-								sSymbolId = string.Format("{0}N{1}.tw", sCommodityId, iContractIndex);
-							} else {
-								sSymbolId = string.Format("{0}{1}.tw", sCommodityId, iContractIndex);
-							}
+							sSymbolId = string.Format("{0}{1}.tw", sCommodityId, iContractIndex);
 						}
 					}
 					break;
@@ -133,7 +129,7 @@ namespace Mitake.Stock.Data {
 			if (sSymbolId == null) {
 				sSymbolId = string.Format("{0}.tw", symbolId);
 			}
-			return sSymbolId;
+			return new string[] { sSymbolId, sCommodityId };
 		}
 
 		/// <summary>
@@ -253,4 +249,4 @@ namespace Mitake.Stock.Data {
 			return iRet;
 		}
 	}
-}  //256行
+}  //252行
