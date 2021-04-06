@@ -192,10 +192,24 @@ namespace Zeghs.Forms {
 				//捲動到最底部
 				if (grid.VScrollBar.InvokeRequired) {
 					grid.VScrollBar.BeginInvoke((MethodInvoker) delegate {
-						grid.VScrollBar.Value = iValue;
+						VScrollBar cBar = grid.VScrollBar;
+						if (iValue >= cBar.Minimum && iValue <= cBar.Maximum) {
+							grid.VScrollBar.Value = iValue;
+						} else {
+							grid.VScrollBar.Minimum = 0;
+							grid.VScrollBar.Maximum = 100;
+							grid.VScrollBar.Value = 0;
+						}
 					});
 				} else {
-					grid.VScrollBar.Value = iValue;
+					VScrollBar cBar = grid.VScrollBar;
+					if (iValue >= cBar.Minimum && iValue <= cBar.Maximum) {
+						grid.VScrollBar.Value = iValue;
+					} else {
+						grid.VScrollBar.Minimum = 0;
+						grid.VScrollBar.Maximum = 100;
+						grid.VScrollBar.Value = 0;
+					}
 				}
 			}
 		}

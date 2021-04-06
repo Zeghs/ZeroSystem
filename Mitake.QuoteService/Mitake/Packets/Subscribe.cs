@@ -7,7 +7,7 @@ namespace Mitake.Packets {
         /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         internal sealed class Subscribe : McpStruct {
-                private const int SUBSCRIBE_SIZE = 4096;  //目前可以訂閱 4096 * 8 = 32768(支)
+                private const int SUBSCRIBE_SIZE = 6250;  //目前可以訂閱 6250 * 8 = 50000(支)
 
                 [MarshalAs(UnmanagedType.ByValArray, SizeConst = SUBSCRIBE_SIZE)]
                 private byte[] __bSubscribeFlag;  //訂閱旗標

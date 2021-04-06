@@ -9,30 +9,25 @@ using Taiwan.Forms;
 
 namespace Taiwan.Rules.Contracts {
 	/// <summary>
-	///   台灣週期貨合約規則
+	///   台灣夜盤週期貨合約規則
 	/// </summary>
-	[RuleProperty(ERuleType.Contract, "TaiwanIndexWeekFuturesContractRule", "Taiwan.Rules.Contracts.TaiwanIndexWeekFuturesContractRule", "(台灣指數週期貨合約到期規則)\r\n\r\n台灣指數週期貨各契約結算日以第三個星期三為最後交易日(如遇國定假日或其他不可抗力因素則以台灣期交所公告為準)。", true)]
-	public sealed class TaiwanIndexWeekFuturesContractRule : RuleBase, IContractTime, IRuleSetting {
-		private int __iCloseHour = 0, __iCloseMinute = 0, __iCloseSecond = 0;
+	[RuleProperty(ERuleType.Contract, "TaiwanIndexWeekNightFuturesContractRule", "Taiwan.Rules.Contracts.TaiwanIndexWeekNightFuturesContractRule", "(台灣指數夜盤週小台期貨合約到期規則)\r\n\r\n台灣指數夜盤週小台期貨各契約結算月份以星期三為最後交易日(如遇國定假日或其他不可抗力因素則以台灣期交所公告為準)。", true)]
+	public sealed class TaiwanIndexWeekNightFuturesContractRule : RuleBase, IContractTime, IRuleSetting {
+		private TimeSpan __cCloseTime;
 		private List<ContractTime> __cContractTimes = new List<ContractTime>(8);
 
-		public TaiwanIndexWeekFuturesContractRule() {
+		public TaiwanIndexWeekNightFuturesContractRule() {
 			if (ShowSetting() == -1) {
 				this.UpdateContractTime(DateTime.UtcNow.AddHours(TaiwanStockExchange.TIME_ZONE));
 			}
 		}
 
-		public TaiwanIndexWeekFuturesContractRule(JToken args) {
+		public TaiwanIndexWeekNightFuturesContractRule(JToken args) {
 			this.args = args;
-			TimeSpan cContractCloseTime = args["ExpireTime"].ToObject<TimeSpan>();
-
-			//算出時分秒
-			__iCloseHour = cContractCloseTime.Hours;
-			__iCloseMinute = cContractCloseTime.Minutes;
-			__iCloseSecond = cContractCloseTime.Seconds;
+			__cCloseTime = args["ExpireTime"].ToObject<TimeSpan>();
 
 			DateTime cToday = DateTime.UtcNow.AddHours(TaiwanStockExchange.TIME_ZONE);
-			cToday = new DateTime(cToday.Year, cToday.Month, cToday.Day, __iCloseHour, __iCloseMinute, __iCloseSecond);
+			cToday = cToday.Date.AddSeconds(__cCloseTime.TotalSeconds);
 			CalcContractTime(cToday);  //計算合約時間
 		}
 
@@ -52,7 +47,7 @@ namespace Taiwan.Rules.Contracts {
 
 		public ContractTime GetContractTime(DateTime date, int index = 0) {
 			ContractTime cContractTime = null;
-			date = new DateTime(date.Year, date.Month, date.Day, __iCloseHour, __iCloseMinute, __iCloseSecond);
+			date = new DateTime(date.Year, date.Month, date.Day, __cCloseTime.Hours, __cCloseTime.Minutes, __cCloseTime.Seconds);
 			int iCount = __cContractTimes.Count;
 			for (int i = index; i < iCount; i++) {
 				ContractTime cContractTemp = __cContractTimes[i];
@@ -74,18 +69,14 @@ namespace Taiwan.Rules.Contracts {
 
 		public int ShowSetting() {
 			frmTaiwanContractSetting cSetting = new frmTaiwanContractSetting();
-			cSetting.CloseTime = new TimeSpan(__iCloseHour, __iCloseMinute, __iCloseSecond);
+			cSetting.CloseTime = __cCloseTime;
 			DialogResult cResult = cSetting.ShowDialog();
 			if (cResult == DialogResult.OK) {
-				TimeSpan cCloseTime = cSetting.CloseTime;
-				__iCloseHour = cCloseTime.Hours;
-				__iCloseMinute = cCloseTime.Minutes;
-				__iCloseSecond = cCloseTime.Seconds;
-
-				this.UpdateContractTime(DateTime.UtcNow.AddHours(TaiwanStockExchange.TIME_ZONE));
+				__cCloseTime = cSetting.CloseTime;
+				this.UpdateContractTime(DateTime.UtcNow.AddHours(TaiwanStockExchange.TIME_ZONE));  //更新
 
 				JObject cObject = new JObject();
-				cObject.Add(new JProperty("ExpireTime", cCloseTime));
+				cObject.Add(new JProperty("ExpireTime", __cCloseTime));
 				this.args = cObject;  //將參數設定至屬性上(方便寫入至設定檔內)
 
 				return 0;  //成功
@@ -96,7 +87,7 @@ namespace Taiwan.Rules.Contracts {
 		public void UpdateContractTime(DateTime date) {
 			__cContractTimes.Clear();
 
-			DateTime cDate = new DateTime(date.Year, date.Month, date.Day, __iCloseHour, __iCloseMinute, __iCloseSecond);
+			DateTime cDate = date.Date.AddSeconds(__cCloseTime.TotalSeconds);
 			CalcContractTime(cDate);  //計算合約時間
 		}
 

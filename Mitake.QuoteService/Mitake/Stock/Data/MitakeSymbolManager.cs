@@ -226,9 +226,11 @@ namespace Mitake.Stock.Data {
 				} else {
 					iYear = (iYear - iMod) + year;
 				}
+				
 				int iDay = __cToday.Day;
 				int iDays = DateTime.DaysInMonth(iYear, month);  //取得該月份的最大天數
-			
+
+				DateTime cContract = DateTime.MinValue;
 				if (commodityId[2] == 'W') {  //如果是週商品(期權)
 					int iFirstWeek = (int) new DateTime(iYear, month, 1).DayOfWeek;
 					int iFirstWedDay = (7 - iFirstWeek > 3) ? 4 - iFirstWeek : 11 - iFirstWeek;
@@ -236,17 +238,19 @@ namespace Mitake.Stock.Data {
 					if (iDay > iDays) {
 					        iDay = iDays;
 					}
+					cContract = new DateTime(iYear, month, iDay);
 				} else {
 					iDay = ((iDay > iDays) ? iDays : iDay);  //如果傳進來的月份為商品代號上的月份代碼轉換的, 就必須注意是否超過此月份的最大天數, 如果超過就需要修正
+					cContract = new DateTime(iYear, month, iDay);
 				}
 
 				IContractTime cRule = cProperty.ContractRule as IContractTime;
 				if (cRule != null) {
-					ContractTime cContractTimes = cRule.GetContractTime(new DateTime(iYear, month, iDay));
+					ContractTime cContractTimes = cRule.GetContractTime(cContract);
 					iRet = cContractTimes.Id;
 				}
 			}
 			return iRet;
 		}
 	}
-}  //252行
+}  //256行

@@ -18,7 +18,7 @@ namespace Mitake.Stock.Util {
 		/// <summary>
 		///   轉換總秒數為 DateTime 結構
 		/// </summary>
-		/// <param name="time">總秒數</param>
+		/// <param name="totalSeconds">總秒數</param>
 		/// <returns>返回值: DateTime 結構</returns>
 		internal static DateTime ConvertForDateTime(int totalSeconds) {
 			return __cToday.AddSeconds(totalSeconds);

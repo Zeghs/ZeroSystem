@@ -30,6 +30,9 @@ namespace Zeghs {
 			cService.Load();
 			cService.Login();
 
+			MitakeSymbolManager.DataSource = "Mitake";
+			MitakeSymbolManager.ExchangeName = "TWSE";
+			cService.SymbolUpdate();
 			//*/
 
 			/*
@@ -106,6 +109,7 @@ namespace Zeghs {
 			System.Console.WriteLine("c " + e.SymbolId);
 			IQuote cQuote = cService.Storage.GetQuote(e.SymbolId);
 			System.Console.WriteLine(cQuote);
+			System.Console.WriteLine("symbol:{0} name:{1}", cQuote.SymbolId, cQuote.SymbolName);
 
 			double dVolume = 0;
 			int iCount = cQuote.TickCount;
@@ -116,7 +120,6 @@ namespace Zeghs {
 					dVolume = cTick.Volume;
 				}
 			}
-			System.Console.WriteLine(cQuote);
 		}
 
 		static void cService_onLoginCompleted(object sender, EventArgs e) {
@@ -124,7 +127,8 @@ namespace Zeghs {
 			//cService.SymbolUpdate();
 
 			System.Console.WriteLine("訂閱......");
-			cService.AddSubscribe("MXW0.tw");
+			cService.Complement("MXWN0.tw");
+			//cService.AddSubscribe("MXW0.tw");
 			//cService.Complement("TXFN0.tw");
 			//cService.Complement("TXW0C9250.tw");
 			//cService.AddSubscribe("OTC.tw");

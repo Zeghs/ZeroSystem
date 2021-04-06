@@ -28,7 +28,7 @@ namespace Mitake {
         public class QuoteService : AbstractQuoteService {
 		private const double TIME_ZONE = 8.0d;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(QuoteService));
-		private static readonly TimeSpan __cSymbolUpdateTime = new TimeSpan(7, 30, 0);  //股票代號表預設更新時間
+		private static readonly TimeSpan __cSymbolUpdateTime = new TimeSpan(8, 30, 0);  //股票代號表預設更新時間
 
 		private bool __bReset = false;         //判斷是否為清盤指令所觸發的登入登出(收到清盤後, 會重新登入伺服器)
 		private bool __bReseted = false;       //判斷是否已經清盤完畢

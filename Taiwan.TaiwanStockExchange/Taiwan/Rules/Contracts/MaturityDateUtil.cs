@@ -50,8 +50,10 @@ namespace Taiwan.Rules.Contracts {
 
 			for (int i = 0; i < 7; i++) {
 				if (date.DayOfWeek == DayOfWeek.Wednesday) {
-					double dTotals = (cMaturity - date).TotalSeconds;  //計算是否在第三個星期三周期內(第三個星期三沒有週選擇權)
-					if (dTotals >= 0 && dTotals <= 518400) {  //要扣掉結算日 604800 - 86400 = 518400(星期四才是新的換周日)
+					int iDay = date.Day;
+					int iEndDay = cMaturity.Day;
+					int iStartDay = iEndDay - 6;
+					if (iDay >= iStartDay && iDay <= iEndDay) {  //如果是第三個星期三就跳過這個區間
 						date = cMaturity.AddSeconds(604800);  //一次加上一星期的秒數
 					}
 

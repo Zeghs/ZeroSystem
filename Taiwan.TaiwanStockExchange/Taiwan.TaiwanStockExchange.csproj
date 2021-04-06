@@ -68,6 +68,7 @@
     <Compile Include="Taiwan\Rules\Contracts\MaturityDateUtil.cs" />
     <Compile Include="Taiwan\Rules\Contracts\TaiwanIndexNightFuturesContractRule.cs" />
     <Compile Include="Taiwan\Rules\Contracts\TaiwanIndexWeekFuturesContractRule.cs" />
+    <Compile Include="Taiwan\Rules\Contracts\TaiwanIndexWeekNightFuturesContractRule.cs" />
     <Compile Include="Taiwan\Rules\Contracts\TaiwanIndexWeekOptionContractRule.cs" />
     <Compile Include="Taiwan\Rules\Contracts\IContractParameters.cs" />
     <Compile Include="Taiwan\Rules\Contracts\TaiwanStockFuturesContractRule.cs" />
