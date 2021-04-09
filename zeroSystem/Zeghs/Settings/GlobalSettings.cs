@@ -1,6 +1,6 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
+using System.Reflection;
 using Newtonsoft.Json;
 using Zeghs.Chart;
 
@@ -61,6 +61,12 @@ namespace Zeghs.Settings {
 				__cPaths = JsonConvert.DeserializeObject<PathSetting>(sDatas[1]);
 				__cBase = JsonConvert.DeserializeObject<BaseSetting>(sDatas[2]);
 				__cTesting = JsonConvert.DeserializeObject<TestSetting>(sDatas[3]);
+			}
+
+			//加入延伸模組
+			string[] sFiles = Directory.GetFiles("plugins\\extends", "*.dll");
+			foreach (string sFile in sFiles) {
+				Assembly.LoadFrom(sFile);
 			}
 		}
 

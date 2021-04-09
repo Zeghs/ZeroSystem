@@ -71,6 +71,14 @@ namespace Netwings.Orders {
 		}
 
 		/// <summary>
+		///   [取得] 商品代號
+		/// </summary>
+		public string SymbolId {
+			get;
+			internal set;
+		}
+
+		/// <summary>
 		///   [取得] 交易稅
 		/// </summary>
 		public double Tax {
@@ -115,11 +123,6 @@ namespace Netwings.Orders {
 		}
 
 		internal bool IsSended {
-			get;
-			set;
-		}
-
-		internal string SymbolId {
 			get;
 			set;
 		}

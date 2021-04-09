@@ -21,8 +21,6 @@ namespace zeroSystem {
 				File.Move("LiveUpdate.ex_", "LiveUpdate.exe");  //再將新的程式更名
 			}
 
-			Assembly.LoadFrom("WES.Runtime.Indicator.dll");  //預先載入否則編譯會找不到(因為此 Dll 只有在信號內會使用到)
-
 			XmlConfigurator.ConfigureAndWatch(new System.IO.FileInfo("log4net_config.xml"));
 
 			ProductManager.Load("exchanges");

@@ -338,11 +338,6 @@
       <Project>{80F4F6B5-91C8-4841-9452-3BD99A2CD475}</Project>
       <Name>WES.Runtime.ChartEngine</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WES.Runtime.Indicator\WES.Runtime.Indicator.csproj">
-      <Project>{B9830F85-72F2-409B-ADFC-09A6E2F2B5AC}</Project>
-      <Name>WES.Runtime.Indicator</Name>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </ProjectReference>
     <ProjectReference Include="..\WES.Runtime.Product\WES.Runtime.Product.csproj">
       <Project>{7C5601E7-7118-477B-A4AC-C2E0DE9999DB}</Project>
       <Name>WES.Runtime.Product</Name>

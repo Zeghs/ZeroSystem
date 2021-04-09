@@ -55,6 +55,13 @@ namespace PowerLanguage {
 		}
 
 		/// <summary>
+		///   [取得] 商品代號
+		/// </summary>
+		string SymbolId {
+			get;
+		}
+
+		/// <summary>
 		///   [取得] 交易稅
 		/// </summary>
 		double Tax {

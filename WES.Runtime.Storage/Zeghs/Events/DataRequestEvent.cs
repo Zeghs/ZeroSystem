@@ -5,14 +5,14 @@ namespace Zeghs.Events {
 	/// <summary>
 	///   資料請求事件類別
 	/// </summary>
-	internal sealed class DataRequestEvent : EventArgs {
+	public sealed class DataRequestEvent : EventArgs {
 		private int __iRate = 0;
 		private int __iTotals = 0;
 
 		/// <summary>
 		///   [取得/設定] 要請求的資料個數
 		/// </summary>
-		internal int Count {
+		public int Count {
 			get;
 			set;
 		}
@@ -20,7 +20,7 @@ namespace Zeghs.Events {
 		/// <summary>
 		///   [取得/設定] 是否已經請求全部資料
 		/// </summary>
-		internal bool IsAlreadyRequestAllData {
+		public bool IsAlreadyRequestAllData {
 			get;
 			set;
 		}
@@ -28,7 +28,7 @@ namespace Zeghs.Events {
 		/// <summary>
 		///   [取得] 與基礎周期的縮放比率
 		/// </summary>
-		internal int Rate {
+		public int Rate {
 			get {
 				return __iRate;
 			}
@@ -37,7 +37,7 @@ namespace Zeghs.Events {
 		/// <summary>
 		///   [取得/設定] 資料的區間日期(0=起始日期, 1=終止日期)
 		/// </summary>
-		internal DateTime[] Ranges {
+		public DateTime[] Ranges {
 			get;
 			set;
 		}
@@ -45,7 +45,7 @@ namespace Zeghs.Events {
 		/// <summary>
 		///   [取得/設定] 返回值
 		/// </summary>
-		internal int Result {
+		public int Result {
 			get;
 			set;
 		}
@@ -53,7 +53,7 @@ namespace Zeghs.Events {
 		/// <summary>
 		///   [取得] 資料總個數(欲請求個數 + 目前已下載完後的資料個數)
 		/// </summary>
-		internal int Totals {
+		public int Totals {
 			get {
 				return __iTotals;
 			}

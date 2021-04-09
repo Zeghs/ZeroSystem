@@ -1,4 +1,4 @@
 ﻿{
-  "HttpDomain": "http://storage.stk.tw",
+  "HttpDomain": "http://storageweb.stk.tw:88",
   "TargetUrl": "/Zeghs/Services/apiGetSeriesSymbolData.ashx"
 }

@@ -2240,6 +2240,11 @@
               [取得] 下單價格
             </summary>
         </member>
+        <member name="P:PowerLanguage.ITradeOrder.SymbolId">
+            <summary>
+              [取得] 商品代號
+            </summary>
+        </member>
         <member name="P:PowerLanguage.ITradeOrder.Tax">
             <summary>
               [取得] 交易稅

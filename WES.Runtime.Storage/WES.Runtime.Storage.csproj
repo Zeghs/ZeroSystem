@@ -64,9 +64,12 @@
     <Compile Include="Zeghs\Events\SeriesPositionChangeEvent.cs" />
     <Compile Include="Zeghs\Events\SeriesRequestEvent.cs" />
     <Compile Include="Zeghs\Events\SeriesResultEvent.cs" />
+    <Compile Include="Zeghs\IO\AbstractDevice.cs" />
     <Compile Include="Zeghs\IO\DataAdapter.cs" />
     <Compile Include="Zeghs\IO\DataLoader.cs" />
+    <Compile Include="Zeghs\IO\HttpPostDevice.cs" />
     <Compile Include="Zeghs\IO\IDataLoader.cs" />
+    <Compile Include="Zeghs\IO\IDeviceCreator.cs" />
     <Compile Include="Zeghs\IO\ZBuffer.cs" />
     <Compile Include="Zeghs\IO\ZReader.cs" />
     <Compile Include="Zeghs\IO\ZRequest.cs" />
