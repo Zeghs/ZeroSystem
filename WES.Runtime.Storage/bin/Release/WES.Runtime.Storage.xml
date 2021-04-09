@@ -117,6 +117,17 @@
               [取得] 回傳代碼(0=成功)
             </summary>
         </member>
+        <member name="T:Zeghs.IO.IDeviceCreator">
+            <summary>
+              歷史資料裝置建立者介面
+            </summary>
+        </member>
+        <member name="M:Zeghs.IO.IDeviceCreator.Create">
+            <summary>
+              建立歷史資料過檔裝置的執行個體
+            </summary>
+            <returns>抽象裝置基底類別</returns>
+        </member>
         <member name="T:PowerLanguage.LoadDataCallback">
             <summary>
               DataLoader 使用非同步取得 Instrument 商品資料會使用此委派通知使用者
@@ -392,6 +403,12 @@
             <summary>
               儲存 Series 設定值
             </summary>
+        </member>
+        <member name="M:Zeghs.Managers.SeriesManager.SetDeviceCreator(Zeghs.IO.IDeviceCreator)">
+            <summary>
+              設定歷史資料裝置建立者介面
+            </summary>
+            <param name="deviceCreator">歷史資料裝置建立者介面</param>
         </member>
         <member name="M:Zeghs.Managers.SeriesManager.AsyncGetSeries(PowerLanguage.InstrumentDataRequest,System.EventHandler{Zeghs.Events.SeriesResultEvent},System.Boolean,System.Object,System.Int32)">
             <summary>
@@ -680,6 +697,44 @@
         <member name="P:Zeghs.IO.ZRequest.Url">
             <summary>
                [取得/設定]Request Url字串
+            </summary>
+        </member>
+        <member name="T:Zeghs.IO.AbstractDevice">
+            <summary>
+              抽象裝置基底類別(給 DataAdapter 使用的抽象裝置基底類別)
+            </summary>
+        </member>
+        <member name="M:Zeghs.IO.AbstractDevice.AddSeries(System.DateTime,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+              加入商品歷史資料
+            </summary>
+            <param name="time">時間</param>
+            <param name="open">開盤價</param>
+            <param name="high">最高價</param>
+            <param name="low">最低價</param>
+            <param name="close">收盤價</param>
+            <param name="volume">成交量</param>
+        </member>
+        <member name="M:Zeghs.IO.AbstractDevice.AdjustSize(System.Int32)">
+            <summary>
+              調整商品資料容量
+            </summary>
+            <param name="count">欲調整資料個數</param>
+        </member>
+        <member name="M:Zeghs.IO.AbstractDevice.Request(Zeghs.Events.DataRequestEvent)">
+            <summary>
+              請求商品歷史資料
+            </summary>
+            <param name="e">資料請求事件</param>
+        </member>
+        <member name="P:Zeghs.IO.AbstractDevice.DataRequest">
+            <summary>
+              [取得] 歷史資料請求結構
+            </summary>
+        </member>
+        <member name="P:Zeghs.IO.AbstractDevice.Position">
+            <summary>
+              [取得/設定] 目前已讀取的歷史資料位置
             </summary>
         </member>
         <member name="T:Zeghs.Data.SeriesSettings">
@@ -1011,6 +1066,12 @@
               [取得] 成交量陣列資訊
             </summary>
         </member>
+        <member name="M:Zeghs.IO.HttpPostDevice.Request(Zeghs.Events.DataRequestEvent)">
+            <summary>
+              請求商品歷史資料
+            </summary>
+            <param name="e">資料請求事件</param>
+        </member>
         <member name="M:Zeghs.Data.SeriesStorage.#ctor(System.Int32)">
             <summary>
               建構子
@@ -1073,61 +1134,6 @@
             </summary>
             <param name="barsAgo">目前或是之前的索引(0=目前的 Bar)</param>
             <returns>返回值:從索引值獲得的所需資料</returns>
-        </member>
-        <member name="T:Zeghs.IO.AbstractDevice">
-            <summary>
-              抽象裝置基底類別(給 DataAdapter 使用的抽象裝置基底類別)
-            </summary>
-        </member>
-        <member name="M:Zeghs.IO.AbstractDevice.AddSeries(System.DateTime,System.Double,System.Double,System.Double,System.Double,System.Double)">
-            <summary>
-              加入商品歷史資料
-            </summary>
-            <param name="time">時間</param>
-            <param name="open">開盤價</param>
-            <param name="high">最高價</param>
-            <param name="low">最低價</param>
-            <param name="close">收盤價</param>
-            <param name="volume">成交量</param>
-        </member>
-        <member name="M:Zeghs.IO.AbstractDevice.AdjustSize(System.Int32)">
-            <summary>
-              調整商品資料容量
-            </summary>
-            <param name="count">欲調整資料個數</param>
-        </member>
-        <member name="M:Zeghs.IO.AbstractDevice.Request(Zeghs.Events.DataRequestEvent)">
-            <summary>
-              請求商品歷史資料
-            </summary>
-            <param name="e">資料請求事件</param>
-        </member>
-        <member name="P:Zeghs.IO.AbstractDevice.DataRequest">
-            <summary>
-              [取得] 歷史資料請求結構
-            </summary>
-        </member>
-        <member name="P:Zeghs.IO.AbstractDevice.Position">
-            <summary>
-              [取得/設定] 目前已讀取的歷史資料位置
-            </summary>
-        </member>
-        <member name="T:Zeghs.IO.IDeviceCreator">
-            <summary>
-              歷史資料裝置建立者介面
-            </summary>
-        </member>
-        <member name="M:Zeghs.IO.IDeviceCreator.Create">
-            <summary>
-              建立歷史資料過檔裝置的執行個體
-            </summary>
-            <returns>抽象裝置基底類別</returns>
-        </member>
-        <member name="M:Zeghs.IO.HttpPostDevice.Request(Zeghs.Events.DataRequestEvent)">
-            <summary>
-              請求商品歷史資料
-            </summary>
-            <param name="e">資料請求事件</param>
         </member>
     </members>
 </doc>

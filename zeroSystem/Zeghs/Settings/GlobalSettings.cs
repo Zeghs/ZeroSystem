@@ -64,7 +64,8 @@ namespace Zeghs.Settings {
 			}
 
 			//加入延伸模組
-			string[] sFiles = Directory.GetFiles("plugins\\extends", "*.dll");
+			string sPath = Path.GetDirectoryName(filename);
+			string[] sFiles = Directory.GetFiles(sPath + ".\\plugins\\extends", "*.dll");
 			foreach (string sFile in sFiles) {
 				Assembly.LoadFrom(sFile);
 			}

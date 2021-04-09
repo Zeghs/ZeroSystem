@@ -68,6 +68,14 @@ namespace Zeghs.Managers {
 			File.WriteAllText(sFileName, sSettings, Encoding.UTF8);
 		}
 
+		/// <summary>
+		///   設定歷史資料裝置建立者介面
+		/// </summary>
+		/// <param name="deviceCreator">歷史資料裝置建立者介面</param>
+		public static void SetDeviceCreator(IDeviceCreator deviceCreator) {
+			DataAdapter.SetDeviceCreator(deviceCreator);
+		}
+
 		private sealed class _AsyncEventArgs {
 			internal EventWaitHandle handle = null;
 			internal InstrumentDataRequest request;
@@ -457,4 +465,4 @@ namespace Zeghs.Managers {
 			}
 		}
 	}
-}  //460行
+}  //468行

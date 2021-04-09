@@ -7,6 +7,10 @@ namespace Zeghs.IO {
 	internal sealed class DataAdapter : IDisposable {
 		private static IDeviceCreator __cDeviceCreator = new HttpPostCreator();
 
+		internal static void SetDeviceCreator(IDeviceCreator deviceCreator) {
+			__cDeviceCreator = deviceCreator;
+		}
+
 		internal static void SetRequestUrl(string domain, string target) {
 			HttpPostCreator.SetRequestUrl(domain + target);
 		}
