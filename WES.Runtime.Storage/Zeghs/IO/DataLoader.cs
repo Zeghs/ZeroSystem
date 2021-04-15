@@ -94,16 +94,10 @@ namespace Zeghs.IO {
 				
 				Instrument cBars_0 = GetInstrument(0);  //取得目前第 0 個 Instrument 商品資料
 				if (cBars_0 != null) {
-					cInstrument.MoveBars(cBars_0.LastBarTime);
+					cInstrument.MoveBars(cBars_0.Time.Value);
 				}
 
-				IQuote cQuote = null;
-				InstrumentDataRequest cRequest = cInstrument.Request;
-				AbstractQuoteService cService = QuoteManager.Manager.GetQuoteService(cRequest.DataFeed);
-				if (cService != null) {
-					cQuote = cService.Storage.GetQuote(cRequest.Symbol);
-				}
-				result(new DataLoaderResult(cInstrument, cQuote, args));
+				result(new DataLoaderResult(cInstrument, cInstrument.Quotes, args));
 			}, useCache, null, millisecondsTimeout);
 		}
 
@@ -216,6 +210,7 @@ namespace Zeghs.IO {
 		private void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
+				
 				if (disposing) {
 					onAddInstrument = null;
 					onLoadCompleted = null;
@@ -237,4 +232,4 @@ namespace Zeghs.IO {
 			CreateInstrument(e.Data, (int) e.Parameters);
 		}
 	}
-} //240行
+} //235行

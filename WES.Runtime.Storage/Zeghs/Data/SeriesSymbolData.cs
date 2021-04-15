@@ -377,7 +377,7 @@ namespace Zeghs.Data {
 
 			//從新計算結算日期
 			__cSettings.SetExpirationFromTime(cToday);
-			__cTimeQueue = __cDataRequest.Resolution.CalculateRealtimePeriods(this.LastBarTime, cToday, __cSettings.Expiration);
+			__cTimeQueue = __cDataRequest.Resolution.CalculateRealtimePeriods((this.LastBarTime == DateTime.MinValue) ? cToday : this.LastBarTime, cToday, __cSettings.Expiration);
 			return __cTimeQueue;
 		}
 

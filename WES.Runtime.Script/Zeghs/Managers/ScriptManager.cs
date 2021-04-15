@@ -109,14 +109,15 @@ namespace Zeghs.Managers {
 		///   建立新的腳本執行個體
 		/// </summary>
 		/// <param name="scriptName">完整腳本名稱</param>
+		/// <param name="args">腳本所需參數</param>
 		/// <returns>返回值: CStudyAbstract 類別, null=無此腳本</returns>
-		public CStudyAbstract CreateScript(string scriptName) {
+		public CStudyAbstract CreateScript(string scriptName, object args) {
 			int iIndex = 0;
 			CStudyAbstract cScript = null;
 
 			if (__cKeys.TryGetValue(scriptName, out iIndex)) {
 				ScriptInformation cScriptInfo = __cScripts[iIndex];
-				cScript = cScriptInfo.CreateScript();
+				cScript = cScriptInfo.CreateScript(args);
 				cScript.About = cScriptInfo.Property;
 			}
 			return cScript;
@@ -242,7 +243,6 @@ namespace Zeghs.Managers {
 		/// <returns>返回值:編譯後的腳本檔案名稱, null=編譯失敗</returns>
 		internal string Complier(string scriptFile) {
 			string sComplierFile = null;
-			
 			if (__cScriptSettings != null) {
 				string sPath = __cScriptSettings.OutputPath;
 				string sAssembly = Path.GetFileNameWithoutExtension(scriptFile);

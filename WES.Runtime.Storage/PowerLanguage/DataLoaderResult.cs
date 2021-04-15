@@ -43,7 +43,13 @@ namespace PowerLanguage {
 			}
 		}
 
-		internal DataLoaderResult(IInstrument instrument, IQuote quote, object parameters) {
+		/// <summary>
+		///   建構子
+		/// </summary>
+		/// <param name="instrument">商品資訊介面</param>
+		/// <param name="quote">Quote 資訊報價介面</param>
+		/// <param name="parameters">其他參數</param>
+		public DataLoaderResult(IInstrument instrument, IQuote quote, object parameters) {
 			__cQuote = quote;
 			__cInstrument = instrument;
 			__oParameters = parameters;

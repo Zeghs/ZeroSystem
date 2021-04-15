@@ -50,9 +50,10 @@ namespace Zeghs.Informations {
 		/// <summary>
 		///   建立腳本
 		/// </summary>
+		/// <param name="args">腳本所需參數</param>
 		/// <returns>返回值:AbstractScript類別</returns>
-		public CStudyAbstract CreateScript() {
-			return Activator.CreateInstance(__cScript, new object()) as CStudyAbstract;
+		public CStudyAbstract CreateScript(object args) {
+			return Activator.CreateInstance(__cScript, args) as CStudyAbstract;
 		}
 	}
 }

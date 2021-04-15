@@ -139,6 +139,14 @@
               資料讀取者回報類別(使用非同步取得 Instrument 會使用此類別存放回報結果)
             </summary>
         </member>
+        <member name="M:PowerLanguage.DataLoaderResult.#ctor(PowerLanguage.IInstrument,Zeghs.Data.IQuote,System.Object)">
+            <summary>
+              建構子
+            </summary>
+            <param name="instrument">商品資訊介面</param>
+            <param name="quote">Quote 資訊報價介面</param>
+            <param name="parameters">其他參數</param>
+        </member>
         <member name="P:PowerLanguage.DataLoaderResult.Data">
             <summary>
               [取得] IInstrument 商品資料

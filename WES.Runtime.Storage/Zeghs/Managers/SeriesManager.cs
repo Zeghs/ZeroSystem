@@ -73,7 +73,7 @@ namespace Zeghs.Managers {
 		/// </summary>
 		/// <param name="deviceCreator">歷史資料裝置建立者介面</param>
 		public static void SetDeviceCreator(IDeviceCreator deviceCreator) {
-			DataAdapter.SetDeviceCreator(deviceCreator);
+			DataAdapter.SetDeviceCreator((deviceCreator == null) ? new HttpPostCreator() : deviceCreator);
 		}
 
 		private sealed class _AsyncEventArgs {
@@ -311,6 +311,7 @@ namespace Zeghs.Managers {
 					}
 
 					if (iBaseSeconds == iTotalSeconds) {
+						dataRequest = cSeries.DataRequest;
 						goto exit;
 					} else {
 						cSeries = cSeries.CreateSeries(dataRequest); //利用基礎周期建立其他的資料周期
@@ -330,7 +331,9 @@ namespace Zeghs.Managers {
 				SeriesSymbolData cSeries = cAdapter.Series;  //取得新的基礎周期序列資料
 
 				int iBaseSeconds = (iTotalSeconds < Resolution.MAX_BASE_TOTALSECONDS) ? Resolution.MIN_BASE_TOTALSECONDS : Resolution.MAX_BASE_TOTALSECONDS;
-				if (iBaseSeconds != iTotalSeconds) {
+				if (iBaseSeconds == iTotalSeconds) {
+					dataRequest = cSeries.DataRequest;
+				} else {
 					SeriesSymbolData cTargetSeries = cSeries.CreateSeries(dataRequest);  //使用 InstrumentDataRequest 建立新的其他週期序列資料
 					cSeries.Merge(cTargetSeries);  //將基礎周期序列資料合併至新的其他週期序列資料
 					cSeries.Dispose();  //釋放基礎周期序列資料
@@ -399,9 +402,8 @@ namespace Zeghs.Managers {
 		}
 
 		private void QuoteService_onComplementCompleted(object sender, QuoteComplementCompletedEvent e) {
-			string sHashKey = string.Format("{0}_{1}", e.DataSource, e.SymbolId);
-
 			_AsyncEventArgs cArgs = null;
+			string sHashKey = string.Format("{0}_{1}", e.DataSource, e.SymbolId);
 			lock (__cAsyncArgs) {
 				if (__cAsyncArgs.TryGetValue(sHashKey, out cArgs)) {
 					__cAsyncArgs.Remove(sHashKey);
@@ -465,4 +467,4 @@ namespace Zeghs.Managers {
 			}
 		}
 	}
-}  //468行
+}  //470行

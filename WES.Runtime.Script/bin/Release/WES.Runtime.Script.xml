@@ -26,11 +26,12 @@
             <param name="scriptFile">腳本檔案名稱</param>
             <returns>返回值:true=成功, false=失敗</returns>
         </member>
-        <member name="M:Zeghs.Managers.ScriptManager.CreateScript(System.String)">
+        <member name="M:Zeghs.Managers.ScriptManager.CreateScript(System.String,System.Object)">
             <summary>
               建立新的腳本執行個體
             </summary>
             <param name="scriptName">完整腳本名稱</param>
+            <param name="args">腳本所需參數</param>
             <returns>返回值: CStudyAbstract 類別, null=無此腳本</returns>
         </member>
         <member name="M:Zeghs.Managers.ScriptManager.LoadScripts">
@@ -466,10 +467,11 @@
             <param name="script">腳本Type型別</param>
             <param name="property">腳本屬性</param>
         </member>
-        <member name="M:Zeghs.Informations.ScriptInformation.CreateScript">
+        <member name="M:Zeghs.Informations.ScriptInformation.CreateScript(System.Object)">
             <summary>
               建立腳本
             </summary>
+            <param name="args">腳本所需參數</param>
             <returns>返回值:AbstractScript類別</returns>
         </member>
         <member name="P:Zeghs.Informations.ScriptInformation.FullName">

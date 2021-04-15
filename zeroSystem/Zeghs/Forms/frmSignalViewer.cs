@@ -109,7 +109,7 @@ namespace Zeghs.Forms {
 		}
 
 		private void CreateSignalObject() {
-			__cSignalObject = ScriptManager.Manager.CreateScript(__cProfile.ScriptName) as SignalObject;
+			__cSignalObject = ScriptManager.Manager.CreateScript(__cProfile.ScriptName, this) as SignalObject;
 			if (__cSignalObject != null) {
 				string sTitle = string.Format("{0}", __cSignalObject.About.Comment);
 				if (this.InvokeRequired) {

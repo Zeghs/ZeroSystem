@@ -154,7 +154,7 @@ namespace Zeghs.Drawing.Plots {
 			IInstrumentSettings cSettings = __cBars.Info;
 			InstrumentDataRequest cRequest = __cBars.Request;
 			Resolution cResolution = cRequest.Resolution;
-			string sTitle = string.Format("{0} {1} ({2}{3}) #{4} {5}", cQuote.SymbolId, cQuote.SymbolName, cResolution.Size, cResolution.Type.ToString(), cSettings.Category.ToString(), cRequest.Exchange);
+			string sTitle = string.Format("{0} {1} ({2}{3}) #{4} {5}", (cQuote == null) ? cRequest.Symbol : cQuote.SymbolId, (cQuote == null) ? cSettings.ASymbolInfo2.SymbolName : cQuote.SymbolName, cResolution.Size, cResolution.Type.ToString(), cSettings.Category.ToString(), cRequest.Exchange);
 
 			IntPtr cOldFont = __cGDI.SelectFont(property.TitleFont);
 			__cGDI.DrawString(sTitle, property.ForeColor, 5, rectangle.Top + 2);
