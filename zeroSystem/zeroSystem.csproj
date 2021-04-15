@@ -352,24 +352,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\frmChildBase_maxbox.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\frmChildBase_minbox.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\frmChildBase_MouseMove_closebox.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\frmChildBase_MouseMove_maxbox.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\frmChildBase_MouseMove_minbox.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\frmChildBase_closebox.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\frmWelcome_background.png" />
   </ItemGroup>
   <ItemGroup>

@@ -165,9 +165,11 @@
 			this.pageItem_Output = new System.Windows.Forms.TabPage();
 			this.txtOutput = new System.Windows.Forms.TextBox();
 			this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.menuItemSigner = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemParameters = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemDataSource = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItemReLoad = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemRemove = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemTradeDetails = new System.Windows.Forms.ToolStripMenuItem();
 			this.chart = new System.Windows.Forms.Control();
@@ -390,43 +392,57 @@
             this.menuItemSigner,
             this.menuItemTradeDetails});
 			this.contextMenu.Name = "contextMenu";
-			this.contextMenu.Size = new System.Drawing.Size(119, 48);
+			this.contextMenu.Size = new System.Drawing.Size(153, 70);
+			// 
+			// toolStripSeparator1
+			// 
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
 			// 
 			// menuItemSigner
 			// 
 			this.menuItemSigner.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuItemParameters,
             this.menuItemDataSource,
-            this.menuItemRemove});
+            this.menuItemRemove,
+            this.toolStripSeparator1,
+            this.menuItemReLoad});
 			this.menuItemSigner.Name = "menuItemSigner";
-			this.menuItemSigner.Size = new System.Drawing.Size(118, 22);
+			this.menuItemSigner.Size = new System.Drawing.Size(152, 22);
 			this.menuItemSigner.Text = "信號交易";
 			// 
 			// menuItemParameters
 			// 
 			this.menuItemParameters.Name = "menuItemParameters";
-			this.menuItemParameters.Size = new System.Drawing.Size(118, 22);
+			this.menuItemParameters.Size = new System.Drawing.Size(152, 22);
 			this.menuItemParameters.Text = "參數設定";
 			this.menuItemParameters.Click += new System.EventHandler(this.menuItemParameters_Click);
 			// 
 			// menuItemDataSource
 			// 
 			this.menuItemDataSource.Name = "menuItemDataSource";
-			this.menuItemDataSource.Size = new System.Drawing.Size(118, 22);
+			this.menuItemDataSource.Size = new System.Drawing.Size(152, 22);
 			this.menuItemDataSource.Text = "資料來源";
 			this.menuItemDataSource.Click += new System.EventHandler(this.menuItemDataSource_Click);
+			// 
+			// menuItemReLoad
+			// 
+			this.menuItemReLoad.Name = "menuItemReLoad";
+			this.menuItemReLoad.Size = new System.Drawing.Size(152, 22);
+			this.menuItemReLoad.Text = "重新載入";
+			this.menuItemReLoad.Click += new System.EventHandler(this.menuItemReLoad_Click);
 			// 
 			// menuItemRemove
 			// 
 			this.menuItemRemove.Name = "menuItemRemove";
-			this.menuItemRemove.Size = new System.Drawing.Size(118, 22);
+			this.menuItemRemove.Size = new System.Drawing.Size(152, 22);
 			this.menuItemRemove.Text = "刪除信號";
 			this.menuItemRemove.Click += new System.EventHandler(this.menuItemRemove_Click);
 			// 
 			// menuItemTradeDetails
 			// 
 			this.menuItemTradeDetails.Name = "menuItemTradeDetails";
-			this.menuItemTradeDetails.Size = new System.Drawing.Size(118, 22);
+			this.menuItemTradeDetails.Size = new System.Drawing.Size(152, 22);
 			this.menuItemTradeDetails.Text = "交易明細";
 			this.menuItemTradeDetails.Click += new System.EventHandler(this.menuItemTradeDetails_Click);
 			// 
@@ -494,5 +510,7 @@
 		private System.Windows.Forms.Label labDate;
 		private System.Windows.Forms.TextBox txtSymbol;
 		private System.Windows.Forms.Label labSymbol;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+		private System.Windows.Forms.ToolStripMenuItem menuItemReLoad;
 	}
 }

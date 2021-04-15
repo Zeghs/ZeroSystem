@@ -67,48 +67,6 @@ namespace ZeroSystem.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap frmChildBase_closebox {
-            get {
-                object obj = ResourceManager.GetObject("frmChildBase_closebox", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap frmChildBase_maxbox {
-            get {
-                object obj = ResourceManager.GetObject("frmChildBase_maxbox", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap frmChildBase_minbox {
-            get {
-                object obj = ResourceManager.GetObject("frmChildBase_minbox", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap frmChildBase_MouseMove_closebox {
-            get {
-                object obj = ResourceManager.GetObject("frmChildBase_MouseMove_closebox", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap frmChildBase_MouseMove_maxbox {
-            get {
-                object obj = ResourceManager.GetObject("frmChildBase_MouseMove_maxbox", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap frmChildBase_MouseMove_minbox {
-            get {
-                object obj = ResourceManager.GetObject("frmChildBase_MouseMove_minbox", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap frmMain_menubar_menuItem_exportCSV {
             get {
                 object obj = ResourceManager.GetObject("frmMain_menubar_menuItem_exportCSV", resourceCulture);

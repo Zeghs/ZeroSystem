@@ -41,6 +41,7 @@ namespace Zeghs.Forms {
 		private bool __bLoaded = false;
 		private bool __bBindMoved = false;
 		private bool __bShowTradeView = false;
+		private bool __bForceShowParameters = false;
 		private ZChart __cChart = null;
 		private ProfileSetting __cProfile = null;
 		private SignalObject __cSignalObject = null;
@@ -333,6 +334,20 @@ namespace Zeghs.Forms {
 			}
 		}
 
+		private void menuItemReLoad_Click(object sender, EventArgs e) {
+			if (__cChart != null) {
+				__cChart.Dispose();
+			}
+
+			if (__cSignalObject != null) {
+				__cSignalObject.Dispose();
+			}
+
+			__bForceShowParameters = true;
+			CreateChartEngine();
+			CreateSignalObject();
+		}
+
 		private void menuItemRemove_Click(object sender, EventArgs e) {
 			DialogResult cResult = MessageBox.Show(__sMessageContent_001, __sMessageHeader_001, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 			if (cResult == DialogResult.Yes) {
@@ -452,14 +467,19 @@ namespace Zeghs.Forms {
 			if (sArgs == null && iCount > 0) {
 				ShowScriptParameters();
 			} else {
-				try {
-					for (int i = 0; i < iCount; i++) {
-						__cParameters[i].SetValue(sArgs[i]);
-					}
-
-					__cSignalObject.UpdateParameters();
-				} catch {
+				if (__bForceShowParameters) {
+					__bForceShowParameters = false;
 					ShowScriptParameters();
+				} else {
+					try {
+						for (int i = 0; i < iCount; i++) {
+							__cParameters[i].SetValue(sArgs[i]);
+						}
+
+						__cSignalObject.UpdateParameters();
+					} catch {
+						ShowScriptParameters();
+					}
 				}
 			}
 		}
