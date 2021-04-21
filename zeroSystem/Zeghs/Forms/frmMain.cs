@@ -281,6 +281,11 @@ namespace Zeghs.Forms {
 			GetDockContentFromPersistString(cButton.Tag as string);
 		}
 
+		private void toolItem_params_Click(object sender, EventArgs e) {
+			frmSignalViewer frmSignalViewer = __cActivateForm as frmSignalViewer;
+			frmSignalViewer.ShowScriptParameters();
+		}
+
 		private void dockPanels_ContentRemoved(object sender, DockContentEventArgs e) {
 			string sFullName = e.Content.DockHandler.Form.GetType().FullName;
 			if (__cCommons.ContainsKey(sFullName)) {

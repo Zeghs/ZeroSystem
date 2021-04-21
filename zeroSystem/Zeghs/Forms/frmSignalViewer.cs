@@ -62,6 +62,9 @@ namespace Zeghs.Forms {
 			InitializeSourceGrid_Trust();
 			InitializeSourceGrid_Trade();
 			InitializeSourceGrid_History();
+
+			__bShowTradeView = GlobalSettings.Base.ShowTradeView;
+			menuItemTradeDetails.Checked = __bShowTradeView;
 		}
 
 		internal void ConnectQuoteServer() {
@@ -80,6 +83,26 @@ namespace Zeghs.Forms {
 
 		internal void SetProfileSetting(ProfileSetting profile) {
 			__cProfile = profile;
+		}
+
+		internal void ShowScriptParameters() {
+			frmScriptParameters frmScriptParameters = new frmScriptParameters();
+			frmScriptParameters.SetParameters(__cOrderService, __cParameters);
+			DialogResult cResult = frmScriptParameters.ShowDialog();
+			if (cResult == DialogResult.OK) {
+				__cSignalObject.UpdateParameters();
+			}
+
+			if (__cParameters != null) {
+				int iCount = __cParameters.Count;
+				if (iCount > 0) {
+					__cProfile.Parameters = new List<string>(iCount);
+					List<string> sArgs = __cProfile.Parameters;
+					for (int i = 0; i < iCount; i++) {
+						sArgs.Add(__cParameters[i].Value.ToString());
+					}
+				}
+			}
 		}
 
 		protected override void OnDockStateChanged(EventArgs e) {
@@ -210,26 +233,6 @@ namespace Zeghs.Forms {
 						grid.VScrollBar.Minimum = 0;
 						grid.VScrollBar.Maximum = 100;
 						grid.VScrollBar.Value = 0;
-					}
-				}
-			}
-		}
-
-		private void ShowScriptParameters() {
-			frmScriptParameters frmScriptParameters = new frmScriptParameters();
-			frmScriptParameters.SetParameters(__cOrderService, __cParameters);
-			DialogResult cResult = frmScriptParameters.ShowDialog();
-			if (cResult == DialogResult.OK) {
-				__cSignalObject.UpdateParameters();
-			}
-
-			if (__cParameters != null) {
-				int iCount = __cParameters.Count;
-				if (iCount > 0) {
-					__cProfile.Parameters = new List<string>(iCount);
-					List<string> sArgs = __cProfile.Parameters;
-					for (int i = 0; i < iCount; i++) {
-						sArgs.Add(__cParameters[i].Value.ToString());
 					}
 				}
 			}

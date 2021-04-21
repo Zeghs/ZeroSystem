@@ -386,6 +386,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\frmMain_toolbar_toolItem_params.png" />
     <None Include="Resources\frmMain_menubar_menuItem_exportJSON.png" />
     <None Include="Resources\loading.gif" />
     <None Include="Resources\frmMain_menubar_menuItem_exportCSV.png" />

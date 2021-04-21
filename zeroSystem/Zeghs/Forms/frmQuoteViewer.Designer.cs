@@ -31,13 +31,15 @@
 
 			this.dataGrid.Rows.RowHeight = 21;  //處理第一列中文字體會被遮住的問題
 			this.dataGrid.Columns.Add("SymbolId", "代號", typeof(string));
+			this.dataGrid.Columns.Add("SymbolName", "名稱", typeof(string));
 			this.dataGrid.Columns.Add("Time", "時間", typeof(System.TimeSpan));
 			this.dataGrid.Columns.Add("Price", "成交", typeof(double));
 			this.dataGrid.Columns.Add("Volume", "總量", typeof(double));
 			this.dataGrid.Columns[0].Width = 56;
-			this.dataGrid.Columns[1].Width = 55;
-			this.dataGrid.Columns[2].DataCell.View = cTextAlignView;
+			this.dataGrid.Columns[1].Width = 56;
+			this.dataGrid.Columns[2].Width = 55;
 			this.dataGrid.Columns[3].DataCell.View = cTextAlignView;
+			this.dataGrid.Columns[4].DataCell.View = cTextAlignView;
 
 			//修改選擇條的框線寬度與顏色
 			SourceGrid.Selection.SelectionBase cSelectionBase = this.dataGrid.Selection as SourceGrid.Selection.SelectionBase;

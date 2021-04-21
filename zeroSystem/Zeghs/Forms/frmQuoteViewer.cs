@@ -38,7 +38,7 @@ namespace Zeghs.Forms {
 				if (sSymbolId.Length == 0) {
 					return;
 				} else {
-					cQuoteInfo = new _QuoteInfo(exchangeName, dataSource, sSymbolId, dPrice);
+					cQuoteInfo = new _QuoteInfo(exchangeName, dataSource, sSymbolId, quote.SymbolName, dPrice);
 					source.Add(cQuoteInfo);
 				}
 			} else {

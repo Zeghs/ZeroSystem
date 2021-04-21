@@ -27,6 +27,11 @@ namespace Zeghs.Data {
 			internal set;
 		}
 
+		public string SymbolName {
+			get;
+			internal set;
+		}
+
 		public TimeSpan Time {
 			get {
 				return __cTime;
@@ -45,8 +50,9 @@ namespace Zeghs.Data {
 			}
 		}
 
-		internal _QuoteInfo(string exchangeName, string dataSource, string symbolId, double price) {
+		internal _QuoteInfo(string exchangeName, string dataSource, string symbolId, string symbolName, double price) {
 			this.SymbolId = symbolId;
+			this.SymbolName = symbolName;
 			this.DataSource = dataSource;
 
 			AbstractExchange cExchange = ProductManager.Manager.GetExchange(exchangeName);

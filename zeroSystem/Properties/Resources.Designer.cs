@@ -123,6 +123,13 @@ namespace ZeroSystem.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap frmMain_toolbar_toolItem_params {
+            get {
+                object obj = ResourceManager.GetObject("frmMain_toolbar_toolItem_params", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap frmMain_toolbar_toolItem_productManager {
             get {
                 object obj = ResourceManager.GetObject("frmMain_toolbar_toolItem_productManager", resourceCulture);
