@@ -127,7 +127,8 @@ namespace Zeghs {
 			//cService.SymbolUpdate();
 
 			System.Console.WriteLine("訂閱......");
-			cService.Complement("MXWN0.tw");
+			//cService.Complement("MXF0.tw");
+			//cService.Complement("MXWN0.tw");
 			//cService.AddSubscribe("MXW0.tw");
 			//cService.Complement("TXFN0.tw");
 			//cService.Complement("TXW0C9250.tw");

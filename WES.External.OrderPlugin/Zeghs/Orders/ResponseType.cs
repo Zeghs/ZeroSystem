@@ -26,6 +26,11 @@
 		/// <summary>
 		///   資訊更新
 		/// </summary>
-		Update = 4
+		Update = 4,
+
+		/// <summary>
+		///   成交回報(下單機回報)
+		/// </summary>
+		ReplyDeal = 20
 	}
 }

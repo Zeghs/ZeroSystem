@@ -420,5 +420,10 @@
               資訊更新
             </summary>
         </member>
+        <member name="F:Zeghs.Orders.ResponseType.ReplyDeal">
+            <summary>
+              成交回報(下單機回報)
+            </summary>
+        </member>
     </members>
 </doc>

@@ -375,6 +375,7 @@ namespace Netwings {
 		protected override void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
+
 				if (disposing) {
 					base.Dispose(disposing);
 
@@ -463,6 +464,7 @@ namespace Netwings {
 				if (cDeal.IsDealed) {  //最後一張成交單成交完畢則表示委託單的下單數量已經全部成交完畢(最後一張成交單成交完畢後委託單數量會為 0 且最後一張成交單的 IsDealed 為真)
 					__cEntrusts.Remove(sTicketID);  //當完全成交完畢後就移除委託單
 				}
+				
 				OnResponse(cDeal, cDeal.SymbolId, ResponseType.Deal, (bClosed) ? null : __cCurrentPosition, (bClosed) ? __cPositions[1].ClosedTrades : __cCurrentPosition.ClosedTrades, iLatestHistoryCount);
 			}
 
@@ -501,6 +503,7 @@ namespace Netwings {
 
 		private TradeOrder GetWaiting(string symbolId, double price) {
 			TradeOrder cTrust = null;
+
 		again:  if (__iMaxTrustIndex > __iTrustIndex) {
 				string sTrustTicket = __iTrustIndex.ToString();
 				cTrust = __cEntrusts.GetTrade(sTrustTicket);
@@ -641,10 +644,12 @@ namespace Netwings {
 								__cDeals.Enqueue(cDealOrder);
 							}
 							cTempTrust.IsDealed = true;
+
+							OnResponse(cDealOrder, cDealOrder.SymbolId, ResponseType.ReplyDeal);
 						}
 						break;
 				}
 			}
 		}
 	}
-} //650行
+} //655行

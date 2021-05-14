@@ -230,17 +230,17 @@ namespace Mitake.Stock.Data {
 				int iDay = __cToday.Day;
 				int iDays = DateTime.DaysInMonth(iYear, month);  //取得該月份的最大天數
 
-				DateTime cContract = DateTime.MinValue;
+				DateTime cContract = __cToday;
 				if (commodityId[2] == 'W') {  //如果是週商品(期權)
 					int iFirstWeek = (int) new DateTime(iYear, month, 1).DayOfWeek;
 					int iFirstWedDay = (7 - iFirstWeek > 3) ? 4 - iFirstWeek : 11 - iFirstWeek;
 					int iWeekDay = iFirstWedDay + (week - 1) * 7;
-					if (iDay > iWeekDay) {  //如果今日日期 > 週商品結算日
+
+					cContract = new DateTime(iYear, month, iWeekDay);
+					if (__cToday > cContract) {  //如果今日日期 > 週商品結算日
 						return -1;  //返回 -1 (表示此週商品已經過期)
 					}
-					
-					iWeekDay = (iWeekDay > iDays) ? iDays : iDay;
-					cContract = new DateTime(iYear, month, iWeekDay);
+					cContract = __cToday;
 				} else {
 					iDay = ((iDay > iDays) ? iDays : iDay);  //如果傳進來的月份為商品代號上的月份代碼轉換的, 就必須注意是否超過此月份的最大天數, 如果超過就需要修正
 					cContract = new DateTime(iYear, month, iDay);

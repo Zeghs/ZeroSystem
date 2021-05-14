@@ -338,6 +338,8 @@ namespace Netwings {
 				if (cDeal.IsDealed) {  //檢查是否戳合完成
 					__cEntrusts.Remove(sTrustID);
 				}
+				
+				OnResponse(cDeal, cDeal.SymbolId, ResponseType.ReplyDeal);
 				OnResponse(cDeal, cDeal.SymbolId, ResponseType.Deal, (bClosed) ? null : __cCurrentPosition, (bClosed) ? __cPositions[1].ClosedTrades : __cCurrentPosition.ClosedTrades, iLatestHistoryCount);
 			}
 
@@ -475,4 +477,4 @@ namespace Netwings {
 			deal.Tax = cTax.GetTax(deal.Action, dTotals);
 		}
 	}
-} //478行
+} //480行

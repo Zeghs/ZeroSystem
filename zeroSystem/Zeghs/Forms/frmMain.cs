@@ -118,6 +118,7 @@ namespace Zeghs.Forms {
 		}
 
 		private void frmMain_Load(object sender, EventArgs e) {
+			this.Text = GlobalSettings.Base.Title;
 			this.dockPanels.LoadFromXml(string.Format("{0}__main.xml", GlobalSettings.Paths.ProfilePath), new DeserializeDockContent(GetDockContentFromPersistString));
 			
 			this.OnResize(null);
