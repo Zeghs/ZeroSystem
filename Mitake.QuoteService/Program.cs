@@ -13,6 +13,8 @@ using Mitake.Stock.Decode;
 using Mitake.Stock.Data;
 using Mitake.Stock.Util;
 
+using PowerLanguage;
+
 namespace Zeghs {
 	static class Program {
 		static QuoteService cService = null;
@@ -127,7 +129,7 @@ namespace Zeghs {
 			//cService.SymbolUpdate();
 
 			System.Console.WriteLine("訂閱......");
-			//cService.Complement("MXF0.tw");
+			cService.Complement("MXFN0.tw");
 			//cService.Complement("MXWN0.tw");
 			//cService.AddSubscribe("MXW0.tw");
 			//cService.Complement("TXFN0.tw");

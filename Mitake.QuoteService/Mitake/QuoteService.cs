@@ -45,7 +45,6 @@ namespace Mitake {
 		private Timer __cReLoginTimer = null;  //斷線重連計時器
 		private Subscribe __cSubscribe = null; //訂閱資訊(上傳伺服器的訂閱資訊 bit Array)
 		private HashSet<string> __cSymbolIds = null;  //訂閱的股票代號雜湊
-		private DateTime __cTradeDate = DateTime.UtcNow; //最後交易日期
 
 		private object __oLock = new object();
                 
@@ -71,7 +70,7 @@ namespace Mitake {
 		/// </summary>
 		public override DateTime TradeDate {
 			get {
-				return __cTradeDate;
+				return Mitake.Stock.Util.Time.TradeDate;
 			}
 		}
 
@@ -83,7 +82,6 @@ namespace Mitake {
 				DateTime cDate = DateTime.Now;
 				int iNowDate = cDate.Year * 10000 + cDate.Month * 100 + cDate.Day;
 				int iUpdateDate = this.UpdateTime.Year * 10000 + this.UpdateTime.Month * 100 + this.UpdateTime.Day;
-
 				return (iNowDate > iUpdateDate);
 			}
 		}
@@ -370,7 +368,7 @@ namespace Mitake {
 		/// </summary>
 		public override void SymbolUpdate() {
 			this.UpdateTime = DateTime.Today.AddDays(-2);  //修改更新時間到兩天前(強迫更新)
-			MitakeSymbolManager.Update(DateTime.UtcNow.AddHours(TIME_ZONE)); //更新所有商品資訊
+			MitakeSymbolManager.Update(this.TradeDate); //更新所有商品資訊
 
 			LoadQuote cLoadQuote = new LoadQuote();  //請求所有股票代號表
 			cLoadQuote.InfoName = 0x38;
@@ -385,7 +383,6 @@ namespace Mitake {
 		protected override void Dispose(bool disposing) {
 			if (!__bDisposed) {
 				__bDisposed = true;
-				
 				if (disposing) {
 					this.Logout();  //登出
 
@@ -452,8 +449,7 @@ namespace Mitake {
 					SymbolUpdate();  //回補股票代號(每天只回補一次股票代號)
 				}
 			} else {
-				__cTradeDate = e.TradeDate;
-				Mitake.Stock.Util.Time.SetToday(__cTradeDate);
+				Mitake.Stock.Util.Time.SetToday(e.TradeDate);
 
 				if (__bReset) {
 					if (!__bReseted) {  //如果還沒有清盤完畢, 就執行清盤動作
@@ -629,7 +625,6 @@ namespace Mitake {
 			e.Message = "與伺服器中斷連線，請檢查網路設定。";
 
 			OnDisconnect(new QuoteDisconnectEvent(this.DataSource, e.RemoteIP, e.Port));
-
 			ReLogin(); //重新登入伺服器
 		}
 
@@ -662,4 +657,4 @@ namespace Mitake {
 			}
 		}
 	}
-} //665行
+} //660行

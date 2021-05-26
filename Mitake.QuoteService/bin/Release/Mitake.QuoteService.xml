@@ -1460,6 +1460,11 @@
             </summary>
             <param name="today">今天日期</param>
         </member>
+        <member name="P:Mitake.Stock.Util.Time.TradeDate">
+            <summary>
+              [取得] 交易日期(即時 Tick 的時間都會併上此交易日期)
+            </summary>
+        </member>
         <member name="T:Mitake.Stock.Decode.Decode_S38">
             <summary>
               個股基本資料

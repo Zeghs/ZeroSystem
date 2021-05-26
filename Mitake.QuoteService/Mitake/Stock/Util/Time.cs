@@ -7,6 +7,15 @@ namespace Mitake.Stock.Util {
 		private static DateTime __cToday = DateTime.Today;
 
 		/// <summary>
+		///   [取得] 交易日期(即時 Tick 的時間都會併上此交易日期)
+		/// </summary>
+		internal static DateTime TradeDate {
+			get {
+				return __cToday;
+			}
+		}
+
+		/// <summary>
 		///   轉換 DateTime 為總秒數(00:00:00 到目前的總秒數)
 		/// </summary>
 		/// <param name="time">DateTime 結構</param>
@@ -99,7 +108,7 @@ namespace Mitake.Stock.Util {
 
 			hh = BitConvert.GetValue(TimeByte, 19, 5);
 			hh = (hh < 0 || hh > 23) ? 0 : hh;
-			hh = (hh < 15) ? 24 + hh : hh;
+			hh = (hh >= 0 && hh <= 5) ? 24 + hh : hh;  //為了因應夜盤會開超過12點的狀況, 而且在5點收盤, 所以超過這個時間就必須要加上 24 小時(夜盤的 Tick 才不會發生時間錯誤狀況)
 			mm = BitConvert.GetValue(TimeByte, 13, 6);
 			mm = (mm < 0 || mm > 59) ? 0 : mm;
 			ss = BitConvert.GetValue(TimeByte, 7, 6);
@@ -149,7 +158,8 @@ namespace Mitake.Stock.Util {
                 internal static void SetTime(PacketBuffer buffer, int time, bool isReal) {
                         ushort usTime = 0;
                         byte bHour = 0, bMinute = 0, bSecond = 0;
-                        bHour = (byte)((time / 3600) - 9);
+                      
+			bHour = (byte)((time / 3600) - 9);
                         time %= 3600;
                         bMinute = (byte)(time / 60);
                         bSecond = (byte)(time % 60);

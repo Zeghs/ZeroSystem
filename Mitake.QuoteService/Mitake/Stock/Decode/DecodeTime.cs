@@ -1,5 +1,4 @@
-﻿using System;
-using Mitake.Events;
+﻿using Mitake.Events;
 using Mitake.Stock.Util;
 using Mitake.Sockets.Data;
 
