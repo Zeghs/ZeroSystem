@@ -30,6 +30,7 @@ namespace Zeghs {
 			cService.onSubscribeCompleted += new EventHandler<Events.QuoteComplementCompletedEvent>(cService_onSubscribeCompleted);
 			cService.onComplementCompleted += new EventHandler<Events.QuoteComplementCompletedEvent>(cService_onComplementCompleted);
 			cService.Load();
+
 			cService.Login();
 
 			MitakeSymbolManager.DataSource = "Mitake";
@@ -76,9 +77,19 @@ namespace Zeghs {
 			System.Console.ReadLine();
 		}
 
+		private static object __oLock = new object();
 		private static void cService_onQuote(object sender, Events.QuoteEvent e) {
-			ITick cTick = e.Quote.GetTick(0);
-			System.Console.WriteLine("{0} {1,8:0.00} {2,10} {3, 10}", cTick.Time.ToString("HHmmss"), cTick.Price, cTick.Single, cTick.Volume);
+			//ITick cTick = e.Quote.GetTick(0);
+			//System.Console.WriteLine("{0} {1,8:0.00} {2,10} {3, 10}", cTick.Time.ToString("HHmmss"), cTick.Price, cTick.Single, cTick.Volume);
+			lock (__oLock) {
+				System.Console.CursorLeft = 0;
+				System.Console.CursorTop = 0;
+				IDOMData cData = e.Quote.DOM;
+				for (int i = 0; i < 5; i++) {
+					System.Console.CursorTop = i;
+					System.Console.WriteLine("{0,8} {1,8} {2,8} {3,8}", cData.Bid[i].Size, cData.Bid[i].Price, cData.Ask[i].Price, cData.Ask[i].Size);
+				}
+			}
 		}
 
 		static DateTime dddd = new DateTime(2015,3,12,13,44,59);
@@ -104,6 +115,7 @@ namespace Zeghs {
 			System.Console.WriteLine("s " + e.SymbolId);
 			IQuote cQuote = cService.Storage.GetQuote(e.SymbolId);
 			System.Console.WriteLine(cQuote);
+			System.Console.Clear();
 		}
 
 		static void cService_onComplementCompleted(object sender, Events.QuoteComplementCompletedEvent e) {
@@ -129,7 +141,7 @@ namespace Zeghs {
 			//cService.SymbolUpdate();
 
 			System.Console.WriteLine("訂閱......");
-			cService.Complement("MXFN0.tw");
+			//cService.Complement("MXFN0.tw");
 			//cService.Complement("MXWN0.tw");
 			//cService.AddSubscribe("MXW0.tw");
 			//cService.Complement("TXFN0.tw");

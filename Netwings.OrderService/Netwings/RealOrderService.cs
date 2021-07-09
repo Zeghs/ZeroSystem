@@ -165,6 +165,7 @@ namespace Netwings {
 
 			if (logger.IsInfoEnabled) logger.Info("[RealOrderService.Initialize] Waiting order data response...");
 			__cResetEvent.WaitOne();  //等待接收未平倉資訊
+			CalculatePositions();  //計算成交部位狀況
 		}
 
 		public override List<RulePropertyAttribute> GetRuleItems(ERuleType ruleType) {
@@ -464,7 +465,6 @@ namespace Netwings {
 				if (cDeal.IsDealed) {  //最後一張成交單成交完畢則表示委託單的下單數量已經全部成交完畢(最後一張成交單成交完畢後委託單數量會為 0 且最後一張成交單的 IsDealed 為真)
 					__cEntrusts.Remove(sTicketID);  //當完全成交完畢後就移除委託單
 				}
-				
 				OnResponse(cDeal, cDeal.SymbolId, ResponseType.Deal, (bClosed) ? null : __cCurrentPosition, (bClosed) ? __cPositions[1].ClosedTrades : __cCurrentPosition.ClosedTrades, iLatestHistoryCount);
 			}
 
