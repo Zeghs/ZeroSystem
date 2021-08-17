@@ -94,7 +94,9 @@ namespace Zeghs.IO {
 				
 				Instrument cBars_0 = GetInstrument(0);  //取得目前第 0 個 Instrument 商品資料
 				if (cBars_0 != null) {
-					cInstrument.MoveBars(cBars_0.Time.Value);
+					if (cBars_0.Time.Value > DateTime.MinValue) {
+						cInstrument.MoveBars(cBars_0.Time.Value);
+					}
 				}
 
 				result(new DataLoaderResult(cInstrument, cInstrument.Quotes, args));
@@ -222,6 +224,7 @@ namespace Zeghs.IO {
 								cInstrument.Dispose();
 							}
 						}
+						
 						__cInstruments.Clear();
 					}
 				}
@@ -232,4 +235,4 @@ namespace Zeghs.IO {
 			CreateInstrument(e.Data, (int) e.Parameters);
 		}
 	}
-} //235行
+} //238行
