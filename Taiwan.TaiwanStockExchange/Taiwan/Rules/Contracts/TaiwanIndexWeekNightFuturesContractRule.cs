@@ -26,9 +26,7 @@ namespace Taiwan.Rules.Contracts {
 			this.args = args;
 			__cCloseTime = args["ExpireTime"].ToObject<TimeSpan>();
 
-			DateTime cToday = DateTime.UtcNow.AddHours(TaiwanStockExchange.TIME_ZONE);
-			cToday = cToday.Date.AddSeconds(__cCloseTime.TotalSeconds);
-			CalcContractTime(cToday);  //計算合約時間
+			this.UpdateContractTime(DateTime.UtcNow.AddHours(TaiwanStockExchange.TIME_ZONE));
 		}
 
 		public int GetContractIndex(string symbolId) {
@@ -87,8 +85,13 @@ namespace Taiwan.Rules.Contracts {
 		public void UpdateContractTime(DateTime date) {
 			__cContractTimes.Clear();
 
-			DateTime cDate = date.Date.AddSeconds(__cCloseTime.TotalSeconds);
-			CalcContractTime(cDate);  //計算合約時間
+			ContractTime cContractTime = MaturityDateUtil.GetWeekMaturityDate(date);
+			if (date.Date == cContractTime.MaturityDate.Date) {
+				date = new DateTime(date.Year, date.Month, date.Day, __cCloseTime.Hours, __cCloseTime.Minutes, __cCloseTime.Seconds);
+			} else {
+				date = date.Date.AddSeconds(__cCloseTime.TotalSeconds);
+			}
+			CalcContractTime(date);  //計算合約時間
 		}
 
 		private void CalcContractTime(DateTime today) {

@@ -125,6 +125,10 @@ namespace Netwings.Orders {
 		}
 
 		internal void CalculateProfits(double price) {
+			if (price == 0) {
+				return;
+			}
+
 			lock (__cPositions) {
 				this.OpenProfit = 0;
 
