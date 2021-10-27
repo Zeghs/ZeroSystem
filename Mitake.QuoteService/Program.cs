@@ -14,6 +14,7 @@ using Mitake.Stock.Data;
 using Mitake.Stock.Util;
 
 using PowerLanguage;
+using System.IO;
 
 namespace Zeghs {
 	static class Program {
@@ -25,7 +26,7 @@ namespace Zeghs {
 
 			//*
 			cService = new QuoteService();
-			cService.onQuote += new EventHandler<Events.QuoteEvent>(cService_onQuote);
+			//cService.onQuote += new EventHandler<Events.QuoteEvent>(cService_onQuote);
 			cService.onLoginCompleted += new EventHandler(cService_onLoginCompleted);
 			cService.onSubscribeCompleted += new EventHandler<Events.QuoteComplementCompletedEvent>(cService_onSubscribeCompleted);
 			cService.onComplementCompleted += new EventHandler<Events.QuoteComplementCompletedEvent>(cService_onComplementCompleted);
@@ -129,7 +130,8 @@ namespace Zeghs {
 			int iCount = cQuote.TickCount;
 			for (int i = iCount - 1; i >= 0; i--) {
 				ITick cTick =  cQuote.GetTick(i);
-				System.Console.WriteLine("{0} {1,8:0.00} {2,8:0.00} {3,8:0.00} {4,10} {5, 10} {6, 10}", cTick.Time.ToString("HHmmss"), cTick.Bid.Price, cTick.Ask.Price, cTick.Price, cTick.Single, cTick.Volume, cTick.Volume - dVolume);
+				System.Console.WriteLine("{7,7} {0} {1,8:0.00} {2,8:0.00} {3,8:0.00} {4,10} {5, 10} {6, 10}", cTick.Time.ToString("HHmmss"), cTick.Bid.Price, cTick.Ask.Price, cTick.Price, cTick.Single, cTick.Volume, cTick.Volume - dVolume, (cTick as MitakeQuoteTick).Serial);
+				File.AppendAllText("aaa.txt", string.Format("{7,7} {0} {1,8:0.00} {2,8:0.00} {3,8:0.00} {4,10} {5, 10} {6, 10}\r\n", cTick.Time.ToString("HHmmss"), cTick.Bid.Price, cTick.Ask.Price, cTick.Price, cTick.Single, cTick.Volume, cTick.Volume - dVolume, (cTick as MitakeQuoteTick).Serial), Encoding.UTF8);
 				if (cTick.Volume > dVolume) {
 					dVolume = cTick.Volume;
 				}
@@ -141,7 +143,8 @@ namespace Zeghs {
 			//cService.SymbolUpdate();
 
 			System.Console.WriteLine("訂閱......");
-			cService.AddSubscribe("MXWN0.tw");
+			cService.Complement("TXF0.tw");
+			//cService.AddSubscribe("MXWN0.tw");
 			//cService.Complement("MXFN0.tw");
 			//cService.Complement("MXWN0.tw");
 			//cService.AddSubscribe("MXW0.tw");

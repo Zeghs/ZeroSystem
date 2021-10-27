@@ -44,25 +44,28 @@ namespace Taiwan.Rules.Contracts {
 		}
 
 		public ContractTime GetContractTime(DateTime date, int index = 0) {
-			ContractTime cContractTime = null;
 			date = new DateTime(date.Year, date.Month, date.Day, __cCloseTime.Hours, __cCloseTime.Minutes, __cCloseTime.Seconds);
-			int iCount = __cContractTimes.Count;
+
+			double dMinValue = double.MaxValue;
+			int iIndex = -1, iCount = __cContractTimes.Count;
 			for (int i = index; i < iCount; i++) {
 				ContractTime cContractTemp = __cContractTimes[i];
 				double dTotals = (cContractTemp.MaturityDate - date).TotalSeconds;
 				if (dTotals >= 0 && dTotals <= 604800) {
-					cContractTime = cContractTemp;
-					break;
+					if (dMinValue > dTotals) {
+						dMinValue = dTotals;
+						iIndex = i;
+					}
 				}
 			}
 
-			if (cContractTime == null) {
+			if (iIndex == -1) {
 				if (index > 0) {
 					date = date.AddSeconds(index * 604800);
 				}
-				cContractTime = MaturityDateUtil.GetWeekMaturityDate(date);
+				return MaturityDateUtil.GetWeekMaturityDate(date);
 			}
-			return cContractTime;
+			return __cContractTimes[iIndex];
 		}
 
 		public int ShowSetting() {
