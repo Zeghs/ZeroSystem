@@ -31,7 +31,7 @@ namespace Taiwan.Rules.Contracts {
 
 		public int GetContractIndex(string symbolId) {
 			int iIndex = 0, iLength = symbolId.Length;
-			for (int i = 3; i < iLength; i++) {
+			for (int i = 4; i < iLength; i++) {
 				char chValue = symbolId[i];
 				if (char.IsDigit(chValue)) {
 					iIndex *= 10;
