@@ -146,7 +146,7 @@ namespace Zeghs.Drawing.Plots {
 					int iLastClose = top + this.AxisY.ConvertValueToHeight(__dLastClose);
 					IntPtr cOldPen = __cGDI.SelectPen(erasePen);
 					__cGDI.DrawLine(prevX, iPrevClose, x, iLastClose);
-					__cGDI.SelectPen(cOldPen);
+					__cGDI.RemoveObject(__cGDI.SelectPen(cOldPen));
 				}
 
 				__dLastClose = dClose;

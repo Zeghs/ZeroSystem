@@ -184,10 +184,11 @@
               [取得] 商品資訊資料讀取者
             </summary>
         </member>
-        <member name="M:PowerLanguage.CStudyAbstract.#ctor">
+        <member name="M:PowerLanguage.CStudyAbstract.#ctor(System.Object)">
             <summary>
               建構子
             </summary>
+            <param name="_ctx">ZChart 圖表物件</param>
         </member>
         <member name="M:PowerLanguage.CStudyAbstract.AddFunction(PowerLanguage.IStudyControl)">
             <summary>
@@ -212,6 +213,14 @@
             <summary>
               更新腳本使用者自訂參數
             </summary>
+        </member>
+        <member name="M:PowerLanguage.CStudyAbstract.AddPlot``1(PowerLanguage.PlotAttributes,System.Int32)">
+            <summary>
+              加入使用者自訂形狀物件
+            </summary>
+            <typeparam name="T">資料類型型別, 須配合 EPlotSharps 列舉來決定型別(int, double, double[]...)</typeparam>
+            <param name="args">PlotAttributes繪製參數</param>
+            <param name="data_stream">資料串流編號(從 1 開始編號)</param>
         </member>
         <member name="M:PowerLanguage.CStudyAbstract.CalcBar">
             <summary>
@@ -278,6 +287,11 @@
         <member name="P:PowerLanguage.CStudyAbstract.About">
             <summary>
               [取得] 腳本開發者資訊
+            </summary>
+        </member>
+        <member name="P:PowerLanguage.CStudyAbstract.Chart">
+            <summary>
+              [取得] ZChart類別
             </summary>
         </member>
         <member name="P:PowerLanguage.CStudyAbstract.DrwText">
@@ -572,7 +586,7 @@
             <summary>
               建構子
             </summary>
-            <param name="_ctx">相容 Multicharts 系統</param>
+            <param name="_ctx">ZChart 圖表物件</param>
         </member>
         <member name="M:PowerLanguage.SignalObject.ApplyProperty(Zeghs.Scripts.SignalProperty)">
             <summary>

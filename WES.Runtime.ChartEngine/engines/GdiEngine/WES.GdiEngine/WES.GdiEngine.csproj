@@ -74,6 +74,8 @@
     <Compile Include="Zeghs\Drawing\Gdi.cs" />
     <Compile Include="Zeghs\Drawing\GdiEngine.cs" />
     <Compile Include="Zeghs\Drawing\PenStyle.cs" />
+    <Compile Include="Zeghs\Drawing\PlotShapes\PlotShapeLine.cs" />
+    <Compile Include="Zeghs\Drawing\PlotShapes\ShapeEngine.cs" />
     <Compile Include="Zeghs\Drawing\Plots\PlotCandlestick.cs" />
     <Compile Include="Zeghs\Drawing\Plots\PlotClosingLine.cs" />
     <Compile Include="Zeghs\Drawing\Plots\PlotEngine.cs" />
@@ -106,6 +108,7 @@
   <ItemGroup>
     <None Include="Resources\Cross.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

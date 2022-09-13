@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
 using log4net;
 using Zeghs.Data;
+using Zeghs.Chart;
 using Zeghs.Events;
 using Zeghs.Scripts;
 using Zeghs.Services;
@@ -69,8 +69,9 @@ namespace PowerLanguage {
 		/// <summary>
 		///   建構子
 		/// </summary>
-		/// <param name="_ctx">相容 Multicharts 系統</param>
-		public SignalObject(object _ctx) {
+		/// <param name="_ctx">ZChart 圖表物件</param>
+		public SignalObject(object _ctx) 
+			: base(_ctx) {
 			__cProperty = new SignalProperty();
 			__cTradeServices = new Dictionary<string, AbstractOrderService>(8);
 		}
@@ -117,6 +118,9 @@ namespace PowerLanguage {
 
 			if (__cOrderService != null) {
 				__cOrderService.Initialize();  //參數設定完成之後才初始化下單元件
+
+				//加入交易資料容器
+				this.Chart.AddTradeContainer(new TradeContainer());
 			}
 		}
 
@@ -253,4 +257,4 @@ namespace PowerLanguage {
 			OnTradeResponse(e);
 		}
 	}
-}  //256行
+}  //260行

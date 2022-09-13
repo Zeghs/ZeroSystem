@@ -86,7 +86,7 @@ namespace Zeghs.Managers {
 
 							Type[] cTypes = cAssembly.GetTypes();
 							foreach (Type cType in cTypes) {
-								if (CheckAbstractOrderService(cType)) {
+								if (CheckAbstractPaintEngine(cType)) {
 									sChartEngine = cType.FullName;
 									break;
 								}
@@ -110,14 +110,14 @@ namespace Zeghs.Managers {
 			}
 		}
 
-		private bool CheckAbstractOrderService(Type baseType) {
+		private bool CheckAbstractPaintEngine(Type baseType) {
 			Type cBase = baseType.BaseType;
 			if (cBase.FullName.Equals("System.Object")) {
 				return false;
 			} else if (cBase.FullName.Equals("Zeghs.Chart.AbstractPaintEngine")) {
 				return true;
 			} else {
-				return CheckAbstractOrderService(cBase);
+				return CheckAbstractPaintEngine(cBase);
 			}
 
 		}

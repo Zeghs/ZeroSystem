@@ -82,7 +82,7 @@ namespace ChartEngine.Tester {
 
 			__cChart.SetChartProperty(cProperty);
 
-			SignalObject cObject = new TestScript();
+			SignalObject cObject = new TestScript(__cChart);
 			cObject.onReady += SignalObject_onReady;
 			cObject.ApplyProperty(new SignalProperty() {
 				DefaultContracts = 1,
@@ -128,13 +128,6 @@ namespace ChartEngine.Tester {
 		private void SignalObject_onReady(object sender, EventArgs e) {
 			SignalObject cObject = sender as SignalObject;
 
-			int iCount = cObject.MaxDataStream;
-			for (int i = 1; i <= iCount; i++) {
-				__cChart.AddSeries(cObject.BarsOfData(i), i);
-			}
-
-			__cChart.AddDrwText(cObject.DrwText);
-			__cChart.AddTradeContainer(new TradeContainer());
 			cObject.onUpdate += __cChart.onUpdate;
 			cObject.onTradeResponse += __cChart.onTradeResponse;
 		}

@@ -72,6 +72,7 @@
     <Compile Include="Zeghs\Chart\Layer.cs" />
     <Compile Include="Zeghs\Chart\TradeContainer.cs" />
     <Compile Include="Zeghs\Chart\ZChart.cs" />
+    <Compile Include="Zeghs\Drawing\PlotObject.cs" />
     <Compile Include="Zeghs\Drawing\TextContainer.cs" />
     <Compile Include="Zeghs\Drawing\TextObject.cs" />
     <Compile Include="Zeghs\Informations\ChartEngineInformation.cs" />

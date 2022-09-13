@@ -22,8 +22,6 @@ namespace Zeghs {
 
 		[STAThread]
 		static void Main() {
-			ProductManager.Load("exchanges");
-
 			//*
 			cService = new QuoteService();
 			//cService.onQuote += new EventHandler<Events.QuoteEvent>(cService_onQuote);

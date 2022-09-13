@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using log4net;
 using Zeghs.Data;
+using Zeghs.Chart;
 using Zeghs.Utils;
 using Zeghs.Events;
 using Zeghs.Scripts;
@@ -21,6 +22,7 @@ namespace PowerLanguage {
 		public event EventHandler<ScriptParametersEvent> onScriptParameters = null;
 
 		private bool __bDisposed = false;  //Dispose旗標
+		private ZChart __cChart = null;
 		private IOutput __cOutputWriter = null;
 		private TextContainer __cDrawTexts = null;
 		private List<IVariables> __cVariables = null;
@@ -35,9 +37,18 @@ namespace PowerLanguage {
 		}
 
 		/// <summary>
+		///   [取得] ZChart類別
+		/// </summary>
+		internal ZChart Chart {
+			get {
+				return __cChart;
+			}
+		}
+
+		/// <summary>
 		///   [取得] 文字繪製容器
 		/// </summary>
-		public ITextContainer DrwText {
+		protected ITextContainer DrwText {
 			get {
 				return __cDrawTexts;
 			}
@@ -64,7 +75,9 @@ namespace PowerLanguage {
 		/// <summary>
 		///   建構子
 		/// </summary>
-		public CStudyAbstract() {
+		/// <param name="_ctx">ZChart 圖表物件</param>
+		public CStudyAbstract(object _ctx) {
+			__cChart = _ctx as ZChart;
 			__cDrawTexts = new TextContainer();
 			__cOutputWriter = new OutputWriter();
 			__cVariables = new List<IVariables>(16);
@@ -112,6 +125,25 @@ namespace PowerLanguage {
 		public virtual void UpdateParameters() {
 		}
 
+		/// <summary>
+		///   加入使用者自訂形狀物件
+		/// </summary>
+		/// <typeparam name="T">資料類型型別, 須配合 EPlotSharps 列舉來決定型別(int, double, double[]...)</typeparam>
+		/// <param name="args">PlotAttributes繪製參數</param>
+		/// <param name="data_stream">資料串流編號(從 1 開始編號)</param>
+		protected IPlotObject<T> AddPlot<T>(PlotAttributes args, int data_stream = 1) {
+			if (__cChart == null) {
+				return null;
+			}
+
+			PlotObject<T> cObject = new PlotObject<T>(this, data_stream);
+			cObject.Name = args.Name;
+			cObject.BGColor = args.BackgroundColor;
+
+			__cChart.AddPlotShape(args, cObject, data_stream);
+			return cObject;
+		}
+	
 		/// <summary>
 		///   計算 Bars 時所呼叫的方法
 		/// </summary>
@@ -229,8 +261,14 @@ namespace PowerLanguage {
 		///   啟動腳本
 		/// </summary>
 		internal override void Start() {
+			int iCount = this.MaxDataStream;  //加入資訊源(DataStream)
+			for (int i = 1; i <= iCount; i++) {
+				__cChart.AddSeries(this.BarsOfData(i), i);
+			}
+
 			//初始化使用者繪圖字型類別
 			__cDrawTexts.Initialate(this);
+			__cChart.AddDrwText(__cDrawTexts);
 
 			//腳本初始化工作
 			CStudyInitialize();
@@ -277,4 +315,4 @@ namespace PowerLanguage {
 			}
 		}
 	}
-}  //280行
+}  //318行

@@ -60,5 +60,13 @@ namespace PowerLanguage {
 			get;
 			set;
 		}
+
+		/// <summary>
+		///   [取得/設定] 自訂圖表形狀
+		/// </summary>
+		public EPlotShapes PlotShape {
+			get;
+			set;
+		}
 	}
 }

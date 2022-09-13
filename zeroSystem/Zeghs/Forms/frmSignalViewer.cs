@@ -1,9 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using WeifenLuo.WinFormsUI.Docking;
 using PowerLanguage;
 using Zeghs.Data;
@@ -133,7 +131,7 @@ namespace Zeghs.Forms {
 		}
 
 		private void CreateSignalObject() {
-			__cSignalObject = ScriptManager.Manager.CreateScript(__cProfile.ScriptName, this) as SignalObject;
+			__cSignalObject = ScriptManager.Manager.CreateScript(__cProfile.ScriptName, __cChart) as SignalObject;
 			if (__cSignalObject != null) {
 				string sTitle = string.Format("{0}", __cSignalObject.About.Comment);
 				if (this.InvokeRequired) {
@@ -448,15 +446,6 @@ namespace Zeghs.Forms {
 		private void SignalObject_onReady(object sender, EventArgs e) {
 			SignalObject cSignalObject = sender as SignalObject;
 			cSignalObject.onReady -= SignalObject_onReady;
-
-			int iCount = cSignalObject.MaxDataStream;  //加入資訊源(DataStream)
-			for (int i = 1; i <= iCount; i++) {
-				__cChart.AddSeries(cSignalObject.BarsOfData(i), i);
-			}
-
-			__cChart.AddDrwText(cSignalObject.DrwText);
-			__cChart.AddTradeContainer(new TradeContainer());
-			
 			cSignalObject.onUpdate += __cChart.onUpdate;
 			cSignalObject.onTradeResponse += __cChart.onTradeResponse;
 		}

@@ -42,6 +42,7 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PowerLanguage\EPlotShapes.cs" />
     <Compile Include="PowerLanguage\IOrderCancel.cs" />
     <Compile Include="PowerLanguage\AxisSetting.cs" />
     <Compile Include="PowerLanguage\ChartPoint.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="PowerLanguage\IOrderPriced.cs" />
     <Compile Include="PowerLanguage\IOrderStopLimit.cs" />
     <Compile Include="PowerLanguage\IOutput.cs" />
+    <Compile Include="PowerLanguage\IPlotObject.cs" />
     <Compile Include="PowerLanguage\IRuleSetting.cs" />
     <Compile Include="PowerLanguage\ISeries.cs" />
     <Compile Include="PowerLanguage\ISeriesSymbolData.cs" />
@@ -93,6 +95,7 @@
     <Compile Include="PowerLanguage\OrderCategory.cs" />
     <Compile Include="PowerLanguage\OrderExit.cs" />
     <Compile Include="PowerLanguage\PenStyle.cs" />
+    <Compile Include="PowerLanguage\PlotAttributes.cs" />
     <Compile Include="PowerLanguage\Product.cs" />
     <Compile Include="PowerLanguage\RuleBase.cs" />
     <Compile Include="PowerLanguage\PublicFunction.cs" />

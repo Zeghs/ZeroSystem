@@ -46,6 +46,11 @@
 		/// <summary>
 		///   交易物件
 		/// </summary>
-		TradeObject = 129
+		TradeObject = 129,
+
+		/// <summary>
+		///    使用者自訂形狀
+		/// </summary>
+		CustomSharp = 256
 	}
 }

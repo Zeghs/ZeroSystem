@@ -215,8 +215,10 @@ namespace Zeghs.Chart {
 		private void CalculateAxisUnit() {
 			double dValue = 0;
 			if (__cSetting.AxisScope == EAxisScope.PriceScaleScope) {
-				double[] dScales = __cPriceScale.GetPriceScale(__dAxisMax);
-				dValue = dScales[0] * dScales[1];
+				if (__cPriceScale != null) {
+					double[] dScales = __cPriceScale.GetPriceScale(__dAxisMax);
+					dValue = dScales[0] * dScales[1];
+				}
 			} else {
 				EAxisScaleMode cScaleMode = __cSetting.ScaleMode;
 				switch (cScaleMode) {

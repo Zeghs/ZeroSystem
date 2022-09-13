@@ -166,6 +166,44 @@ namespace Zeghs.Chart {
 		}
 
 		/// <summary>
+		///   加入 PlotShape 物件(使用者自訂繪圖物件)
+		/// </summary>
+		/// <param name="args">Plot屬性類別</param>
+		/// <param name="plotObject">Plot資料物件</param>
+		/// <param name="data_stream">資料串流編號(從 1 開始編號)</param>
+		public void AddPlotShape(PlotAttributes args, object plotObject, int data_stream) {
+			if (__cAxisX != null) {
+				Layer cLayer = null;
+				ChartSetting cSetting = __cProperty.ChartSettings[data_stream - 1];
+				int iCount = __cLayers.Count;
+				if (cSetting.IsSubChart && cSetting.LayerIndex < iCount) {
+					cLayer = __cLayers[cSetting.LayerIndex];
+					
+					__bNewSeries = true;
+					this.Resize();
+
+					ChartSetting cPlotSetting = new ChartSetting() {
+						Axis = cSetting.Axis,
+						ChartType = EChartType.CustomSharp,
+						IsShowNewPrice = args.ShowLastPrice,
+						IsSubChart = true,
+						LayerIndex = cSetting.LayerIndex,
+					        LegendColor = args.PenStyles[0].Color,
+						PenStyles = args.PenStyles,
+						PlotShape = args.PlotSharp
+					};
+
+					AbstractPlot cPlot = __cPainter.GetPlot(this, plotObject, cPlotSetting);
+					if (cPlot != null) {
+						cPlot.DataStream = data_stream;
+						cPlot.AdjustAxisScaleFromX(__cAxisX);
+						cLayer.AddPlot(cPlot);
+					}
+				}
+			}
+		}
+
+		/// <summary>
 		///   加入交易資料容器(如果有加入交易資料容器則可以在圖表上顯示使用者交易線圖與交易資訊)
 		/// </summary>
 		/// <param name="container">交易資料容器</param>

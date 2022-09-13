@@ -1,6 +1,7 @@
 ﻿using System;
 using PowerLanguage;
 using Zeghs.Chart;
+using Zeghs.Drawing.PlotSharps;
 
 namespace Zeghs.Drawing.Plots {
 	internal sealed class PlotEngine {
@@ -25,6 +26,9 @@ namespace Zeghs.Drawing.Plots {
 					break;
 				case EChartType.TradeObject:
 					cPlot = new PlotTradeObject(engine, source, chartSetting);
+					break;
+				case EChartType.CustomSharp:
+					cPlot = ShapeEngine.Create(engine, chart, source, chartSetting);
 					break;
 			}
 			return cPlot;
