@@ -129,6 +129,8 @@ namespace Zeghs.Chart {
 			CalculateAxisUnit();  //計算每個刻度最小單位值
 
 			__bRefresh = false;
+			__iScaleCount = (__iScaleCount <= 0) ? 1 : __iScaleCount;
+
 			List<double> cAxis = new List<double>(__iScaleCount);
 			for (int i = 0; i <= __iScaleCount; i++) {
 				cAxis.Add(Math.Round(__dAxisMax - __dScaleUnit * i, this.Decimals));

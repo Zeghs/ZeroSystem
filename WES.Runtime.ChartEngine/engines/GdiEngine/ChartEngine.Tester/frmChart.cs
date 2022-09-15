@@ -31,7 +31,7 @@ namespace ChartEngine.Tester {
 				IsShowNewPrice = true,
 				LayerIndex = 0,
 				LegendColor = Color.Yellow,
-				ChartType = EChartType.Candlestick,
+				ChartType = EChartType.ClosingLine,
 				PenStyles = new PowerLanguage.PenStyle[] {
 					new PowerLanguage.PenStyle(Color.Red, 1),
 					new PowerLanguage.PenStyle(Color.Green, 1),

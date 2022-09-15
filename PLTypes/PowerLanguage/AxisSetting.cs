@@ -50,5 +50,13 @@
 			get;
 			set;
 		}
+
+		/// <summary>
+		///   建立淺層複本
+		/// </summary>
+		/// <returns></returns>
+		public AxisSetting Clone() {
+			return this.MemberwiseClone() as AxisSetting;
+		}
 	}
 }

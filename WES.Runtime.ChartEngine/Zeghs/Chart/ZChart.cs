@@ -175,30 +175,40 @@ namespace Zeghs.Chart {
 			if (__cAxisX != null) {
 				Layer cLayer = null;
 				ChartSetting cSetting = __cProperty.ChartSettings[data_stream - 1];
+
+				//判斷是否要建立新的 Layer 圖層
 				int iCount = __cLayers.Count;
-				if (cSetting.IsSubChart && cSetting.LayerIndex < iCount) {
-					cLayer = __cLayers[cSetting.LayerIndex];
-					
-					__bNewSeries = true;
-					this.Resize();
+				if (args.LayerIndex == -1 || args.LayerIndex >= iCount) {
+					cLayer = CreateLayer();
+					cLayer.LayerIndex = iCount;
 
-					ChartSetting cPlotSetting = new ChartSetting() {
-						Axis = cSetting.Axis,
-						ChartType = EChartType.CustomSharp,
-						IsShowNewPrice = args.ShowLastPrice,
-						IsSubChart = true,
-						LayerIndex = cSetting.LayerIndex,
-					        LegendColor = args.PenStyles[0].Color,
-						PenStyles = args.PenStyles,
-						PlotShape = args.PlotSharp
-					};
+					__cLayers.Add(cLayer);
+				} else {
+					cLayer = __cLayers[args.LayerIndex];
+				}
 
-					AbstractPlot cPlot = __cPainter.GetPlot(this, plotObject, cPlotSetting);
-					if (cPlot != null) {
-						cPlot.DataStream = data_stream;
-						cPlot.AdjustAxisScaleFromX(__cAxisX);
-						cLayer.AddPlot(cPlot);
-					}
+				__bNewSeries = true;
+				this.Resize();
+
+				AxisSetting cAxis = cSetting.Axis.Clone();
+				cAxis.IsCreateInstance = (args.LayerIndex == -1) ? true : !args.UseMasterAxisY;
+
+				ChartSetting cPlotSetting = new ChartSetting() {
+					Axis = cAxis,
+					ChartType = EChartType.CustomSharp,
+					IsShowNewPrice = args.ShowLastPrice,
+					IsSubChart = true,
+					LayerIndex = cSetting.LayerIndex,
+					LegendColor = args.PenStyles[0].Color,
+					PenStyles = args.PenStyles,
+					PlotShape = args.PlotSharp
+				};
+
+				AbstractPlot cPlot = __cPainter.GetPlot(this, plotObject, cPlotSetting);
+				if (cPlot != null) {
+					cPlot.DataStream = data_stream;
+					cPlot.AdjustAxisScaleFromX(__cAxisX);
+					cLayer.AddPlot(cPlot);
 				}
 			}
 		}
@@ -376,6 +386,7 @@ namespace Zeghs.Chart {
 		private void Dispose(bool disposing) {
 			if (!this.__bDisposed) {
 				__bDisposed = true;
+				
 				if (disposing) {
 					__bBusy = true;
 					if (__cInstrument != null) {
@@ -476,6 +487,7 @@ namespace Zeghs.Chart {
 			if (__bFirst) {
 				Graphics g = e.Graphics;
 				g.Clear(__cProperty.BackgroundColor);
+				
 				using (SolidBrush cBrush = new SolidBrush(__cProperty.ForeColor)) {
 					g.DrawString("WES.Runtime.ChartEngine, Copyright © Web Electric Services. All rights reserved", __cContext.Font, cBrush, 0, 0);
 					g.DrawString("Loading data is in progress, Please wait...", __cContext.Font, cBrush, 0, 15);

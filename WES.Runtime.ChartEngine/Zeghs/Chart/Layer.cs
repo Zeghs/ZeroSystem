@@ -156,11 +156,15 @@ namespace Zeghs.Chart {
 		internal void CalculatePlot() {
 			int iCount = __cPlots.Count;
 			if (iCount > 0) {
-				AxisY cAxis0 = __cPlots[0].AxisY;
+				AxisY cAxisY = this.AxisY;
+				cAxisY.Reset();
+
 				for (int i = 0; i < iCount; i++) {
-					if (i == 0 || __cPlots[i].AxisY != cAxis0) {
-						__cPlots[i].CalculatePlot(this.AxisX);
+					if (__cPlots[i].AxisY != cAxisY) {
+						__cPlots[i].AxisY.Reset();
 					}
+
+					__cPlots[i].CalculatePlot(this.AxisX);
 				}
 			}
 		}
@@ -181,8 +185,16 @@ namespace Zeghs.Chart {
 
 		internal void ResizeAxisY(int width) {
 			if (__cPlots.Count > 0) {
-				AxisY cAxisY = __cPlots[0].AxisY;
-				cAxisY.SetAxisRectangle(__cLayerRect, width);
+				AxisY cAxisY_0 = this.AxisY;
+				cAxisY_0.SetAxisRectangle(__cLayerRect, width);
+
+				int iCount = __cPlots.Count;
+				for (int i = 1; i < iCount; i++) {
+					AxisY cAxisY = __cPlots[i].AxisY;
+					if (cAxisY != cAxisY_0) {
+						cAxisY.SetAxisRectangle(__cLayerRect, width);
+					}
+				}
 			}
 		}
 		
@@ -195,7 +207,6 @@ namespace Zeghs.Chart {
 					for (int i = 0; i < iCount; i++) {
 						__cPlots[i].Dispose();
 					}
-					
 					__cPlots.Clear();
 				}
 			}

@@ -29,8 +29,6 @@ namespace Zeghs.Drawing.PlotShapes {
 		}
 
 		public override void CalculatePlot(AxisX axis) {
-			this.AxisY.Reset();
-
 			int iBarNumber = axis.BarNumber;
 			VariableSeries<double> cValues = __cObjects.Value;
 
@@ -52,7 +50,6 @@ namespace Zeghs.Drawing.PlotShapes {
 
 			int iIndex = 0;
 			int iOldBKColor = __cGDI.SelectBackground(property.BackgroundColor);
-
 			if (onlyUpdateLastBar) {
 				iIndex = cAxisX.BarNumber + cAxisX.BarCount - 1;
 				iIndex = (iIndex > cAxisX.DataCount) ? cAxisX.DataCount : iIndex;
@@ -121,6 +118,9 @@ namespace Zeghs.Drawing.PlotShapes {
 			}
 
 			__dPrev = __cObjects.Value[offset + 1];
+			if (__dPrev == 0) {
+				__dPrev = value;
+			}
 			return true;
 		}
 

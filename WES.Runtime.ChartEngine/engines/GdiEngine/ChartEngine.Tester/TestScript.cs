@@ -14,14 +14,16 @@ namespace ChartEngine.Tester {
 		}
 
 		ITextObject cText = null;
-		IPlotObject<double> cObjects = null;
+		IPlotObject<double> cObject1s = null;
+		IPlotObject<double> cObject2s = null;
 		protected override void Create() {
 			BUY = OrderCreator.MarketThisBar(new SOrderParameters(Contracts.UserSpecified, EOrderAction.Buy));
 			SELL = OrderCreator.MarketThisBar(new SOrderParameters(Contracts.UserSpecified, EOrderAction.SellShort));
 			BUY_C = OrderCreator.MarketThisBar(new SOrderParameters(Contracts.Default, EOrderAction.Sell, OrderExit.FromAll));
 			SELL_C = OrderCreator.MarketThisBar(new SOrderParameters(Contracts.Default, EOrderAction.BuyToCover, OrderExit.FromAll));
 
-			cObjects = AddPlot<double>(new PlotAttributes("ZEGHS", EPlotShapes.Line, Color.White));
+			cObject1s = AddPlot<double>(new PlotAttributes("ZEGHS1", EPlotShapes.Line, Color.White, -1));
+			cObject2s = AddPlot<double>(new PlotAttributes("ZEGHS2", EPlotShapes.Line, Color.Yellow, 1));
 
 			cText = this.DrwText.Create(new ChartPoint(1, 150), "1234", true);
 			cText.Size = 13;
@@ -51,11 +53,12 @@ namespace ChartEngine.Tester {
 				cObject = this.DrwText.Create(new ChartPoint(BarsOfData(2).Low[0]), iii.ToString(), 2);
 				cObject.HStyle = ETextStyleH.Center;
 				//*/
-				cObjects.Set(Bars.High.Value + 5, Color.Blue);
+				cObject1s.Set(Bars.High.Value + 5, Color.Yellow);
 			}
 
 			cText.Text = DateTime.Now.ToString();
-			cObjects.Set(Bars.High.Value + 5);
+			cObject1s.Set(Bars.High.Value + 5);
+			cObject2s.Set(Bars.Low.Value - 5);
 		}
 	}
 }

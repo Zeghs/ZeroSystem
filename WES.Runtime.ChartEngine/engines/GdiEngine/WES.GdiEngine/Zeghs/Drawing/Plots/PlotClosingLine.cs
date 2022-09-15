@@ -32,8 +32,6 @@ namespace Zeghs.Drawing.Plots {
 		}
 
 		public override void CalculatePlot(AxisX axis) {
-			this.AxisY.Reset();
-
 			int iBarNumber = axis.BarNumber;
 			int iCount = axis.BarCount;
 			for (int i = 0; i < iCount; i++) {
@@ -63,7 +61,7 @@ namespace Zeghs.Drawing.Plots {
 				int iX = cAxisX.ConvertBarNumberToWidth(iIndex).CenterPoint;
 				int iPrevX = cAxisX.ConvertBarNumberToWidth(iIndex - 1).CenterPoint;
 				if (!DrawClosingLine(iOffset, cRectY.Y, iX, iPrevX, new PowerLanguage.PenStyle(property.BackgroundColor, cLinePen.Width, cLinePen.Pattern))) {
-				        return false;
+					return false;
 				}
 			} else {
 				this.RefreshAxisY(property);
@@ -101,7 +99,7 @@ namespace Zeghs.Drawing.Plots {
 				}
 			}
 			this.DrawLegend(layer.LegendIndex, property);
-			
+
 			__cGDI.SelectBackground(iOldBKColor);
 			return true;
 		}
@@ -132,6 +130,9 @@ namespace Zeghs.Drawing.Plots {
 			}
 
 			__dPrevClose = __cBars.Close[offset + 1];
+			if (__dPrevClose == 0) {
+				__dPrevClose = close;
+			}
 			return true;
 		}
 

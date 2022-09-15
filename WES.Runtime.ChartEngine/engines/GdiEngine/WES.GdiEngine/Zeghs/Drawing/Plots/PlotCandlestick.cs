@@ -31,8 +31,6 @@ namespace Zeghs.Drawing.Plots {
 		}
 
 		public override void CalculatePlot(AxisX axis) {
-			this.AxisY.Reset();
-
 			int iBarNumber = axis.BarNumber;
 			int iCount = axis.BarCount;
 			for (int i = 0; i < iCount; i++) {
